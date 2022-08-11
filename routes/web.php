@@ -29,6 +29,8 @@ All Normal Users Routes List
 Route::middleware(['auth', 'user-access:user'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/home', [HomeController::class, 'index'])->name('home');
+    // dbConnect 및 Service 별도 분리 테스트
+    Route::get('/test', [HomeController::class, 'test']);
 });
 
 /*------------------------------------------
