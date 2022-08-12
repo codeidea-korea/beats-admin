@@ -17,16 +17,20 @@ class AdminAuthorityServiceImpl extends DBConnection  implements AdminAuthorityS
 
 
         $result = $this->statDB->table('users')
+            ->leftJoin('adm_group', 'users.group_code', '=', 'adm_group.group_code')
             ->select(
-                'name',
-                'phoneno',
-                'email',
-                'created_at',
+                'users.name',
+                'adm_group.group_name',
+                'users.phoneno',
+                'users.email',
+                'users.isuse',
+                'users.created_at',
                // $this->statDB->raw('SUM(name) AS CNT')
             )
             ->where('type', $params['type'])
+            ->orderby('created_at','desc')
            // ->groupBy('name')
-            ->paginate();
+            ->get();
         return $result;
 
     }

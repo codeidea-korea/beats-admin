@@ -174,10 +174,10 @@
                         <th style="width:8%">No</th>
                         <th style="width:10%">그룹</th>
                         <th style="width:10%">이름</th>
-                        <th style="width:10%">연락처</th>
+                        <th style="width:20%">연락처</th>
                         <th>E-mail</th>
                         <th style="width:10%">상태</th>
-                        <th style="width:10%">등록일</th>
+                        <th style="width:20%">등록일</th>
                     </tr>
                     </thead>
 
@@ -185,12 +185,12 @@
                     @foreach($adminData as $rs)
                     <tr>
                         <td style="width:8%">1</td>
-                        <td style="width:10%">그룹</td>
+                        <td style="width:10%">{{$rs->group_name}}</td>
                         <td style="width:10%">{{$rs->name}}</td>
-                        <td style="width:10%">{{$rs->name}}</td>
-                        <td>E-mail</td>
-                        <td style="width:10%">상태</td>
-                        <td style="width:10%">등록일</td>
+                        <td style="width:20%">@if($rs->phoneno==null) 000-0000-0000 @else {{$rs->phoneno}} @endif</td>
+                        <td>{{$rs->email}}</td>
+                        <td style="width:10%">{{$rs->isuse}}</td>
+                        <td style="width:20%">{{$rs->created_at}}</td>
                     </tr>
                     @endforeach
 
