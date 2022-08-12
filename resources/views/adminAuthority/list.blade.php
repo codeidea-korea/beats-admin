@@ -11,16 +11,16 @@
     <title>Admin - Data Tables</title>
 
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Arimo:400,700,400italic">
-    <link rel="stylesheet" href="assets/css/fonts/linecons/css/linecons.css">
-    <link rel="stylesheet" href="assets/css/fonts/fontawesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="assets/css/bootstrap.css">
-    <link rel="stylesheet" href="assets/css/xenon-core.css">
-    <link rel="stylesheet" href="assets/css/xenon-forms.css">
-    <link rel="stylesheet" href="assets/css/xenon-components.css">
-    <link rel="stylesheet" href="assets/css/xenon-skins.css">
-    <link rel="stylesheet" href="assets/css/custom.css">
+    <link rel="stylesheet" href="/assets/css/fonts/linecons/css/linecons.css">
+    <link rel="stylesheet" href="/assets/css/fonts/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="/assets/css/xenon-core.css">
+    <link rel="stylesheet" href="/assets/css/xenon-forms.css">
+    <link rel="stylesheet" href="/assets/css/xenon-components.css">
+    <link rel="stylesheet" href="/assets/css/xenon-skins.css">
+    <link rel="stylesheet" href="/assets/css/custom.css">
 
-    <script src="assets/js/jquery-1.11.1.min.js"></script>
+    <script src="/assets/js/jquery-1.11.1.min.js"></script>
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -46,7 +46,8 @@
                 <!-- logo -->
                 <div class="logo">
                     <a href="/dashboard" class="logo-expanded">
-                        <img src="assets/images/logo@2x2.png"  alt="" />
+                        <img src="/assets/images/logo@2x2.png"  alt="" />
+
                     </a>
                 </div>
 
@@ -171,154 +172,27 @@
                     <thead>
                     <tr>
                         <th style="width:8%">No</th>
-                        <th style="width:15%">사용자 구분</th>
-                        <th>id</th>
-                        <th style="width:10%">등록 일자</th>
-                        <th style="width:10%">사용 승인</th>
+                        <th style="width:10%">그룹</th>
+                        <th style="width:10%">이름</th>
+                        <th style="width:10%">연락처</th>
+                        <th>E-mail</th>
+                        <th style="width:10%">상태</th>
+                        <th style="width:10%">등록일</th>
                     </tr>
                     </thead>
 
                     <tbody>
+                    @foreach($adminData as $rs)
                     <tr>
-                        <td>1</td>
-                        <td>일반</td>
-                        <td onClick="location.href='/memberView?memNo=1';">test1@test.co.kr</td>
-                        <td>2022-05-01</td>
-                        <td>N</td>
+                        <td style="width:8%">1</td>
+                        <td style="width:10%">그룹</td>
+                        <td style="width:10%">{{$rs->name}}</td>
+                        <td style="width:10%">{{$rs->name}}</td>
+                        <td>E-mail</td>
+                        <td style="width:10%">상태</td>
+                        <td style="width:10%">등록일</td>
                     </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>기관</td>
-                        <td>test2@test.co.kr</td>
-                        <td>2022-05-01</td>
-                        <td>Y</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>기업</td>
-                        <td>test3@test.co.kr</td>
-                        <td>2022-05-01</td>
-                        <td>Y</td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>기관</td>
-                        <td>test4@test.co.kr</td>
-                        <td>2022-05-01</td>
-                        <td>Y</td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>기관</td>
-                        <td>test5@test.co.kr</td>
-                        <td>2022-05-01</td>
-                        <td>Y</td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td>일반</td>
-                        <td>test6@test.co.kr</td>
-                        <td>2022-05-01</td>
-                        <td>Y</td>
-                    </tr>
-                    <tr>
-                        <td>7</td>
-                        <td>기업</td>
-                        <td>test7@test.co.kr</td>
-                        <td>2022-05-01</td>
-                        <td>Y</td>
-                    </tr>
-                    <tr>
-                        <td>8</td>
-                        <td>일반</td>
-                        <td>test1@test.co.kr</td>
-                        <td>2022-05-01</td>
-                        <td>N</td>
-                    </tr>
-                    <tr>
-                        <td>9</td>
-                        <td>기관</td>
-                        <td>test2@test.co.kr</td>
-                        <td>2022-05-01</td>
-                        <td>Y</td>
-                    </tr>
-                    <tr>
-                        <td>10</td>
-                        <td>기업</td>
-                        <td>test3@test.co.kr</td>
-                        <td>2022-05-01</td>
-                        <td>Y</td>
-                    </tr>
-                    <tr>
-                        <td>11</td>
-                        <td>일반</td>
-                        <td>test1@test.co.kr</td>
-                        <td>2022-05-01</td>
-                        <td>N</td>
-                    </tr>
-                    <tr>
-                        <td>12</td>
-                        <td>기관</td>
-                        <td>test2@test.co.kr</td>
-                        <td>2022-05-01</td>
-                        <td>Y</td>
-                    </tr>
-                    <tr>
-                        <td>13</td>
-                        <td>기업</td>
-                        <td>test3@test.co.kr</td>
-                        <td>2022-05-01</td>
-                        <td>Y</td>
-                    </tr>
-                    <tr>
-                        <td>14</td>
-                        <td>기관</td>
-                        <td>test4@test.co.kr</td>
-                        <td>2022-05-01</td>
-                        <td>Y</td>
-                    </tr>
-                    <tr>
-                        <td>15</td>
-                        <td>기관</td>
-                        <td>test5@test.co.kr</td>
-                        <td>2022-05-01</td>
-                        <td>Y</td>
-                    </tr>
-                    <tr>
-                        <td>16</td>
-                        <td>일반</td>
-                        <td>test6@test.co.kr</td>
-                        <td>2022-05-01</td>
-                        <td>Y</td>
-                    </tr>
-                    <tr>
-                        <td>17</td>
-                        <td>기업</td>
-                        <td>test7@test.co.kr</td>
-                        <td>2022-05-01</td>
-                        <td>Y</td>
-                    </tr>
-                    <tr>
-                        <td>18</td>
-                        <td>일반</td>
-                        <td>test1@test.co.kr</td>
-                        <td>2022-05-01</td>
-                        <td>N</td>
-                    </tr>
-                    <tr>
-                        <td>19</td>
-                        <td>기관</td>
-                        <td>test2@test.co.kr</td>
-                        <td>2022-05-01</td>
-                        <td>Y</td>
-                    </tr>
-                    <tr>
-                        <td>20</td>
-                        <td>기업</td>
-                        <td>test3@test.co.kr</td>
-                        <td>2022-05-01</td>
-                        <td>Y</td>
-                    </tr>
+                    @endforeach
 
                     </tbody>
                 </table>
