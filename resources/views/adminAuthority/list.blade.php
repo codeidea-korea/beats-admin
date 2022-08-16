@@ -126,10 +126,22 @@
                 <ol class="breadcrumb bc-1" >
                     <li>
                         <a href="/dashboard"><i class="fa-home"></i>Home</a>
+
                     </li>
                     <li class="active">
                         <strong>사용자관리</strong>
                     </li>
+                    <li>
+                        <a href="{{ route('logout') }}"
+                           onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                            {{ __('Logout') }}
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                    </li>
+
                 </ol>
 
             </div>

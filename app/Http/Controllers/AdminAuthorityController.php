@@ -40,4 +40,14 @@ class AdminAuthorityController extends Controller
             'adminData' => $adminData
         ]);
     }
+    public function getAdminView()
+    {
+        $params = $this->request->input();
+        $params['type'] = $params['type'] ?? 0;
+        $adminData = $this->adminAuthorityService->getAdminList($params);
+
+        return view('adminAuthority.list',[
+            'adminData' => $adminData
+        ]);
+    }
 }

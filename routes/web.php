@@ -32,6 +32,7 @@ Route::middleware(['auth'])->group(function () {
     // dbConnect 및 Service 별도 분리 테스트
     //Route::get('/test', [HomeController::class, 'test']);
     Route::get('/admin/list', [\App\Http\Controllers\AdminAuthorityController::class, 'getAdminList']);
+    Route::get('/admin/view', [\App\Http\Controllers\AdminAuthorityController::class, 'getAdminView']);
 });
 
 /*------------------------------------------
