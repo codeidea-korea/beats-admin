@@ -13,4 +13,7 @@ interface AdminAuthorityServiceInterface
 
     // 관리자 데이터
     public function getAdminData($params);
+
+    // 관리자 등록
+    public function getAdminAdd($params);
 }

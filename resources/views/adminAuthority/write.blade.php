@@ -201,13 +201,66 @@
 
                 </form>
                 <div style="float:right;">
-                    <button class="btn btn-purple" type="button" onClick="alert();">등록</button>
+                    <button class="btn btn-purple btn_create" type="button">등록</button>
                     <button class="btn btn-red" type="button" onClick="alert();">취소</button>
                     <button class="btn btn-blue" type="button" onClick="javascript:location.href = '/admin/list';">목록</button>
                 </div>
             </div>
 
         </div>
+        <script>
+            $(".btn_create").on('click', function(){
+
+                let isuse = $('select[name=isuse]').val();
+                let group_code = $('select[name=group_code]').val();
+                let name = $('input[name=name]').val();
+                let id = $('input[name=id]').val();
+                let password = $('input[name=password]').val();
+                let password2 = $('input[name=password2]').val();
+                let phoneno = $('input[name=phoneno]').val();
+                let email = $('select[name=email]').val();
+                alert('test');
+                let data = {
+                    isuse:isuse
+                    ,group_code:group_code
+                    ,name:name
+                    ,id:id
+                    ,password:password
+                    ,password2:password2
+                    ,phoneno:phoneno
+                    ,email:email
+                };
+
+                $.ajax({
+                    contentType: "application/json; charset=utf-8",
+                    type:"get",
+                    dataType:'json',
+                    data: data,
+                    url: '{{ url('/admin/ajax/adminAdd') }}',
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    success: function searchSuccess(data) {
+                        if(data.result=="SUCCESS"){
+                            alert('관리자계정이 추가되었습니다.');
+                            location.reload();
+                        }else{
+                            alert("error");
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e);
+                        alert('로딩 중 오류가 발생 하였습니다.');
+                    }
+                });
+
+
+            });
+
+            /*
+
+
+
+             */
+        </script>
 
         <footer class="main-footer sticky footer-type-1">
 

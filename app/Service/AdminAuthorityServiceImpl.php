@@ -77,4 +77,22 @@ class AdminAuthorityServiceImpl extends DBConnection  implements AdminAuthorityS
 
     }
 
+    public function getAdminAdd($params) {
+
+        $result = $this->statDB->table('users')
+            ->insertGetId([
+                'id' => $params['id']
+                ,'group_code' => $params['group_code']
+                ,'name' => $params['name']
+                ,'phoneno' => $params['phoneno']
+                ,'isuse' => $params['isuse']
+                ,'email' => $params['email']
+                ,'password' => bcrypt($params['password'])
+                ,'type' => 0
+            ]);
+
+        return $result;
+
+    }
+
 }
