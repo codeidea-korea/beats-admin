@@ -66,44 +66,26 @@
                 <!-- add class "multiple-expanded" to allow multiple submenus to open -->
                 <!-- class "auto-inherit-active-class" will automatically add "active" class for parent elements who are marked already with class "active" -->
                 <li>
-                    <a href="/dashboard">
-                        <i class="linecons-cog"></i>
+                    <a href="/admin/list">
+                    <i class="linecons-cog"></i>
                         <span class="title">Dashboard</span>
                     </a>
                 </li>
                 <li class="active opened active">
-                    <a href="/member">
+                    <a href="/admin/list">
                         <i class="linecons-user"></i>
-                        <span class="title">사용자관리</span>
+                        <span class="title">관리자 관리</span>
                     </a>
                 </li>
                 <li>
-                    <a href="/notice">
-                        <i class="linecons-database"></i>
-                        <span class="title">시스템자원관리</span>
+                    <a href="{{ route('logout') }}"
+                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                        {{ __('Logout') }}
                     </a>
-                    <ul>
-                        <li class="active">
-                            <a href="/notice">
-                                <span class="title">공지사항관리</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/qa">
-                                <span class="title">Q&A관리</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/faq">
-                                <span class="title">FAQ관리</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/pds">
-                                <span class="title">자료실관리</span>
-                            </a>
-                        </li>
-                    </ul>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
                 </li>
 
             </ul>
@@ -118,7 +100,7 @@
         <div class="page-title">
 
             <div class="title-env">
-                <h1 class="title">사용자관리</h1>
+                <h1 class="title">관리자 관리</h1>
             </div>
 
             <div class="breadcrumb-env">
@@ -129,18 +111,9 @@
 
                     </li>
                     <li class="active">
-                        <strong>사용자관리</strong>
+                        <strong>관리자 관리</strong>
                     </li>
-                    <li>
-                        <a href="{{ route('logout') }}"
-                           onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                            {{ __('Logout') }}
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                            @csrf
-                        </form>
-                    </li>
+
 
                 </ol>
 
@@ -152,7 +125,7 @@
         <!-- 공지사항 -->
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">사용자관리</h3>
+                <h3 class="panel-title">관리자 관리</h3>
 
                 <div class="panel-options">
                     <a href="#" data-toggle="panel">
@@ -194,11 +167,11 @@
                     </thead>
 
                     <tbody>
-                    @foreach($adminData as $rs)
+                    @foreach($adminList as $rs)
                     <tr>
                         <td style="width:8%">1</td>
                         <td style="width:10%">{{$rs->group_name}}</td>
-                        <td style="width:10%">{{$rs->name}}</td>
+                        <td style="width:10%"><a href="/admin/view?idx={{$rs->idx}}">{{$rs->name}}</a></td>
                         <td style="width:20%">@if($rs->phoneno==null) 000-0000-0000 @else {{$rs->phoneno}} @endif</td>
                         <td>{{$rs->email}}</td>
                         <td style="width:10%">{{$rs->isuse}}</td>
@@ -208,6 +181,9 @@
 
                     </tbody>
                 </table>
+                <div style="float:right;">
+                    <button class="btn btn-purple" type="button" onClick="javascript:location.href = '/admin/write';">등록</button>
+                </div>
 
             </div>
         </div>
@@ -412,26 +388,26 @@
 
 
 <!-- Imported styles on this page -->
-<link rel="stylesheet" href="assets/js/datatables/dataTables.bootstrap.css">
+<link rel="stylesheet" href="/assets/js/datatables/dataTables.bootstrap.css">
 
 <!-- Bottom Scripts -->
-<script src="assets/js/bootstrap.min.js"></script>
-<script src="assets/js/TweenMax.min.js"></script>
-<script src="assets/js/resizeable.js"></script>
-<script src="assets/js/joinable.js"></script>
-<script src="assets/js/xenon-api.js"></script>
-<script src="assets/js/xenon-toggles.js"></script>
-<script src="assets/js/datatables/js/jquery.dataTables.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
+<script src="/assets/js/TweenMax.min.js"></script>
+<script src="/assets/js/resizeable.js"></script>
+<script src="/assets/js/joinable.js"></script>
+<script src="/assets/js/xenon-api.js"></script>
+<script src="/assets/js/xenon-toggles.js"></script>
+<script src="/assets/js/datatables/js/jquery.dataTables.min.js"></script>
 
 
 <!-- Imported scripts on this page -->
-<script src="assets/js/datatables/dataTables.bootstrap.js"></script>
-<script src="assets/js/datatables/yadcf/jquery.dataTables.yadcf.js"></script>
-<script src="assets/js/datatables/tabletools/dataTables.tableTools.min.js"></script>
+<script src="/assets/js/datatables/dataTables.bootstrap.js"></script>
+<script src="/assets/js/datatables/yadcf/jquery.dataTables.yadcf.js"></script>
+<script src="/assets/js/datatables/tabletools/dataTables.tableTools.min.js"></script>
 
 
 <!-- JavaScripts initializations and stuff -->
-<script src="assets/js/xenon-custom.js"></script>
+<script src="/assets/js/xenon-custom.js"></script>
 
 </body>
 </html>

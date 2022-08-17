@@ -13,13 +13,31 @@ class AdminAuthorityServiceImpl extends DBConnection  implements AdminAuthorityS
         parent::__construct();
     }
 
-    public function getAdminList($params) {
+    public function getAdmGroupList($params) {
 
+        $result = $this->statDB->table('adm_group')
+            ->select(
+                'idx',
+                'group_code',
+                'group_name',
+                'adm_personal_data',
+            )
+            ->where('isuse', 'Y')
+            ->orderby('group_code','asc')
+            ->get();
+        return $result;
+
+    }
+
+
+    public function getAdminList($params) {
 
         $result = $this->statDB->table('users')
             ->leftJoin('adm_group', 'users.group_code', '=', 'adm_group.group_code')
             ->select(
+                'users.idx',
                 'users.name',
+                'users.group_code',
                 'adm_group.group_name',
                 'users.phoneno',
                 'users.email',
@@ -31,6 +49,30 @@ class AdminAuthorityServiceImpl extends DBConnection  implements AdminAuthorityS
             ->orderby('created_at','desc')
            // ->groupBy('name')
             ->get();
+        return $result;
+
+    }
+
+    public function getAdminData($params) {
+
+        $result = $this->statDB->table('users')
+            ->leftJoin('adm_group', 'users.group_code', '=', 'adm_group.group_code')
+            ->select(
+                'users.idx',
+                'users.id',
+                'users.name',
+                'users.group_code',
+                'adm_group.group_name',
+                'users.phoneno',
+                'users.email',
+                'users.isuse',
+                'users.created_at',
+                'users.adminid',
+            // $this->statDB->raw('SUM(name) AS CNT')
+            )
+            ->where('users.type', $params['type'])
+            ->where('users.idx', $params['idx'])
+            ->first();
         return $result;
 
     }

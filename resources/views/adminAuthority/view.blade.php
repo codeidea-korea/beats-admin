@@ -11,16 +11,16 @@
     <title>Admin - Data Tables</title>
 
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Arimo:400,700,400italic">
-    <link rel="stylesheet" href="assets/css/fonts/linecons/css/linecons.css">
-    <link rel="stylesheet" href="assets/css/fonts/fontawesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="assets/css/bootstrap.css">
-    <link rel="stylesheet" href="assets/css/xenon-core.css">
-    <link rel="stylesheet" href="assets/css/xenon-forms.css">
-    <link rel="stylesheet" href="assets/css/xenon-components.css">
-    <link rel="stylesheet" href="assets/css/xenon-skins.css">
-    <link rel="stylesheet" href="assets/css/custom.css">
+    <link rel="stylesheet" href="/assets/css/fonts/linecons/css/linecons.css">
+    <link rel="stylesheet" href="/assets/css/fonts/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="/assets/css/xenon-core.css">
+    <link rel="stylesheet" href="/assets/css/xenon-forms.css">
+    <link rel="stylesheet" href="/assets/css/xenon-components.css">
+    <link rel="stylesheet" href="/assets/css/xenon-skins.css">
+    <link rel="stylesheet" href="/assets/css/custom.css">
 
-    <script src="assets/js/jquery-1.11.1.min.js"></script>
+    <script src="/assets/js/jquery-1.11.1.min.js"></script>
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -46,7 +46,7 @@
                 <!-- logo -->
                 <div class="logo">
                     <a href="/dashboard" class="logo-expanded">
-                        <img src="assets/images/logo@2x2.png"  alt="" />
+                        <img src="/assets/images/logo@2x2.png"  alt="" />
                     </a>
                 </div>
 
@@ -65,44 +65,26 @@
                 <!-- add class "multiple-expanded" to allow multiple submenus to open -->
                 <!-- class "auto-inherit-active-class" will automatically add "active" class for parent elements who are marked already with class "active" -->
                 <li>
-                    <a href="/dashboard">
+                    <a href="/admin/list">
                         <i class="linecons-cog"></i>
                         <span class="title">Dashboard</span>
                     </a>
                 </li>
                 <li class="active opened active">
-                    <a href="/member">
+                    <a href="/admin/list">
                         <i class="linecons-user"></i>
-                        <span class="title">사용자관리</span>
+                        <span class="title">관리자 관리</span>
                     </a>
                 </li>
                 <li>
-                    <a href="/notice">
-                        <i class="linecons-database"></i>
-                        <span class="title">시스템자원관리</span>
+                    <a href="{{ route('logout') }}"
+                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                        {{ __('Logout') }}
                     </a>
-                    <ul>
-                        <li class="active">
-                            <a href="/notice">
-                                <span class="title">공지사항관리</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/qa">
-                                <span class="title">Q&A관리</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/faq">
-                                <span class="title">FAQ관리</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/pds">
-                                <span class="title">자료실관리</span>
-                            </a>
-                        </li>
-                    </ul>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
                 </li>
 
             </ul>
@@ -139,129 +121,106 @@
         <!-- 공지사항 -->
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">사용자 id : test1@test.co.kr</h3>
+                <h3 class="panel-title">관리자 상세</h3>
             </div>
             <div class="panel-body">
 
                 <form role="form" class="form-horizontal" role="form">
-
                     <div class="form-group">
-                        <label class="col-sm-2 control-label" for="field-1">ID</label>
+                        <label class="col-sm-2 control-label" for="field-1">상태</label>
 
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="userId" value="test1@test.co.kr" readonly>
+                            <select class="form-control" name="isuse">
+                                <option value="Y" @if($adminData->isuse=="Y") selected @endif>활성화</option>
+                                <option value="N" @if($adminData->isuse=="N") selected @endif>비활성화</option>
+                            </select>
                         </div>
                     </div>
+                    <div class="form-group-separator"></div>
 
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="field-1">그룹</label>
+
+                        <div class="col-sm-10">
+                            <select class="form-control" name="group_code">
+                                @foreach($groupList as $rs)
+                                    <option value="{{$rs->group_code}}" @if($adminData->group_code==$rs->group_code) selected @endif >{{$rs->group_name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group-separator"></div>
+
+                    <div class="form-group" >
+                        <label class="col-sm-2 control-label" for="field-1">이름</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="name" value="{{$adminData->name}}">
+                        </div>
+                    </div>
+                    <div class="form-group-separator"></div>
+
+
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="field-1">아이디</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="id" value="{{$adminData->id}}" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group-separator"></div>
+                    <div class="form-group" >
+                        <label class="col-sm-2 control-label" for="field-1">비밀번호 재설정</label>
+                        <div class="col-sm-10">
+                            <button class="btn btn-purple" type="button">비밀번호 재설정</button>
+                        </div>
+                    </div>
+                    <div class="form-group-separator"></div>
+
+                    <div class="form-group" >
+                        <label class="col-sm-2 control-label" for="field-1">연락처</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="phoneno" value="{{$adminData->phoneno}}">
+                        </div>
+                    </div>
                     <div class="form-group-separator"></div>
 
                     <div class="form-group">
                         <label class="col-sm-2 control-label" for="field-1">Email</label>
 
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="userEmail" value="test1@test.co.kr" readonly>
-                        </div>
-                    </div>
-
-                    <div class="form-group-separator"></div>
-
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">이메일 수신여부</label>
-                        <div class="col-sm-10">
-                            <p>
-                                <label class="radio-inline">
-                                    <input type="radio" name="emailCk" checked>
-                                    Yes
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="emailCk">
-                                    No
-                                </label>
-                            </p>
-
+                            <input type="text" class="form-control" id="email" value="{{$adminData->email}}">
                         </div>
                     </div>
                     <div class="form-group-separator"></div>
 
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">기관구분</label>
-                        <div class="col-sm-10">
-                            <p>
-                                <label class="radio-inline">
-                                    <input type="radio" name="gubun" checked>
-                                    기업
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="gubun">
-                                    업체
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="gubun">
-                                    개인
-                                </label>
-                            </p>
-
-                        </div>
-                    </div>
-                    <div class="form-group-separator"></div>
-
-
-                    <div class="form-group" id="gubunDisplay1-1">
-                        <label class="col-sm-2 control-label" for="field-1">소속 기업</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" >
-                        </div>
-                    </div>
-                    <div class="form-group-separator" id="gubunDisplay1-2"></div>
-
-                    <div class="form-group" id="gubunDisplay2-1">
-                        <label class="col-sm-2 control-label" for="field-1">부서 / 직위</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group-separator" id="gubunDisplay2-2"></div>
-
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label" for="field-1">등록일시</label>
+                        <label class="col-sm-2 control-label" for="field-1">등록자</label>
 
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="field-1" value="2022-05-02" readonly >
-                        </div>
-                    </div>
-                    <div class="form-group-separator"></div>
-
-
-
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label" for="field-1">AI 검색권한</label>
-
-                        <div class="col-sm-10">
-                            <input type="checkbox" checked class="iswitch iswitch-red">
+                            <input type="text" class="form-control" id="" value="{{$adminData->adminid}}">
                         </div>
                     </div>
                     <div class="form-group-separator"></div>
 
                     <div class="form-group">
-                        <label class="col-sm-2 control-label" for="field-1">사용자 승인</label>
+                        <label class="col-sm-2 control-label" for="field-1">등록일</label>
 
                         <div class="col-sm-10">
-                            <input type="checkbox" checked class="iswitch iswitch-red">
+                            <input type="text" class="form-control" id="" value="{{$adminData->created_at}}">
                         </div>
                     </div>
                     <div class="form-group-separator"></div>
 
                 </form>
                 <div style="float:right;">
-                    <button class="btn btn-purple" type="button">수정</button>
-                    <button class="btn btn-red" type="button">삭제</button>
-                    <button class="btn btn-blue" type="button">목록</button>
+                    <button class="btn btn-purple" type="button" onClick="alert();">수정</button>
+                    <button class="btn btn-red" type="button" onClick="alert();">삭제</button>
+                    <button class="btn btn-blue" type="button" onClick="javascript:location.href = '/admin/list';">목록</button>
                 </div>
             </div>
 
         </div>
-
-
 
         <footer class="main-footer sticky footer-type-1">
 
@@ -289,49 +248,8 @@
         </footer>
     </div>
 
-
-
-
 </div>
 
-<div class="footer-sticked-chat"><!-- Start: Footer Sticked Chat -->
-
-    <script type="text/javascript">
-        function toggleSampleChatWindow()
-        {
-            var $chat_win = jQuery("#sample-chat-window");
-
-            $chat_win.toggleClass('open');
-
-            if($chat_win.hasClass('open'))
-            {
-                var $messages = $chat_win.find('.ps-scrollbar');
-
-                if($.isFunction($.fn.perfectScrollbar))
-                {
-                    $messages.perfectScrollbar('destroy');
-
-                    setTimeout(function(){
-                        $messages.perfectScrollbar();
-                        $chat_win.find('.form-control').focus();
-                    }, 300);
-                }
-            }
-
-            jQuery("#sample-chat-window form").on('submit', function(ev)
-            {
-                ev.preventDefault();
-            });
-        }
-
-
-    </script>
-
-
-
-
-    <!-- End: Footer Sticked Chat -->
-</div>
 
 
 
@@ -339,26 +257,26 @@
 
 
 <!-- Imported styles on this page -->
-<link rel="stylesheet" href="assets/js/datatables/dataTables.bootstrap.css">
+<link rel="stylesheet" href="/assets/js/datatables/dataTables.bootstrap.css">
 
 <!-- Bottom Scripts -->
-<script src="assets/js/bootstrap.min.js"></script>
-<script src="assets/js/TweenMax.min.js"></script>
-<script src="assets/js/resizeable.js"></script>
-<script src="assets/js/joinable.js"></script>
-<script src="assets/js/xenon-api.js"></script>
-<script src="assets/js/xenon-toggles.js"></script>
-<script src="assets/js/datatables/js/jquery.dataTables.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
+<script src="/assets/js/TweenMax.min.js"></script>
+<script src="/assets/js/resizeable.js"></script>
+<script src="/assets/js/joinable.js"></script>
+<script src="/assets/js/xenon-api.js"></script>
+<script src="/assets/js/xenon-toggles.js"></script>
+<script src="/assets/js/datatables/js/jquery.dataTables.min.js"></script>
 
 
 <!-- Imported scripts on this page -->
-<script src="assets/js/datatables/dataTables.bootstrap.js"></script>
-<script src="assets/js/datatables/yadcf/jquery.dataTables.yadcf.js"></script>
-<script src="assets/js/datatables/tabletools/dataTables.tableTools.min.js"></script>
+<script src="/assets/js/datatables/dataTables.bootstrap.js"></script>
+<script src="/assets/js/datatables/yadcf/jquery.dataTables.yadcf.js"></script>
+<script src="/assets/js/datatables/tabletools/dataTables.tableTools.min.js"></script>
 
 
 <!-- JavaScripts initializations and stuff -->
-<script src="assets/js/xenon-custom.js"></script>
+<script src="/assets/js/xenon-custom.js"></script>
 
 </body>
 </html>

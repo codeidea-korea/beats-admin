@@ -34,20 +34,34 @@ class AdminAuthorityController extends Controller
     {
         $params = $this->request->input();
         $params['type'] = $params['type'] ?? 0;
-        $adminData = $this->adminAuthorityService->getAdminList($params);
+        $adminList = $this->adminAuthorityService->getAdminList($params);
 
         return view('adminAuthority.list',[
-            'adminData' => $adminData
+            'adminList' => $adminList
         ]);
     }
     public function getAdminView()
     {
         $params = $this->request->input();
         $params['type'] = $params['type'] ?? 0;
-        $adminData = $this->adminAuthorityService->getAdminList($params);
+        $params['id'] = $params['id'] ?? 0;
+        $adminData = $this->adminAuthorityService->getAdminData($params);
+        $groupList = $this->adminAuthorityService->getAdmGroupList($params);
 
-        return view('adminAuthority.list',[
-            'adminData' => $adminData
+        return view('adminAuthority.view',[
+            'adminData' => $adminData,
+            'groupList' => $groupList
         ]);
     }
+    public function getAdminWrite()
+    {
+        $params = $this->request->input();
+        $params['type'] = $params['type'] ?? 0;
+        $groupList = $this->adminAuthorityService->getAdmGroupList($params);
+        return view('adminAuthority.write',[
+            'params' => $params,
+            'groupList' => $groupList
+        ]);
+    }
+
 }

@@ -33,6 +33,7 @@ Route::middleware(['auth'])->group(function () {
     //Route::get('/test', [HomeController::class, 'test']);
     Route::get('/admin/list', [\App\Http\Controllers\AdminAuthorityController::class, 'getAdminList']);
     Route::get('/admin/view', [\App\Http\Controllers\AdminAuthorityController::class, 'getAdminView']);
+    Route::get('/admin/write', [\App\Http\Controllers\AdminAuthorityController::class, 'getAdminWrite']);
 });
 
 /*------------------------------------------
