@@ -36,6 +36,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/write', [\App\Http\Controllers\AdminAuthorityController::class, 'getAdminWrite']);
     Route::get('/admin/ajax/adminAdd', [\App\Http\Controllers\AdminAuthorityController::class, 'setAdminAdd']);
 
+    Route::get('/admin/board/list', [\App\Http\Controllers\BoardController::class, 'getBoardList']);
+    Route::get('/admin/board/view/{bidx}', [\App\Http\Controllers\BoardController::class, 'getBoardView']);
+    Route::get('/admin/board/write', [\App\Http\Controllers\BoardController::class, 'getBoardWrite']);
+    Route::post('/admin/board/add', [\App\Http\Controllers\BoardController::class, 'BoardAdd']);
+    Route::post('/admin/board/update', [\App\Http\Controllers\BoardController::class, 'BoardUpdate']);
+    Route::post('/admin/board/delete', [\App\Http\Controllers\BoardController::class, 'BoardDelete']);
 });
 
 /*------------------------------------------
