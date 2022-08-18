@@ -34,7 +34,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/list', [\App\Http\Controllers\AdminAuthorityController::class, 'getAdminList']);
     Route::get('/admin/view', [\App\Http\Controllers\AdminAuthorityController::class, 'getAdminView']);
     Route::get('/admin/write', [\App\Http\Controllers\AdminAuthorityController::class, 'getAdminWrite']);
-    Route::get('/admin/ajax/adminAdd', [\App\Http\Controllers\AdminAuthorityController::class, 'setAdminAdd']);
+    Route::post('/admin/ajax/adminAdd', [\App\Http\Controllers\AdminAuthorityController::class, 'setAdminAdd']);
 
     Route::get('/admin/board/list', [\App\Http\Controllers\BoardController::class, 'getBoardList']);
     Route::get('/admin/board/view/{bidx}', [\App\Http\Controllers\BoardController::class, 'getBoardView']);

@@ -89,6 +89,7 @@ class AdminAuthorityServiceImpl extends DBConnection  implements AdminAuthorityS
                 ,'email' => $params['email']
                 ,'password' => bcrypt($params['password'])
                 ,'type' => 0
+                ,'created_at' => now()
             ]);
 
         return $result;

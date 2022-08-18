@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Xenon Boostrap Admin Panel" />
     <meta name="author" content="" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <title>Admin - Data Tables</title>
 
@@ -124,8 +125,8 @@
                 <h3 class="panel-title">관리자 등록</h3>
             </div>
             <div class="panel-body">
-
-                <form role="form" class="form-horizontal" role="form">
+                <form name="RegForm" class="form-horizontal" role="form" id="RegForm"  method="post" action="{{ url('/admin/ajax/adminAdd') }}">
+                    @csrf
                     <div class="form-group">
                         <label class="col-sm-2 control-label" for="field-1">상태</label>
 
@@ -165,7 +166,7 @@
                         <label class="col-sm-2 control-label" for="field-1">아이디</label>
 
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="id" value="">
+                            <input type="text" class="form-control" name="id" value="">
                             <button class="btn btn-purple" type="button">중복 확인</button>
                         </div>
                     </div>
@@ -198,68 +199,69 @@
                         </div>
                     </div>
                     <div class="form-group-separator"></div>
+                    <div style="float:right;">
+                        <button class="btn btn-purple btn_create" type="submit">등록</button>
+                        <button class="btn btn-red" type="button" onClick="alert();">취소</button>
+                        <button class="btn btn-blue" type="button" onClick="javascript:location.href = '/admin/list';">목록</button>
+                    </div>
 
                 </form>
-                <div style="float:right;">
-                    <button class="btn btn-purple btn_create" type="button">등록</button>
-                    <button class="btn btn-red" type="button" onClick="alert();">취소</button>
-                    <button class="btn btn-blue" type="button" onClick="javascript:location.href = '/admin/list';">목록</button>
-                </div>
+
             </div>
 
         </div>
         <script>
-            $(".btn_create").on('click', function(){
-
-                let isuse = $('select[name=isuse]').val();
-                let group_code = $('select[name=group_code]').val();
-                let name = $('input[name=name]').val();
-                let id = $('input[name=id]').val();
-                let password = $('input[name=password]').val();
-                let password2 = $('input[name=password2]').val();
-                let phoneno = $('input[name=phoneno]').val();
-                let email = $('select[name=email]').val();
-                alert('test');
-                let data = {
-                    isuse:isuse
-                    ,group_code:group_code
-                    ,name:name
-                    ,id:id
-                    ,password:password
-                    ,password2:password2
-                    ,phoneno:phoneno
-                    ,email:email
-                };
-
-                $.ajax({
-                    contentType: "application/json; charset=utf-8",
-                    type:"get",
-                    dataType:'json',
-                    data: data,
-                    url: '{{ url('/admin/ajax/adminAdd') }}',
-                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                    success: function searchSuccess(data) {
-                        if(data.result=="SUCCESS"){
-                            alert('관리자계정이 추가되었습니다.');
-                            location.reload();
-                        }else{
-                            alert("error");
-                        }
-                    },
-                    error: function (e) {
-                        console.log(e);
-                        alert('로딩 중 오류가 발생 하였습니다.');
-                    }
-                });
-
-
-            });
-
             /*
+                $(".btn_create").on('click', function(){
 
+                    var isuse = $('select[name=isuse]').val();
+                    var group_code = $('select[name=group_code]').val();
+                    var name = $('input[name=name]').val();
+                    var id = $('input[name=id]').val();
+                    var password = $('input[name=password]').val();
+                    var password2 = $('input[name=password2]').val();
+                    var phoneno = $('input[name=phoneno]').val();
+                    var email = $('input[name=email]').val();
 
+                    var data = {
+                        isuse:isuse
+                        ,group_code:group_code
+                        ,name:name
+                        ,id:id
+                        ,password:password
+                        ,password2:password2
+                        ,phoneno:phoneno
+                        ,email:email
+                    };
+                    $.ajax({
+                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        type:"post",
+                        //contentType: "application/json; charset=utf-8",
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType:'json',
 
-             */
+                        data: data,
+                        url: '{{ url('/admin/ajax/adminAdd') }}',
+                        success: function searchSuccess(data) {
+                            if(data.result=="SUCCESS"){
+                                alert('관리자계정이 추가되었습니다.');
+                                location.reload();
+                            }else{
+                                alert(data.result);
+                            }
+                        },
+                        error: function (e) {
+                            console.log('start');
+                            console.log(e);
+                            alert('로딩 중 오류가 발생 하였습니다.');
+                        }
+                    });
+
+                });
+            */
+
         </script>
 
         <footer class="main-footer sticky footer-type-1">
