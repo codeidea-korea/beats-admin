@@ -29,6 +29,15 @@ class AdminAuthorityServiceImpl extends DBConnection  implements AdminAuthorityS
 
     }
 
+    public function getAdminTotal($params) {
+
+        $result = $this->statDB->table('users')
+            ->select(DB::raw("COUNT(idx) AS cnt"))
+            ->where('type', $params['type'])
+            ->first();
+        return $result;
+
+    }
 
     public function getAdminList($params) {
 
@@ -47,6 +56,9 @@ class AdminAuthorityServiceImpl extends DBConnection  implements AdminAuthorityS
             )
             ->where('type', $params['type'])
             ->orderby('created_at','desc')
+            //->limit(0,$params['limit'])
+            ->skip(($params['page']-1)*$params['limit'])
+            ->take($params['limit'])
            // ->groupBy('name')
             ->get();
         return $result;

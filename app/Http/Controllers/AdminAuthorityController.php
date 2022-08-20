@@ -28,10 +28,18 @@ class AdminAuthorityController extends Controller
     {
         $params = $this->request->input();
         $params['type'] = $params['type'] ?? 0;
+        $params['page'] = $params['page'] ?? 1;
+        $params['limit'] = $params['limit'] ?? 10;
         $adminList = $this->adminAuthorityService->getAdminList($params);
-
+        $adminTotal = $this->adminAuthorityService->getAdminTotal($params);
+        $totalCount = $adminTotal->cnt;
+        $params['totalCnt'] = $totalCount;
         return view('adminAuthority.list',[
-            'adminList' => $adminList
+            'params' => $params
+            ,'searchData' => $params
+            ,'adminList' => $adminList
+            ,'adminTotal' => $adminTotal
+            ,'totalCount' => $totalCount
         ]);
     }
     public function getAdminView()

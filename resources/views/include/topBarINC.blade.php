@@ -10,7 +10,7 @@
     <!-- BEGIN: Account Menu -->
     <div class="intro-x dropdown w-8 h-8">
         <div class="dropdown-toggle w-8 h-8 rounded-full overflow-hidden shadow-lg image-fit zoom-in" role="button" aria-expanded="false" data-tw-toggle="dropdown">
-            <img alt="Midone - HTML Admin Template" src="dist/images/profile-5.jpg">
+            <img alt="Midone - HTML Admin Template" src="/dist/images/profile-5.jpg">
         </div>
         <div class="dropdown-menu w-56">
             <ul class="dropdown-content bg-primary text-white">
