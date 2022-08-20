@@ -43,7 +43,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/admin/board/update', [\App\Http\Controllers\BoardController::class, 'BoardUpdate']);
     Route::post('/admin/board/delete', [\App\Http\Controllers\BoardController::class, 'BoardDelete']);
 });
-
+Route::get('/pageSample', function () {
+    return view('pageSample');
+});
 /*------------------------------------------
 --------------------------------------------
 All Admin Routes List
