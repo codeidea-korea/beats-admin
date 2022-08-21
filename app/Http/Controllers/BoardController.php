@@ -35,7 +35,7 @@ class BoardController extends Controller
         $params = $this->request->input();
         $boardData = $this->adminBoardService->getBoardList($params);
 
-        return view('admin.noticeBoard.list',[
+        return view('noticeBoard.list',[
             'boardData' => $boardData
         ]);
     }
@@ -44,7 +44,7 @@ class BoardController extends Controller
         $params = $this->request->input();
         $boardData = $this->adminBoardService->getBoardView($params, $bidx);
 
-        return view('admin.noticeBoard.view',[
+        return view('noticeBoard.view',[
             'boardData' => $boardData
         ]);
     }
@@ -53,7 +53,7 @@ class BoardController extends Controller
     {
         $params = $this->request->input();
 
-        return view('admin.noticeBoard.write');
+        return view('noticeBoard.write');
     }
 
     public function BoardAdd()

@@ -17,7 +17,8 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
 
 
         $result = $this->statDB->table('notice_board')
-            ->leftJoin('members', 'notice_board.mem_id', '=', 'members.id')
+            ->leftJoin('members', 'notice_board.mem_id', '=', 'members.idx')
+            ->leftJoin('member_data', 'members.idx', '=', 'member_data.mem_id')
             ->select(
                 'notice_board.idx',
                 'notice_board.mem_id',
@@ -30,7 +31,7 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
                 'notice_board.wr_open',
                 'notice_board.wr_file',
                 'notice_board.created_at',
-                'members.name',
+                'member_data.name',
                // $this->statDB->raw('SUM(name) AS CNT')
             )
             ->orderby('created_at','desc')
@@ -43,7 +44,8 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
     public function getBoardView($params, $bidx) {
 
         $result = $this->statDB->table('notice_board')
-            ->leftJoin('members', 'notice_board.mem_id', '=', 'members.id')
+            ->leftJoin('members', 'notice_board.mem_id', '=', 'members.idx')
+            ->leftJoin('member_data', 'members.idx', '=', 'member_data.mem_id')
             ->select(
                 'notice_board.idx',
                 'notice_board.mem_id',
@@ -56,7 +58,7 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
                 'notice_board.wr_open',
                 'notice_board.wr_file',
                 'notice_board.created_at',
-                'members.name',
+                'member_data.name',
                // $this->statDB->raw('SUM(name) AS CNT')
             )
             ->where('notice_board.idx',$bidx)
