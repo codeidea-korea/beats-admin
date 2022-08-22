@@ -15,13 +15,12 @@
                 <div class="intro-y box">
 
                     <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60">
-                        <h2 class="font-medium text-base mr-auto text-primary">총 000개의 언어가 있습니다.</h2>
-                        <button class="btn btn-primary w-24">버튼</button>
+                        <h2 class="font-medium text-base mr-auto text-primary">총 {{$params['totalCnt']}}개의 언어가 있습니다.</h2>
                     </div>
 
                     <!-- table 시작 -->
                     <div class="p-5">
-                        <table class="table table-bordered table-hover">
+                        <table class="table table-bordered table-hover"  >
                             <thead>
                             <tr>
                                 <th class="whitespace-nowrap text-center">No.</th>
@@ -29,11 +28,32 @@
                                 <th class="whitespace-nowrap text-center">관리</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="langTable">
+                            @foreach($langList as $rs)
+                                <tr>
+                                    <td class="w-10 text-center">1</td>
+                                    <td>
+                                        <div class="mt-2">
+                                            <select data-placeholder="Select your favorite actors" class="tom-select w-full">
+                                                <option value="1">한국어</option>
+                                                <option value="2">영어</option>
+                                                <option value="3">일본어</option>
+                                                <option value="4">중국어</option>
+                                                <option value="5">프랑스어</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td class="md:w-60 w-32">
+                                        <button class="btn btn-primary w-24">완료</button>
+                                    </td>
+                                </tr>
+                            @endforeach
+
+                            {{--
                             <tr>
                                 <td class="w-10 text-center">1</td>
                                 <td>
-                                    <!-- BEGIN: Basic Select -->
+                                     BEGIN: Basic Select
                                     <div class="mt-2">
                                         <select data-placeholder="Select your favorite actors" class="tom-select w-full">
                                             <option value="1">한국어</option>
@@ -43,7 +63,7 @@
                                             <option value="5">프랑스어</option>
                                         </select>
                                     </div>
-                                    <!-- END: Basic Select -->
+                                     END: Basic Select
                                 </td>
                                 <td class="md:w-60 w-32">
                                     <button class="btn btn-primary w-24">완료</button>
@@ -70,7 +90,7 @@
                             <tr>
                                 <td class="text-center">4</td>
                                 <td>
-                                    <!-- BEGIN: Basic Select -->
+                                    BEGIN: Basic Select
                                     <div class="mt-2">
                                         <select data-placeholder="Select your favorite actors" class="tom-select w-full">
                                             <option value="1">언어선택</option>
@@ -80,33 +100,47 @@
                                             <option value="5">프랑스어</option>
                                         </select>
                                     </div>
-                                    <!-- END: Basic Select -->
+                                     END: Basic Select
                                 </td>
                                 <td>
                                     <button class="btn btn-outline-pending w-24 inline-block">취소</button>
                                 </td>
                             </tr>
+                            --}}
                             </tbody>
                         </table>
-                        <button href="" class="btn btn-primary mt-5 intro-y w-full block text-center rounded-md py-4 border-slate-400">언어 추가</button>
+                        <button onClick="addLangFrom();" class="btn btn-primary mt-5 intro-y w-full block text-center rounded-md py-4 border-slate-400">언어 추가</button>
                     </div>
                 </div>
             </div>
-            <!-- table 끝-->
-            <div class="intro-y col-span-12 flex items-center justify-center sm:justify-end p-5">
-                <button class="btn btn-secondary w-24">Previous</button>
-                <button class="btn btn-primary w-24 ml-2">Next</button>
-            </div>
         </div>
 
+        <script>
+            function addLangFrom() {
+
+                var ihtml = "";
+
+                ihtml += "<tr>";
+                ihtml += "<td class='text-center'>4</td>";
+                ihtml += "<td>";
+                ihtml += "<div class='mt-2'>";
+                ihtml += "<select data-placeholder='Select your favorite actors' class='tom-select w-full'>";
+                ihtml += "<option value=''>언어선택</option>";
+                ihtml += "<option value='kr'>한국어</option>";
+                ihtml += "<option value='en'>영어</option>";
+                ihtml += "<option value='jp'>일본어</option>";
+                ihtml += "<option value='ch'>중국어</option>";
+                ihtml += "</select>";
+                ihtml += "</div>";
+                ihtml += "</td>";
+                ihtml += "<td><button class='btn btn-outline-pending w-24 inline-block'>취소</button></td>";
+                ihtml += "</tr>";
+                console.log(ihtml);
+                document.getElementById('langTable').append(ihtml);
+
+                //$('#langTable').append(ihtml);
+            }
+        </script>
 @endsection
 
-@section('scripts')
-    <script>
-        function change(page) {
-            $("input[name=page]").val(page);
-            $("form[name=searchData]").submit();
-        }
-    </script>
-@endsection
 
