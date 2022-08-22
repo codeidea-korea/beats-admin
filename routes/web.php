@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AdminAuthorityController;
+use App\Http\Controllers\MultilingualController;
+use App\Http\Controllers\BoardController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -31,17 +34,35 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     // dbConnect 및 Service 별도 분리 테스트
     //Route::get('/test', [HomeController::class, 'test']);
-    Route::get('/admin/list', [\App\Http\Controllers\AdminAuthorityController::class, 'getAdminList']);
-    Route::get('/admin/view', [\App\Http\Controllers\AdminAuthorityController::class, 'getAdminView']);
-    Route::get('/admin/write', [\App\Http\Controllers\AdminAuthorityController::class, 'getAdminWrite']);
-    Route::post('/admin/ajax/adminAdd', [\App\Http\Controllers\AdminAuthorityController::class, 'setAdminAdd']);
 
-    Route::get('/admin/board/list', [\App\Http\Controllers\BoardController::class, 'getBoardList']);
-    Route::get('/admin/board/view/{bidx}', [\App\Http\Controllers\BoardController::class, 'getBoardView']);
-    Route::get('/admin/board/write', [\App\Http\Controllers\BoardController::class, 'getBoardWrite']);
-    Route::post('/admin/board/add', [\App\Http\Controllers\BoardController::class, 'BoardAdd']);
-    Route::post('/admin/board/update', [\App\Http\Controllers\BoardController::class, 'BoardUpdate']);
-    Route::post('/admin/board/delete', [\App\Http\Controllers\BoardController::class, 'BoardDelete']);
+    //관리자 관리
+    Route::group(['prefix' => 'admin'], function()
+    {
+        Route::get('/', [AdminAuthorityController::class, 'getAdminList']);
+        Route::get('list', [AdminAuthorityController::class, 'getAdminList']);
+        Route::get('view', [AdminAuthorityController::class, 'getAdminView']);
+        Route::get('write', [AdminAuthorityController::class, 'getAdminWrite']);
+        Route::post('ajax/adminAdd', [AdminAuthorityController::class, 'setAdminAdd']);
+
+    });
+
+
+
+    Route::get('/admin/board/list', [BoardController::class, 'getBoardList']);
+    Route::get('/admin/board/view/{bidx}', [BoardController::class, 'getBoardView']);
+    Route::get('/admin/board/write', [BoardController::class, 'getBoardWrite']);
+    Route::post('/admin/board/add', [BoardController::class, 'BoardAdd']);
+    Route::post('/admin/board/update', [BoardController::class, 'BoardUpdate']);
+    Route::post('/admin/board/delete', [BoardController::class, 'BoardDelete']);
+
+    //다국어설정
+    Route::group(['prefix' => 'multilingual'], function()
+    {
+        Route::get('/', [MultilingualController::class, 'langManage']);
+        Route::get('/langManage', [MultilingualController::class, 'langManage']);
+
+    });
+
 });
 Route::get('/pageSample', function () {
     return view('pageSample');
