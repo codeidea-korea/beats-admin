@@ -121,27 +121,29 @@
 
             function addLangFrom() {
 
+                var dom = document.createElement('tr');
                 var ihtml = "";
 
-                ihtml =  "<tr>"
-                + "<td class='text-center'>4</td>"
-                + "<td>"
-                + "<div class='mt-2'>"
-                + "<select data-placeholder='Select your favorite actors' class='tom-select w-full'>"
-                + "<option value=''>언어선택</option>"
-                + "<option value='kr'>한국어</option>"
-                + "<option value='en'>영어</option>"
-                + "<option value='jp'>일본어</option>"
-                + "<option value='ch'>중국어</option>"
-                + "</select>"
-                + "</div>"
-                + "</td>"
-                + "<td><button class='btn btn-outline-pending w-24 inline-block'>취소</button></td>"
-                + "</tr>";
-                console.log(ihtml);
-                //document.getElementById('langTable').append(ihtml);
+                ihtml =  "<tr>"+"<td class='text-center'>4</td>"
+                ihtml += "<td>"
+                ihtml += "<div class='mt-2'>"
+                ihtml += "<select data-placeholder='Select your favorite actors' class='tom-select w-full'>"
+                ihtml += "<option value=''>언어선택</option>"
+                ihtml += "<option value='kr'>한국어</option>"
+                ihtml += "<option value='en'>영어</option>"
+                ihtml += "<option value='jp'>일본어</option>"
+                ihtml += "<option value='ch'>중국어</option>"
+                ihtml += "</select>"
+                ihtml += "</div>"
+                ihtml += "</td>"
+                ihtml += "<td><button class='btn btn-outline-pending w-24 inline-block'>취소</button></td>"
+                ihtml += "</tr>";
+
+                dom.innerHTML = ihtml;
+
+                //document.getElementById('langTable').append(dom);
                 //$("table tbody").append(ihtml);
-                $('#langTable').append(ihtml);
+                $('#langTable').append(dom);
             }
         </script>
 @endsection
