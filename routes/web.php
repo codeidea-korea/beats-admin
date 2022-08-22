@@ -70,11 +70,9 @@ Route::middleware(['auth'])->group(function () {
     Route::group(['prefix' => 'multilingual'], function()
     {
         Route::get('/', [MultilingualController::class, 'langManage']);
-        Route::get('/langManage', [MultilingualController::class, 'langManage']);
-        //Route::get('/menuManage', [MultilingualController::class, 'menuManage']);
-        Route::get('menuManage', function () {
-            return view('/multilingual.menuManage');
-        });
+        Route::get('langManage', [MultilingualController::class, 'langManage']);
+        Route::get('menuManage', [MultilingualController::class, 'menuManage']);
+
     });
 
 });

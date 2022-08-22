@@ -53,7 +53,7 @@ class MultilingualController extends Controller
     {
         $params = $this->request->input();
 
-        return view('multilingual.menuManage',[
+        return view('multilingual.menuMange',[
             'params' => $params
         ]);
     }
