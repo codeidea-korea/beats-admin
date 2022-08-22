@@ -48,4 +48,14 @@ class MultilingualController extends Controller
         ]);
     }
 
+
+    public function menuManage()
+    {
+        $params = $this->request->input();
+
+        return view('multilingual.menuMange',[
+            'params' => $params
+        ]);
+    }
+
 }

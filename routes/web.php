@@ -69,7 +69,8 @@ Route::middleware(['auth'])->group(function () {
     Route::group(['prefix' => 'multilingual'], function()
     {
         Route::get('/', [MultilingualController::class, 'langManage']);
-        Route::get('/langManage', [MultilingualController::class, 'langManage']);
+        Route::get('langManage', [MultilingualController::class, 'langManage']);
+        Route::get('menuManage', [MultilingualController::class, 'menuManage']);
 
     });
 
