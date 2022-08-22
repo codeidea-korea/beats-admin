@@ -2,15 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Response;
 use App\Service\MainManageServiceImpl;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Foundation\Application;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Redirector;
-use Illuminate\Support\Facades\DB;
-use Illuminate\View\View;
 use Session;
 
 class MainManageController extends Controller
