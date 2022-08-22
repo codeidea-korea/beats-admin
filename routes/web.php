@@ -53,7 +53,6 @@ Route::middleware(['auth'])->group(function () {
     {
         Route::get('banner/list', [MainManageController::class, 'getBannerList']);
         Route::get('banner/view/{bidx}', [MainManageController::class, 'getBannerView']);
-        Route::get('banner/write', [MainManageController::class, 'getBannerWrite']);
         Route::post('banner/add', [MainManageController::class, 'BannerAdd']);
         Route::post('banner/update', [MainManageController::class, 'BannerUpdate']);
         Route::post('banner/delete', [MainManageController::class, 'BannerDelete']);

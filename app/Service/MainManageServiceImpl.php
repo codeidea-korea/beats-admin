@@ -106,12 +106,23 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
 
     }
 
-    public function BoardAdd($params) {
+    public function BannerAdd($params) {
+        
+        if($params['banner_img'] != ""){
+            $file = $params['banner_img'];
+            $cfilename = $file->getClientOriginalName();
+            $cfilesource = $file->hashName();
+            $folderName = '/banner/';
+            $file->storeAs($folderName, $file->hashName(), 'public');
+            $params['banner_file'] = $cfilename;
+            $params['banner_source'] = $cfilesource;
+        }
 
-        $result = $this->statDB->table('notice_board')
-            ->insertGetId([
-                'wr_title' => $params['wr_title'], 'wr_content' => $params['wr_content'], 'wr_open' => $params['wr_open'],
-                'mem_id' => auth()->user()->id, 'created_at' => \Carbon\Carbon::now(),
+        $result = $this->statDB->table('adm_banner_data')
+            ->insert([
+                'br_title' => $params['br_title'], 'contents' => $params['contents'], 'contents_url' => $params['contents_url'],
+                'banner_file' => $params['banner_file'], 'banner_source' => $params['banner_source'], 'banner_code' => $params['banner_code'],
+                'isuse' => $params['isuse'], 'mem_id' => auth()->user()->id, 'created_at' => \Carbon\Carbon::now(),
             ]);
 
         return $result;

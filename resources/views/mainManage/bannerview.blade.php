@@ -169,69 +169,108 @@
                     <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60">
                         <h2 class="font-medium text-base mr-auto">컨텐츠 등록</h2>
                     </div>
+                    
+                    <form id="BannerWriteForm" method="post" action="/mainmanage/banner/add" accept="multipart/form-data">
+                        <div class="overflow-x-auto">
+                            <input type="hidden" name="banner_code" value="{{$bannerData[0]->banner_code}}"/>
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">제목</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input name="br_title" id="regular-form-1" type="text" class="form-control" placeholder="제목을 입력해주세요.">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">컨텐츠 구분</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <select name="contents" class="form-select w-56" aria-label=".form-select-lg example">
+                                            <option value="">선택</option>
+                                            <option value="notice">공지사항</option>
+                                            <option value="event">이벤트</option>
+                                            <option value="url">URL 등록</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">연결 컨텐츠</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input name="contents_url"id="regular-form-1" type="text" class="form-control" placeholder="연결할 컨텐츠를 입력해주세요.">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">배너 이미지</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input name="banner_img" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" type="file">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">상태</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <select name="isuse" class="form-select w-56" aria-label=".form-select-lg example">
+                                            <option value="Y">사용</option>
+                                            <option value="N">미 사용</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
 
-                    <div class="overflow-x-auto">
-                    <table class="table table-bordered">
-                        <tr>
-                            <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">제목</th>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input id="regular-form-1" type="text" class="form-control" placeholder="제목을 입력해주세요.">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">컨텐츠 구분</th>
-                        </tr>
-                        <tr>
-                            <td>
-                                <select name="contents" class="form-select w-56" aria-label=".form-select-lg example">
-                                    <option value="">선택</option>
-                                    <option value="notice">공지사항</option>
-                                    <option value="event">이벤트</option>
-                                    <option value="url">URL 등록</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">연결 컨텐츠</th>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input name="contents_url"id="regular-form-1" type="text" class="form-control" placeholder="연결할 컨텐츠를 입력해주세요.">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">배너 이미지</th>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" type="file" name="banner_img">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">상태</th>
-                        </tr>
-                        <tr>
-                            <td>
-                                <select name="isuse" class="form-select w-56" aria-label=".form-select-lg example">
-                                    <option value="Y">사용</option>
-                                    <option value="N">미 사용</option>
-                                </select>
-                            </td>
-                        </tr>
-                    </table>
-                    </div>
-
-                    <div class="flex items-center justify-center mt-5">
-                        <button class="btn btn-primary w-32 ml-2 mr-2">등록</button>
-                        <button class="btn btn-secondary w-32" data-tw-dismiss="modal">닫기</button>
-                    </div>
+                        <div class="flex items-center justify-center mt-5">
+                            <button class="btn btn-primary w-32 ml-2 mr-2 bannerAddbtn">등록</button>
+                            <button class="btn btn-secondary w-32" data-tw-dismiss="modal">닫기</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
     <!-- 등록 모달 끝 -->
+    
+    <script>
+        $(document).on('click','.bannerAddbtn', function(){
+            
+
+            console.log($('#BannerWriteForm'))
+            $('#BannerWriteForm').submit();
+
+            /*var BannerWriteForm = $("#BannerWriteForm")[0];
+            var formData = new FormData(BannerWriteForm);
+
+            $.ajax({
+                type:"post",
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType:'json',
+                data: formData,
+                url: '/mainmanage/banner/add',
+                success: function (data) {
+                    if(data.result=="SUCCESS"){
+                        alert('컨텐츠가 등록되었습니다.');
+                        location.reload();
+                    }else{
+                        alert(data.result);
+                    }
+                },
+                error: function (e) {
+                    console.log('start');
+                    console.log(e);
+                    alert('로딩 중 오류가 발생 하였습니다.');
+                }
+            });*/
+
+        });
+    </script>
 @endsection
 
 @section('scripts')
@@ -242,4 +281,3 @@
         }
     </script>
 @endsection
-

@@ -65,4 +65,18 @@ class MainManageController extends Controller
             ,'totalCount' => $totalCount
         ]);
     }
+
+    public function BannerAdd()
+    {
+        $params = $this->request->input();
+        $boardData = $this->adminBoardService->BannerAdd($params);
+
+        if($boardData > 0){
+            $data['result'] = "success";
+        }else{
+            $data['result'] = "등록에 실패하였습니다.다시 시도하거나 관리자에게 문의해주세요!";
+        }
+
+        return $data;
+    }
 }
