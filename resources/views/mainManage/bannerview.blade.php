@@ -170,9 +170,11 @@
                         <h2 class="font-medium text-base mr-auto">컨텐츠 등록</h2>
                     </div>
                     
-                    <form id="BannerWriteForm" method="post" action="/mainmanage/banner/add" accept="multipart/form-data">
+                    <form id="BannerWriteForm" method="post" action="/mainmanage/banner/add" enctype="multipart/form-data">
                         <div class="overflow-x-auto">
+                            {{ csrf_field() }}
                             <input type="hidden" name="banner_code" value="{{$bannerData[0]->banner_code}}"/>
+                            <input type="hidden" name="mem_id" value="{{auth()->user()->idx}}"/>
                             <table class="table table-bordered">
                                 <tr>
                                     <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">제목</th>
@@ -208,7 +210,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input name="banner_img" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" type="file">
+                                        <input type="file" name="banner_img" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
                                     </td>
                                 </tr>
                                 <tr>
@@ -227,7 +229,7 @@
 
                         <div class="flex items-center justify-center mt-5">
                             <button class="btn btn-primary w-32 ml-2 mr-2 bannerAddbtn">등록</button>
-                            <button class="btn btn-secondary w-32" data-tw-dismiss="modal">닫기</button>
+                            <button type="button" class="btn btn-secondary w-32" data-tw-dismiss="modal">닫기</button>
                         </div>
                     </form>
                 </div>

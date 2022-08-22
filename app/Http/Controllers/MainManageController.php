@@ -44,14 +44,14 @@ class MainManageController extends Controller
         ]);
     }
     
-    public function getBannerView($bidx)
+    public function getBannerView($banner_code)
     {
         $params = $this->request->input();
         $params['type'] = $params['type'] ?? 0;
         $params['page'] = $params['page'] ?? 1;
         $params['limit'] = $params['limit'] ?? 10;
-        $bannerData = $this->adminMainmanageService->getBannerView($params, $bidx);
-        $bannerDataList = $this->adminMainmanageService->getBannerDataList($params, $bidx);
+        $bannerData = $this->adminMainmanageService->getBannerView($params, $banner_code);
+        $bannerDataList = $this->adminMainmanageService->getBannerDataList($params, $banner_code);
         $bannerDataTotal = $this->adminMainmanageService->getBannerDataTotal();
         $totalCount = $bannerDataTotal->cnt;
         $params['totalCnt'] = $totalCount;
@@ -69,14 +69,9 @@ class MainManageController extends Controller
     public function BannerAdd()
     {
         $params = $this->request->input();
-        $boardData = $this->adminBoardService->BannerAdd($params);
+        $file = $this->request->file('banner_img');
+        $bannercode = $this->adminMainmanageService->BannerAdd($params,$file);
 
-        if($boardData > 0){
-            $data['result'] = "success";
-        }else{
-            $data['result'] = "등록에 실패하였습니다.다시 시도하거나 관리자에게 문의해주세요!";
-        }
-
-        return $data;
+        return redirect('/mainmanage/banner/view/'.$bannercode);
     }
 }

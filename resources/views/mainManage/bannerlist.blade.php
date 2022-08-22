@@ -38,7 +38,7 @@
                                     <tr>
                                         <td class="whitespace-nowrap text-center">{{$totalCount-($i+(($params['page']-1)*10))}}</td>
                                         <td class="whitespace-nowrap text-center">{{$rs->type}}</td>
-                                        <td class="whitespace-nowrap text-center"><a href="/mainmanage/banner/view/{{$rs->idx}}">{{$rs->banner_name}}</a></td>
+                                        <td class="whitespace-nowrap text-center"><a href="/mainmanage/banner/view/{{$rs->banner_code}}">{{$rs->banner_name}}</a></td>
                                         <td class="whitespace-nowrap text-center">{{$rs->downcontents}}</td>
                                         <td class="whitespace-nowrap text-center">{{$rs->created_at}}</td>
                                     </tr>

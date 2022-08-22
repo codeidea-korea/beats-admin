@@ -38,7 +38,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
 
         $result = $this->statDB->table('adm_banner_data')
             ->select(DB::raw("COUNT(idx) AS downcontents"))
-            ->groupBy('br_idx')
+            ->groupBy('banner_code')
             ->first();
         return $result;
 
@@ -53,7 +53,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
 
     }
 
-    public function getBannerView($params, $bidx) {
+    public function getBannerView($params, $banner_code) {
 
         $result = $this->statDB->table('adm_banner')
             ->select(
@@ -67,7 +67,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
                 'adm_banner.updated_at',
                // $this->statDB->raw('SUM(name) AS CNT')
             )
-            ->where('adm_banner.idx',$bidx)
+            ->where('adm_banner.banner_code',$banner_code)
            // ->groupBy('name')
            ->get();
 
@@ -75,7 +75,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
 
     }
 
-    public function getBannerDataList($params, $bidx) {
+    public function getBannerDataList($params, $banner_code) {
 
 
         $result = $this->statDB->table('adm_banner_data')
@@ -88,7 +88,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
                 'adm_banner_data.created_at',
                 //DB::raw('IFNULL(COUNT(adm_banner_data.idx),0) as downcontents'),
             )
-            ->where('adm_banner_data.br_idx',$bidx)
+            ->where('adm_banner_data.banner_code',$banner_code)
             ->orderby('br_seq','desc')
            // ->groupBy('name')
             ->get();
@@ -106,10 +106,9 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
 
     }
 
-    public function BannerAdd($params) {
+    public function BannerAdd($params,$file) {
         
-        if($params['banner_img'] != ""){
-            $file = $params['banner_img'];
+        if($file != ""){
             $cfilename = $file->getClientOriginalName();
             $cfilesource = $file->hashName();
             $folderName = '/banner/';
@@ -122,10 +121,16 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
             ->insert([
                 'br_title' => $params['br_title'], 'contents' => $params['contents'], 'contents_url' => $params['contents_url'],
                 'banner_file' => $params['banner_file'], 'banner_source' => $params['banner_source'], 'banner_code' => $params['banner_code'],
-                'isuse' => $params['isuse'], 'mem_id' => auth()->user()->id, 'created_at' => \Carbon\Carbon::now(),
+                'isuse' => $params['isuse'], 'mem_id' => auth()->user()->idx, 'created_at' => \Carbon\Carbon::now(),
             ]);
 
-        return $result;
+        if($result > 0){
+            $bannercode = $params['banner_code'];
+        }else{
+            $bannercode = "fails";
+        }
+
+        return $bannercode;
 
     }
 
