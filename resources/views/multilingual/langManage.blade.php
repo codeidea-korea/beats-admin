@@ -139,9 +139,9 @@
                 + "<td><button class='btn btn-outline-pending w-24 inline-block'>취소</button></td>"
                 + "</tr>";
                 console.log(ihtml);
-                document.getElementById('langTable').append(ihtml);
+                //document.getElementById('langTable').append(ihtml);
                 //$("table tbody").append(ihtml);
-                //$('#langTable').append(ihtml);
+                $('#langTable').append(ihtml);
             }
         </script>
 @endsection
