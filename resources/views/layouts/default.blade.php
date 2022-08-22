@@ -7,7 +7,7 @@
 <!-- END: Head -->
 <body class="py-5">
 {{-- --}}
-
+@include('include.pageMenuINC')
 
 @yield('content')
 
