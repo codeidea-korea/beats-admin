@@ -3,7 +3,7 @@
 
     <div class="content">
         <!-- BEGIN: Top Bar -->
-    {{-- @include('include.topBarINC') --}}
+    @include('include.topBarINC')
     <!-- END: Top Bar -->
         <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
             <h2 class="text-lg font-medium mr-auto">언어 관리</h2>
