@@ -15,23 +15,31 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
 
     public function getBannerList($params) {
 
-
         $result = $this->statDB->table('adm_banner')
-            ->leftJoin('adm_banner_data', 'adm_banner.idx', '=', 'adm_banner_data.br_idx')
             ->select(
                 'adm_banner.idx',
                 'adm_banner.mem_id',
                 'adm_banner.banner_code',
                 'adm_banner.banner_name',
                 'adm_banner.type',
+                'adm_banner.downcontents',
                 'adm_banner.created_at',
                 'adm_banner.updated_at',
-                //DB::raw('IFNULL(COUNT(adm_banner_data.idx),0) as downcontents'),
             )
             ->orderby('created_at','desc')
            // ->groupBy('name')
             ->get();
         
+        return $result;
+
+    }
+
+    public function getDownContents() {
+
+        $result = $this->statDB->table('adm_banner_data')
+            ->select(DB::raw("COUNT(idx) AS downcontents"))
+            ->groupBy('br_idx')
+            ->first();
         return $result;
 
     }
@@ -54,6 +62,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
                 'adm_banner.banner_code',
                 'adm_banner.banner_name',
                 'adm_banner.type',
+                'adm_banner.downcontents',
                 'adm_banner.created_at',
                 'adm_banner.updated_at',
                // $this->statDB->raw('SUM(name) AS CNT')

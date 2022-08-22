@@ -16,9 +16,9 @@
                 <div class="intro-y box mt-5">
                     <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60">
                         <h2 class="font-medium text-base mr-auto text-primary">총 {{number_format($totalCount)}}개의 배너영역이 있습니다.</h2>
-                        <button class="btn box flex items-center text-slate-600 border border-slate-400" onClick="javascript:location.href = '/mainmanage/banner/write';">
+                        <!-- <button class="btn box flex items-center text-slate-600 border border-slate-400" data-tw-toggle="modal" data-tw-target="#superlarge-modal-size-preview">
                             등록
-                        </button>
+                        </button> -->
                     </div>
                     <div class="p-5">
                         <div class="overflow-x-auto">
@@ -39,7 +39,7 @@
                                         <td class="whitespace-nowrap text-center">{{$totalCount-($i+(($params['page']-1)*10))}}</td>
                                         <td class="whitespace-nowrap text-center">{{$rs->type}}</td>
                                         <td class="whitespace-nowrap text-center"><a href="/mainmanage/banner/view/{{$rs->idx}}">{{$rs->banner_name}}</a></td>
-                                        <td class="whitespace-nowrap text-center">0</td>
+                                        <td class="whitespace-nowrap text-center">{{$rs->downcontents}}</td>
                                         <td class="whitespace-nowrap text-center">{{$rs->created_at}}</td>
                                     </tr>
                                     @php $i++; @endphp
@@ -66,7 +66,6 @@
         </div>
 
     </div>
-
 @endsection
 
 @section('scripts')

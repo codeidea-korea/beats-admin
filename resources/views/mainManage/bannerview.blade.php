@@ -37,7 +37,7 @@
                             <tr>
                                 <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">하위 컨텐츠</th>
                                 <td colspan="3" class="whitespace-nowrap">
-                                    <span>2</span>
+                                    <span>{{$bannerData[0]->downcontents}}</span>
                                 </td>
                             </tr>
                             <tr>
@@ -102,6 +102,9 @@
             <div class="intro-y box mt-5">
                 <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60">
                     <h2 class="font-medium text-base mr-auto text-primary">총 {{number_format($totalCount)}}개의 컨텐츠가 있습니다.</h2>
+                    <button class="btn box flex items-center text-slate-600 border border-slate-400 mr-2" data-tw-toggle="modal" data-tw-target="#superlarge-modal-size-preview">
+                        등록
+                    </button>
                     <button class="btn box flex items-center text-slate-600 border border-slate-400">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="file-text" data-lucide="file-text" class="lucide lucide-file-text hidden sm:block w-4 h-4 mr-2">
                             <path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"></path>
@@ -157,6 +160,78 @@
 
     </div>
 
+    <!-- 등록 모달 시작 -->
+    <div id="superlarge-modal-size-preview" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-2xl">
+            <div class="modal-content">
+                <div class="modal-body p-10 text-center">
+
+                    <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60">
+                        <h2 class="font-medium text-base mr-auto">컨텐츠 등록</h2>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">제목</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input id="regular-form-1" type="text" class="form-control" placeholder="제목을 입력해주세요.">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">컨텐츠 구분</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <select name="contents" class="form-select w-56" aria-label=".form-select-lg example">
+                                    <option value="">선택</option>
+                                    <option value="notice">공지사항</option>
+                                    <option value="event">이벤트</option>
+                                    <option value="url">URL 등록</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">연결 컨텐츠</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input name="contents_url"id="regular-form-1" type="text" class="form-control" placeholder="연결할 컨텐츠를 입력해주세요.">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">배너 이미지</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" type="file" name="banner_img">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">상태</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <select name="isuse" class="form-select w-56" aria-label=".form-select-lg example">
+                                    <option value="Y">사용</option>
+                                    <option value="N">미 사용</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                    </div>
+
+                    <div class="flex items-center justify-center mt-5">
+                        <button class="btn btn-primary w-32 ml-2 mr-2">등록</button>
+                        <button class="btn btn-secondary w-32" data-tw-dismiss="modal">닫기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 등록 모달 끝 -->
 @endsection
 
 @section('scripts')
