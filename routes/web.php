@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AdminAuthorityController;
 use App\Http\Controllers\MultilingualController;
 use App\Http\Controllers\BoardController;
@@ -47,6 +48,12 @@ Route::middleware(['auth'])->group(function () {
     });
 
 
+    Route::get('/mainmanage/banner/list', [\App\Http\Controllers\MainManageController::class, 'getBannerList']);
+    Route::get('/mainmanage/banner/view/{bidx}', [\App\Http\Controllers\MainManageController::class, 'getBannerView']);
+    Route::get('/mainmanage/banner/write', [\App\Http\Controllers\MainManageController::class, 'getBannerWrite']);
+    Route::post('/mainmanage/banner/add', [\App\Http\Controllers\MainManageController::class, 'BannerAdd']);
+    Route::post('/mainmanage/banner/update', [\App\Http\Controllers\MainManageController::class, 'BannerUpdate']);
+    Route::post('/mainmanage/banner/delete', [\App\Http\Controllers\MainManageController::class, 'BannerDelete']);
 
     Route::get('/admin/board/list', [BoardController::class, 'getBoardList']);
     Route::get('/admin/board/view/{bidx}', [BoardController::class, 'getBoardView']);
@@ -64,6 +71,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
 });
+
 Route::get('/pageSample', function () {
     return view('pageSample');
 });
