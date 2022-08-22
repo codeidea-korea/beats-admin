@@ -3,7 +3,7 @@
 
     <div class="content">
         <!-- BEGIN: Top Bar -->
-    @include('include.topBarINC')
+    {{-- @include('include.topBarINC') --}}
     <!-- END: Top Bar -->
         <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
             <h2 class="text-lg font-medium mr-auto">언어 관리</h2>
@@ -35,11 +35,11 @@
                                     <td>
                                         <div class="mt-2">
                                             <select data-placeholder="Select your favorite actors" class="tom-select w-full">
-                                                <option value="1">한국어</option>
-                                                <option value="2">영어</option>
-                                                <option value="3">일본어</option>
-                                                <option value="4">중국어</option>
-                                                <option value="5">프랑스어</option>
+                                                <option value=''>언어선택</option>
+                                                <option value='kr' @if($rs->lang_code=='kr') selected @endif >한국어</option>
+                                                <option value='en' @if($rs->lang_code=='en') selected @endif >영어</option>
+                                                <option value='jp' @if($rs->lang_code=='jp') selected @endif >일본어</option>
+                                                <option value='ch' @if($rs->lang_code=='ch') selected @endif >중국어</option>
                                             </select>
                                         </div>
                                     </td>
@@ -114,31 +114,34 @@
                 </div>
             </div>
         </div>
-
         <script>
+            $(function (){
+
+            })
+
             function addLangFrom() {
 
                 var ihtml = "";
 
-                ihtml += "<tr>";
-                ihtml += "<td class='text-center'>4</td>";
-                ihtml += "<td>";
-                ihtml += "<div class='mt-2'>";
-                ihtml += "<select data-placeholder='Select your favorite actors' class='tom-select w-full'>";
-                ihtml += "<option value=''>언어선택</option>";
-                ihtml += "<option value='kr'>한국어</option>";
-                ihtml += "<option value='en'>영어</option>";
-                ihtml += "<option value='jp'>일본어</option>";
-                ihtml += "<option value='ch'>중국어</option>";
-                ihtml += "</select>";
-                ihtml += "</div>";
-                ihtml += "</td>";
-                ihtml += "<td><button class='btn btn-outline-pending w-24 inline-block'>취소</button></td>";
-                ihtml += "</tr>";
+                ihtml =  "<tr>"
+                + "<td class='text-center'>4</td>"
+                + "<td>"
+                + "<div class='mt-2'>"
+                + "<select data-placeholder='Select your favorite actors' class='tom-select w-full'>"
+                + "<option value=''>언어선택</option>"
+                + "<option value='kr'>한국어</option>"
+                + "<option value='en'>영어</option>"
+                + "<option value='jp'>일본어</option>"
+                + "<option value='ch'>중국어</option>"
+                + "</select>"
+                + "</div>"
+                + "</td>"
+                + "<td><button class='btn btn-outline-pending w-24 inline-block'>취소</button></td>"
+                + "</tr>";
                 console.log(ihtml);
-                document.getElementById('langTable').append(ihtml);
-
-                //$('#langTable').append(ihtml);
+                //document.getElementById('langTable').append(ihtml);
+                //$("table tbody").append(ihtml);
+                $('#langTable').append(ihtml);
             }
         </script>
 @endsection

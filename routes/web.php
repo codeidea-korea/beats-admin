@@ -75,6 +75,10 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/pageSample', function () {
     return view('pageSample');
 });
+
+Route::get('/test', function () {
+    return view('test');
+});
 /*------------------------------------------
 --------------------------------------------
 All Admin Routes List
