@@ -27,7 +27,7 @@ class AdminAuthorityController extends Controller
     public function getAdminList()
     {
         $params = $this->request->input();
-        $params['menuCode'] = "AD120000";
+        $params['menuCode'] = "AD120100";
 
         $params['type'] = $params['type'] ?? 0;
         $params['page'] = $params['page'] ?? 1;
@@ -47,7 +47,7 @@ class AdminAuthorityController extends Controller
     public function getAdminView()
     {
         $params = $this->request->input();
-        $params['menuCode'] = "AD120000";
+        $params['menuCode'] = "AD120100";
         $params['type'] = $params['type'] ?? 0;
         $params['id'] = $params['id'] ?? 0;
         $adminData = $this->adminAuthorityService->getAdminData($params);
@@ -62,7 +62,7 @@ class AdminAuthorityController extends Controller
     public function getAdminWrite()
     {
         $params = $this->request->input();
-        $params['menuCode'] = "AD120000";
+        $params['menuCode'] = "AD120100";
         $params['type'] = $params['type'] ?? 0;
         $groupList = $this->adminAuthorityService->getAdmGroupList($params);
         return view('adminAuthority.write',[
