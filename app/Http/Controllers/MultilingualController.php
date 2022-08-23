@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Service\LangManageServiceImpl;
 use Response;
-use App\Service\AdminAuthorityServiceImpl;
 use Illuminate\Http\Request;
 use Session;
 
@@ -49,13 +48,49 @@ class MultilingualController extends Controller
     }
 
 
-    public function menuManage()
+    public function menuManage($siteCode)
     {
         $params = $this->request->input();
+        $params['siteCode'] = $siteCode;
+        $params['menuCode'] = "AD000200";
 
-        return view('multilingual.menuMange',[
+        $beatSomeoneMenuList = $this->langManageService->getBeatSomeoneMenuList($params);
+        $bybeatMenuList = $this->langManageService->getByBeatMenuList($params);
+
+        return view('multilingual.menuManage',[
             'params' => $params
+            ,'beatSomeoneMenuList' => $beatSomeoneMenuList
+            ,'bybeatMenuList' => $bybeatMenuList
         ]);
+    }
+
+    public function setMenuManage(){
+        $params = $this->request->input();
+        $sqlParam = array();
+        $result=0;
+
+        $arDataCount = count($params['lang_kr']);
+
+        for($i=0;$i<$arDataCount;$i++){
+            $sqlParam = null;
+            $sqlParam['menu_index'] = $params['menu_index'][$i];
+            $sqlParam['lang_kr'] = $params['lang_kr'][$i];
+            $sqlParam['lang_en'] = $params['lang_en'][$i];
+            $sqlParam['lang_ch'] = $params['lang_ch'][$i];
+            $sqlParam['lang_jp'] = $params['lang_jp'][$i];
+
+            if($params['siteCode']=="01"){
+                $result =  $this->langManageService->setByBeatMenuList($sqlParam);
+            }elseif($params['siteCode']=="02"){
+                $result =  $this->langManageService->setBeatSomeoneMenuList($sqlParam);
+            }
+        }
+        if($result){
+            return redirect('/multilingual/menuManage/'.$params['siteCode'])->with('alert', '수정되었습니다.');
+        }else{
+            return redirect()->back()->with('alert', '등록/수정에 실패하였습니다. \n관리자에게 문의 바랍니다.');
+        }
+
     }
 
 }

@@ -13,6 +13,26 @@ class AdminAuthorityServiceImpl extends DBConnection  implements AdminAuthorityS
         parent::__construct();
     }
 
+    public function getAdmMenuList(){
+        $result = $this->statDB->table('adm_menu')
+            ->select(
+                'menuindex',
+                'menuname',
+                'parentindex',
+                'depth',
+                'lcnt',
+                'description',
+                'url',
+                'menucode',
+                'sortorder',
+                'rootindex',
+            )
+            ->where('isdisplay', 'Y')
+            ->orderby('sortorder','asc')
+            ->get();
+        return $result;
+    }
+
     public function getAdmGroupList($params) {
 
         $result = $this->statDB->table('adm_group')

@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\DB;
 
 interface AdminAuthorityServiceInterface
 {
+    // 메뉴 리스트
+    public function getAdmMenuList();
+
     // 관리자 그룹코드 리스트
     public function getAdmGroupList($params);
 

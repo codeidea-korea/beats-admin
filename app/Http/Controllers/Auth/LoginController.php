@@ -4,8 +4,13 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use App\Service\LangManageServiceImpl;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\Service\AdminAuthorityServiceImpl;
+use Response;
 use Illuminate\Http\Request;
+use Session;
+
 
 class LoginController extends Controller
 {
@@ -22,6 +27,9 @@ class LoginController extends Controller
 
     use AuthenticatesUsers;
 
+    private $request;
+    private $adminAuthorityService;
+
     /**
      * Where to redirect users after login.
      *
@@ -36,6 +44,8 @@ class LoginController extends Controller
      */
     public function __construct()
     {
+        $this->adminAuthorityService = new AdminAuthorityServiceImpl();
+
         $this->middleware('guest')->except('logout');
     }
 
@@ -50,6 +60,12 @@ class LoginController extends Controller
 
         if(auth()->attempt(array('id' => $input['id'], 'password' => $input['password'])))
         {
+            // 메뉴 session에 저장
+            $menuList = $this->adminAuthorityService->getAdmMenuList();
+            session(['ADMINMENULIST'=>$menuList]);
+            //var_dump( session('ADMINMENULIST'));
+
+
             //if (auth()->user()->type == 'admin') {
             //    return redirect()->route('admin.home');
             //}else if (auth()->user()->type == 'manager') {

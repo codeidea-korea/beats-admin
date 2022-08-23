@@ -57,4 +57,68 @@ class LangManageServiceImpl extends DBConnection  implements LangManageServiceIn
 
     }
 
+    public function getBeatSomeoneMenuList($params) {
+
+        $result = $this->statDB->table('beat_someone_menu')
+            ->select(
+                'menu_index',
+                'menu_code',
+                'lang_kr',
+                'lang_en',
+                'lang_ch',
+                'lang_jp',
+            )
+            ->orderby('menu_index','asc')
+            ->get();
+        return $result;
+
+    }
+
+    public function getByBeatMenuList($params) {
+
+        $result = $this->statDB->table('bybeat_menu')
+            ->select(
+                'menu_index',
+                'menu_code',
+                'lang_kr',
+                'lang_en',
+                'lang_ch',
+                'lang_jp',
+            )
+            ->orderby('menu_index','asc')
+            ->get();
+        return $result;
+
+    }
+
+    public function setBeatSomeoneMenuList($params) {
+
+        $result = $this->statDB->table('beat_someone_menu')
+            ->where('menu_index',$params['menu_index'])
+            ->update([
+                'lang_kr'=>$params['lang_kr'],
+                'lang_en'=>$params['lang_en'],
+                'lang_ch'=>$params['lang_ch'],
+                'lang_jp'=>$params['lang_jp'],
+                ]);
+        return $result;
+
+    }
+
+    public function setByBeatMenuList($params) {
+
+        $result = $this->statDB->table('bybeat_menu')
+            ->where('menu_index',$params['menu_index'])
+            ->update([
+                'lang_kr'=>$params['lang_kr'],
+                'lang_en'=>$params['lang_en'],
+                'lang_ch'=>$params['lang_ch'],
+                'lang_jp'=>$params['lang_jp'],
+            ]);
+        return $result;
+
+    }
+
+
+
 }

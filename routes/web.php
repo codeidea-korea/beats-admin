@@ -70,7 +70,8 @@ Route::middleware(['auth'])->group(function () {
     {
         Route::get('/', [MultilingualController::class, 'langManage']);
         Route::get('langManage', [MultilingualController::class, 'langManage']);
-        Route::get('menuManage', [MultilingualController::class, 'menuManage']);
+        Route::get('menuManage/{siteCode}', [MultilingualController::class, 'menuManage']);
+        Route::post('updateMenuManage', [MultilingualController::class, 'setMenuManage']);
 
     });
 

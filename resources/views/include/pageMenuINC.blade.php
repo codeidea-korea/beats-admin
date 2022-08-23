@@ -364,8 +364,66 @@
             <img alt="Midone - HTML Admin Template" class="w-6" src="/dist/images/logo.svg">
             <span class="hidden xl:block text-white text-lg ml-3"> 통합관리자 </span>
         </a>
+
         <div class="side-nav__devider my-6"></div>
         <ul>
+            <?php
+            $tempDepth = 1;
+            ?>
+            @foreach(session('ADMINMENULIST') as $rs)
+
+                <?php
+
+                    if($tempDepth==2 && $rs->depth == 1){
+                ?>
+                        </ul>
+                    </li>
+                <?php
+                        $tempDepth = 1;
+                    }
+                    if($rs->depth == 1 && $rs->lcnt==0){
+                ?>
+                    <li>
+                        <a href="javascript:location.href='{{ url($rs->url) }}';" class="side-menu @if(substr($rs->menucode,0,5) == substr($params['menuCode'],0,5)) side-menu--active @endif">
+                            <div class="side-menu__icon"> <i data-lucide="{{$rs->description}}"></i> </div>
+                            <div class="side-menu__title">
+                                {{$rs->menuname}}
+                            </div>
+                        </a>
+                    </li>
+                <?php
+                    }elseif($rs->depth == 1&&$rs->lcnt > 0){
+                ?>
+
+                    <li>
+                        <!--<a href="javascript:;" class="side-menu side-menu--active">-->
+                        <a href="javascript:;" class="side-menu @if(substr($rs->menucode,0,5) == substr($params['menuCode'],0,5)) side-menu--active @endif">
+                            <div class="side-menu__icon"> <i data-lucide="{{$rs->description}}"></i> </div>
+                            <div class="side-menu__title">
+                                {{$rs->menuname}}
+                                <div class="side-menu__sub-icon @if(substr($rs->menucode,0,5) == substr($params['menuCode'],0,5)) transform rotate-180 @endif"> <i data-lucide="chevron-down"></i> </div>
+                                <!--<div class="side-menu__sub-icon transform rotate-180"> <i data-lucide="chevron-down"></i> </div>-->
+                            </div>
+                        </a>
+                        <ul class="side-menu__sub-open" @if(substr($rs->menucode,0,5) != substr($params['menuCode'],0,5)) style="display:none" @endif >
+                <?php
+                            $tempDepth=2;
+                    }elseif($rs->depth == 2){
+                ?>
+
+                    <li>
+                        <!--<a href="javascript:;" class="side-menu side-menu--active">-->
+                        <a href="javascript:location.href='{{ url($rs->url) }}';" class="side-menu @if($rs->menucode == $params['menuCode']) side-menu--active @endif">
+                            <div class="side-menu__icon"> <i data-lucide="activity"></i> </div>
+                            <div class="side-menu__title">  {{$rs->menuname}}</div>
+                        </a>
+                    </li>
+
+                <?php
+                    }
+                ?>
+            @endforeach
+<!--
             <li>
                 <a href="javascript:;" class="side-menu side-menu--active">
                     <div class="side-menu__icon"> <i data-lucide="home"></i> </div>
@@ -375,6 +433,7 @@
                     </div>
                 </a>
                 <ul class="side-menu__sub-open">
+
                     <li>
                         <a href="javascript:;" class="side-menu side-menu--active">
                             <div class="side-menu__icon"> <i data-lucide="activity"></i> </div>
@@ -389,6 +448,7 @@
                     </li>
                 </ul>
             </li>
+
             <li>
                 <a href="javascript:;" class="side-menu">
                     <div class="side-menu__icon"> <i data-lucide="box"></i> </div>
@@ -741,6 +801,7 @@
                     </li>
                 </ul>
             </li>
+-->
         </ul>
     </nav>
     <!-- END: Side Menu -->
