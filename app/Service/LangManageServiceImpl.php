@@ -36,6 +36,25 @@ class LangManageServiceImpl extends DBConnection  implements LangManageServiceIn
 
     }
 
+    public function getLangCheck($params) {
+        $result = $this->statDB->table('lang_data')
+            ->select(DB::raw("COUNT(idx) AS cnt"))
+            ->where('idx',$params['idx'])
+            ->where('lang_code',$params['lang_code'])
+            ->first();
+        return $result;
+    }
+
+    public function setLangUpdate($params) {
+        $result = $this->statDB->table('lang_data')
+            ->where('idx',$params['idx'])
+            ->update([
+                'lang_code'=>$params['lang_code'],
+                'lang_value'=>$params['lang_value'],
+            ]);
+        return $result;
+    }
+
 
 
     public function getLangAdd($params) {

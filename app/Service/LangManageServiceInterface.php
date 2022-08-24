@@ -12,6 +12,9 @@ interface LangManageServiceInterface
     // 언어관리 총수
     public function getLangTotal($params);
 
+    // 언어관리 수정
+    public function setLangUpdate($params);
+
     // 언어관리 등록
     public function getLangAdd($params);
 

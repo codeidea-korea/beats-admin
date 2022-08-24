@@ -27,6 +27,7 @@ class MultilingualController extends Controller
     public function langManage()
     {
         $params = $this->request->input();
+        $params['menuCode'] = "AD000100";
         $params['type'] = $params['type'] ?? 0;
         $params['page'] = $params['page'] ?? 1;
         $params['limit'] = $params['limit'] ?? 10;
@@ -39,12 +40,38 @@ class MultilingualController extends Controller
             ,'langList' => $langList
         ]);
     }
-    public function addLangForm(){
+
+    public function setLangUpdate(){
         $params = $this->request->input();
 
-        return view('multilingual.ajax.addLangForm',[
-            'params' => $params
-        ]);
+        $sqlParam['idx'] = $params['idx'];
+        $sqlParam['lang_code'] = $params['lang_code'];
+        $sqlParam['lang_value'] = $params['lang_value'];
+
+        $langCheck = $this->langManageService->getLangCheck($params);
+        if($langCheck->cnt == 0){
+            $result =  $this->langManageService->setLangUpdate($sqlParam);
+            if($result){
+                return array(
+                    'resultCode' => 'SUCCESS'
+                    ,'resultMessage' => '언어 정보가 수정되었습니다.'
+                );
+            }else{
+                return array(
+                    'resultCode' => 'FAIL'
+                    ,'resultMessage' => '처리 실패'
+                );
+            }
+        }else{
+            return array(
+                'resultCode' => 'FAIL'
+            ,'resultMessage' => '언어 항목이 변경전과 동일합니다. 변경후 확인버튼을 눌러주세요.'
+            );
+        }
+
+
+
+
     }
 
 

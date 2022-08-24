@@ -20,6 +20,7 @@
 
                     <!-- table 시작 -->
                     <div class="p-5">
+                        <input type="hidden" id="totalCnt" name="totalCnt" value="{{$params['totalCnt']}}">
                         <table class="table table-bordered table-hover"  >
                             <thead>
                             <tr>
@@ -29,12 +30,15 @@
                             </tr>
                             </thead>
                             <tbody id="langTable">
+                            @php
+                            $no = 1;
+                            @endphp
                             @foreach($langList as $rs)
                                 <tr>
-                                    <td class="w-10 text-center">1</td>
+                                    <td class="w-10 text-center">{{$no}}</td>
                                     <td>
-                                        <div class="mt-2">
-                                            <select data-placeholder="Select your favorite actors" class="tom-select w-full">
+                                        <div class="mt-2 s_{{$rs->idx}}" style="display:none;">
+                                            <select data-placeholder="Select your favorite actors" class="tom-select w-full" name="langSelect_{{$rs->idx}}">
                                                 <option value=''>언어선택</option>
                                                 <option value='kr' @if($rs->lang_code=='kr') selected @endif >한국어</option>
                                                 <option value='en' @if($rs->lang_code=='en') selected @endif >영어</option>
@@ -42,11 +46,19 @@
                                                 <option value='ch' @if($rs->lang_code=='ch') selected @endif >중국어</option>
                                             </select>
                                         </div>
+                                        <div class="mt-2 l_{{$rs->idx}}">
+                                            <label> {{$rs->lang_value}} </label>
+                                        </div>
                                     </td>
                                     <td class="md:w-60 w-32">
-                                        <button class="btn btn-primary w-24">완료</button>
+                                        <button class="btn btn-primary w-24 up_{{$rs->idx}}" style="display:none;" onClick="updateAd({{$rs->idx}});">완료</button>
+                                        <button class="btn btn-outline-dark w-24 inline-block ch_{{$rs->idx}}" onClick="changeAd({{$rs->idx}});">수정</button>
+                                        <button class="btn btn-danger w-24 dl_{{$rs->idx}}" onClick="alert({{$rs->idx}});">삭제</button>
                                     </td>
                                 </tr>
+                                @php
+                                    $no ++;
+                                @endphp
                             @endforeach
 
                             {{--
@@ -119,15 +131,60 @@
 
             })
 
+            function changeAd(no){
+                $(".up_"+no).show();
+                $(".ch_"+no).hide();
+                $(".dl_"+no).hide();
+                $(".s_"+no).show();
+                $(".l_"+no).hide();
+            }
+
+            function updateAd(no){
+                var lang_code = $("select[name=langSelect_"+no+"]").val();
+                var lang_value = $("select[name=langSelect_"+no+"] option:checked").text();
+                    var data = {
+                        idx:no
+                        ,lang_code:lang_code
+                        ,lang_value:lang_value
+                    };
+                    jQuery.ajax({
+                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        type:"post",
+                        //contentType: "application/json; charset=utf-8",
+                        //contentType: false,
+                        //cache: false,
+                        //processData: false,
+                        dataType:'json',
+                        data: data,
+                        url: '{{ url('/multilingual/ajax/langUpdate') }}',
+                        success: function searchSuccess(data) {
+
+                            if(data.resultCode=="SUCCESS"){
+                                alert(data.resultMessage);
+                                location.reload();
+                            }else{
+                                alert(data.resultMessage);
+                            }
+                        },
+                        error: function (e) {
+                            console.log('start');
+                            console.log(e);
+                            alert('로딩 중 오류가 발생 하였습니다.');
+                        }
+                    });
+
+            }
             function addLangFrom() {
 
+                var totalCnt = $("#totalCnt").val();
+                var nowCount = totalCnt*1+1;
+                $("#totalCnt").val(nowCount);
                 var dom = document.createElement('tr');
                 var ihtml = "";
-
-                ihtml =  "<tr>"+"<td class='text-center'>4</td>"
+                ihtml =  "<tr class='newLangTr_"+nowCount+"' >"+"<td class='text-center'>"+nowCount+"</td>"
                 ihtml += "<td>"
                 ihtml += "<div class='mt-2'>"
-                ihtml += "<select data-placeholder='Select your favorite actors' class='tom-select w-full'>"
+                ihtml += "<select data-placeholder='Select your favorite actors' class='tom-select w-full' name='newLangSelect_"+nowCount+"' >"
                 ihtml += "<option value=''>언어선택</option>"
                 ihtml += "<option value='kr'>한국어</option>"
                 ihtml += "<option value='en'>영어</option>"
@@ -136,7 +193,7 @@
                 ihtml += "</select>"
                 ihtml += "</div>"
                 ihtml += "</td>"
-                ihtml += "<td><button class='btn btn-outline-pending w-24 inline-block'>취소</button></td>"
+                ihtml += "<td><button class='btn btn-outline-pending w-24 inline-block' onClick='cancleLangFrom("+nowCount+");'>취소</button></td>"
                 ihtml += "</tr>";
 
                 dom.innerHTML = ihtml;
@@ -144,6 +201,10 @@
                 //document.getElementById('langTable').append(dom);
                 //$("table tbody").append(ihtml);
                 $('#langTable').append(dom);
+            }
+
+            function cancleLangFrom(no) {
+                $(".newLangSelect_"+no).remove();
             }
         </script>
 @endsection
