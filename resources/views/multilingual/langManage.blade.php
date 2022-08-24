@@ -53,7 +53,7 @@
                                     <td class="md:w-60 w-32">
                                         <button class="btn btn-primary w-24 up_{{$rs->idx}}" style="display:none;" onClick="updateAd({{$rs->idx}});">완료</button>
                                         <button class="btn btn-outline-dark w-24 inline-block ch_{{$rs->idx}}" onClick="changeAd({{$rs->idx}});">수정</button>
-                                        <button class="btn btn-danger w-24 dl_{{$rs->idx}}" onClick="alert({{$rs->idx}});">삭제</button>
+                                        <button class="btn btn-danger w-24 dl_{{$rs->idx}}" onClick="alert('{{$rs->idx}} 삭제 임의로 막음');">삭제</button>
                                     </td>
                                 </tr>
                                 @php
@@ -61,64 +61,6 @@
                                 @endphp
                             @endforeach
 
-                            {{--
-                            <tr>
-                                <td class="w-10 text-center">1</td>
-                                <td>
-                                     BEGIN: Basic Select
-                                    <div class="mt-2">
-                                        <select data-placeholder="Select your favorite actors" class="tom-select w-full">
-                                            <option value="1">한국어</option>
-                                            <option value="2">영어</option>
-                                            <option value="3">일본어</option>
-                                            <option value="4">중국어</option>
-                                            <option value="5">프랑스어</option>
-                                        </select>
-                                    </div>
-                                     END: Basic Select
-                                </td>
-                                <td class="md:w-60 w-32">
-                                    <button class="btn btn-primary w-24">완료</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">2</td>
-                                <td>
-                                    <input id="regular-form-1" type="text" class="form-control" placeholder="Input text">
-                                </td>
-                                <td>
-                                    <button class="btn btn-outline-dark w-24 inline-block">수정</button>
-                                    <button class="btn btn-danger w-24">삭제</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">3</td>
-                                <td>일본어</td>
-                                <td>
-                                    <button class="btn btn-outline-dark w-24 inline-block">수정</button>
-                                    <button class="btn btn-danger w-24">삭제</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">4</td>
-                                <td>
-                                    BEGIN: Basic Select
-                                    <div class="mt-2">
-                                        <select data-placeholder="Select your favorite actors" class="tom-select w-full">
-                                            <option value="1">언어선택</option>
-                                            <option value="2">영어</option>
-                                            <option value="3">일본어</option>
-                                            <option value="4">중국어</option>
-                                            <option value="5">프랑스어</option>
-                                        </select>
-                                    </div>
-                                     END: Basic Select
-                                </td>
-                                <td>
-                                    <button class="btn btn-outline-pending w-24 inline-block">취소</button>
-                                </td>
-                            </tr>
-                            --}}
                             </tbody>
                         </table>
                         <button onClick="addLangFrom();" class="btn btn-primary mt-5 intro-y w-full block text-center rounded-md py-4 border-slate-400">언어 추가</button>
@@ -126,10 +68,11 @@
                 </div>
             </div>
         </div>
-        <script>
-            $(function (){
 
-            })
+        <script>
+            //  $(function (){
+            //
+            //  })
 
             function changeAd(no){
                 $(".up_"+no).show();
@@ -150,10 +93,6 @@
                     jQuery.ajax({
                         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                         type:"post",
-                        //contentType: "application/json; charset=utf-8",
-                        //contentType: false,
-                        //cache: false,
-                        //processData: false,
                         dataType:'json',
                         data: data,
                         url: '{{ url('/multilingual/ajax/langUpdate') }}',
@@ -174,39 +113,42 @@
                     });
 
             }
+            // 폼추가
             function addLangFrom() {
-
                 var totalCnt = $("#totalCnt").val();
                 var nowCount = totalCnt*1+1;
                 $("#totalCnt").val(nowCount);
-                var dom = document.createElement('tr');
-                var ihtml = "";
-                ihtml =  "<tr class='newLangTr_"+nowCount+"' >"+"<td class='text-center'>"+nowCount+"</td>"
-                ihtml += "<td>"
-                ihtml += "<div class='mt-2'>"
-                ihtml += "<select data-placeholder='Select your favorite actors' class='tom-select w-full' name='newLangSelect_"+nowCount+"' >"
-                ihtml += "<option value=''>언어선택</option>"
-                ihtml += "<option value='kr'>한국어</option>"
-                ihtml += "<option value='en'>영어</option>"
-                ihtml += "<option value='jp'>일본어</option>"
-                ihtml += "<option value='ch'>중국어</option>"
-                ihtml += "</select>"
-                ihtml += "</div>"
-                ihtml += "</td>"
-                ihtml += "<td><button class='btn btn-outline-pending w-24 inline-block' onClick='cancleLangFrom("+nowCount+");'>취소</button></td>"
-                ihtml += "</tr>";
 
-                dom.innerHTML = ihtml;
+                 var dom = document.createElement('tr');
+                 var ihtml = "";
+                 ihtml =  "<tr class='newLangTr_"+nowCount+"' >"+"<td class='text-center'>"+nowCount+"</td>"
+                 ihtml += "<td>"
+                 ihtml += "<div class='mt-2'>"
+                 ihtml += "<select data-placeholder='Select your favorite actors' class='tom-select w-full' name='newLangSelect_"+nowCount+"' >"
+                 ihtml += "<option value=''>언어선택</option>"
+                 ihtml += "<option value='kr'>한국어</option>"
+                 ihtml += "<option value='en'>영어</option>"
+                 ihtml += "<option value='jp'>일본어</option>"
+                 ihtml += "<option value='ch'>중국어</option>"
+                 ihtml += "</select>"
+                 ihtml += "</div>"
+                 ihtml += "</td>"
+                 ihtml += "<td><button class='btn btn-outline-pending w-24 inline-block newLangbtnCancle'>취소</button></td>"
+                 ihtml += "</tr>";
+                 dom.innerHTML = ihtml;
 
-                //document.getElementById('langTable').append(dom);
-                //$("table tbody").append(ihtml);
-                $('#langTable').append(dom);
+                 $("#langTable").append(dom);
             }
+            // 폼삭제
+            $("#langTable").on("click", ".newLangbtnCancle", function() {
+                $(this).closest("tr").remove();
+            });
 
-            function cancleLangFrom(no) {
+            function cancleLangFrom() {
                 $(".newLangSelect_"+no).remove();
             }
         </script>
+
 @endsection
 
 
