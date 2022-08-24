@@ -28,6 +28,7 @@ class MainManageController extends Controller
     public function getBannerList()
     {
         $params = $this->request->input();
+        $params['menuCode'] = "AD020100";
         $params['type'] = $params['type'] ?? 0;
         $params['page'] = $params['page'] ?? 1;
         $params['limit'] = $params['limit'] ?? 10;
@@ -47,6 +48,7 @@ class MainManageController extends Controller
     public function getBannerView($banner_code)
     {
         $params = $this->request->input();
+        $params['menuCode'] = "AD020100";
         $params['type'] = $params['type'] ?? 0;
         $params['page'] = $params['page'] ?? 1;
         $params['limit'] = $params['limit'] ?? 10;
@@ -72,6 +74,10 @@ class MainManageController extends Controller
         $file = $this->request->file('banner_img');
         $bannercode = $this->adminMainmanageService->BannerAdd($params,$file);
 
-        return redirect('/mainmanage/banner/view/'.$bannercode);
+        if($bannercode == "fails"){
+            return redirect('/mainmanage/banner/list');
+        }else{
+            return redirect('/mainmanage/banner/view/'.$bannercode);
+        }
     }
 }
