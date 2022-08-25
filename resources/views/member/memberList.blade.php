@@ -331,6 +331,76 @@
                                                 <td class="whitespace-nowrap text-center">작곡가</td>
                                                 <td class="whitespace-nowrap text-center">카카오</td>
                                             </tr>
+                                            <tr>
+                                                <td class="whitespace-nowrap text-center">
+                                                    <div class="form-check">
+                                                        <input id="checkbox-switch-1" class="form-check-input" type="checkbox" value="">
+                                                    </div>
+                                                </td>
+                                                <td class="whitespace-nowrap text-center">바이비츠</td>
+                                                <td class="whitespace-nowrap text-center">작곡가</td>
+                                                <td class="whitespace-nowrap text-center">카카오</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="whitespace-nowrap text-center">
+                                                    <div class="form-check">
+                                                        <input id="checkbox-switch-1" class="form-check-input" type="checkbox" value="">
+                                                    </div>
+                                                </td>
+                                                <td class="whitespace-nowrap text-center">바이비츠</td>
+                                                <td class="whitespace-nowrap text-center">작곡가</td>
+                                                <td class="whitespace-nowrap text-center">카카오</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="whitespace-nowrap text-center">
+                                                    <div class="form-check">
+                                                        <input id="checkbox-switch-1" class="form-check-input" type="checkbox" value="">
+                                                    </div>
+                                                </td>
+                                                <td class="whitespace-nowrap text-center">바이비츠</td>
+                                                <td class="whitespace-nowrap text-center">작곡가</td>
+                                                <td class="whitespace-nowrap text-center">카카오</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="whitespace-nowrap text-center">
+                                                    <div class="form-check">
+                                                        <input id="checkbox-switch-1" class="form-check-input" type="checkbox" value="">
+                                                    </div>
+                                                </td>
+                                                <td class="whitespace-nowrap text-center">바이비츠</td>
+                                                <td class="whitespace-nowrap text-center">작곡가</td>
+                                                <td class="whitespace-nowrap text-center">카카오</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="whitespace-nowrap text-center">
+                                                    <div class="form-check">
+                                                        <input id="checkbox-switch-1" class="form-check-input" type="checkbox" value="">
+                                                    </div>
+                                                </td>
+                                                <td class="whitespace-nowrap text-center">바이비츠</td>
+                                                <td class="whitespace-nowrap text-center">작곡가</td>
+                                                <td class="whitespace-nowrap text-center">카카오</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="whitespace-nowrap text-center">
+                                                    <div class="form-check">
+                                                        <input id="checkbox-switch-1" class="form-check-input" type="checkbox" value="">
+                                                    </div>
+                                                </td>
+                                                <td class="whitespace-nowrap text-center">바이비츠</td>
+                                                <td class="whitespace-nowrap text-center">작곡가</td>
+                                                <td class="whitespace-nowrap text-center">카카오</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="whitespace-nowrap text-center">
+                                                    <div class="form-check">
+                                                        <input id="checkbox-switch-1" class="form-check-input" type="checkbox" value="">
+                                                    </div>
+                                                </td>
+                                                <td class="whitespace-nowrap text-center">바이비츠</td>
+                                                <td class="whitespace-nowrap text-center">작곡가</td>
+                                                <td class="whitespace-nowrap text-center">카카오</td>
+                                            </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -493,7 +563,7 @@
 
                     <div class="flex items-center justify-center mt-5">
                         <button class="btn btn-primary w-32 mr-5">설정</button>
-                        <button class="btn btn-secondary w-32 modalCancel">닫기</button>
+                        <button class="btn btn-secondary w-32 modalCancel" data-tw-dismiss="modal">닫기</button>
                     </div>
                 </div>
             </div>
@@ -502,12 +572,7 @@
 
     <script>
         $(function (){
-            // 폼삭제
-            $(".modalCancel").on("click", function() {
-                $("#superlarge-modal-size-preview2").hidden.true;
-                //$(this).closest("tr").remove();superlarge-modal-size-preview2
-                alert();
-            });
+            $('#superlarge-modal-size-preview2').modal({ keyboard: false, backdrop: 'static' })
         })
 
         function change(page) {
@@ -516,4 +581,3 @@
         }
     </script>
 @endsection
-`
