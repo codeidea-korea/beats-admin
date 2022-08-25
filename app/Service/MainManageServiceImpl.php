@@ -15,20 +15,23 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
 
     public function getBannerList($params) {
 
-        $result = $this->statDB->table('adm_banner')
-            ->select(
-                'adm_banner.idx',
-                'adm_banner.mem_id',
-                'adm_banner.banner_code',
-                'adm_banner.banner_name',
-                'adm_banner.type',
-                'adm_banner.downcontents',
-                'adm_banner.created_at',
-                'adm_banner.updated_at',
-            )
-            ->orderby('created_at','desc')
+        $result = $this->statDB
+            ->select('
+            SELECT 
+            adm_banner.idx,
+            adm_banner.mem_id,
+            adm_banner.banner_code,
+            adm_banner.banner_name,
+            adm_banner.type,
+            adm_banner.created_at,
+            adm_banner.updated_at,
+            IFNULL(adm_banner_data.downcontents,0) AS downcontents 
+            FROM adm_banner 
+            LEFT JOIN (SELECT banner_code,COUNT(idx) as downcontents FROM adm_banner_data GROUP BY banner_code) as adm_banner_data 
+            ON adm_banner.banner_code = adm_banner_data.banner_code 
+            ORDER BY created_at desc'
+            );
            // ->groupBy('name')
-            ->get();
         
         return $result;
 
@@ -55,21 +58,22 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
 
     public function getBannerView($params, $banner_code) {
 
-        $result = $this->statDB->table('adm_banner')
-            ->select(
-                'adm_banner.idx',
-                'adm_banner.mem_id',
-                'adm_banner.banner_code',
-                'adm_banner.banner_name',
-                'adm_banner.type',
-                'adm_banner.downcontents',
-                'adm_banner.created_at',
-                'adm_banner.updated_at',
-               // $this->statDB->raw('SUM(name) AS CNT')
-            )
-            ->where('adm_banner.banner_code',$banner_code)
+        $result = $this->statDB
+            ->select('SELECT 
+            adm_banner.idx,
+            adm_banner.mem_id,
+            adm_banner.banner_code,
+            adm_banner.banner_name,
+            adm_banner.type,
+            adm_banner.created_at,
+            adm_banner.updated_at,
+            IFNULL(adm_banner_data.downcontents,0) AS downcontents 
+            FROM adm_banner
+            LEFT JOIN (SELECT banner_code,COUNT(idx) as downcontents FROM adm_banner_data GROUP BY banner_code) as adm_banner_data 
+            ON adm_banner.banner_code = adm_banner_data.banner_code
+            WHERE adm_banner.banner_code = "'.$banner_code.'"
+            ORDER BY created_at desc');
            // ->groupBy('name')
-           ->get();
 
         return $result;
 

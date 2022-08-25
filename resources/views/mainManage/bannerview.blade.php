@@ -120,7 +120,7 @@
                         <table class="table table-bordered table-hover table-auto">
                             <thead>
                                 <tr>
-                                    <th class="whitespace-nowrap text-center">No.</th>
+                                    <th class="whitespace-nowrap text-center"><input type="checkbox" class="all_check" name="all_check"></th>
                                     <th class="whitespace-nowrap text-center">구분</th>
                                     <th class="whitespace-nowrap text-center">제목</th>
                                     <th class="whitespace-nowrap text-center">상태</th>
@@ -132,7 +132,7 @@
                                 @php $i=0; @endphp
                                 @foreach($bannerDataList as $rs)
                                     <tr>
-                                        <td class="whitespace-nowrap text-center">{{$totalCount-($i+(($params['page']-1)*10))}}</td>
+                                        <td class="whitespace-nowrap text-center"><input type="checkbox" class="del_check" name="del_check" value="{{$rs->idx}}"></td>
                                         <td class="whitespace-nowrap text-center">@if($rs->contents === 'notice') 공지사항 @elseif($rs->contents === 'event') 이벤트 @else URL 등록 @endif</td>
                                         <td class="whitespace-nowrap text-center"><a href="">{{$rs->br_title}}</a></td>
                                         <td class="whitespace-nowrap text-center">@if($rs->isuse === "Y") 사용 @else 미 사용 @endif</td>
@@ -174,7 +174,6 @@
                         <div class="overflow-x-auto">
                             {{ csrf_field() }}
                             <input type="hidden" name="banner_code" value="{{$bannerData[0]->banner_code}}"/>
-                            <input type="hidden" name="mem_id" value="{{auth()->user()->idx}}"/>
                             <table class="table table-bordered">
                                 <tr>
                                     <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">제목</th>
@@ -271,6 +270,14 @@
                 }
             });*/
 
+        });
+        
+        $(document).on('click','.all_check',function(){
+            if($(this).is(':checked') == true){
+                $('.del_check').attr('checked',true);
+            }else{
+                $('.del_check').removeAttr('checked');
+            }
         });
     </script>
 @endsection
