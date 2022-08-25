@@ -33,14 +33,16 @@ class MemberController extends Controller
         $params['limit'] = $params['limit'] ?? 10;
         //$sample = $this->memberService->bannerSample($params);
 
-        //$adminList = $this->memberService->getMemberList($params);
-        //$adminTotal = $this->adminAuthorityService->getAdminTotal($params);
+        $memberList = $this->memberService->getMemberList($params);
+        $memberTotal = $this->memberService->getMemberTotal($params);
+        $totalCount = $memberTotal->cnt;
+        $params['totalCnt'] = $totalCount;
 
         return view('member.memberList',[
             'params' => $params
             ,'searchData' => $params
-
-
+            ,'memberList' => $memberList
+            ,'totalCount' => $totalCount
         ]);
     }
 

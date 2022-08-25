@@ -13,6 +13,16 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
         parent::__construct();
     }
 
+    public function getMemberTotal($params) {
+
+        $result = $this->statDB->table('members')
+            ->select(DB::raw("COUNT(idx) AS cnt"))
+            ->where('isuse', 'Y')
+            ->first();
+        return $result;
+
+    }
+
     public function getMemberList($params){
         $result = $this->statDB->table('members')
             ->leftJoin('member_data', 'members.idx', '=', 'member_data.mem_id')
@@ -30,6 +40,7 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
                 'member_data.mem_status',
                 'member_data.mem_regdate',
             )
+            ->where('members.isuse', 'Y')
             ->orderby('mem_regdate','desc')
             ->skip(($params['page']-1)*$params['limit'])
             ->take($params['limit'])
