@@ -164,7 +164,7 @@
                 <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center mt-5">
                     <nav class="w-full">
 
-                        {{--@include('vendor.pagination.default')--}}
+                        @include('vendor.pagination.default')
 
                     </nav>
                 </div>
