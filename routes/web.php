@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminAuthorityController;
 use App\Http\Controllers\MultilingualController;
 use App\Http\Controllers\MainManageController;
 use App\Http\Controllers\BoardController;
+use App\Http\Controllers\MemberController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -75,6 +76,16 @@ Route::middleware(['auth'])->group(function () {
         Route::post('updateMenuManage', [MultilingualController::class, 'setMenuManage']);
 
     });
+
+
+    //회원관리
+    Route::group(['prefix' => 'member'], function()
+    {
+        Route::get('/', [MemberController::class, 'getMemberList']);
+        Route::get('memberList', [MemberController::class, 'getMemberList']);
+
+    });
+
 
 });
 

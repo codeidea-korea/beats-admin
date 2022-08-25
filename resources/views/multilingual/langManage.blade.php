@@ -70,9 +70,12 @@
         </div>
 
         <script>
-            //  $(function (){
-            //
-            //  })
+              $(function (){
+                  // 폼삭제
+                  $("#langTable").on("click", ".newLangbtnCancle", function() {
+                      $(this).closest("tr").remove();
+                  });
+              })
 
             function changeAd(no){
                 $(".up_"+no).show();
@@ -139,10 +142,7 @@
 
                  $("#langTable").append(dom);
             }
-            // 폼삭제
-            $("#langTable").on("click", ".newLangbtnCancle", function() {
-                $(this).closest("tr").remove();
-            });
+
 
             function cancleLangFrom() {
                 $(".newLangSelect_"+no).remove();

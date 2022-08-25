@@ -29,7 +29,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
             ->orderby('created_at','desc')
            // ->groupBy('name')
             ->get();
-        
+
         return $result;
 
     }
@@ -92,7 +92,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
             ->orderby('br_seq','desc')
            // ->groupBy('name')
             ->get();
-        
+
         return $result;
 
     }
@@ -107,7 +107,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
     }
 
     public function BannerAdd($params,$file) {
-        
+
         if($file != ""){
             $cfilename = $file->getClientOriginalName();
             $cfilesource = $file->hashName();
