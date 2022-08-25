@@ -80,4 +80,12 @@ class MainManageController extends Controller
             return redirect('/mainmanage/banner/view/'.$bannercode);
         }
     }
+
+    public function SeqChange()
+    {
+        $params = $this->request->input();
+        $bannerdata = $this->adminMainmanageService->SeqChange($params);
+
+        return $bannerdata;
+    }
 }

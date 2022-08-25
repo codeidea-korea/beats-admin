@@ -128,7 +128,7 @@
                                     <th class="whitespace-nowrap text-center">순서</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="banner_data_list">
                                 @php $i=0; @endphp
                                 @foreach($bannerDataList as $rs)
                                     <tr>
@@ -137,7 +137,22 @@
                                         <td class="whitespace-nowrap text-center"><a href="">{{$rs->br_title}}</a></td>
                                         <td class="whitespace-nowrap text-center">@if($rs->isuse === "Y") 사용 @else 미 사용 @endif</td>
                                         <td class="whitespace-nowrap text-center">{{$rs->created_at}}</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->br_seq}}</td>
+                                        <td class="whitespace-nowrap text-center">
+                                            <button class="btn box items-center text-slate-600 border border-slate-400 mr-2 seqchange" data-idx="{{$rs->idx}}" data-change_idx="{{$rs->bf_idx}}" data-br_seq="{{$rs->br_seq}}" data-change_seq="{{$rs->bf_br_seq}}" @if($rs->bf_idx == "") disabled @endif>
+                                                @if($rs->bf_idx == "")
+                                                    △
+                                                @else
+                                                    ▲
+                                                @endif
+                                            </button>
+                                            <button class="btn box items-center text-slate-600 border border-slate-400 seqchange" data-idx="{{$rs->idx}}" data-change_idx="{{$rs->af_idx}}" data-br_seq="{{$rs->br_seq}}" data-change_seq="{{$rs->af_br_seq}}"@if($rs->af_idx == "") disabled @endif>
+                                                @if($rs->af_idx == "")
+                                                    ▽
+                                                @else
+                                                    ▼
+                                                @endif
+                                            </button>
+                                        </td>
                                     </tr>
                                     @php $i++; @endphp
                                 @endforeach
@@ -236,8 +251,38 @@
         </div>
     </div>
     <!-- 등록 모달 끝 -->
+    <script type="text/x-mustache" id="SeqChangeForm">
+        <tr>
+            <td class="whitespace-nowrap text-center"><input type="checkbox" class="del_check" name="del_check" value="((idx))"></td>
+            <td class="whitespace-nowrap text-center">((contents))</td>
+            <td class="whitespace-nowrap text-center"><a href="">((br_title))</a></td>
+            <td class="whitespace-nowrap text-center">((isuse))</td>
+            <td class="whitespace-nowrap text-center">((created_at))</td>
+            <td class="whitespace-nowrap text-center">
+                <button class="btn box items-center text-slate-600 border border-slate-400 mr-2 seqchange" data-idx="((idx))" data-change_idx="((bf_idx))" data-br_seq="((br_seq))" data-change_seq="((bf_br_seq))" ((^bf_idx))disabled((/bf_idx))>
+                    ((^bf_idx))
+                        △
+                    ((/bf_idx))
+                    ((#bf_idx))
+                        ▲
+                    ((/bf_idx))
+                </button>
+                <button class="btn box items-center text-slate-600 border border-slate-400 seqchange" data-idx="((idx))" data-change_idx="((af_idx))" data-br_seq="((br_seq))" data-change_seq="((af_br_seq))" ((^af_idx))disabled((/af_idx))>
+                    ((^af_idx))
+                        ▽
+                    ((/af_idx))
+                    ((#af_idx))
+                        ▼
+                    ((/af_idx))
+                </button>
+            </td>
+        </tr>
+    </script>
     
     <script>
+
+        var SeqChangeForm = $("#SeqChangeForm").html();
+
         $(document).on('click','.bannerAddbtn', function(){
             
 
@@ -278,6 +323,65 @@
             }else{
                 $('.del_check').removeAttr('checked');
             }
+        });
+
+        $(document).on('click','.seqchange', function(){
+            var idx = $(this).data("idx");
+            var change_idx = $(this).data("change_idx");
+            var br_seq = $(this).data("br_seq");
+            var change_seq = $(this).data("change_seq");
+            var banner_code = "{{$bannerData[0]->banner_code}}";
+
+            jQuery.ajax({
+                cache: false,
+                dataType:'json',
+                data: {
+                    idx:idx,
+                    change_idx:change_idx,
+                    br_seq:br_seq,
+                    change_seq:change_seq,
+                    banner_code:banner_code
+                },
+                url: '/mainmanage/banner/seqchange',
+                success: function (data) {
+                    
+                    $("#banner_data_list").html("");
+
+                    data.forEach(function(item,index) {
+
+                        var dom = document.createElement('tr');
+
+                        if(item.contents == "notice"){
+                            item.contents = "공지사항";
+                        }else if(item.contents == "event"){
+                            item.contents = "이벤트";
+                        }else{
+                            item.contents = "URL 등록";
+                        }
+
+                        if(item.isuse == "Y"){
+                            item.isuse = "사용";
+                        }else{
+                            item.isuse = "미 사용";
+                        }
+
+                        dom.innerHTML = Mustache.render(SeqChangeForm,item);
+
+                        $("#banner_data_list").append(dom);
+                    });
+                    /*if(data.result=="SUCCESS"){
+                        alert('컨텐츠가 등록되었습니다.');
+                    }else{
+                        //alert(data.result);
+                        console.log(data.result);
+                    }*/
+                },
+                error: function (e) {
+                    console.log('start');
+                    console.log(e);
+                    //alert('로딩 중 오류가 발생 하였습니다.');
+                }
+            });
         });
     </script>
 @endsection

@@ -90,6 +90,10 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
                 'adm_banner_data.contents',
                 'adm_banner_data.br_seq',
                 'adm_banner_data.created_at',
+                DB::raw('IFNULL(LAG(adm_banner_data.idx) OVER (ORDER BY adm_banner_data.br_seq),"") as af_idx'),
+                DB::raw('IFNULL(LEAD(adm_banner_data.idx) OVER (ORDER BY adm_banner_data.br_seq),"") as bf_idx'),
+                DB::raw('IFNULL(LAG(adm_banner_data.br_seq) OVER (ORDER BY adm_banner_data.br_seq),"") as af_br_seq'),
+                DB::raw('IFNULL(LEAD(adm_banner_data.br_seq) OVER (ORDER BY adm_banner_data.br_seq),"") as bf_br_seq'),
                 //DB::raw('IFNULL(COUNT(adm_banner_data.idx),0) as downcontents'),
             )
             ->where('adm_banner_data.banner_code',$banner_code)
@@ -108,6 +112,31 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
             ->first();
         return $result;
 
+    }
+
+    public function SeqChange($params){
+        $this->statDB->table('adm_banner_data')->where('idx',$params['idx'])->update(['br_seq' => $params['change_seq']]);
+        $this->statDB->table('adm_banner_data')->where('idx',$params['change_idx'])->update(['br_seq' => $params['br_seq']]);
+
+        $result = $this->statDB->table('adm_banner_data')
+            ->select(
+                'adm_banner_data.idx',
+                'adm_banner_data.br_title',
+                'adm_banner_data.isuse',
+                'adm_banner_data.contents',
+                'adm_banner_data.br_seq',
+                'adm_banner_data.created_at',
+                DB::raw('IFNULL(LAG(adm_banner_data.idx) OVER (ORDER BY adm_banner_data.br_seq),"") as af_idx'),
+                DB::raw('IFNULL(LEAD(adm_banner_data.idx) OVER (ORDER BY adm_banner_data.br_seq),"") as bf_idx'),
+                DB::raw('IFNULL(LAG(adm_banner_data.br_seq) OVER (ORDER BY adm_banner_data.br_seq),"") as af_br_seq'),
+                DB::raw('IFNULL(LEAD(adm_banner_data.br_seq) OVER (ORDER BY adm_banner_data.br_seq),"") as bf_br_seq'),
+                //DB::raw('IFNULL(COUNT(adm_banner_data.idx),0) as downcontents'),
+            )
+            ->where('adm_banner_data.banner_code',$params['banner_code'])
+            ->orderby('br_seq','desc')
+           // ->groupBy('name')
+            ->get();
+        return $result;
     }
 
     public function BannerAdd($params,$file) {

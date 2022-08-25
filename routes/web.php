@@ -57,6 +57,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('banner/add', [MainManageController::class, 'BannerAdd']);
         Route::post('banner/update', [MainManageController::class, 'BannerUpdate']);
         Route::post('banner/delete', [MainManageController::class, 'BannerDelete']);
+        Route::get('banner/seqchange', [MainManageController::class, 'SeqChange']);
     });
 
     Route::get('/admin/board/list', [BoardController::class, 'getBoardList']);
