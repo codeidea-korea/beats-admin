@@ -51,7 +51,7 @@
                 </div>
 
             </div>
-            <form name="searchData" action="" method="get">
+            <form id="searchData" name="searchData" action="/mainmanage/banner/view/{{$bannerData[0]->banner_code}}" method="get">
                 <input type="hidden" name="page" value="{{ $searchData['page'] }}">
                 <div class="intro-y box mt-5">
                     <div class="p-5">
@@ -60,39 +60,31 @@
                                 <tr>
                                     <th class="bg-primary/10 whitespace-nowrap w-32 text-center">구분</th>
                                     <td class="">
-                                        <select class="form-select w-60" aria-label=".form-select-lg example">
-                                            <option value="">전체</option>
-                                            <option value="notice">공지사항</option>
-                                            <option value="event">이벤트</option>
-                                            <option value="url">URL 등록</option>
+                                        <select name="contents" class="form-select w-60" aria-label=".form-select-lg example">
+                                            <option value=''>전체</option>
+                                            <option value="notice" @if($params['search_contents'] == 'notice') selected @endif>공지사항</option>
+                                            <option value="event" @if($params['search_contents'] == 'event') selected @endif>이벤트</option>
+                                            <option value="url" @if($params['search_contents'] == 'url') selected @endif>URL 등록</option>
                                         </select>
                                     </td>
                                     <th class="bg-primary/10 whitespace-nowrap w-32 text-center">검색</th>
                                     <td class="">
                                         <div class="relative inline-block w-56">
-                                            <input type="text" name="search_text" class="form-control" data-single-mode="true">
+                                            <input type="text" name="search_text" class="form-control" data-single-mode="true" value="{{$params['fr_search_text']}}">
                                         </div>
                                     </td>
                                     <th class="bg-primary/10 whitespace-nowrap w-32 text-center">등록일</th>
                                     <td class="">
-                                        <div class="relative inline-block w-56">
-                                            <div class="absolute rounded-l w-10 h-full flex items-center justify-center bg-slate-100 border text-slate-500 dark:bg-darkmode-700 dark:border-darkmode-800 dark:text-slate-400">
-                                                <i data-lucide="calendar" class="w-4 h-4"></i>
-                                            </div>
-                                            <input type="text" class="datepicker form-control pl-12" data-single-mode="true">
-                                        </div>
-                                        <div class="relative inline-block w-56">
-                                            <div class="absolute rounded-l w-10 h-full flex items-center justify-center bg-slate-100 border text-slate-500 dark:bg-darkmode-700 dark:border-darkmode-800 dark:text-slate-400">
-                                                <i data-lucide="calendar" class="w-4 h-4"></i>
-                                            </div>
-                                            <input type="text" class="datepicker form-control pl-12" data-single-mode="true">
+                                        <div class="sm:ml-auto mt-3 sm:mt-0 relative text-slate-500">
+                                            <i data-lucide="calendar" class="w-4 h-4 z-10 absolute my-auto inset-y-0 ml-3 left-0"></i>
+                                            <input name="created_at" type="text" class="datepicker form-control sm:w-56 box pl-10" value="{{$params['search_created_at']}}">
                                         </div>
                                     </td>
                                 </tr>
                             </table>
                         </div>
                         <div class="intro-y col-span-12 flex items-center justify-center sm:justify-end mt-5">
-                            <button class="btn btn-primary w-24 ml-2">검색</button>
+                            <button class="btn btn-primary w-24 ml-2" onclick="$('#searchData').submit();">검색</button>
                             <button class="btn btn-secondary w-24">초기화</button>
                         </div>
                     </div>
@@ -102,6 +94,9 @@
             <div class="intro-y box mt-5">
                 <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60">
                     <h2 class="font-medium text-base mr-auto text-primary">총 {{number_format($totalCount)}}개의 컨텐츠가 있습니다.</h2>
+                    <button class="btn box flex items-center text-slate-600 border border-slate-400 mr-2" id="select_delete">
+                        선택 삭제
+                    </button>
                     <button class="btn box flex items-center text-slate-600 border border-slate-400 mr-2" data-tw-toggle="modal" data-tw-target="#superlarge-modal-size-preview">
                         등록
                     </button>
@@ -134,7 +129,7 @@
                                     <tr>
                                         <td class="whitespace-nowrap text-center"><input type="checkbox" class="del_check" name="del_check" value="{{$rs->idx}}"></td>
                                         <td class="whitespace-nowrap text-center">@if($rs->contents === 'notice') 공지사항 @elseif($rs->contents === 'event') 이벤트 @else URL 등록 @endif</td>
-                                        <td class="whitespace-nowrap text-center"><a href="">{{$rs->br_title}}</a></td>
+                                        <td class="whitespace-nowrap text-center bannerUpdate" data-idx="{{$rs->idx}}" data-contents="{{$rs->contents}}" data-contents_url="{{$rs->contents_url}}" data-br_title="{{$rs->br_title}}" data-isuse="{{$rs->isuse}}" data-banner_file="{{$rs->banner_file}}" data-banner_source="{{$rs->banner_source}}" data-tw-toggle="modal" data-tw-target="#superlarge-modal-size-update">{{$rs->br_title}}</td>
                                         <td class="whitespace-nowrap text-center">@if($rs->isuse === "Y") 사용 @else 미 사용 @endif</td>
                                         <td class="whitespace-nowrap text-center">{{$rs->created_at}}</td>
                                         <td class="whitespace-nowrap text-center">
@@ -251,42 +246,111 @@
         </div>
     </div>
     <!-- 등록 모달 끝 -->
-    <script type="text/x-mustache" id="SeqChangeForm">
-        <tr>
-            <td class="whitespace-nowrap text-center"><input type="checkbox" class="del_check" name="del_check" value="((idx))"></td>
-            <td class="whitespace-nowrap text-center">((contents))</td>
-            <td class="whitespace-nowrap text-center"><a href="">((br_title))</a></td>
-            <td class="whitespace-nowrap text-center">((isuse))</td>
-            <td class="whitespace-nowrap text-center">((created_at))</td>
-            <td class="whitespace-nowrap text-center">
-                <button class="btn box items-center text-slate-600 border border-slate-400 mr-2 seqchange" data-idx="((idx))" data-change_idx="((bf_idx))" data-br_seq="((br_seq))" data-change_seq="((bf_br_seq))" ((^bf_idx))disabled((/bf_idx))>
-                    ((^bf_idx))
-                        △
-                    ((/bf_idx))
-                    ((#bf_idx))
-                        ▲
-                    ((/bf_idx))
-                </button>
-                <button class="btn box items-center text-slate-600 border border-slate-400 seqchange" data-idx="((idx))" data-change_idx="((af_idx))" data-br_seq="((br_seq))" data-change_seq="((af_br_seq))" ((^af_idx))disabled((/af_idx))>
-                    ((^af_idx))
-                        ▽
-                    ((/af_idx))
-                    ((#af_idx))
-                        ▼
-                    ((/af_idx))
-                </button>
-            </td>
-        </tr>
-    </script>
+
+    <!-- 등록 모달 시작 -->
+    <div id="superlarge-modal-size-update" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-2xl">
+            <div class="modal-content">
+                <div class="modal-body p-10 text-center">
+
+                    <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60">
+                        <h2 class="font-medium text-base mr-auto">컨텐츠 수정</h2>
+                    </div>
+                    
+                    <form id="BannerUpdateForm" method="post" action="/mainmanage/banner/update" enctype="multipart/form-data">
+                        <div class="overflow-x-auto">
+                            {{ csrf_field() }}
+                            <input type="hidden" name="up_idx" value=""/>
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">제목</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input name="up_br_title" id="regular-form-1" type="text" class="form-control" placeholder="제목을 입력해주세요.">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">컨텐츠 구분</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <select name="up_contents" class="form-select w-56" aria-label=".form-select-lg example">
+                                            <option value="">선택</option>
+                                            <option value="notice">공지사항</option>
+                                            <option value="event">이벤트</option>
+                                            <option value="url">URL 등록</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">연결 컨텐츠</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input name="up_contents_url"id="regular-form-1" type="text" class="form-control" placeholder="연결할 컨텐츠를 입력해주세요.">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">배너 이미지</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="file" name="up_banner_img" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
+                                        <img class="up_banner_img" src="" alt="배너 이미지">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">상태</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <select name="up_isuse" class="form-select w-56" aria-label=".form-select-lg example">
+                                            <option value="Y">사용</option>
+                                            <option value="N">미 사용</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="flex items-center justify-center mt-5">
+                            <button class="btn btn-primary w-32 ml-2 mr-2 bannerUpdatebtn">수정</button>
+                            <button type="button" class="btn btn-secondary w-32" data-tw-dismiss="modal">닫기</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 등록 모달 끝 -->
     
     <script>
 
-        var SeqChangeForm = $("#SeqChangeForm").html();
+        var ajax_checked = false;
 
         $(document).on('click','.bannerAddbtn', function(){
             
+            if($("input[name='br_title']").val() == ""){
+                alert("제목을 입력해주세요.");
+                return;
+            }
 
-            console.log($('#BannerWriteForm'))
+            if($("select[name='contents']").val() == ""){
+                alert("컨텐츠 구분을 선택해주세요.");
+                return;
+            }
+
+            if($("input[name='contents_url']").val() == ""){
+                alert("연결할 컨텐츠를 입력해주세요.");
+                return;
+            }
+
+            if($("input[name='banner_img']").val() == ""){
+                alert("배너 이미지를 선택해주세요.");
+                return;
+            }
+
             $('#BannerWriteForm').submit();
 
             /*var BannerWriteForm = $("#BannerWriteForm")[0];
@@ -325,63 +389,212 @@
             }
         });
 
+        $(document).on('click','#select_delete',function(){
+            var del_check = "";
+            if(confirm("선택하신 목록들을 삭제하시겠습니까?")){
+                if($("input[name='del_check']:checked").length > 0){
+                    
+                    $("input[name='del_check']:checked").each(function(e){
+                        del_check += $(this).val()+",";
+                    })
+
+                    del_check = del_check.slice(0, -1);
+
+                    jQuery.ajax({
+                        cache: false,
+                        dataType:'json',
+                        data: {
+                            del_check : del_check
+                        },
+                        url: '/mainmanage/banner/selectdelete',
+                        success: function (data) {
+                            if(data == "SUCCESS"){
+                                alert('컨텐츠가 삭제되었습니다.');
+                                location.reload();
+                            }else{
+                                alert(data);
+                                //console.log(data);
+                            }
+                        },
+                        error: function (e) {
+                            console.log('start');
+                            console.log(e);
+                            //alert('로딩 중 오류가 발생 하였습니다.');
+                        }
+                    });
+                }else{
+                    alert('선택한 목록이 없습니다');
+                }
+            }
+        });
+
+        $(document).on('click','.bannerUpdate',function(){
+            var idx = $(this).data('idx');
+            var br_title = $(this).data('br_title');
+            var contents = $(this).data('contents');
+            var contents_url = $(this).data('contents_url');
+            var banner_file = $(this).data('banner_file');
+            var banner_source = $(this).data('banner_source');
+            var isuse = $(this).data('isuse');
+
+            $("input[name='up_idx']").val(idx);
+            $("input[name='up_br_title']").val(br_title);
+            $("select[name='up_contents']").val(contents);
+            $("input[name='up_contents_url']").val(contents_url);
+            $("select[name='up_isuse']").val(isuse);
+            $('.up_banner_img').attr('src','/storage/banner/'+banner_source);
+        });
+
+        $(document).on('click','.bannerUpdatebtn', function(){
+            
+            if($("input[name='up_br_title']").val() == ""){
+                alert("제목을 입력해주세요.");
+                return;
+            }
+
+            if($("select[name='up_contents']").val() == ""){
+                alert("컨텐츠 구분을 선택해주세요.");
+                return;
+            }
+
+            if($("input[name='up_contents_url']").val() == ""){
+                alert("연결할 컨텐츠를 입력해주세요.");
+                return;
+            }
+
+            $('#BannerUpdateForm').submit();
+
+            /*var BannerWriteForm = $("#BannerWriteForm")[0];
+            var formData = new FormData(BannerWriteForm);
+
+            $.ajax({
+                type:"post",
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType:'json',
+                data: formData,
+                url: '/mainmanage/banner/add',
+                success: function (data) {
+                    if(data.result=="SUCCESS"){
+                        alert('컨텐츠가 등록되었습니다.');
+                        location.reload();
+                    }else{
+                        alert(data.result);
+                    }
+                },
+                error: function (e) {
+                    console.log('start');
+                    console.log(e);
+                    alert('로딩 중 오류가 발생 하였습니다.');
+                }
+            });*/
+
+        });
+
         $(document).on('click','.seqchange', function(){
             var idx = $(this).data("idx");
             var change_idx = $(this).data("change_idx");
             var br_seq = $(this).data("br_seq");
             var change_seq = $(this).data("change_seq");
+            var contents = "{{$params['contents']}}";
+            var search_text = "{{$params['search_text']}}";
+            var created_at = "{{$params['created_at']}}";
             var banner_code = "{{$bannerData[0]->banner_code}}";
+            var page = $("input[name=page]").val();
+            
+            if(ajax_checked == false){
+                ajax_checked = true;
+                jQuery.ajax({
+                    cache: false,
+                    dataType:'json',
+                    data: {
+                        idx:idx,
+                        change_idx:change_idx,
+                        br_seq:br_seq,
+                        change_seq:change_seq,
+                        banner_code:banner_code,
+                        page:page,
+                        contents:contents,
+                        search_text:search_text,
+                        created_at:created_at,
+                    },
+                    url: '/mainmanage/banner/seqchange',
+                    success: function (data) {
+                        
+                        $("#banner_data_list").html("");
 
-            jQuery.ajax({
-                cache: false,
-                dataType:'json',
-                data: {
-                    idx:idx,
-                    change_idx:change_idx,
-                    br_seq:br_seq,
-                    change_seq:change_seq,
-                    banner_code:banner_code
-                },
-                url: '/mainmanage/banner/seqchange',
-                success: function (data) {
-                    
-                    $("#banner_data_list").html("");
+                        data.forEach(function(item,index) {
 
-                    data.forEach(function(item,index) {
+                            var dom = document.createElement('tr');
 
-                        var dom = document.createElement('tr');
+                            if(item.contents == "notice"){
+                                item.contents = "공지사항";
+                            }else if(item.contents == "event"){
+                                item.contents = "이벤트";
+                            }else{
+                                item.contents = "URL 등록";
+                            }
 
-                        if(item.contents == "notice"){
-                            item.contents = "공지사항";
-                        }else if(item.contents == "event"){
-                            item.contents = "이벤트";
+                            if(item.isuse == "Y"){
+                                item.isuse = "사용";
+                            }else{
+                                item.isuse = "미 사용";
+                            }
+
+                            var bf_disabled = "", af_disabled = "",bf_up = "", af_down = "";
+
+                            if(item.bf_idx == ""){
+                                bf_disabled = "disabled";
+                                bf_up = "△";
+                            }else{
+                                bf_up = "▲";
+                            }
+
+                            if(item.af_idx == ""){
+                                af_disabled = "disabled";
+                                af_down = "▽";
+                            }else{
+                                af_down = "▼";
+                            }
+
+
+                            var hitem = '<tr>'
+                                +'<td class="whitespace-nowrap text-center"><input type="checkbox" class="del_check" name="del_check" value="'+item.idx+'"></td>'
+                                +'<td class="whitespace-nowrap text-center">'+item.contents+'</td>'
+                                +'<td class="whitespace-nowrap text-center bannerUpdate" data-idx="'+item.idx+'" data-contents="'+item.contents+'" data-contents_url="'+item.contents_url+'" data-br_title="'+item.br_title+'" data-isuse="'+item.isuse+'" data-banner_file="'+item.banner_file+'" data-banner_source="'+item.banner_source+'" data-tw-toggle="modal" data-tw-target="#superlarge-modal-size-update">'+item.br_title+'</td>'
+                                +'<td class="whitespace-nowrap text-center">'+item.isuse+'</td>'
+                                +'<td class="whitespace-nowrap text-center">'+item.created_at+'</td>'
+                                +'<td class="whitespace-nowrap text-center">'
+                                +    '<button class="btn box items-center text-slate-600 border border-slate-400 mr-2 seqchange" data-idx="'+item.idx+'" data-change_idx="'+item.bf_idx+'" data-br_seq="'+item.br_seq+'" data-change_seq="'+item.bf_br_seq+'" '+bf_disabled+'>'
+                                +    bf_up        
+                                +    '</button>'
+                                +    '<button class="btn box items-center text-slate-600 border border-slate-400 mr-2 seqchange" data-idx="'+item.idx+'" data-change_idx="'+item.af_idx+'" data-br_seq="'+item.br_seq+'" data-change_seq="'+item.af_br_seq+'" '+af_disabled+'>'
+                                +    af_down
+                                +    '</button>'
+                                +'</td>'
+                                +'</tr>'
+
+                            dom.innerHTML = hitem;
+
+                            $("#banner_data_list").append(dom);
+
+                            ajax_checked = false;
+                        });
+                        /*if(data.result=="SUCCESS"){
+                            alert('컨텐츠가 등록되었습니다.');
                         }else{
-                            item.contents = "URL 등록";
-                        }
-
-                        if(item.isuse == "Y"){
-                            item.isuse = "사용";
-                        }else{
-                            item.isuse = "미 사용";
-                        }
-
-                        dom.innerHTML = Mustache.render(SeqChangeForm,item);
-
-                        $("#banner_data_list").append(dom);
-                    });
-                    /*if(data.result=="SUCCESS"){
-                        alert('컨텐츠가 등록되었습니다.');
-                    }else{
-                        //alert(data.result);
-                        console.log(data.result);
-                    }*/
-                },
-                error: function (e) {
-                    console.log('start');
-                    console.log(e);
-                    //alert('로딩 중 오류가 발생 하였습니다.');
-                }
-            });
+                            //alert(data.result);
+                            console.log(data.result);
+                        }*/
+                    },
+                    error: function (e) {
+                        console.log('start');
+                        console.log(e);
+                        //alert('로딩 중 오류가 발생 하였습니다.');
+                    }
+                });
+            }
         });
     </script>
 @endsection

@@ -58,6 +58,14 @@ Route::middleware(['auth'])->group(function () {
         Route::post('banner/update', [MainManageController::class, 'BannerUpdate']);
         Route::post('banner/delete', [MainManageController::class, 'BannerDelete']);
         Route::get('banner/seqchange', [MainManageController::class, 'SeqChange']);
+        Route::get('banner/selectdelete', [MainManageController::class, 'SelectDelete']);
+
+        Route::get('popup/list', [MainManageController::class, 'getPopupList']);
+        Route::get('popup/view/{bidx}', [MainManageController::class, 'getPopupView']);
+        Route::get('popup/write', [MainManageController::class, 'PopupWrite']);
+        Route::post('popup/add', [MainManageController::class, 'PopupAdd']);
+        Route::post('popup/update', [MainManageController::class, 'PopupUpdate']);
+        Route::get('popup/delete', [MainManageController::class, 'PopupDelete']);
     });
 
     Route::get('/admin/board/list', [BoardController::class, 'getBoardList']);
