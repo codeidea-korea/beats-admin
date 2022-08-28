@@ -31,4 +31,16 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+
+    /*
+    |------------------------------
+    |SNS 정보
+    |------------------------------
+     */
+    'facebook' => [
+        'client_id' => 'xxxxxxx', //앱ID
+        'client_secret' => 'xxxxxxxx', //앱암호
+        'redirect' => '',
+    ],
+
 ];
