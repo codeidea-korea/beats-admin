@@ -114,7 +114,7 @@
                 <div class="intro-y box mt-5">
                     <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60">
                         <h2 class="font-medium text-base mr-auto text-primary">총 {{number_format($totalCount)}}명의 관리자가 있습니다.</h2>
-                        <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#superlarge-modal-size-preview2" class="btn btn-primary mr-1 mb-2">포인트 지급</a>
+                        <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#superlarge-modal-size-preview2" class="btn btn-primary mr-1 mb-2" id="pointOpen">포인트 지급</a>
                     </div>
                     <div class="p-5">
                         <div class="overflow-x-auto">
@@ -283,7 +283,7 @@
                             <div class="flex justify-between items-center mt-5">
                                 <div class="w-full">
                                     <div class="flex flex-col sm:flex-row items-center border-b border-slate-200/60">
-                                        <h2 class="font-medium text-base mr-auto text-primary">총 000명의 회원이 있습니다</h2>
+                                        <h2 class="font-medium text-base mr-auto text-primary">총 <span id="pointMemCnt">0</span>명의 회원이 있습니다</h2>
                                     </div>
 
                                     <div class="overflow-x-auto">
@@ -292,7 +292,7 @@
                                             <tr>
                                                 <th class="whitespace-nowrap text-center bg-primary/10">
                                                     <div class="form-check">
-                                                        <input id="checkbox-switch-1" class="form-check-input" type="checkbox" value="">
+                                                        <input id="checkbox-switch-1" class="form-check-input all_check" type="checkbox" value="">
                                                     </div>
                                                 </th>
                                                 <th class="whitespace-nowrap text-cente bg-primary/10">서비스</th>
@@ -300,8 +300,8 @@
                                                 <th class="whitespace-nowrap text-center bg-primary/10">가입 채널</th>
                                             </tr>
                                             </thead>
-                                            <tbody>
-                                            <tr>
+                                            <tbody id="pointMemList">
+                                            <!-- <tr>
                                                 <td class="whitespace-nowrap text-center">
                                                     <div class="form-check">
                                                         <input id="checkbox-switch-1" class="form-check-input" type="checkbox" value="">
@@ -310,152 +310,13 @@
                                                 <td class="whitespace-nowrap text-center">바이비츠</td>
                                                 <td class="whitespace-nowrap text-center">작곡가</td>
                                                 <td class="whitespace-nowrap text-center">카카오</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="whitespace-nowrap text-center">
-                                                    <div class="form-check">
-                                                        <input id="checkbox-switch-1" class="form-check-input" type="checkbox" value="">
-                                                    </div>
-                                                </td>
-                                                <td class="whitespace-nowrap text-center">바이비츠</td>
-                                                <td class="whitespace-nowrap text-center">작곡가</td>
-                                                <td class="whitespace-nowrap text-center">카카오</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="whitespace-nowrap text-center">
-                                                    <div class="form-check">
-                                                        <input id="checkbox-switch-1" class="form-check-input" type="checkbox" value="">
-                                                    </div>
-                                                </td>
-                                                <td class="whitespace-nowrap text-center">바이비츠</td>
-                                                <td class="whitespace-nowrap text-center">작곡가</td>
-                                                <td class="whitespace-nowrap text-center">카카오</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="whitespace-nowrap text-center">
-                                                    <div class="form-check">
-                                                        <input id="checkbox-switch-1" class="form-check-input" type="checkbox" value="">
-                                                    </div>
-                                                </td>
-                                                <td class="whitespace-nowrap text-center">바이비츠</td>
-                                                <td class="whitespace-nowrap text-center">작곡가</td>
-                                                <td class="whitespace-nowrap text-center">카카오</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="whitespace-nowrap text-center">
-                                                    <div class="form-check">
-                                                        <input id="checkbox-switch-1" class="form-check-input" type="checkbox" value="">
-                                                    </div>
-                                                </td>
-                                                <td class="whitespace-nowrap text-center">바이비츠</td>
-                                                <td class="whitespace-nowrap text-center">작곡가</td>
-                                                <td class="whitespace-nowrap text-center">카카오</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="whitespace-nowrap text-center">
-                                                    <div class="form-check">
-                                                        <input id="checkbox-switch-1" class="form-check-input" type="checkbox" value="">
-                                                    </div>
-                                                </td>
-                                                <td class="whitespace-nowrap text-center">바이비츠</td>
-                                                <td class="whitespace-nowrap text-center">작곡가</td>
-                                                <td class="whitespace-nowrap text-center">카카오</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="whitespace-nowrap text-center">
-                                                    <div class="form-check">
-                                                        <input id="checkbox-switch-1" class="form-check-input" type="checkbox" value="">
-                                                    </div>
-                                                </td>
-                                                <td class="whitespace-nowrap text-center">바이비츠</td>
-                                                <td class="whitespace-nowrap text-center">작곡가</td>
-                                                <td class="whitespace-nowrap text-center">카카오</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="whitespace-nowrap text-center">
-                                                    <div class="form-check">
-                                                        <input id="checkbox-switch-1" class="form-check-input" type="checkbox" value="">
-                                                    </div>
-                                                </td>
-                                                <td class="whitespace-nowrap text-center">바이비츠</td>
-                                                <td class="whitespace-nowrap text-center">작곡가</td>
-                                                <td class="whitespace-nowrap text-center">카카오</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="whitespace-nowrap text-center">
-                                                    <div class="form-check">
-                                                        <input id="checkbox-switch-1" class="form-check-input" type="checkbox" value="">
-                                                    </div>
-                                                </td>
-                                                <td class="whitespace-nowrap text-center">바이비츠</td>
-                                                <td class="whitespace-nowrap text-center">작곡가</td>
-                                                <td class="whitespace-nowrap text-center">카카오</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="whitespace-nowrap text-center">
-                                                    <div class="form-check">
-                                                        <input id="checkbox-switch-1" class="form-check-input" type="checkbox" value="">
-                                                    </div>
-                                                </td>
-                                                <td class="whitespace-nowrap text-center">바이비츠</td>
-                                                <td class="whitespace-nowrap text-center">작곡가</td>
-                                                <td class="whitespace-nowrap text-center">카카오</td>
-                                            </tr>
+                                            </tr> -->
                                             </tbody>
                                         </table>
                                     </div>
 
                                     <!-- 페이징처리 시작 -->
-                                    <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center mt-5">
-                                        <nav class="w-full">
-                                            <ul class="pagination justify-center">
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="chevrons-left" class="lucide lucide-chevrons-left w-4 h-4" data-lucide="chevrons-left">
-                                                            <polyline points="11 17 6 12 11 7"></polyline>
-                                                            <polyline points="18 17 13 12 18 7"></polyline>
-                                                        </svg>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="chevron-left" class="lucide lucide-chevron-left w-4 h-4" data-lucide="chevron-left">
-                                                            <polyline points="15 18 9 12 15 6"></polyline>
-                                                        </svg>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#">...</a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#">1</a>
-                                                </li>
-                                                <li class="page-item active">
-                                                    <a class="page-link" href="#">2</a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#">3</a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#">...</a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="chevron-right" class="lucide lucide-chevron-right w-4 h-4" data-lucide="chevron-right">
-                                                            <polyline points="9 18 15 12 9 6"></polyline>
-                                                        </svg>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="chevrons-right" class="lucide lucide-chevrons-right w-4 h-4" data-lucide="chevrons-right">
-                                                            <polyline points="13 17 18 12 13 7"></polyline>
-                                                            <polyline points="6 17 11 12 6 7"></polyline>
-                                                        </svg>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
+                                    <div id="MemAllPaging">
                                     </div>
                                     <!-- 페이징처리 종료 -->
                                 </div>
@@ -470,7 +331,7 @@
                                 <!-- 오른쪽 테이블 시작 -->
                                 <div class="w-full">
                                     <div class="flex flex-col sm:flex-row items-center border-b border-slate-200/60">
-                                        <h2 class="font-medium text-base mr-auto text-primary">총 000명의 회원이 있습니다</h2>
+                                        <h2 class="font-medium text-base mr-auto text-primary">총 0의 회원이 있습니다</h2>
                                     </div>
 
                                     <div class="overflow-x-auto">
@@ -503,56 +364,58 @@
                                     </div>
 
                                     <!-- 페이징처리 시작 -->
-                                    <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center mt-5">
-                                        <nav class="w-full">
-                                            <ul class="pagination justify-center">
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="chevrons-left" class="lucide lucide-chevrons-left w-4 h-4" data-lucide="chevrons-left">
-                                                            <polyline points="11 17 6 12 11 7"></polyline>
-                                                            <polyline points="18 17 13 12 18 7"></polyline>
-                                                        </svg>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="chevron-left" class="lucide lucide-chevron-left w-4 h-4" data-lucide="chevron-left">
-                                                            <polyline points="15 18 9 12 15 6"></polyline>
-                                                        </svg>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#">...</a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#">1</a>
-                                                </li>
-                                                <li class="page-item active">
-                                                    <a class="page-link" href="#">2</a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#">3</a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#">...</a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="chevron-right" class="lucide lucide-chevron-right w-4 h-4" data-lucide="chevron-right">
-                                                            <polyline points="9 18 15 12 9 6"></polyline>
-                                                        </svg>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="chevrons-right" class="lucide lucide-chevrons-right w-4 h-4" data-lucide="chevrons-right">
-                                                            <polyline points="13 17 18 12 13 7"></polyline>
-                                                            <polyline points="6 17 11 12 6 7"></polyline>
-                                                        </svg>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
+                                    <div id="sendPointMemPaging">
+                                        <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center mt-5">
+                                            <nav class="w-full">
+                                                <ul class="pagination justify-center">
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="#">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="chevrons-left" class="lucide lucide-chevrons-left w-4 h-4" data-lucide="chevrons-left">
+                                                                <polyline points="11 17 6 12 11 7"></polyline>
+                                                                <polyline points="18 17 13 12 18 7"></polyline>
+                                                            </svg>
+                                                        </a>
+                                                    </li>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="#">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="chevron-left" class="lucide lucide-chevron-left w-4 h-4" data-lucide="chevron-left">
+                                                                <polyline points="15 18 9 12 15 6"></polyline>
+                                                            </svg>
+                                                        </a>
+                                                    </li>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="#">...</a>
+                                                    </li>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="#">1</a>
+                                                    </li>
+                                                    <li class="page-item active">
+                                                        <a class="page-link" href="#">2</a>
+                                                    </li>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="#">3</a>
+                                                    </li>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="#">...</a>
+                                                    </li>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="#">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="chevron-right" class="lucide lucide-chevron-right w-4 h-4" data-lucide="chevron-right">
+                                                                <polyline points="9 18 15 12 9 6"></polyline>
+                                                            </svg>
+                                                        </a>
+                                                    </li>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="#">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="chevrons-right" class="lucide lucide-chevrons-right w-4 h-4" data-lucide="chevrons-right">
+                                                                <polyline points="13 17 18 12 13 7"></polyline>
+                                                                <polyline points="6 17 11 12 6 7"></polyline>
+                                                            </svg>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
                                     </div>
                                     <!-- 페이징처리 종료 -->
                                 </div>
@@ -572,8 +435,120 @@
 
     <script>
         $(function (){
-            $('#superlarge-modal-size-preview2').modal({ keyboard: false, backdrop: 'static' })
+            //$('#superlarge-modal-size-preview2').modal({ keyboard: false, backdrop: 'static' })
         })
+
+        var ajax_checked = true;
+
+        $(document).on('click','.all_check',function(){
+            if($(this).is(':checked') == true){
+                $('.send_check').attr('checked',true);
+            }else{
+                $('.send_check').removeAttr('checked');
+            }
+        });
+
+        $(document).on('click','#pointOpen',function(){
+            if(ajax_checked){
+                ajax_checked = false;
+                $("#pointMemList").html('');
+                getPointMemList(1);
+            }
+        });
+
+        function getPointMemList(page){
+            jQuery.ajax({
+                type:"get",
+                dataType:'json',
+                data: {
+                    page : page,
+                    limit : 10,
+                },
+                url: "{{ url('/member/ajax/memberList') }}",
+                success: function searchSuccess(data) {
+
+                    if(data.resultCode=="SUCCESS"){
+                        
+                        data.memberList.forEach(function(item,index){
+                            var dom = document.createElement('tr');
+                            var ihtml = "";
+                            var mem_class = "";
+                            var gubun = "";
+
+                            if(item.class == 1){
+                                mem_class = "비트썸원";
+                            }else if(item.class == 2){
+                                mem_class = "바이비트";
+                            }else{
+                                mem_class = "통합회원";
+                            }
+
+                            if(item.gubun == 1){
+                                gubun = "일반";
+                            }else if(item.gubun == 2){
+                                gubun = "작곡가";
+                            }else if(item.gubun == 3){
+                                gubun = "음원 구매자";
+                            }else{
+                                gubun = "멘토 뮤지션";
+                            }
+
+                            ihtml =  '<tr>'
+                            ihtml +=    '<td class="whitespace-nowrap text-center">';
+                            ihtml +=    '<div class="form-check">';
+                            ihtml +=    '<input id="checkbox-switch-1" class="form-check-input send_check" type="checkbox" value="">';
+                            ihtml +=    '</div>';
+                            ihtml +=    '<td class="whitespace-nowrap text-center">'+mem_class+'</td>';
+                            ihtml +=    '<td class="whitespace-nowrap text-center">'+gubun+'</td>';
+                            ihtml +=    '<td class="whitespace-nowrap text-center">'+item.channel+'</td>';
+                            ihtml +=    '</tr>';
+                            dom.innerHTML = ihtml;
+
+                            $("#pointMemList").append(dom);
+                        });
+
+                        $('#pointMemCnt').html(data.totalCount);
+
+                        $("#MemAllPaging").html('');
+
+                        jQuery.ajax({
+                            cache: false,
+                            dataType:'json',
+                            data: {
+                                page : page,
+                                totalCount : data.totalCount,
+                                functionName : 'pointMemChange',
+                            },
+                            url: '/member/ajax/memberPaging',
+                            success: function (pagingdata) {
+                                if(pagingdata.resultCode=="SUCCESS"){
+                                    $("#MemAllPaging").append(pagingdata.paging);
+                                }else{
+                                    console.log(pagingdata.resultMessage);
+                                }
+                            },
+                            error: function (e) {
+                                console.log('start');
+                                console.log(e);
+                                //alert('로딩 중 오류가 발생 하였습니다.');
+                            }
+                        });
+                    }else{
+                        alert(data.resultMessage);
+                    }
+                },
+                error: function (e) {
+                    console.log('start');
+                    console.log(e);
+                    alert('로딩 중 오류가 발생 하였습니다.');
+                }
+            });
+        }
+
+        function pointMemChange(pointpage){
+            $("#pointMemList").html('');
+            getPointMemList(pointpage);
+        }
 
         function change(page) {
             $("input[name=page]").val(page);

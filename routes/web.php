@@ -92,7 +92,8 @@ Route::middleware(['auth'])->group(function () {
     {
         Route::get('/', [MemberController::class, 'getMemberList']);
         Route::get('memberList', [MemberController::class, 'getMemberList']);
-
+        Route::get('/ajax/memberList', [MemberController::class, 'getPointMemberList']);
+        Route::get('/ajax/memberPaging', [MemberController::class, 'getPaging']);
     });
 
 

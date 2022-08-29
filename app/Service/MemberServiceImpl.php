@@ -48,6 +48,44 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
         return $result;
     }
 
+    public function getPointMemberTotal($params) {
+
+        $result = $this->statDB->table('members')
+            ->select(DB::raw("COUNT(idx) AS cnt"))
+            ->where('isuse', 'Y')
+            ->when(isset($params['send_member_data']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->whereNotIn('members.idx',  $params['send_member_data']);
+                });
+            })
+            ->first();
+        return $result;
+
+    }
+
+    public function getPointMemberList($params){
+        $result = $this->statDB->table('members')
+            ->leftJoin('member_data', 'members.idx', '=', 'member_data.mem_id')
+            ->select(
+                'member_data.mem_id',
+                'member_data.name',
+                'member_data.class',
+                'member_data.gubun',
+                'member_data.channel',
+            )
+            ->where('members.isuse', 'Y')
+            ->when(isset($params['send_member_data']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->whereNotIn('members.idx',  $params['send_member_data']);
+                });
+            })
+            ->orderby('mem_regdate','desc')
+            ->skip(($params['page']-1)*$params['limit'])
+            ->take($params['limit'])
+            ->get();
+        return $result;
+    }
+
     public function bannerSample(){
         $result = $this->statDB->select(
             "SELECT

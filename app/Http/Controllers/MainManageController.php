@@ -84,7 +84,7 @@ class MainManageController extends Controller
         $bannercode = $this->adminMainmanageService->BannerAdd($params,$file);
 
         if($bannercode == "fails"){
-            return redirect('/mainmanage/banner/list');
+            return redirect()->back()->with('alert', '등록/수정에 실패하였습니다. \n관리자에게 문의 바랍니다.');
         }else{
             return redirect('/mainmanage/banner/view/'.$bannercode);
         }
@@ -97,7 +97,7 @@ class MainManageController extends Controller
         $bannercode = $this->adminMainmanageService->BannerUpdate($params,$file);
 
         if($bannercode == "fails"){
-            return redirect('/mainmanage/banner/list');
+            return redirect()->back()->with('alert', '등록/수정에 실패하였습니다. \n관리자에게 문의 바랍니다.');
         }else{
             return redirect('/mainmanage/banner/view/'.$bannercode);
         }
@@ -130,7 +130,7 @@ class MainManageController extends Controller
 
         $result = "SUCCESS";
 
-        if($bannerdata <= 0){
+        if(!$bannerdata){
             $result = "컨텐츠 삭제에 실패하였습니다. 다시 시도해주세요";
         }
 
@@ -195,7 +195,7 @@ class MainManageController extends Controller
         $result = $this->adminMainmanageService->PopupAdd($params,$file);
 
         if($result == "fails"){
-            return redirect('/mainmanage/popup/list');
+            return redirect()->back()->with('alert', '등록/수정에 실패하였습니다. \n관리자에게 문의 바랍니다.');
         }else{
             return redirect('/mainmanage/popup/view/'.$result);
         }
@@ -208,7 +208,7 @@ class MainManageController extends Controller
         $result = $this->adminMainmanageService->PopupUpdate($params,$file);
 
         if($result == "fails"){
-            return redirect('/mainmanage/popup/list');
+            return redirect()->back()->with('alert', '등록/수정에 실패하였습니다. \n관리자에게 문의 바랍니다.');
         }else{
             return redirect('/mainmanage/popup/view/'.$result);
         }
@@ -223,7 +223,7 @@ class MainManageController extends Controller
             'result' => 'SUCCESS'
         );
 
-        if($popupdata <= 0){
+        if(!$popupdata){
             $result['result'] = "팝업 삭제에 실패하였습니다. 다시 시도해주세요";
         }
 
