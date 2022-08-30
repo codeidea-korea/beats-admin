@@ -1,4 +1,5 @@
-`@extends('layouts.Default')
+@extends('layouts.default')
+
 @section('content')
 
     <div class="content">
@@ -468,7 +469,7 @@
                 success: function searchSuccess(data) {
 
                     if(data.resultCode=="SUCCESS"){
-                        
+
                         data.memberList.forEach(function(item,index){
                             var dom = document.createElement('tr');
                             var ihtml = "";

@@ -1,4 +1,5 @@
-@extends('layouts.Default')
+@extends('layouts.default')
+
 @section('content')
 
     <div class="content">
@@ -156,7 +157,7 @@
                     </div>
                 </div>
             </div>
-			
+
 			<!-- 페이징처리 시작 -->
             <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center mt-5">
                 <nav class="w-full">
@@ -179,7 +180,7 @@
                     <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60">
                         <h2 class="font-medium text-base mr-auto">컨텐츠 등록</h2>
                     </div>
-                    
+
                     <form id="BannerWriteForm" method="post" action="/mainmanage/banner/add" enctype="multipart/form-data">
                         <div class="overflow-x-auto">
                             {{ csrf_field() }}
@@ -256,7 +257,7 @@
                     <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60">
                         <h2 class="font-medium text-base mr-auto">컨텐츠 수정</h2>
                     </div>
-                    
+
                     <form id="BannerUpdateForm" method="post" action="/mainmanage/banner/update" enctype="multipart/form-data">
                         <div class="overflow-x-auto">
                             {{ csrf_field() }}
@@ -324,13 +325,13 @@
         </div>
     </div>
     <!-- 등록 모달 끝 -->
-    
+
     <script>
 
         var ajax_checked = false;
 
         $(document).on('click','.bannerAddbtn', function(){
-            
+
             if($("input[name='br_title']").val() == ""){
                 alert("제목을 입력해주세요.");
                 return;
@@ -380,7 +381,7 @@
             });*/
 
         });
-        
+
         $(document).on('click','.all_check',function(){
             if($(this).is(':checked') == true){
                 $('.del_check').attr('checked',true);
@@ -393,7 +394,7 @@
             var del_check = "";
             if(confirm("선택하신 목록들을 삭제하시겠습니까?")){
                 if($("input[name='del_check']:checked").length > 0){
-                    
+
                     $("input[name='del_check']:checked").each(function(e){
                         del_check += $(this).val()+",";
                     })
@@ -446,7 +447,7 @@
         });
 
         $(document).on('click','.bannerUpdatebtn', function(){
-            
+
             if($("input[name='up_br_title']").val() == ""){
                 alert("제목을 입력해주세요.");
                 return;
@@ -502,7 +503,7 @@
             var created_at = "{{$params['created_at']}}";
             var banner_code = "{{$bannerData[0]->banner_code}}";
             var page = $("input[name=page]").val();
-            
+
             if(ajax_checked == false){
                 ajax_checked = true;
                 jQuery.ajax({
@@ -521,7 +522,7 @@
                     },
                     url: '/mainmanage/banner/seqchange',
                     success: function (data) {
-                        
+
                         $("#banner_data_list").html("");
 
                         data.forEach(function(item,index) {
@@ -567,7 +568,7 @@
                                 +'<td class="whitespace-nowrap text-center">'+item.created_at+'</td>'
                                 +'<td class="whitespace-nowrap text-center">'
                                 +    '<button class="btn box items-center text-slate-600 border border-slate-400 mr-2 seqchange" data-idx="'+item.idx+'" data-change_idx="'+item.bf_idx+'" data-br_seq="'+item.br_seq+'" data-change_seq="'+item.bf_br_seq+'" '+bf_disabled+'>'
-                                +    bf_up        
+                                +    bf_up
                                 +    '</button>'
                                 +    '<button class="btn box items-center text-slate-600 border border-slate-400 mr-2 seqchange" data-idx="'+item.idx+'" data-change_idx="'+item.af_idx+'" data-br_seq="'+item.br_seq+'" data-change_seq="'+item.af_br_seq+'" '+af_disabled+'>'
                                 +    af_down

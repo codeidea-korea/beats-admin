@@ -1,4 +1,5 @@
-@extends('layouts.Default')
+@extends('layouts.default')
+
 @section('content')
 
     <div class="content">
@@ -130,13 +131,13 @@
     </div>
 
     </div>
-    
+
     <script>
 
         var ajax_checked = false;
 
         $(document).on('click','.bannerUpdatebtn', function(){
-            
+
             if($("input[name='pp_title']").val() == ""){
                 alert("제목을 입력해주세요.");
                 return false;
@@ -198,7 +199,7 @@
             });*/
 
         });
-        
+
         $(document).on('click','.popupDeletebtn',function(){
             var idx = $("input[name='idx']").val();
             if(confirm("팝업을 삭제하시겠습니까?")){

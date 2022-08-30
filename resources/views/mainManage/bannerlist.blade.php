@@ -1,4 +1,5 @@
-@extends('layouts.Default')
+@extends('layouts.default')
+
 @section('content')
 
     <div class="content">

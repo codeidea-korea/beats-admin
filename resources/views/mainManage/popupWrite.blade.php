@@ -1,4 +1,5 @@
-@extends('layouts.Default')
+@extends('layouts.default')
+
 @section('content')
 
     <div class="content">
@@ -126,7 +127,7 @@
         });
 
         $(document).on('click','.popupAddbtn', function(){
-            
+
             if($("input[name='pp_title']").val() == ""){
                 alert("제목을 입력해주세요.");
                 return false;
