@@ -1,122 +1,105 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+@extends('layouts.default')
+@section('content')
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Xenon Boostrap Admin Panel" />
-    <meta name="author" content="" />
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
-
-    <title>Admin - Data Tables</title>
-
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Arimo:400,700,400italic">
-    <link rel="stylesheet" href="/assets/css/fonts/linecons/css/linecons.css">
-    <link rel="stylesheet" href="/assets/css/fonts/fontawesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/assets/css/bootstrap.css">
-    <link rel="stylesheet" href="/assets/css/xenon-core.css">
-    <link rel="stylesheet" href="/assets/css/xenon-forms.css">
-    <link rel="stylesheet" href="/assets/css/xenon-components.css">
-    <link rel="stylesheet" href="/assets/css/xenon-skins.css">
-    <link rel="stylesheet" href="/assets/css/custom.css">
-
-    <script src="/assets/js/jquery-1.11.1.min.js"></script>
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-
-</head>
-<body class="page-body">
-
-<div class="page-container"><!-- add class "sidebar-collapsed" to close sidebar by default, "chat-visible" to make chat appear always -->
-
-    <!-- Add "fixed" class to make the sidebar fixed always to the browser viewport. -->
-    <!-- Adding class "toggle-others" will keep only one menu item open at a time. -->
-    <!-- Adding class "collapsed" collapse sidebar root elements and show only icons. -->
-    <div class="sidebar-menu toggle-others fixed">
-
-        <div class="sidebar-menu-inner">
-
-            <header class="logo-env">
-
-                <!-- logo -->
-                <div class="logo">
-                    <a href="/dashboard" class="logo-expanded">
-                        <img src="/assets/images/logo@2x2.png"  alt="" />
-                    </a>
-                </div>
-
-                <!-- This will toggle the mobile menu and will be visible only on mobile devices -->
-                <div class="mobile-menu-toggle visible-xs">
-                    <a href="#" data-toggle="mobile-menu">
-                        <i class="fa-bars"></i>
-                    </a>
-                </div>
-
-            </header>
-
-
-
-            <ul id="main-menu" class="main-menu">
-                <!-- add class "multiple-expanded" to allow multiple submenus to open -->
-                <!-- class "auto-inherit-active-class" will automatically add "active" class for parent elements who are marked already with class "active" -->
-                <li>
-                    <a href="/admin/list">
-                        <i class="linecons-cog"></i>
-                        <span class="title">Dashboard</span>
-                    </a>
-                </li>
-                <li class="active opened active">
-                    <a href="/admin/list">
-                        <i class="linecons-user"></i>
-                        <span class="title">관리자 관리</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('logout') }}"
-                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                        {{ __('Logout') }}
-                    </a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                        @csrf
-                    </form>
-                </li>
-
-            </ul>
-
+    <div class="content">
+        <!-- BEGIN: Top Bar -->
+    @include('include.topBarINC')
+    <!-- END: Top Bar -->
+        <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
+            <h2 class="text-lg font-medium mr-auto">관리자 등록</h2>
         </div>
 
-    </div>
+        <div class="grid grid-cols-12 gap-6 mt-5">
+            <div class="intro-y col-span-12 lg:col-span-12">
+                <div class="intro-y box">
 
-    <div class="main-content">
+                    <!-- table 시작 -->
+                    <div class="p-5">
+                        <div class="overflow-x-auto">
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" style="width:220px;">상태</th>
+                                    <td>
+                                        <select class="form-select w-60" aria-label=".form-select-lg" name="isuse">
+                                            <option value="Y" >활성화</option>
+                                            <option value="N" >비활성화</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" style="width:220px;">그룹</th>
+                                    <td>
+                                        <select class="form-select w-60" aria-label=".form-select-lg" name="group_code">
+                                            @foreach($groupList as $rs)
+                                                <option value="{{$rs->group_code}}" >{{$rs->group_name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" style="width:220px;">이름</th>
+                                    <td>
+                                        <input type="text" class="form-control" name="name" value="" placeholder="이름 표기 영역">
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" style="width:220px;">아이디</th>
+                                    <td>
+                                        <input type="text" class="form-control" name="id" value="" placeholder="이름 표기 영역">
+                                        <button class="btn btn-purple" type="button">중복 확인</button>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" style="width:220px;">비밀번호</th>
+                                    <td>
+                                        <input type="text" class="form-control" name="password" value="" placeholder="이름 표기 영역">
+                                    </td>
+                                </tr>
 
 
-        <div class="page-title">
 
-            <div class="title-env">
-                <h1 class="title">사용자관리</h1>
+
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" style="width:220px;">tkd</th>
+                                    <td>
+                                        <input id="regular-form-1" type="text" class="form-control" placeholder="제품명 표기 영역">
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10">(영어)제품영</th>
+                                    <td >
+                                        <input id="regular-form-1" type="text" class="form-control" placeholder="(영어) 제품명 표기 영역">
+
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10">관리자</th>
+                                    <td>조정훈</td>
+                                </tr>
+                            </table>
+                            <!-- 테이블 끝 -->
+                            <div class="flex justify-between w-full p-5">
+                                <div>
+                                    <button class="btn btn-dark w-24">목록</button>
+                                </div>
+                                <div>
+                                    <button class="btn btn-secondary w-24">삭제</button>
+                                    <button class="btn btn-primary w-24 ml-2">수정</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
-
-            <div class="breadcrumb-env">
-
-                <ol class="breadcrumb bc-1" >
-                    <li>
-                        <a href="/dashboard"><i class="fa-home"></i>Home</a>
-                    </li>
-                    <li class="active">
-                        <strong>사용자관리</strong>
-                    </li>
-                </ol>
-
-            </div>
-
         </div>
+
 
 
         <!-- 공지사항 -->
@@ -127,30 +110,7 @@
             <div class="panel-body">
                 <form name="RegForm" class="form-horizontal" role="form" id="RegForm"  method="post" action="{{ url('/admin/ajax/adminAdd') }}">
                     @csrf
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label" for="field-1">상태</label>
 
-                        <div class="col-sm-10">
-                            <select class="form-control" name="isuse">
-                                <option value="Y" >활성화</option>
-                                <option value="N" >비활성화</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group-separator"></div>
-
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label" for="field-1">그룹</label>
-
-                        <div class="col-sm-10">
-                            <select class="form-control" name="group_code">
-                                @foreach($groupList as $rs)
-                                    <option value="{{$rs->group_code}}" >{{$rs->group_name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group-separator"></div>
 
                     <div class="form-group" >
                         <label class="col-sm-2 control-label" for="field-1">이름</label>
@@ -263,62 +223,4 @@
             */
 
         </script>
-
-        <footer class="main-footer sticky footer-type-1">
-
-            <div class="footer-inner">
-
-                <!-- Add your copyright text here -->
-                <div class="footer-text">
-                    &copy; 2022
-                    <strong>Admin</strong>
-                    xxxx theme by laborator
-                </div>
-
-
-                <!-- Go to Top Link, just add rel="go-top" to any link to add this functionality -->
-                <div class="go-up">
-
-                    <a href="#" rel="go-top">
-                        <i class="fa-angle-up"></i>
-                    </a>
-
-                </div>
-
-            </div>
-
-        </footer>
-    </div>
-
-</div>
-
-
-
-
-
-
-
-<!-- Imported styles on this page -->
-<link rel="stylesheet" href="/assets/js/datatables/dataTables.bootstrap.css">
-
-<!-- Bottom Scripts -->
-<script src="/assets/js/bootstrap.min.js"></script>
-<script src="/assets/js/TweenMax.min.js"></script>
-<script src="/assets/js/resizeable.js"></script>
-<script src="/assets/js/joinable.js"></script>
-<script src="/assets/js/xenon-api.js"></script>
-<script src="/assets/js/xenon-toggles.js"></script>
-<script src="/assets/js/datatables/js/jquery.dataTables.min.js"></script>
-
-
-<!-- Imported scripts on this page -->
-<script src="/assets/js/datatables/dataTables.bootstrap.js"></script>
-<script src="/assets/js/datatables/yadcf/jquery.dataTables.yadcf.js"></script>
-<script src="/assets/js/datatables/tabletools/dataTables.tableTools.min.js"></script>
-
-
-<!-- JavaScripts initializations and stuff -->
-<script src="/assets/js/xenon-custom.js"></script>
-
-</body>
-</html>
+@endsection
