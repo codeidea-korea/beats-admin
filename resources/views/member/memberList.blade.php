@@ -324,7 +324,7 @@
 
                                 <!-- 가운데 화살표 시작 -->
                                 <div class="ml-5 mr-5">
-                                    <i data-lucide="fast-forward"></i>
+                                    <i data-lucide="fast-forward" id="sendMemMove"></i>
                                     <i data-lucide="rewind" class="mt-5"></i>
                                 </div>
                                 <!-- 가운데 화살표 끝 -->
@@ -349,17 +349,17 @@
                                                 <th class="whitespace-nowrap text-center bg-primary/10">가입 채널</th>
                                             </tr>
                                             </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td class="whitespace-nowrap text-center">
-                                                    <div class="form-check">
-                                                        <input id="checkbox-switch-1" class="form-check-input" type="checkbox" value="">
-                                                    </div>
-                                                </td>
-                                                <td class="whitespace-nowrap text-center">바이비츠</td>
-                                                <td class="whitespace-nowrap text-center">작곡가</td>
-                                                <td class="whitespace-nowrap text-center">카카오</td>
-                                            </tr>
+                                            <tbody id="sendPointMemList">
+                                                <tr>
+                                                    <td class="whitespace-nowrap text-center">
+                                                        <div class="form-check">
+                                                            <input id="checkbox-switch-1" class="form-check-input" type="checkbox" value="">
+                                                        </div>
+                                                    </td>
+                                                    <td class="whitespace-nowrap text-center">바이비츠</td>
+                                                    <td class="whitespace-nowrap text-center">작곡가</td>
+                                                    <td class="whitespace-nowrap text-center">카카오</td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -441,6 +441,8 @@
 
         var ajax_checked = true;
 
+        var g_page = 1;
+
         $(document).on('click','.all_check',function(){
             if($(this).is(':checked') == true){
                 $('.send_check').attr('checked',true);
@@ -453,7 +455,25 @@
             if(ajax_checked){
                 ajax_checked = false;
                 $("#pointMemList").html('');
-                getPointMemList(1);
+                getPointMemList(g_page);
+            }
+        });
+
+        $(document).on('click','#sendMemMove',function(){
+
+            if($('input[name="send_check"]:checked').length <= 0){
+                alert('먼저 포인트를 보낼 회원을 선택해주세요');
+            }else{
+                $('input[name="send_check"]:checked').each(function(){
+                    var dom = document.createElement('tr');
+                    
+                    dom.innerHTML = $(this).closest('tr').html();
+
+                    $('#sendPointMemList').append(dom);
+                });
+
+                $("#pointMemList").html('');
+                getPointMemList(g_page);
             }
         });
 
@@ -497,7 +517,7 @@
                             ihtml =  '<tr>'
                             ihtml +=    '<td class="whitespace-nowrap text-center">';
                             ihtml +=    '<div class="form-check">';
-                            ihtml +=    '<input id="checkbox-switch-1" class="form-check-input send_check" type="checkbox" value="">';
+                            ihtml +=    '<input name="send_check" id="checkbox-switch-1" class="form-check-input send_check" type="checkbox" value="'+item.idx+'">';
                             ihtml +=    '</div>';
                             ihtml +=    '<td class="whitespace-nowrap text-center">'+mem_class+'</td>';
                             ihtml +=    '<td class="whitespace-nowrap text-center">'+gubun+'</td>';
@@ -549,6 +569,7 @@
         function pointMemChange(pointpage){
             $("#pointMemList").html('');
             getPointMemList(pointpage);
+            g_page = pointpage;
         }
 
         function change(page) {
