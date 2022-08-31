@@ -76,6 +76,36 @@ class MemberController extends Controller
         return json_encode($result);
     }
 
+    public function sendPoint()
+    {
+        $params = $this->request->input();
+        //$sample = $this->memberService->bannerSample($params);
+        $params['increase'] = $params['increase'] ?? '';
+        $params['amount'] = $params['amount'] ?? 0;
+        $params['reason'] = $params['reason'] ?? '';
+
+        if($params['increase'] == 0){
+            $params['tmp_amount'] = $params['amount'];
+        }else{
+            $params['tmp_amount'] = -$params['amount'];
+        }
+
+        $result = array(
+            'resultCode' => 'SUCCESS'
+        );
+
+        $sendPoint = $this->memberService->sendPoint($params);
+
+        if($sendPoint){
+            $result['resultMessage'] = "포인트가 지급되었습니다.";
+        }else{
+            $result['resultCode'] = "FAIL";
+            $result['resultMessage'] = "포인트 지급에 실패하였습니다. 다시 시도해주세요";
+        }
+
+        return json_encode($result);
+    }
+
     public function getPaging()
     {
         $params = $this->request->input();

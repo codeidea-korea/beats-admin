@@ -194,25 +194,19 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <select class="form-select w-56" aria-label=".form-select-lg example">
-                                        <option>+</option>
-                                        <option>전체1</option>
-                                        <option>전체2</option>
+                                    <select name="increase" class="form-select w-56" aria-label=".form-select-lg example">
+                                        <option value="0">+</option>
+                                        <option value="1">-</option>
                                     </select>
                                 </td>
                                 <td>
-                                    <input id="regular-form-1" type="text" class="form-control" placeholder="금액 입력">
+                                    <input name="amount" id="regular-form-1" type="text" class="form-control" placeholder="금액 입력">
                                 </td>
                                 <td>
-                                    <input id="regular-form-1" type="text" class="form-control" placeholder="사유 입력">
+                                    <input name="reason" id="regular-form-1" type="text" class="form-control" placeholder="사유 입력">
                                 </td>
                                 <td>
-                                    <select class="form-select w-56" aria-label=".form-select-lg example">
-                                        <option>관리자</option>
-                                        <option>전체1</option>
-                                        <option>전체2</option>
-                                    </select>
-
+                                    <input name="mem_id" id="regular-form-1" type="text" class="form-control" placeholder="사유 입력" value="{{auth()->user()->name}}" readonly>
                                     <!-- <div class="form-check inline-block ml-5">
                                         <input id="checkbox-switch-1" class="form-check-input" type="checkbox" value="">
                                         <label class="form-check-label" for="checkbox-switch-1">Chris Evans</label>
@@ -325,14 +319,14 @@
                                 <!-- 가운데 화살표 시작 -->
                                 <div class="ml-5 mr-5">
                                     <i data-lucide="fast-forward" id="sendMemMove"></i>
-                                    <i data-lucide="rewind" class="mt-5"></i>
+                                    <i data-lucide="rewind" class="mt-5" id="sendMemBackMove"></i>
                                 </div>
                                 <!-- 가운데 화살표 끝 -->
 
                                 <!-- 오른쪽 테이블 시작 -->
                                 <div class="w-full">
                                     <div class="flex flex-col sm:flex-row items-center border-b border-slate-200/60">
-                                        <h2 class="font-medium text-base mr-auto text-primary">총 0의 회원이 있습니다</h2>
+                                        <h2 class="font-medium text-base mr-auto text-primary">총 <span id="sendPointMemCnt">0</span>의 회원이 있습니다</h2>
                                     </div>
 
                                     <div class="overflow-x-auto">
@@ -341,7 +335,7 @@
                                             <tr>
                                                 <th class="whitespace-nowrap text-center bg-primary/10">
                                                     <div class="form-check">
-                                                        <input id="checkbox-switch-1" class="form-check-input" type="checkbox" value="">
+                                                        <input id="checkbox-switch-1" class="form-check-input all_back_check" type="checkbox" value="">
                                                     </div>
                                                 </th>
                                                 <th class="whitespace-nowrap text-cente bg-primary/10">서비스</th>
@@ -365,7 +359,7 @@
                     </div>
 
                     <div class="flex items-center justify-center mt-5">
-                        <button class="btn btn-primary w-32 mr-5">설정</button>
+                        <button class="btn btn-primary w-32 mr-5 sendPointBtn">설정</button>
                         <button class="btn btn-secondary w-32 modalCancel" data-tw-dismiss="modal">닫기</button>
                     </div>
                 </div>
@@ -395,6 +389,14 @@
             }
         });
 
+        $(document).on('click','.all_back_check',function(){
+            if($(this).is(':checked') == true){
+                $('.send_back_check').attr('checked',true);
+            }else{
+                $('.send_back_check').removeAttr('checked');
+            }
+        });
+
         $(document).on('click','#pointOpen',function(){
             if(ajax_checked){
                 ajax_checked = false;
@@ -410,22 +412,18 @@
             }else{
 
                 $('input[name="send_check"]:checked').each(function(){
-                    var dom = document.createElement('tr');
-
-                    var ihtml = "";
-
                     var idx = $(this).val();
                     var mem_class = $(this).data("mem_class");
-                    var gubun = $(this).data("gubun");
-                    var channel = $(this).data("channel");
+                    var email = $(this).data("email");
+                    var mem_nickname = $(this).data("mem_nickname");
 
                     send_member_data[idx] = {
                             mem_class : mem_class,
-                            gubun : gubun,
-                            channel : channel,
+                            email : email,
+                            mem_nickname : mem_nickname,
                     };
 
-                    send_member.push(parseInt(idx));
+                    send_member.push(idx);
                 });
 
                 getSendPointMemList(g_send_page);
@@ -435,7 +433,82 @@
             }
         });
 
+        $(document).on('click','#sendMemBackMove',function(){
+
+            if($('input[name="send_back_check"]:checked').length <= 0){
+                alert('먼저 포인트를 보내지 않을 회원을 선택해주세요');
+            }else{
+
+                $('input[name="send_back_check"]:checked').each(function(){
+                    var idx = $(this).val();
+
+                    delete send_member_data[idx];
+
+                    console.log(send_member.find(v => v === idx))
+
+                    send_member = send_member.filter(function(data) {return data != idx;});
+                });
+
+                getSendPointMemList(g_send_page);
+
+                getPointMemList(g_page);
+            }
+        });
+
+        $(document).on('click','.sendPointBtn', function(){
+
+            var increase = $('select[name="increase"]').val();
+            var amount = $('input[name="amount"]').val();
+            var reason = $('input[name="reason"]').val();
+
+            if(send_member.length <= 0){
+                alert('먼저 포인트를 보낼 회원을 선택해주세요.');
+                return false;
+            }
+
+            if(increase == ""){
+                alert('포인트의 증감을 선택해주세요.');
+                return false;
+            }
+
+            if(amount == ""){
+                alert('포인트의 금액을 입력해주세요.');
+                return false;
+            }
+
+            if(reason == ""){
+                alert('포인트 지급 내용를 입력해주세요.');
+                return false;
+            }
+
+            jQuery.ajax({
+                cache: false,
+                dataType:'json',
+                data: {
+                    send_member : send_member,
+                    increase : increase,
+                    amount : amount,
+                    reason : reason,
+                },
+                url: '/member/ajax/sendPoint',
+                success: function (data) {
+                    if(data.resultCode=="SUCCESS"){
+                        alert(data.resultMessage);
+                        location.reload();
+                    }else{
+                        alert(data.resultMessage);
+                    }
+                },
+                error: function (e) {
+                    console.log('start');
+                    console.log(e);
+                    //alert('로딩 중 오류가 발생 하였습니다.');
+                }
+            });
+        });
+
         function getPointMemList(page){
+            $("#pointMemList").html('');
             jQuery.ajax({
                 type:"get",
                 dataType:'json',
@@ -463,24 +536,14 @@
                                 mem_class = "통합회원";
                             }
 
-                            if(item.gubun == 1){
-                                gubun = "일반";
-                            }else if(item.gubun == 2){
-                                gubun = "작곡가";
-                            }else if(item.gubun == 3){
-                                gubun = "음원 구매자";
-                            }else{
-                                gubun = "멘토 뮤지션";
-                            }
-
                             ihtml =  '<tr>'
                             ihtml +=    '<td class="whitespace-nowrap text-center">';
                             ihtml +=    '<div class="form-check">';
-                            ihtml +=    '<input name="send_check" id="checkbox-switch-1" class="form-check-input send_check" type="checkbox" value="'+item.idx+'" data-mem_class="'+mem_class+'" data-gubun="'+gubun+'" data-channel="'+item.channel+'">';
+                            ihtml +=    '<input name="send_check" id="checkbox-switch-1" class="form-check-input send_check" type="checkbox" value="'+item.idx+'" data-mem_class="'+mem_class+'" data-email="'+item.email+'" data-mem_nickname="'+item.mem_nickname+'">';
                             ihtml +=    '</div>';
                             ihtml +=    '<td class="whitespace-nowrap text-center">'+mem_class+'</td>';
-                            ihtml +=    '<td class="whitespace-nowrap text-center">'+gubun+'</td>';
-                            ihtml +=    '<td class="whitespace-nowrap text-center">'+item.channel+'</td>';
+                            ihtml +=    '<td class="whitespace-nowrap text-center">'+item.email+'</td>';
+                            ihtml +=    '<td class="whitespace-nowrap text-center">'+item.mem_nickname+'</td>';
                             ihtml +=    '</tr>';
                             dom.innerHTML = ihtml;
 
@@ -526,7 +589,6 @@
         }
 
         function pointMemChange(pointpage){
-            $("#pointMemList").html('');
             getPointMemList(pointpage);
             g_page = pointpage;
         }
@@ -540,19 +602,18 @@
 
                 var ihtml = "";
 
-                var idx = Listobj[key];
                 var mem_class = Listobj[key].mem_class;
-                var gubun = Listobj[key].gubun;
-                var channel = Listobj[key].channel;
+                var email = Listobj[key].email;
+                var mem_nickname = Listobj[key].mem_nickname;
 
                 ihtml =  '<tr>'
                 ihtml +=    '<td class="whitespace-nowrap text-center">';
                 ihtml +=    '<div class="form-check">';
-                ihtml +=    '<input name="send_back_check" id="checkbox-switch-1" class="form-check-input send_back_check" type="checkbox" value="'+idx+'">';
+                ihtml +=    '<input name="send_back_check" id="checkbox-switch-1" class="form-check-input send_back_check" type="checkbox" value="'+key+'">';
                 ihtml +=    '</div>';
                 ihtml +=    '<td class="whitespace-nowrap text-center">'+mem_class+'</td>';
-                ihtml +=    '<td class="whitespace-nowrap text-center">'+gubun+'</td>';
-                ihtml +=    '<td class="whitespace-nowrap text-center">'+channel+'</td>';
+                ihtml +=    '<td class="whitespace-nowrap text-center">'+email+'</td>';
+                ihtml +=    '<td class="whitespace-nowrap text-center">'+mem_nickname+'</td>';
                 ihtml +=    '</tr>';
 
                 dom.innerHTML = ihtml;
@@ -561,6 +622,8 @@
             });
 
             $("#sendPointMemPaging").html('');
+
+            $('#sendPointMemCnt').html(Object.keys(send_member_data).length);
 
             jQuery.ajax({
                 cache: false,

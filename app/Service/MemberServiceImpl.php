@@ -69,10 +69,9 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
             ->select(
                 'members.idx',
                 'member_data.mem_id',
-                'member_data.name',
                 'member_data.class',
-                'member_data.gubun',
-                'member_data.channel',
+                'member_data.email',
+                'member_data.mem_nickname',
             )
             ->where('members.isuse', 'Y')
             ->when(isset($params['send_member_data']), function($query) use ($params){
@@ -84,6 +83,17 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
             ->skip(($params['page']-1)*$params['limit'])
             ->take($params['limit'])
             ->get();
+        return $result;
+    }
+
+    public function sendPoint($params) {
+
+        $result = $this->statDB->table('member_data')
+            ->whereIn('mem_id',$params['send_member'])
+            ->update([
+                'mem_point' => 'member_data.mem_point + $params["tmp_amount"]'
+            ]);
+
         return $result;
     }
 
