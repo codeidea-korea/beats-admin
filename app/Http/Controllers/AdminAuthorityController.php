@@ -32,6 +32,14 @@ class AdminAuthorityController extends Controller
         $params['type'] = $params['type'] ?? 0;
         $params['page'] = $params['page'] ?? 1;
         $params['limit'] = $params['limit'] ?? 10;
+
+        $params['group_code'] = $params['group_code'] ?? "";
+        $params['group_code'] = $params['group_code'] ?? "";
+
+
+
+
+        $groupList = $this->adminAuthorityService->getAdmGroupList($params);
         $adminList = $this->adminAuthorityService->getAdminList($params);
         $adminTotal = $this->adminAuthorityService->getAdminTotal($params);
         $totalCount = $adminTotal->cnt;
@@ -42,6 +50,7 @@ class AdminAuthorityController extends Controller
             ,'adminList' => $adminList
             ,'adminTotal' => $adminTotal
             ,'totalCount' => $totalCount
+            ,'groupList' => $groupList
         ]);
     }
     public function getAdminView()
@@ -83,12 +92,21 @@ class AdminAuthorityController extends Controller
         $data['group_code'] = $params['group_code'];
 
         $result = $this->adminAuthorityService->getAdminAdd($data);
-        if($result){
-            return redirect('/admin/list');
-        }else{
-            return redirect('/admin/write');
-        }
 
+        if($result){
+            $rData['result']="SUCCESS";
+        }else{
+            $rData['result']="FAIL-";
+        }
+        return json_encode($rData);
+    }
+
+    public function getAdminIdCheck(){
+        $params = $this->request->input();
+
+        $result = $this->adminAuthorityService->getAdminId($params);
+
+        return $result->cnt;
     }
 
 }

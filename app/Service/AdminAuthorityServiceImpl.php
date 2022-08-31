@@ -128,4 +128,13 @@ class AdminAuthorityServiceImpl extends DBConnection  implements AdminAuthorityS
 
     }
 
+    public function getAdminId($params) {
+
+        $result = $this->statDB->table('users')
+            ->select(DB::raw("COUNT(idx) AS cnt"))
+            ->where('id', $params['id'])
+            ->first();
+        return $result;
+    }
+
 }

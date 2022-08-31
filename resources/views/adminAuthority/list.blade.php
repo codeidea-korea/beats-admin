@@ -22,34 +22,35 @@
                                     <tr>
                                         <th class="bg-primary/10 whitespace-nowrap w-32 text-center">그룹</th>
                                         <td class="whitespace-nowrap">
-                                            <select class="form-select w-60" aria-label=".form-select-lg example">
-                                                <option>미 선택</option>
-                                                <option>선택1</option>
-                                                <option>선택2</option>
+                                            <select class="form-select w-60" aria-label=".form-select-lg" name="group_code">
+                                                <option value="">미 선택</option>
+                                                @foreach($groupList as $rs)
+                                                    <option value="{{$rs->group_code}}" >{{$rs->group_name}}</option>
+                                                @endforeach
                                             </select>
                                             <!--<button class="btn btn-primary w-24">대상 설정</button>-->
                                         </td>
 
                                         <th class="bg-primary/10 whitespace-nowrap w-32 text-center">등록일</th>
                                         <td class="whitespace-nowrap">
-                                            <input type="text" class="datepicker form-control pl-12" data-single-mode="true">
+                                            <input type="text" class="datepicker form-control sm:w-56 box pl-10" name="searchDate">
                                         </td>
                                     </tr>
                                     <tr>
                                         <th class="bg-primary/10 whitespace-nowrap w-32 text-center">상태</th>
                                         <td class="whitespace-nowrap">
-                                            <select class="form-select w-60" aria-label=".form-select-lg example">
-                                                <option>미 선택</option>
-                                                <option>선택1</option>
-                                                <option>선택2</option>
+                                            <select class="form-select w-60" aria-label=".form-select-lg" name="isuse">
+                                                <option value="">전체</option>
+                                                <option value="Y">활성화</option>
+                                                <option value="N">비활성화</option>
                                             </select>
                                         </td>
                                         <th class="bg-primary/10 whitespace-nowrap w-32 text-center">검색</th>
                                         <td class="whitespace-nowrap">
                                             <select class="form-select w-60" aria-label=".form-select-lg example">
-                                                <option>미 선택</option>
-                                                <option>선택1</option>
-                                                <option>선택2</option>
+                                                <option value="">미 선택</option>
+                                                <option value="">이름</option>
+                                                <option value="">이메일</option>
                                             </select>
                                             <input id="regular-form-1" type="text"  placeholder="Input text">
                                             <button class="btn box  text-slate-600 border border-slate-400">
@@ -98,10 +99,8 @@
                                         <td class="whitespace-nowrap text-center">{{$rs->isuse}}</td>
                                         <td class="whitespace-nowrap text-center">{{$rs->created_at}}</td>
                                     </tr>
-                                    @php $i++; @endphp
+                                 @php $i++; @endphp
                                 @endforeach
-
-
                                 </tbody>
                             </table>
                         </div>
@@ -111,9 +110,7 @@
                 <!-- 페이징처리 시작 -->
                 <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center mt-5">
                     <nav class="w-full">
-
                         @include('vendor.pagination.default')
-
                     </nav>
                 </div>
                 <!-- 페이징처리 종료 -->

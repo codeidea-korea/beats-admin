@@ -45,6 +45,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('list', [AdminAuthorityController::class, 'getAdminList']);
         Route::get('view', [AdminAuthorityController::class, 'getAdminView']);
         Route::get('write', [AdminAuthorityController::class, 'getAdminWrite']);
+        Route::get('ajax/adminIdCheck', [AdminAuthorityController::class, 'getAdminIdCheck']);
         Route::post('ajax/adminAdd', [AdminAuthorityController::class, 'setAdminAdd']);
 
     });
