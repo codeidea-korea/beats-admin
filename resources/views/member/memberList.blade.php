@@ -223,40 +223,34 @@
                             <div class="flex items-center w-full">
                                 <div class="flex items-center mr-5">
                                     <span class="mr-2">가입 채널</span>
-                                    <select class="form-select w-32" aria-label=".form-select-lg example">
-                                        <option>비트썸원</option>
-                                        <option>전체1</option>
-                                        <option>전체2</option>
+                                    <select name="point_mem_class" class="form-select w-32" aria-label=".form-select-lg example">
+                                        <option value="0">비트썸원</option>
+                                        <option value="1">바이비트</option>
+                                        <option value="2">통합회원</option>
                                     </select>
                                 </div>
 
                                 <div class="flex items-center mr-5">
                                     <span class="mr-2">국적</span>
-                                    <select class="form-select w-32" aria-label=".form-select-lg example">
-                                        <option>전체</option>
-                                        <option>전체1</option>
-                                        <option>전체2</option>
+                                    <select name="point_nationality" class="form-select w-32" aria-label=".form-select-lg example">
+                                        <option value="">전체</option>
+                                        <option value="kr">한국</option>
+                                        <option value="en">미국</option>
+                                        <option value="ch">중국</option>
+                                        <option value="jp">일본</option>
                                     </select>
                                 </div>
 
                                 <div class="flex items-center mr-5">
                                     <span class="mr-2">검색</span>
-                                    <input id="regular-form-1" type="text" class="form-control w-52" placeholder="금액 입력">
+                                    <input name="point_search_text" id="regular-form-1" type="text" class="form-control w-52" placeholder="검색어 입력">
                                 </div>
 
                                 <div class="flex items-center mr-5">
                                     <span class="mr-2">가입일</span>
-                                    <div class="relative inline-block w-40">
-                                        <div class="absolute rounded-l w-10 h-full flex items-center justify-center bg-slate-100 border text-slate-500 dark:bg-darkmode-700 dark:border-darkmode-800 dark:text-slate-400">
-                                            <i data-lucide="calendar" class="w-4 h-4"></i>
-                                        </div>
-                                        <input type="text" class="datepicker form-control pl-12" data-single-mode="true">
-                                    </div>
-                                    <div class="relative inline-block w-40">
-                                        <div class="absolute rounded-l w-10 h-full flex items-center justify-center bg-slate-100 border text-slate-500 dark:bg-darkmode-700 dark:border-darkmode-800 dark:text-slate-400">
-                                            <i data-lucide="calendar" class="w-4 h-4"></i>
-                                        </div>
-                                        <input type="text" class="datepicker form-control pl-12" data-single-mode="true">
+                                    <div class="sm:ml-auto mt-3 sm:mt-0 relative text-slate-500">
+                                        <i data-lucide="calendar" class="w-4 h-4 z-10 absolute my-auto inset-y-0 ml-3 left-0"></i>
+                                        <input name="point_mem_regdate" type="text" class="datepicker form-control sm:w-56 box pl-10" value="">
                                     </div>
                                 </div>
                             </div>
@@ -271,7 +265,7 @@
                                         <line x1="10" y1="9" x2="8" y2="9"></line>
                                     </svg> Excel Upload
                                 </button>
-                                <button class="btn btn-primary w-24 ml-2">검색</button>
+                                <button class="btn btn-primary w-24 ml-2" id="searchPointBtn">검색</button>
                                 <button class="btn btn-secondary w-24">초기화</button>
                             </div>
 
@@ -380,6 +374,11 @@
         var send_member = [];
 
         var send_member_data = {};
+
+        var search_mem_class = "";
+        var search_nationality = "";
+        var search_text = "";
+        var search_mem_regdate = "";
 
         $(document).on('click','.all_check',function(){
             if($(this).is(':checked') == true){
@@ -507,8 +506,19 @@
             });
         });
 
+        $(document).on('click',"#searchPointBtn",function(){
+            
+            search_mem_class = $('select[name="point_mem_class"]').val();
+            search_nationality = $('select[name="point_nationality"]').val();
+            search_text = $('input[name="point_search_text"]').val();
+            search_mem_regdate = $('input[name="point_mem_regdate"]').val();
+
+            getPointMemList(1);
+        });
+
         function getPointMemList(page){
             $("#pointMemList").html('');
+            
             jQuery.ajax({
                 type:"get",
                 dataType:'json',
@@ -516,6 +526,10 @@
                     page : page,
                     limit : 10,
                     send_member_data : send_member,
+                    class : search_mem_class,
+                    nationality : search_nationality,
+                    search_text : search_text,
+                    mem_regdate : search_mem_regdate,
                 },
                 url: "{{ url('/member/ajax/memberList') }}",
                 success: function searchSuccess(data) {

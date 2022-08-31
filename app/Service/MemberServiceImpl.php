@@ -51,11 +51,33 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
     public function getPointMemberTotal($params) {
 
         $result = $this->statDB->table('members')
-            ->select(DB::raw("COUNT(idx) AS cnt"))
-            ->where('isuse', 'Y')
+            ->select(DB::raw("COUNT(members.idx) AS cnt"))
+            ->leftJoin('member_data', 'members.idx', '=', 'member_data.mem_id')
+            ->where('members.isuse', 'Y')
             ->when(isset($params['send_member_data']), function($query) use ($params){
                 return $query->where(function($query) use ($params) {
                     $query->whereNotIn('members.idx',  $params['send_member_data']);
+                });
+            })
+            ->when(isset($params['class']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.class',  $params['class']);
+                });
+            })
+            ->when(isset($params['nationality']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.nationality',  $params['nationality']);
+                });
+            })
+            ->when(isset($params['search_text']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.email', 'like' , '%'.$params['search_text'].'%')
+                    ->orWhere('member_data.mem_nickname', 'like' , '%'.$params['search_text'].'%');
+                });
+            })
+            ->when(isset($params['fr_search_at']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->whereBetween('member_data.mem_regdate',  [$params['fr_search_at'],$params['bk_search_at']]);
                 });
             })
             ->first();
@@ -79,6 +101,27 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
                     $query->whereNotIn('members.idx',  $params['send_member_data']);
                 });
             })
+            ->when(isset($params['class']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.class',  $params['class']);
+                });
+            })
+            ->when(isset($params['nationality']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.nationality',  $params['nationality']);
+                });
+            })
+            ->when(isset($params['search_text']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.email', 'like' , '%'.$params['search_text'].'%')
+                    ->orWhere('member_data.mem_nickname', 'like' , '%'.$params['search_text'].'%');
+                });
+            })
+            ->when(isset($params['fr_search_at']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->whereBetween('member_data.mem_regdate',  [$params['fr_search_at'],$params['bk_search_at']]);
+                });
+            })
             ->orderby('mem_regdate','desc')
             ->skip(($params['page']-1)*$params['limit'])
             ->take($params['limit'])
@@ -88,11 +131,29 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
 
     public function sendPoint($params) {
 
-        $result = $this->statDB->table('member_data')
-            ->whereIn('mem_id',$params['send_member'])
-            ->update([
-                'mem_point' => 'member_data.mem_point + $params["tmp_amount"]'
+        if($params['increase'] == 0){
+            $increase = $this->statDB->table('member_data')
+                ->whereIn('mem_id',$params['send_member'])
+                ->increment('mem_point',$params["amount"]);
+        }else{
+            $increase = $this->statDB->table('member_data')
+                ->whereIn('mem_id',$params['send_member'])
+                ->decrement('mem_point',$params["amount"]);
+        }
+
+        foreach($params['send_member'] as $value){
+            $point_log = $this->statDB->table('point_log')
+            ->insert([
+                'increase' => $params['increase'], 'amount' => $params['amount'], 'reason' => $params['reason'],
+                'mem_id' => auth()->user()->idx, 'created_at' => \Carbon\Carbon::now(),
             ]);
+        }
+
+        if($point_log && $increase){
+            $result = 1;
+        }else{
+            $result = 0;
+        }
 
         return $result;
     }

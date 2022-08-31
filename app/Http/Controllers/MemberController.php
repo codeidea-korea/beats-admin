@@ -56,6 +56,12 @@ class MemberController extends Controller
         $params['limit'] = $params['limit'] ?? 10;
         //$sample = $this->memberService->bannerSample($params);
 
+        if($params['mem_regdate'] != ''){
+            $atexplode = explode(' - ',$params['mem_regdate']);
+            $params['fr_search_at'] = $atexplode[0];
+            $params['bk_search_at'] = $atexplode[1];
+        }
+
         $memberList = $this->memberService->getPointMemberList($params);
         $memberTotal = $this->memberService->getPointMemberTotal($params);
         $totalCount = $memberTotal->cnt;
@@ -83,12 +89,6 @@ class MemberController extends Controller
         $params['increase'] = $params['increase'] ?? '';
         $params['amount'] = $params['amount'] ?? 0;
         $params['reason'] = $params['reason'] ?? '';
-
-        if($params['increase'] == 0){
-            $params['tmp_amount'] = $params['amount'];
-        }else{
-            $params['tmp_amount'] = -$params['amount'];
-        }
 
         $result = array(
             'resultCode' => 'SUCCESS'
