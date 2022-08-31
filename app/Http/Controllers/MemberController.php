@@ -57,7 +57,7 @@ class MemberController extends Controller
         //$sample = $this->memberService->bannerSample($params);
 
         $memberList = $this->memberService->getPointMemberList($params);
-        $memberTotal = $this->memberService->getMemberTotal($params);
+        $memberTotal = $this->memberService->getPointMemberTotal($params);
         $totalCount = $memberTotal->cnt;
         $params['totalCnt'] = $totalCount;
 

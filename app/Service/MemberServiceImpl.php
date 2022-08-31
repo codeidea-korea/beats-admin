@@ -67,6 +67,7 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
         $result = $this->statDB->table('members')
             ->leftJoin('member_data', 'members.idx', '=', 'member_data.mem_id')
             ->select(
+                'members.idx',
                 'member_data.mem_id',
                 'member_data.name',
                 'member_data.class',

@@ -350,73 +350,12 @@
                                             </tr>
                                             </thead>
                                             <tbody id="sendPointMemList">
-                                                <tr>
-                                                    <td class="whitespace-nowrap text-center">
-                                                        <div class="form-check">
-                                                            <input id="checkbox-switch-1" class="form-check-input" type="checkbox" value="">
-                                                        </div>
-                                                    </td>
-                                                    <td class="whitespace-nowrap text-center">바이비츠</td>
-                                                    <td class="whitespace-nowrap text-center">작곡가</td>
-                                                    <td class="whitespace-nowrap text-center">카카오</td>
-                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
 
                                     <!-- 페이징처리 시작 -->
                                     <div id="sendPointMemPaging">
-                                        <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center mt-5">
-                                            <nav class="w-full">
-                                                <ul class="pagination justify-center">
-                                                    <li class="page-item">
-                                                        <a class="page-link" href="#">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="chevrons-left" class="lucide lucide-chevrons-left w-4 h-4" data-lucide="chevrons-left">
-                                                                <polyline points="11 17 6 12 11 7"></polyline>
-                                                                <polyline points="18 17 13 12 18 7"></polyline>
-                                                            </svg>
-                                                        </a>
-                                                    </li>
-                                                    <li class="page-item">
-                                                        <a class="page-link" href="#">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="chevron-left" class="lucide lucide-chevron-left w-4 h-4" data-lucide="chevron-left">
-                                                                <polyline points="15 18 9 12 15 6"></polyline>
-                                                            </svg>
-                                                        </a>
-                                                    </li>
-                                                    <li class="page-item">
-                                                        <a class="page-link" href="#">...</a>
-                                                    </li>
-                                                    <li class="page-item">
-                                                        <a class="page-link" href="#">1</a>
-                                                    </li>
-                                                    <li class="page-item active">
-                                                        <a class="page-link" href="#">2</a>
-                                                    </li>
-                                                    <li class="page-item">
-                                                        <a class="page-link" href="#">3</a>
-                                                    </li>
-                                                    <li class="page-item">
-                                                        <a class="page-link" href="#">...</a>
-                                                    </li>
-                                                    <li class="page-item">
-                                                        <a class="page-link" href="#">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="chevron-right" class="lucide lucide-chevron-right w-4 h-4" data-lucide="chevron-right">
-                                                                <polyline points="9 18 15 12 9 6"></polyline>
-                                                            </svg>
-                                                        </a>
-                                                    </li>
-                                                    <li class="page-item">
-                                                        <a class="page-link" href="#">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="chevrons-right" class="lucide lucide-chevrons-right w-4 h-4" data-lucide="chevrons-right">
-                                                                <polyline points="13 17 18 12 13 7"></polyline>
-                                                                <polyline points="6 17 11 12 6 7"></polyline>
-                                                            </svg>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </nav>
-                                        </div>
                                     </div>
                                     <!-- 페이징처리 종료 -->
                                 </div>
@@ -442,6 +381,11 @@
         var ajax_checked = true;
 
         var g_page = 1;
+        var g_send_page = 1;
+
+        var send_member = [];
+
+        var send_member_data = {};
 
         $(document).on('click','.all_check',function(){
             if($(this).is(':checked') == true){
@@ -464,13 +408,27 @@
             if($('input[name="send_check"]:checked').length <= 0){
                 alert('먼저 포인트를 보낼 회원을 선택해주세요');
             }else{
+
                 $('input[name="send_check"]:checked').each(function(){
                     var dom = document.createElement('tr');
-                    
-                    dom.innerHTML = $(this).closest('tr').html();
 
-                    $('#sendPointMemList').append(dom);
+                    var ihtml = "";
+
+                    var idx = $(this).val();
+                    var mem_class = $(this).data("mem_class");
+                    var gubun = $(this).data("gubun");
+                    var channel = $(this).data("channel");
+
+                    send_member_data[idx] = {
+                            mem_class : mem_class,
+                            gubun : gubun,
+                            channel : channel,
+                    };
+
+                    send_member.push(parseInt(idx));
                 });
+
+                getSendPointMemList(g_send_page);
 
                 $("#pointMemList").html('');
                 getPointMemList(g_page);
@@ -484,6 +442,7 @@
                 data: {
                     page : page,
                     limit : 10,
+                    send_member_data : send_member,
                 },
                 url: "{{ url('/member/ajax/memberList') }}",
                 success: function searchSuccess(data) {
@@ -517,7 +476,7 @@
                             ihtml =  '<tr>'
                             ihtml +=    '<td class="whitespace-nowrap text-center">';
                             ihtml +=    '<div class="form-check">';
-                            ihtml +=    '<input name="send_check" id="checkbox-switch-1" class="form-check-input send_check" type="checkbox" value="'+item.idx+'">';
+                            ihtml +=    '<input name="send_check" id="checkbox-switch-1" class="form-check-input send_check" type="checkbox" value="'+item.idx+'" data-mem_class="'+mem_class+'" data-gubun="'+gubun+'" data-channel="'+item.channel+'">';
                             ihtml +=    '</div>';
                             ihtml +=    '<td class="whitespace-nowrap text-center">'+mem_class+'</td>';
                             ihtml +=    '<td class="whitespace-nowrap text-center">'+gubun+'</td>';
@@ -572,9 +531,79 @@
             g_page = pointpage;
         }
 
+        function getSendPointMemList(page){
+            $('#sendPointMemList').html('');
+            var Listobj = sliceObj(send_member_data, page);
+            Object.keys(Listobj).forEach(function(key){
+
+                var dom = document.createElement('tr');
+
+                var ihtml = "";
+
+                var idx = Listobj[key];
+                var mem_class = Listobj[key].mem_class;
+                var gubun = Listobj[key].gubun;
+                var channel = Listobj[key].channel;
+
+                ihtml =  '<tr>'
+                ihtml +=    '<td class="whitespace-nowrap text-center">';
+                ihtml +=    '<div class="form-check">';
+                ihtml +=    '<input name="send_back_check" id="checkbox-switch-1" class="form-check-input send_back_check" type="checkbox" value="'+idx+'">';
+                ihtml +=    '</div>';
+                ihtml +=    '<td class="whitespace-nowrap text-center">'+mem_class+'</td>';
+                ihtml +=    '<td class="whitespace-nowrap text-center">'+gubun+'</td>';
+                ihtml +=    '<td class="whitespace-nowrap text-center">'+channel+'</td>';
+                ihtml +=    '</tr>';
+
+                dom.innerHTML = ihtml;
+
+                $('#sendPointMemList').append(dom);
+            });
+
+            $("#sendPointMemPaging").html('');
+
+            jQuery.ajax({
+                cache: false,
+                dataType:'json',
+                data: {
+                    page : page,
+                    totalCount : Object.keys(send_member_data).length,
+                    functionName : 'pointMemDelete',
+                },
+                url: '/member/ajax/memberPaging',
+                success: function (pagingdata) {
+                    if(pagingdata.resultCode=="SUCCESS"){
+                        $("#sendPointMemPaging").append(pagingdata.paging);
+                    }else{
+                        console.log(pagingdata.resultMessage);
+                    }
+                },
+                error: function (e) {
+                    console.log('start');
+                    console.log(e);
+                    //alert('로딩 중 오류가 발생 하였습니다.');
+                }
+            });
+        }
+
+        function pointMemDelete(pointpage){
+            g_send_page = pointpage;
+            getSendPointMemList(pointpage)
+        }
+
         function change(page) {
             $("input[name=page]").val(page);
             $("form[name=searchData]").submit();
+        }
+
+        function sliceObj(obj, sliceCount){
+            let newObj = {};
+            for(let i=0 ; i < Object.keys(obj).length ; i++){
+                if(!(i >= (sliceCount-1)*10 && i <= ((sliceCount-1)*10)+9)){break};
+                let key = Object.keys(obj)[i];
+                newObj[key] = obj[key]
+            }
+            return newObj
         }
     </script>
 @endsection
