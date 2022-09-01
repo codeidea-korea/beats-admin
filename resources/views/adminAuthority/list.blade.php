@@ -47,12 +47,12 @@
                                         </td>
                                         <th class="bg-primary/10 whitespace-nowrap w-32 text-center">검색</th>
                                         <td class="whitespace-nowrap">
-                                            <select class="form-select w-60" aria-label=".form-select-lg example">
+                                            <select class="form-select w-60" aria-label=".form-select-lg" name="sType">
                                                 <option value="">미 선택</option>
                                                 <option value="">이름</option>
                                                 <option value="">이메일</option>
                                             </select>
-                                            <input id="regular-form-1" type="text"  placeholder="Input text">
+                                            <input id="regular-form-1" type="text" name="sWord">
                                             <button class="btn box  text-slate-600 border border-slate-400">
                                                 검색
                                             </button>
