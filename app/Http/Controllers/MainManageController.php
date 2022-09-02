@@ -134,7 +134,7 @@ class MainManageController extends Controller
             $result = "컨텐츠 삭제에 실패하였습니다. 다시 시도해주세요";
         }
 
-        return $result;
+        return json_encode($result);
     }
 
     public function getPopupList()

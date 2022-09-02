@@ -69,12 +69,15 @@ Route::middleware(['auth'])->group(function () {
         Route::get('popup/delete', [MainManageController::class, 'PopupDelete']);
     });
 
-    Route::get('/admin/board/list', [BoardController::class, 'getBoardList']);
-    Route::get('/admin/board/view/{bidx}', [BoardController::class, 'getBoardView']);
-    Route::get('/admin/board/write', [BoardController::class, 'getBoardWrite']);
-    Route::post('/admin/board/add', [BoardController::class, 'BoardAdd']);
-    Route::post('/admin/board/update', [BoardController::class, 'BoardUpdate']);
-    Route::post('/admin/board/delete', [BoardController::class, 'BoardDelete']);
+    Route::group(['prefix' => 'service'], function()
+    {
+        Route::get('/board/list', [BoardController::class, 'getBoardList']);
+        Route::get('/board/view/{bidx}', [BoardController::class, 'getBoardView']);
+        Route::get('/board/write', [BoardController::class, 'getBoardWrite']);
+        Route::post('/board/add', [BoardController::class, 'BoardAdd']);
+        Route::post('/board/update', [BoardController::class, 'BoardUpdate']);
+        Route::get('/board/delete', [BoardController::class, 'BoardDelete']);
+    });
 
     //다국어설정
     Route::group(['prefix' => 'multilingual'], function()

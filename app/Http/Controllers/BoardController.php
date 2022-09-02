@@ -33,43 +33,80 @@ class BoardController extends Controller
     public function getBoardList()
     {
         $params = $this->request->input();
-        $boardData = $this->adminBoardService->getBoardList($params);
+        $params['menuCode'] = "AD100300";
+        $params['type'] = $params['type'] ?? 0;
+        $params['page'] = $params['page'] ?? 1;
+        $params['limit'] = $params['limit'] ?? 10;
+        $params['search_gubun'] = $params['gubun'] ?? '';
+        $params['fr_search_text'] = $params['search_text'] ?? '';
+        $params['search_created_at'] = $params['created_at'] ?? '';
+        $params['search_wr_open'] = $params['wr_open'] ?? '';
 
-        return view('noticeBoard.list',[
+        if($params['search_created_at'] != ''){
+            $atexplode = explode(' - ',$params['created_at']);
+            $params['fr_search_at'] = $atexplode[0];
+            $params['bk_search_at'] = $atexplode[1];
+        }
+
+        $boardData = $this->adminBoardService->getBoardList($params);
+        $boardTotal = $this->adminBoardService->getBoardTotal($params);
+        $totalCount = $boardTotal->cnt;
+        $params['totalCnt'] = $totalCount;
+
+        return view('service.noticeList',[
             'boardData' => $boardData
+            ,'params' => $params
+            ,'searchData' => $params
+            ,'totalCount' => $totalCount
         ]);
     }
+    
     public function getBoardView($bidx)
     {
         $params = $this->request->input();
+        $params['menuCode'] = "AD100300";
+        $params['type'] = $params['type'] ?? 0;
+        $params['page'] = $params['page'] ?? 1;
+        $params['limit'] = $params['limit'] ?? 10;
         $boardData = $this->adminBoardService->getBoardView($params, $bidx);
 
-        return view('noticeBoard.view',[
+        return view('service.noticeView',[
             'boardData' => $boardData
+            ,'params' => $params
         ]);
     }
 
     public function getBoardWrite()
     {
         $params = $this->request->input();
-
-        return view('noticeBoard.write');
+        $params['menuCode'] = "AD100300";
+        return view('service.noticeWrite',[
+            'params'=> $params
+        ]);
     }
 
     public function BoardAdd()
     {
         $params = $this->request->input();
-        $boardData = $this->adminBoardService->BoardAdd($params);
+        $result = $this->adminBoardService->BoardAdd($params);
 
-        return redirect('/admin/board/view/'.$boardData);
+        if($result){
+            return redirect('/service/board/view/'.$result)->with('alert', '등록되었습니다.');
+        }else{
+            return redirect()->back()->with('alert', '등록/수정에 실패하였습니다. \n관리자에게 문의 바랍니다.');
+        }
     }
 
     public function BoardUpdate()
     {
         $params = $this->request->input();
-        $boardData = $this->adminBoardService->BoardUpdate($params);
+        $result = $this->adminBoardService->BoardUpdate($params);
 
-        return redirect('/admin/board/list');
+        if($result){
+            return redirect('/service/board/list')->with('alert', '수정되었습니다.');
+        }else{
+            return redirect()->back()->with('alert', '등록/수정에 실패하였습니다. \n관리자에게 문의 바랍니다.');
+        }
     }
 
     public function BoardDelete()
@@ -77,6 +114,15 @@ class BoardController extends Controller
         $params = $this->request->input();
         $boardData = $this->adminBoardService->BoardDelete($params);
 
-        return redirect('/admin/board/list');
+        $result = array(
+            'result' => 'SUCCESS'
+        );
+
+
+        if(!$boardData){
+            $result['result'] = "컨텐츠 삭제에 실패하였습니다. 다시 시도해주세요";
+        }
+
+        return json_encode($result);
     }
 }
