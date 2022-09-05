@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\ApiHomeController;
 use App\Http\Controllers\Api\ApiMemberController;
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,10 @@ use App\Http\Controllers\Api\ApiMemberController;
 |
 */
 Route::prefix('/v1/')->group(function () {
+    // HOME > 언어
+    Route::get('lang', [ApiHomeController::class, 'langList']);
+    // HOME > 메뉴
+    Route::get('menuList', [ApiHomeController::class, 'menuList']);
     // get
     Route::get('testList', [ApiMemberController::class, 'testList']);
 
