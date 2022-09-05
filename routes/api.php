@@ -19,6 +19,9 @@ Route::prefix('/v1/')->group(function () {
     Route::get('lang', [ApiHomeController::class, 'langList']);
     // HOME > 메뉴
     Route::get('menuList', [ApiHomeController::class, 'menuList']);
+    // HOME > 메뉴
+    Route::get('bannerList', [ApiHomeController::class, 'bannerList']);
+
     // get
     Route::get('testList', [ApiMemberController::class, 'testList']);
 

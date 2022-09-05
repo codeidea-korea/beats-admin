@@ -66,5 +66,34 @@ class ApiHomeController extends Controller
         }
     }
 
+    public function bannerList()
+    {
+        try{
+            $params = $this->request->input();
+            $params['banner_code'] = isset($params['banner_code']) ? $params['banner_code'] : ''; // 사이트 구분 =>  bb:byBeats , bs:Beat Someone
+            $params['lang'] = isset($params['lang']) ? $params['lang'] : 'kr';
+
+
+            if($params['banner_code']==""){
+                $returnData['code']=-1;
+                $returnData['message']="배너코드값이 누락되었습니다.";
+            }else{
+
+                $bannerList = $this->apiHomeService->getBannerList($params);
+
+                $returnData['code']=0;
+                $returnData['message']="complete";
+                $returnData['response']['count']=count($bannerList);
+                $returnData['response']['data']=$bannerList;
+            }
+
+
+            return json_encode($returnData);
+
+        } catch(\Exception $exception){
+            throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+        }
+    }
+
 
 }
