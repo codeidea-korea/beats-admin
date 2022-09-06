@@ -43,7 +43,7 @@
                                     <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">내용</th>
                                     <td colspan="3" class="whitespace-nowrap">
                                         <div class="p-5" id="classic-editor">
-                                            <div class="preview">
+                                            <!-- <div class="preview">
                                                 <div class="editor">
                                                 </div>
                                             </div>
@@ -52,7 +52,8 @@
                                                 <div class="overflow-y-auto mt-3 rounded-md">
                                                     <pre class="source-preview" id="copy-classic-editor"> <code class="javascript"> import ClassicEditor from &quot;@ckeditor/ckeditor5-build-classic&quot;; $(&quot;.editor&quot;).each(function () { const el = this;  ClassicEditor.create(el).then( newEditor => {editor = newEditor;} ).catch((error) =HTMLCloseTag { console.error(error); }); }); </code> </pre>
                                                 </div>
-                                            </div>
+                                            </div> -->
+                                            <textarea class="form-control" id="editor1" name="editor1"></textarea>
                                         </div>
                                         <textarea name="wr_content" id="wr_content" class="hidden"></textarea>
                                     </td>
@@ -83,28 +84,44 @@
 
     </div>
 
-    <script src="/dist/js/ckeditor-classic.js"></script>
+    <script src="/dist/js/ckeditor.js"></script>
+    <script src="/dist/js/ck.upload.adapter.js"></script>
 
     <script>
 
         var ajax_checked = false;
+        let editor;
+
+        ClassicEditor
+        .create( document.querySelector( '#editor1' ), {
+            ckfinder: {
+                uploadUrl: "{{route('ckeditor.upload').'?_token='.csrf_token()}}"
+            }
+        })
+        .then(newEditor => {
+            editor = newEditor;
+        })
+        .catch( error => {
+            console.error( error );
+        } );
         
         // 값 가져오기
 
         $(document).on('click','.boardAddbtn', function(){
+
+            
+            if($("select[name='gubun']").val() == ""){
+                alert("구분을 선택해주세요.");
+                return false;
+            }
 
             if($("input[name='wr_title']").val() == ""){
                 alert("제목을 입력해주세요.");
                 return false;
             }
 
-            if($(".ck-content").text() == ""){
+            if(editor.getData() == ""){
                 alert("내용을 입력해주세요.");
-                return false;
-            }
-
-            if($("select[name='gubun']").val() == ""){
-                alert("구분을 선택해주세요.");
                 return false;
             }
 
@@ -113,7 +130,7 @@
                 return false;
             }
 
-            $("#wr_content").val($(".ck-content").text());
+            $("#wr_content").val(editor.getData());
 
             $('#boardWriteForm').submit();
 

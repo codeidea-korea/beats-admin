@@ -125,4 +125,12 @@ class BoardController extends Controller
 
         return json_encode($result);
     }
+
+    public function upload()
+    {
+        $file = $this->request;
+        $uploaddata = $this->adminBoardService->upload($file);
+
+        return $uploaddata;
+    }
 }

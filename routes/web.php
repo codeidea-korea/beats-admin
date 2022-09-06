@@ -101,7 +101,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/ajax/sendPoint', [MemberController::class, 'sendPoint']);
     });
 
-
+    Route::post('ckeditor/upload', [BoardController::class, 'upload'])->name('ckeditor.upload');
 });
 
 Route::get('/pageSample', function () {

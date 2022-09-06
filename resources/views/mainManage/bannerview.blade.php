@@ -334,22 +334,22 @@
 
             if($("input[name='br_title']").val() == ""){
                 alert("제목을 입력해주세요.");
-                return;
+                return false;
             }
 
             if($("select[name='contents']").val() == ""){
                 alert("컨텐츠 구분을 선택해주세요.");
-                return;
+                return false;
             }
 
             if($("input[name='contents_url']").val() == ""){
                 alert("연결할 컨텐츠를 입력해주세요.");
-                return;
+                return false;
             }
 
             if($("input[name='banner_img']").val() == ""){
                 alert("배너 이미지를 선택해주세요.");
-                return;
+                return false;
             }
 
             $('#BannerWriteForm').submit();
