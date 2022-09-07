@@ -16,10 +16,15 @@
 
             <div class="intro-y box">
 
+                <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60">
+                    <h2 class="font-medium text-base mr-auto">약관 상세</h2>
+                </div>
+
                 <div class="p-5">
                     <div class="overflow-x-auto">
-                        <form id="termsWriteForm" method="post" action="/service/terms/add" enctype="multipart/form-data">
+                    <form id="termsUpdateForm" method="post" action="/service/terms/update" enctype="multipart/form-data">
                             {{ csrf_field() }}
+                            <input name="idx" type="hidden" value="{{$termsData[0]->idx}}">
                             <table class="table table-bordered">
                                 <tr>
                                     <th class="bg-primary/10 whitespace-nowrap w-32 text-center">구분</th>
@@ -27,7 +32,7 @@
                                         <select id="gubun" name="gubun" class="form-select w-60" aria-label=".form-select-lg example">
                                             <option value="">선택</option>
                                             @foreach($gubun as $rs)
-                                                <option value="{{$rs->codename}}">{{$rs->codevalue}}</option>
+                                                <option value="{{$rs->codename}}" @if($termsData[0]->gubun == $rs->codename) selected @endif>{{$rs->codevalue}}</option>
                                             @endforeach
                                         </select>
                                     </td>
@@ -37,6 +42,9 @@
                                     <td class="whitespace-nowrap">
                                         <select id="terms_type" name="terms_type" class="form-select w-60" aria-label=".form-select-lg example">
                                             <option value="">선택</option>
+                                            @foreach($terms_type as $rs)
+                                                <option value="{{$rs->codename}}" @if($termsData[0]->terms_type == $rs->codename) selected @endif>{{$rs->codevalue}}</option>
+                                            @endforeach
                                         </select>
                                     </td>
                                 </tr>
@@ -44,15 +52,15 @@
                                     <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">버전</th>
                                     <td colspan="3" class="whitespace-nowrap">
                                         <div class="flex items-center">
-                                            V&nbsp&nbsp<input name="version" id="regular-form-1" type="text" class="form-control" placeholder="Input text">
+                                            V&nbsp&nbsp<input name="version" id="regular-form-1" type="text" class="form-control" placeholder="Input text" value="{{$termsData[0]->version}}">
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">내용</th>
                                     <td colspan="3" class="whitespace-nowrap">
-                                        <div class="p-5" id="classic-editor">
-                                            <!-- <div class="preview">
+                                        <!-- <div class="p-5" id="classic-editor">
+                                            <div class="preview">
                                                 <div class="editor">
                                                 </div>
                                             </div>
@@ -61,16 +69,16 @@
                                                 <div class="overflow-y-auto mt-3 rounded-md">
                                                     <pre class="source-preview" id="copy-classic-editor"> <code class="javascript"> import ClassicEditor from &quot;@ckeditor/ckeditor5-build-classic&quot;; $(&quot;.editor&quot;).each(function () { const el = this;  ClassicEditor.create(el).then( newEditor => {editor = newEditor;} ).catch((error) =HTMLCloseTag { console.error(error); }); }); </code> </pre>
                                                 </div>
-                                            </div> -->
-                                            <textarea class="form-control" id="editor1" name="editor1"></textarea>
-                                        </div>
+                                            </div>
+                                        </div> -->
+                                        <textarea class="form-control" id="editor1" name="editor1">{{$termsData[0]->content}}</textarea>
                                         <textarea name="content" id="content" class="hidden"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="bg-primary/10 whitespace-nowrap w-32 text-center">관리자</th>
-                                    <td class="whitespace-nowrap">
-                                        {{auth()->user()->name}}
+                                    <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">관리자</th>
+                                    <td colspan="3" class="whitespace-nowrap">
+                                        {{$termsData[0]->name}}
                                     </td>
                                 </tr>
                                 <tr>
@@ -80,33 +88,52 @@
                                             <div class="absolute rounded-l w-10 h-full flex items-center justify-center bg-slate-100 border text-slate-500 dark:bg-darkmode-700 dark:border-darkmode-800 dark:text-slate-400">
                                                 <i data-lucide="calendar" class="w-4 h-4"></i>
                                             </div>
-                                            <input id="apply_date" name="apply_date" type="text" class="datepicker form-control pl-12" data-single-mode="true">
+                                            <input id="apply_date" name="apply_date" type="text" class="datepicker form-control pl-12" data-single-mode="true" value="{{$termsData[0]->apply_date}}">
                                         </div>
+                                        
+                                        @php 
+                                            $apply_date_hour = date("H", strtotime($termsData[0]->apply_date));
+                                            $apply_date_min = date("i", strtotime($termsData[0]->apply_date));
+                                        @endphp
+
                                         <select name="apply_date_hour" class="form-select w-56" aria-label=".form-select-lg example">
                                             @for ($i = 0; $i <= 24; $i++)
                                                 @if($i < 10)
-                                                    <option value="0{{$i}}" >0{{$i}}</option>
+                                                    <option value="0{{$i}}" @if($apply_date_hour == '0'.$i) selected @endif>0{{$i}}</option>
                                                 @else
-                                                    <option value="{{$i}}" >{{$i}}</option>
+                                                    <option value="{{$i}}" @if($apply_date_hour == $i) selected @endif>{{$i}}</option>
                                                 @endif
                                             @endfor
                                         </select>시
                                         <select name="apply_date_min" class="form-select w-56" aria-label=".form-select-lg example">
                                             @for ($i = 0; $i <= 59; $i++)
                                                 @if($i < 10)
-                                                    <option value="0{{$i}}" >0{{$i}}</option>
+                                                    <option value="0{{$i}}" @if($apply_date_min == '0'.$i) selected @endif>0{{$i}}</option>
                                                 @else
-                                                    <option value="{{$i}}" >{{$i}}</option>
+                                                    <option value="{{$i}}" @if($apply_date_min == $i) selected @endif>{{$i}}</option>
                                                 @endif
                                             @endfor
                                         </select>분
                                     </td>
                                 </tr>
+                                <tr>
+                                    <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">최초 등록일</th>
+                                    <td colspan="1" class="whitespace-nowrap">
+                                        {{$termsData[0]->created_at}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">최근 수정일</th>
+                                    <td colspan="1" class="whitespace-nowrap">
+                                        {{$termsData[0]->updated_at}}
+                                    </td>
+                                </tr>
                             </table>
 
                             <div class="flex items-center justify-center mt-5">
-                                <div class="btn btn-primary w-32 ml-2 mr-2 termsAddbtn">등록</div>
-                                <button type="button" class="btn btn-secondary w-32" onclick="history.back(-1)">취소</button>
+                                <button type="button" class="btn btn-secondary w-32 termsDeletebtn">삭제</button>
+                                <div class="btn btn-primary w-32 ml-2 mr-2 termsUpdatebtn">수정</div>
+                                <button type="button" class="btn btn-secondary w-32" onclick="location.href='/service/terms/list'">취소</button>
                             </div>
                         </form>
                     </div>
@@ -139,8 +166,7 @@
         .catch( error => {
             console.error( error );
         } );
-        
-        // 값 가져오기
+
         $(document).on('change','#gubun',function(){
 
             $("#terms_type option").remove();
@@ -169,10 +195,9 @@
                 }
             });
         });
+           
+        $(document).on('click','.termsUpdatebtn', function(){
 
-        $(document).on('click','.termsAddbtn', function(){
-
-            
             if($("select[name='gubun']").val() == ""){
                 alert("구분을 선택해주세요.");
                 return false;
@@ -228,6 +253,36 @@
                 }
             });*/
 
+        });
+
+        $(document).on('click','.termsDeletebtn',function(){
+            var idx = $("input[name='idx']").val();
+            if(confirm("약관을 삭제하시겠습니까?")){
+                jQuery.ajax({
+                    cache: false,
+                    dataType:'json',
+                    data: {
+                        idx : idx
+                    },
+                    url: '/service/terms/delete',
+                    success: function (data) {
+                        if(data.result == "SUCCESS"){
+                            alert('약관이 삭제되었습니다.');
+                            location.href="/service/terms/list"
+                        }else{
+                            alert(data.result);
+                            //console.log(data);
+                        }
+                    },
+                    error: function (e) {
+                        console.log('start');
+                        console.log(e);
+                        //alert('로딩 중 오류가 발생 하였습니다.');
+                    }
+                });
+            }else{
+                alert('선택한 목록이 없습니다');
+            }
         });
     </script>
 @endsection

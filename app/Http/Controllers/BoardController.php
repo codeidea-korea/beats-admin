@@ -172,10 +172,13 @@ class BoardController extends Controller
         $params['menuCode'] = "AD100500";
         $termsData = $this->adminBoardService->getTermsView($params, $tidx);
         $gubun = $this->adminBoardService->getGubun($params);
+        $terms_params['gubun'] = $termsData[0]->gubun;
+        $terms_type = $this->adminBoardService->getTermsType($terms_params);
 
         return view('service.termsView',[
             'termsData' => $termsData
             ,'gubun' => $gubun
+            ,'terms_type' => $terms_type
             ,'params' => $params
         ]);
     }
@@ -209,6 +212,36 @@ class BoardController extends Controller
         }else{
             return redirect()->back()->with('alert', '등록/수정에 실패하였습니다. \n관리자에게 문의 바랍니다.');
         }
+    }
+
+    public function TermsUpdate()
+    {
+        $params = $this->request->input();
+        $params['apply_date_time'] = $params['apply_date']." ".$params['apply_date_hour'].":".$params['apply_date_hour'].":00";
+        $result = $this->adminBoardService->TermsUpdate($params);
+
+        if($result){
+            return redirect('/service/terms/list')->with('alert', '수정되었습니다.');
+        }else{
+            return redirect()->back()->with('alert', '등록/수정에 실패하였습니다. \n관리자에게 문의 바랍니다.');
+        }
+    }
+
+    public function TermsDelete()
+    {
+        $params = $this->request->input();
+        $boardData = $this->adminBoardService->TermsDelete($params);
+
+        $result = array(
+            'result' => 'SUCCESS'
+        );
+
+
+        if(!$boardData){
+            $result['result'] = "컨텐츠 삭제에 실패하였습니다. 다시 시도해주세요";
+        }
+
+        return json_encode($result);
     }
 
     public function upload()
