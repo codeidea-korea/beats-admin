@@ -64,7 +64,7 @@ class ApiHomeServiceImpl extends DBConnection  implements ApiHomeServiceInterfac
                      'adm_banner_data.banner_source as bannerSource',
                   )
                   ->where('adm_banner_data.isuse','Y')
-                  ->where('adm_banner.banner_code',$params['banner_code'])
+                  ->where('adm_banner.banner_code',$params['bannerCode'])
                   ->orderby('adm_banner_data.br_seq','asc')
                   ->get();
         return $result;

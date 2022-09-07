@@ -70,11 +70,11 @@ class ApiHomeController extends Controller
     {
         try{
             $params = $this->request->input();
-            $params['banner_code'] = isset($params['banner_code']) ? $params['banner_code'] : ''; // 사이트 구분 =>  bb:byBeats , bs:Beat Someone
+            $params['bannerCode'] = isset($params['bannerCode']) ? $params['bannerCode'] : ''; // 사이트 구분 =>  bb:byBeats , bs:Beat Someone
             $params['lang'] = isset($params['lang']) ? $params['lang'] : 'kr';
 
 
-            if($params['banner_code']==""){
+            if($params['bannerCode']==""){
                 $returnData['code']=-1;
                 $returnData['message']="배너코드값이 누락되었습니다.";
             }else{
