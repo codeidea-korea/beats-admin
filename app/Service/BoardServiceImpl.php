@@ -113,7 +113,6 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
                // $this->statDB->raw('SUM(name) AS CNT')
             )
             ->where('notice_board.idx',$bidx)
-            ->orderby('created_at','desc')
            // ->groupBy('name')
            ->get();
 
@@ -154,14 +153,182 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
 
     }
 
-    public function upload($request)
+    public function getTermsList($params) {
+
+
+        $result = $this->statDB->table('adm_terms')
+            ->leftJoin('users', 'adm_terms.mem_id', '=', 'users.idx')
+            ->leftJoin('adm_code as gubun', 'adm_terms.gubun', '=', 'gubun.codename')
+            ->leftJoin('adm_code as terms_type', 'adm_terms.terms_type', '=', 'terms_type.codename')
+            ->select(
+                'adm_terms.idx',
+                'adm_terms.mem_id',
+                'gubun.codevalue as gubun',
+                'terms_type.codevalue as terms_type',
+                'adm_terms.content',
+                'adm_terms.version',
+                'adm_terms.isuse',
+                'adm_terms.apply_date',
+                'users.name',
+               // $this->statDB->raw('SUM(name) AS CNT')
+            )
+            ->when(isset($params['gubun']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('gubun',  $params['gubun']);
+                });
+            })
+            ->when(isset($params['terms_type']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('terms_type',  $params['terms_type']);
+                });
+            })
+            ->when(isset($params['search_text']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('content', 'like', '%'.$params['search_text'].'%');
+                });
+            })
+            ->when(isset($params['fr_search_at']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->whereBetween('adm_terms.apply_date',  [$params['fr_search_at'],$params['bk_search_at']]);
+                });
+            })
+            ->orderby('adm_terms.created_at','desc')
+           // ->groupBy('name')
+            ->get();
+        return $result;
+
+    }
+
+    public function getGubun($params) {
+        
+        $result = $this->statDB->table('adm_code')
+            ->select(
+                'adm_code.codename',
+                'adm_code.codevalue',
+               // $this->statDB->raw('SUM(name) AS CNT')
+            )
+            ->where('parentindex','TE000000')
+            ->where('depth',2)
+           // ->groupBy('name')
+            ->get();
+
+        return $result;
+
+    }
+
+    public function getTermsType($params) {
+        
+        $result = $this->statDB->table('adm_code')
+            ->select(
+                'adm_code.codename',
+                'adm_code.codevalue',
+               // $this->statDB->raw('SUM(name) AS CNT')
+            )
+            ->where('parentindex',$params['gubun'])
+            ->where('depth',3)
+           // ->groupBy('name')
+            ->get();
+
+        return $result;
+
+    }
+
+    public function getTermsTotal($params) {
+
+        $result = $this->statDB->table('adm_terms')
+            ->select(DB::raw("COUNT(idx) AS cnt"))
+            ->when(isset($params['gubun']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('gubun',  $params['gubun']);
+                });
+            })
+            ->when(isset($params['terms_type']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('terms_type',  $params['terms_type']);
+                });
+            })
+            ->when(isset($params['search_text']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('content', 'like', '%'.$params['search_text'].'%');
+                });
+            })
+            ->when(isset($params['fr_search_at']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->whereBetween('adm_terms.apply_date',  [$params['fr_search_at'],$params['bk_search_at']]);
+                });
+            })
+            ->first();
+        return $result;
+
+    }
+
+    public function getTermsView($params, $tidx) {
+
+        $result = $this->statDB->table('adm_terms')
+            ->leftJoin('users', 'adm_terms.mem_id', '=', 'users.idx')
+            ->select(
+                'adm_terms.idx',
+                'adm_terms.mem_id',
+                'adm_terms.gubun',
+                'adm_terms.terms_type',
+                'adm_terms.content',
+                'adm_terms.version',
+                'adm_terms.isuse',
+                'adm_terms.apply_date',
+                'adm_terms.created_at',
+                'adm_terms.updated_at',
+                'users.name',
+               // $this->statDB->raw('SUM(name) AS CNT')
+            )
+            ->where('adm_terms.idx',$tidx)
+           // ->groupBy('name')
+           ->get();
+
+        return $result;
+
+    }
+
+    public function TermsAdd($params) {
+
+        $result = $this->statDB->table('adm_terms')
+            ->insertGetId([
+                'gubun' => $params['gubun'], 'terms_type' => $params['terms_type'], 'content' => $params['content'],
+                'version' => $params['version'], 'apply_date' => $params['apply_date_time'], 'mem_id' => auth()->user()->idx, 'created_at' => \Carbon\Carbon::now(),
+            ]);
+
+        return $result;
+
+    }
+
+    public function TermsUpdate($params) {
+
+        $result = $this->statDB->table('adm_terms')
+            ->where('idx',$params['idx'])
+            ->update([
+                'gubun' => $params['gubun'], 'terms_type' => $params['terms_type'], 'content' => $params['content'],
+                'version' => $params['version'], 'apply_date' => $params['apply_date_time'], 'updated_at' => \Carbon\Carbon::now()
+            ]);
+
+        return $result;
+
+    }
+
+    public function TermsDelete($params) {
+
+        $result = $this->statDB->table('adm_terms')->where('idx', $params['idx'])->delete();
+
+        return $result;
+
+    }
+
+    public function upload($params)
     {
-        if (!$request->hasFile('upload')) {
+        if (!$params->hasFile('upload')) {
             return response()->json([
                 'message' => '파일이 정상적으로 업로드되지 않았습니다'
             ], 400);
         }
-        $uploadFile = $request->file('upload');
+        $uploadFile = $params->file('upload');
 
         // 파일이 한개일때 배열에 담아줌 (아래 코드를 여러개일때도 같이 쓰게)
         if (!is_array($uploadFile)) {

@@ -77,6 +77,14 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/board/add', [BoardController::class, 'BoardAdd']);
         Route::post('/board/update', [BoardController::class, 'BoardUpdate']);
         Route::get('/board/delete', [BoardController::class, 'BoardDelete']);
+
+        Route::get('/terms/list', [BoardController::class, 'getTermsList']);
+        Route::get('/terms/view/{bidx}', [BoardController::class, 'getTermsView']);
+        Route::get('/terms/write', [BoardController::class, 'getTermsWrite']);
+        Route::post('/terms/add', [BoardController::class, 'TermsAdd']);
+        Route::post('/terms/update', [BoardController::class, 'TermsUpdate']);
+        Route::get('/terms/delete', [BoardController::class, 'TermsDelete']);
+        Route::get('/terms/termstype', [BoardController::class, 'getTermsType']);
     });
 
     //다국어설정

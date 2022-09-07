@@ -14,4 +14,6 @@ interface BoardServiceInterface
     public function BoardUpdate($params);
 
     public function BoardDelete($params);
+
+    public function upload($params);
 }

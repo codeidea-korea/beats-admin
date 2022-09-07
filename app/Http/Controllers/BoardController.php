@@ -126,6 +126,91 @@ class BoardController extends Controller
         return json_encode($result);
     }
 
+    public function getTermsList()
+    {
+        $params = $this->request->input();
+        $params['menuCode'] = "AD100500";
+        $params['type'] = $params['type'] ?? 0;
+        $params['page'] = $params['page'] ?? 1;
+        $params['limit'] = $params['limit'] ?? 10;
+        $params['search_gubun'] = $params['gubun'] ?? '';
+        $params['search_terms_type'] = $params['terms_type'] ?? '';
+        $params['fr_search_text'] = $params['search_text'] ?? '';
+        $params['search_apply_date'] = $params['apply_date'] ?? '';
+
+        if($params['search_apply_date'] != ''){
+            $atexplode = explode(' - ',$params['apply_date']);
+            $params['fr_search_at'] = $atexplode[0];
+            $params['bk_search_at'] = $atexplode[1];
+        }
+
+        if($params['search_gubun'] != ''){
+            $terms_type = $this->adminBoardService->getTermsType($params);
+        }else{
+            $terms_type = [];
+        }
+
+        $termsData = $this->adminBoardService->getTermsList($params);
+        $termsTotal = $this->adminBoardService->getTermsTotal($params);
+        $gubun = $this->adminBoardService->getGubun($params);
+        $totalCount = $termsTotal->cnt;
+        $params['totalCnt'] = $totalCount;
+
+        return view('service.termsList',[
+            'termsData' => $termsData
+            ,'terms_type' => $terms_type
+            ,'gubun' => $gubun
+            ,'params' => $params
+            ,'searchData' => $params
+            ,'totalCount' => $totalCount
+        ]);
+    }
+
+    public function getTermsView($tidx)
+    {
+        $params = $this->request->input();
+        $params['menuCode'] = "AD100500";
+        $termsData = $this->adminBoardService->getTermsView($params, $tidx);
+        $gubun = $this->adminBoardService->getGubun($params);
+
+        return view('service.termsView',[
+            'termsData' => $termsData
+            ,'gubun' => $gubun
+            ,'params' => $params
+        ]);
+    }
+
+    public function getTermsType(){
+        $params = $this->request->input();
+        $termstype = $this->adminBoardService->getTermsType($params);
+
+        return $termstype;
+    }
+
+    public function getTermsWrite()
+    {
+        $params = $this->request->input();
+        $params['menuCode'] = "AD100500";
+        $gubun = $this->adminBoardService->getGubun($params);
+        return view('service.termsWrite',[
+            'params'=> $params
+            ,'gubun' => $gubun
+        ]);
+    }
+
+    public function TermsAdd()
+    {
+        $params = $this->request->input();
+        $params['apply_date_time'] = $params['apply_date']." ".$params['apply_date_hour'].":".$params['apply_date_hour'].":00";
+        $result = $this->adminBoardService->TermsAdd($params);
+
+        if($result){
+            return redirect('/service/terms/view/'.$result)->with('alert', '등록되었습니다.');
+        }else{
+            return redirect()->back()->with('alert', '등록/수정에 실패하였습니다. \n관리자에게 문의 바랍니다.');
+        }
+    }
+
     public function upload()
     {
         $file = $this->request;
