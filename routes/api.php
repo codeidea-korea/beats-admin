@@ -23,7 +23,7 @@ Route::prefix('/v1/')->group(function () {
     Route::get('bannerList', [ApiHomeController::class, 'bannerList']);
 
     Route::group(['prefix' => 'member'], function() {
-        Route::get('login', [ApiMemberController::class, 'apiLogin']);
+        Route::put('login', [ApiMemberController::class, 'apiLogin']);
     });
 
     // get
