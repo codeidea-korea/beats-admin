@@ -37,6 +37,8 @@ Route::prefix('/v1/')->group(function () {
 
     // delete 구형브라우저 X
     Route::delete('testList', [ApiMemberController::class, 'testList']);
+
+    Route::get('getTerms', [ApiMemberController::class, 'getTerms']);
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

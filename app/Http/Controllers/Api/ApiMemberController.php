@@ -135,6 +135,24 @@ class ApiMemberController extends Controller
         return json_encode($returnData);
     }
 
+    public function getTerms()
+    {
+        $params = $this->request->input();
+        $params['termsType'] = $params['termsType'] ?? 'all';
+
+        if($params['termsType'] == 'all'){
+            $params['termsType'] = array('TE010100','TE010200','TE010300','TE020100','TE020200','TE020300');
+        }
+
+        $result = $this->apiMemberService->getTerms($params);
+
+        $returnData['code']=0;
+        $returnData['message']="messageSample!!";
+        $returnData['response']=$result;
+
+        return json_encode($returnData);
+    }
+
     public function testList()
     {
 

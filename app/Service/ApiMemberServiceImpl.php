@@ -173,6 +173,35 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
         return $result;
     }
 
+    public function getTerms($params){
+        $group_terms = $this->statDB->table('adm_terms')
+            ->select(
+                'adm_terms.terms_type',
+                DB::raw('MAX(adm_terms.version) as version'),
+            )
+            ->where('apply_date', '<=', DB::raw("(DATE_FORMAT(NOW(), '%Y-%m-%d %h:%i:%s'))"))
+            ->when(isset($params['termsType']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->whereIn('adm_terms.terms_type',  $params['termsType']);
+                });
+            })
+            ->groupBy('adm_terms.terms_type');
 
+        $result = $this->statDB->table('adm_terms')
+            ->joinSub($group_terms, 'group_terms', function ($join) {
+                $join->on('adm_terms.terms_type', '=', 'group_terms.terms_type')->on('adm_terms.version', '=', 'group_terms.version');
+            })
+            ->leftJoin('adm_code as gubun', 'adm_terms.gubun', '=', 'gubun.codename')
+            ->leftJoin('adm_code as terms_type', 'adm_terms.terms_type', '=', 'terms_type.codename')
+            ->select(
+                'adm_terms.idx',
+                'gubun.codevalue as gubun',
+                'terms_type.codevalue as termsType',
+                'adm_terms.content',
+            )
+            ->get();
+
+        return $result;
+    }
 
 }
