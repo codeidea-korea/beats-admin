@@ -135,13 +135,31 @@ class ApiMemberController extends Controller
         return json_encode($returnData);
     }
 
+    public function loginCheck()
+    {
+        $params = $this->request->input();
+        $params['sns'] = $params['sns'] ?? "email";
+        $params['snsKey'] = $params['snsKey'] ?? "";
+        $params['emailId'] = $params['emailId'] ?? "";
+        $params['_token'] = $params['_token'] ?? "";
+
+        $result = $this->apiMemberService->loginCheck($params);
+
+        $returnData['code']=0;
+        $returnData['message']="messageSample!!";
+        $returnData['response']=$result;
+
+        return json_encode($returnData);
+    }
+
     public function getTerms()
     {
         $params = $this->request->input();
         $params['termsType'] = $params['termsType'] ?? 'all';
 
         if($params['termsType'] == 'all'){
-            $params['termsType'] = array('TE010100','TE010200','TE010300','TE020100','TE020200','TE020300');
+            $params['termsType'] = $this->apiMemberService->getTermsCode($params);
+            //$params['termsType'] = array('TE010100','TE010200','TE010300','TE020100','TE020200','TE020300');
         }
 
         $result = $this->apiMemberService->getTerms($params);

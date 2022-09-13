@@ -167,9 +167,79 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
             ->update(
                 [
                     'login_token' => $params['_token']
-                    ,'last_login_at' => DB::raw('NOW()')
+                    ,'last_login_at' => DB::raw('DATE_ADD(NOW(), INTERVAL 1 HOUR)')
                 ]
             );
+        return $result;
+    }
+
+    public function loginCheck($params){
+
+        $result = $this->statDB->table('members')
+            ->where('isuse',"Y")
+            ->where('login_token',$params['_token'])
+            ->where('last_login_at', "<", "NOW()")
+            ->when($params['sns']=="email", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('email_id',$params['emailId']);
+                });
+            })
+            ->when($params['sns']=="apple", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('apple_key',$params['snsKey']);
+                });
+            })
+            ->when($params['sns']=="naver", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('naver_key',$params['snsKey']);
+                });
+            })
+            ->when($params['sns']=="kakao", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('kakao_key',$params['snsKey']);
+                });
+            })
+            ->when($params['sns']=="google", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('google_key',$params['snsKey']);
+                });
+            })
+            ->when($params['sns']=="facebook", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('facebook_key',$params['snsKey']);
+                });
+            })
+            ->when($params['sns']=="twitter", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('twitter_key',$params['snsKey']);
+                });
+            })
+            ->when($params['sns']=="soundcloud", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('soundcloud_key',$params['snsKey']);
+                });
+            })
+            ->update(
+                [
+                    'last_login_at' => DB::raw('DATE_ADD(NOW(), INTERVAL 1 HOUR)'),
+                ]
+            );
+        return $result;
+    }
+
+    public function getTermsCode($params){
+
+        $result = $this->statDB->table('adm_code')
+            ->select(
+                'adm_code.codename',
+            )
+            ->where('adm_code.depth',3)
+            ->get();
+
+        $result = array_map(function ($value) {
+            return $value->codename;
+        }, $result->toArray());
+
         return $result;
     }
 
