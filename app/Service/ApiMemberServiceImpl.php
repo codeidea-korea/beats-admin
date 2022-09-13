@@ -178,7 +178,7 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
         $result = $this->statDB->table('members')
             ->where('isuse',"Y")
             ->where('login_token',$params['_token'])
-            ->where('last_login_at', "<", "NOW()")
+            ->where('last_login_at', ">=", DB::raw('NOW()'))
             ->when($params['sns']=="email", function($query) use ($params){
                 return $query->where(function($query) use ($params) {
                     $query->where('email_id',$params['emailId']);

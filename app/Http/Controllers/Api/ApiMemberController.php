@@ -147,12 +147,59 @@ class ApiMemberController extends Controller
         $params['_token'] = $params['_token'] ?? "";
 
         $result = $this->apiMemberService->loginCheck($params);
-
+        
         $returnData['code']=0;
         $returnData['message']="messageSample!!";
         $returnData['response']=$result;
 
         return json_encode($returnData);
+    }
+
+    public function apiJoin()
+    {
+        $params = $this->request->input();
+        $params['sns'] = $params['sns'] ?? "email";
+        $params['snsKey'] = $params['snsKey'] ?? "";
+        $params['emailId'] = $params['emailId'] ?? "";
+        $params['password'] = $params['password'] ?? "";
+        $params['sign_site'] = $params['signSite'] ?? "";
+        $params['apple_key'] = $params['appleKey'] ?? "";
+        $params['naver_key'] = $params['naverKey'] ?? "";
+        $params['kakao_key'] = $params['kakaoKey'] ?? "";
+        $params['google_key'] = $params['googleKey'] ?? "";
+        $params['facebook_key'] = $params['facebookKey'] ?? "";
+        $params['twitter_key'] = $params['twitterKey'] ?? "";
+        $params['soundcloud_key'] = $params['soundcloudKey'] ?? "";
+        $params['email'] = $params['email'] ?? "";
+        $params['name'] = $params['name'] ?? "";
+        $params['mem_nickname'] = $params['memNickname'] ?? "";
+        $params['nationality'] = $params['nationality'] ?? "";
+        $params['phone_number'] = $params['phoneNumber'] ?? "";
+        $params['marketing_consent'] = $params['marketingConsent'];
+
+        if(($params['snsKey'] != "" || $params['emailId'] != "") && $params['password'] != "" && $params['sign_site'] != "" && $params['name'] != "" && $params['mem_nickname'] != "" && $params['nationality'] != "" 
+        && $params['phone_number'] != "" && $params['marketing_consent'] != ""){
+
+            $returnData['code'] = 1;
+            $returnData['message'] = "입력하지 않은 필수 값이 있습니다. 필수 값을 입력해 주세요";
+            $returnData['response'] = '';
+    
+            return json_encode($returnData);
+
+        }else{
+
+            if($params['sns'] != 'email'){
+                $params[$params['sns'].'_key'] = $params['snsKey'];
+            }
+    
+            $result = $this->apiMemberService->apiJoin($params);
+            
+            $returnData['code']=0;
+            $returnData['message']="messageSample!!";
+            $returnData['response']=$result;
+    
+            return json_encode($returnData);
+        }
     }
 
     public function getTerms()
