@@ -115,6 +115,8 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/pageSample', function () {
     return view('pageSample');
 });
+
+
 /*------------------------------------------
 --------------------------------------------
 All Admin Routes List
