@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Service\MemberServiceImpl;
+use App\Service\ApiHomeServiceImpl;
 use App\Service\ApiMemberServiceImpl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -15,12 +16,14 @@ class ApiMemberController extends Controller
     private $request;
     private $memberService;
     private $apiMemberService;
+    private $apiHomeService;
 
     public function __construct(Request $request)
     {
         $this->request = $request;
         $this->memberService = new MemberServiceImpl();
         $this->apiMemberService = new ApiMemberServiceImpl();
+        $this->apiHomeService = new ApiHomeServiceImpl();
     }
 
     public function apiLogin()
@@ -171,6 +174,19 @@ class ApiMemberController extends Controller
         return json_encode($returnData);
     }
 
+    public function getNationality(){
+        $params = $this->request->input();
+        $params['codeIndex'] = $params['codeIndex'] ?? 'CT000000';
+
+        $result = $this->apiHomeService->getCodeList($params);
+
+
+        $returnData['code']=0;
+        $returnData['message']="messageSample!!";
+        $returnData['response']=$result;
+
+        return json_encode($returnData);
+    }
     public function testList()
     {
 

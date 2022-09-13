@@ -25,6 +25,7 @@ Route::prefix('/v1/')->group(function () {
     Route::group(['prefix' => 'member'], function() {
         Route::put('login', [ApiMemberController::class, 'apiLogin']);
         Route::put('loginCheck', [ApiMemberController::class, 'loginCheck']);
+        Route::get('nationality', [ApiMemberController::class, 'getNationality']);
     });
 
     // get
@@ -40,6 +41,7 @@ Route::prefix('/v1/')->group(function () {
     Route::delete('testList', [ApiMemberController::class, 'testList']);
 
     Route::get('getTerms', [ApiMemberController::class, 'getTerms']);
+
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

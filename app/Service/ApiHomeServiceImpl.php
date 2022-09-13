@@ -70,4 +70,18 @@ class ApiHomeServiceImpl extends DBConnection  implements ApiHomeServiceInterfac
         return $result;
     }
 
+    public function getCodeList($params){
+        $result = $this->statDB->table('adm_code')
+            ->select(
+                'idx',
+                'codename as codeName',
+                'codevalue as codeValue',
+            )
+            ->where('parentindex',$params['codeIndex'])
+            ->orderby('codevalue','asc')
+            ->get();
+        return $result;
+
+    }
+
 }

@@ -14,4 +14,7 @@ interface ApiHomeServiceInterface
     // 배너 list
     public function getBannerList($params);
 
+    // 코드 list
+    public function getCodeList($params);
+
 }
