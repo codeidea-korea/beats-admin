@@ -8,6 +8,7 @@ use App\Service\ApiHomeServiceImpl;
 use App\Service\ApiMemberServiceImpl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Api\HttpException;
 use Response;
 use Session;
 
@@ -140,66 +141,95 @@ class ApiMemberController extends Controller
 
     public function loginCheck()
     {
-        $params = $this->request->input();
-        $params['sns'] = $params['sns'] ?? "email";
-        $params['snsKey'] = $params['snsKey'] ?? "";
-        $params['emailId'] = $params['emailId'] ?? "";
-        $params['_token'] = $params['_token'] ?? "";
-
-        $result = $this->apiMemberService->loginCheck($params);
+        $returnData['code'] = -1;
+        $returnData['message'] = "시스템 장애";
         
-        $returnData['code']=0;
-        $returnData['message']="messageSample!!";
-        $returnData['response']=$result;
+        try{
+            $params = $this->request->input();
+            $params['sns'] = $params['sns'] ?? "email";
+            $params['snsKey'] = $params['snsKey'] ?? "";
+            $params['emailId'] = $params['emailId'] ?? "";
+            $params['_token'] = $params['_token'] ?? "";
+
+            $result = $this->apiMemberService->loginCheck($params);
+            
+            $returnData['code']=0;
+            $returnData['message']="로그인 유지 확인";
+            $returnData['response']=$result;
+
+        } catch(\Exception $exception){
+            throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+        }
 
         return json_encode($returnData);
     }
 
     public function apiJoin()
     {
-        $params = $this->request->input();
-        $params['sns'] = $params['sns'] ?? "email";
-        $params['snsKey'] = $params['snsKey'] ?? "";
-        $params['emailId'] = $params['emailId'] ?? "";
-        $params['password'] = $params['password'] ?? "";
-        $params['sign_site'] = $params['signSite'] ?? "";
-        $params['apple_key'] = $params['appleKey'] ?? "";
-        $params['naver_key'] = $params['naverKey'] ?? "";
-        $params['kakao_key'] = $params['kakaoKey'] ?? "";
-        $params['google_key'] = $params['googleKey'] ?? "";
-        $params['facebook_key'] = $params['facebookKey'] ?? "";
-        $params['twitter_key'] = $params['twitterKey'] ?? "";
-        $params['soundcloud_key'] = $params['soundcloudKey'] ?? "";
-        $params['email'] = $params['email'] ?? "";
-        $params['name'] = $params['name'] ?? "";
-        $params['mem_nickname'] = $params['memNickname'] ?? "";
-        $params['nationality'] = $params['nationality'] ?? "";
-        $params['phone_number'] = $params['phoneNumber'] ?? "";
-        $params['marketing_consent'] = $params['marketingConsent'];
+        $returnData['code'] = -1;
+        $returnData['message'] = "시스템 장애";
+        
+        try{
+            $params = $this->request->input();
+            $params['existing_yn'] = $params['existing_yn'] ?? "";
+            $params['sns'] = $params['sns'] ?? "email";
+            $params['snsKey'] = $params['snsKey'] ?? "";
+            $params['emailId'] = $params['emailId'] ?? "";
+            $params['password'] = $params['password'] ?? "";
+            $params['sign_site'] = $params['signSite'] ?? "";
+            $params['apple_key'] = $params['appleKey'] ?? null;
+            $params['naver_key'] = $params['naverKey'] ?? null;
+            $params['kakao_key'] = $params['kakaoKey'] ?? null;
+            $params['google_key'] = $params['googleKey'] ?? null;
+            $params['facebook_key'] = $params['facebookKey'] ?? null;
+            $params['twitter_key'] = $params['twitterKey'] ?? null;
+            $params['soundcloud_key'] = $params['soundcloudKey'] ?? null;
+            $params['email'] = $params['email'] ?? null;
+            $params['name'] = $params['name'] ?? "";
+            $params['mem_nickname'] = $params['memNickname'] ?? "";
+            $params['nationality'] = $params['nationality'] ?? "";
+            $params['phone_number'] = $params['phoneNumber'] ?? "";
+            $params['marketing_consent'] = $params['marketingConsent'] ?? "";
 
-        if(($params['snsKey'] != "" || $params['emailId'] != "") && $params['password'] != "" && $params['sign_site'] != "" && $params['name'] != "" && $params['mem_nickname'] != "" && $params['nationality'] != "" 
-        && $params['phone_number'] != "" && $params['marketing_consent'] != ""){
-
-            $returnData['code'] = 1;
-            $returnData['message'] = "입력하지 않은 필수 값이 있습니다. 필수 값을 입력해 주세요";
-            $returnData['response'] = '';
-    
-            return json_encode($returnData);
-
-        }else{
-
-            if($params['sns'] != 'email'){
-                $params[$params['sns'].'_key'] = $params['snsKey'];
-            }
-    
-            $result = $this->apiMemberService->apiJoin($params);
+            if($params['existing_yn'] == ''){
+                $returnData['code'] = 1;
+                $returnData['message'] = "기존회원과 통합회원을 구분해 주세요";
+            }else{
+                if($params['existing_yn'] == 'Y'){
             
-            $returnData['code']=0;
-            $returnData['message']="messageSample!!";
-            $returnData['response']=$result;
-    
-            return json_encode($returnData);
+                    $result = $this->apiMemberService->integratedTransform($params);
+                    
+                    $returnData['code']=0;
+                    $returnData['message']="통합회원 전환 완료";
+                    $returnData['response']=$result;
+
+                }else{
+                    if(($params['snsKey'] == "" && $params['emailId'] == "") || $params['password'] == "" || $params['sign_site'] == "" || $params['name'] == "" || $params['mem_nickname'] == "" || $params['nationality'] == "" 
+                    || $params['phone_number'] == "" || $params['marketing_consent'] == ""){
+
+                        $returnData['code'] = 2;
+                        $returnData['message'] = "입력하지 않은 필수 값이 있습니다. 필수 값을 입력해 주세요";
+
+                    }else{
+
+                        if($params['sns'] != 'email'){
+                            $params[$params['sns'].'_key'] = $params['snsKey'];
+                        }
+                
+                        $result = $this->apiMemberService->apiJoin($params);
+                        
+                        $returnData['code']=0;
+                        $returnData['message']="회원가입 완료";
+                        $returnData['response']=$result;
+                    }
+                }
+            }
+        } catch(\Exception $exception){
+            //throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+            echo $exception;
         }
+        
+        return json_encode($returnData);
     }
 
     public function getTerms()
