@@ -143,7 +143,7 @@ class ApiMemberController extends Controller
     {
         $returnData['code'] = -1;
         $returnData['message'] = "시스템 장애";
-        
+
         try{
             $params = $this->request->input();
             $params['sns'] = $params['sns'] ?? "email";
@@ -152,7 +152,7 @@ class ApiMemberController extends Controller
             $params['_token'] = $params['_token'] ?? "";
 
             $result = $this->apiMemberService->loginCheck($params);
-            
+
             $returnData['code']=0;
             $returnData['message']="로그인 유지 확인";
             $returnData['response']=$result;
@@ -168,7 +168,7 @@ class ApiMemberController extends Controller
     {
         $returnData['code'] = -1;
         $returnData['message'] = "시스템 장애";
-        
+
         try{
             $params = $this->request->input();
             $params['existing_yn'] = $params['existing_yn'] ?? "";
@@ -196,15 +196,15 @@ class ApiMemberController extends Controller
                 $returnData['message'] = "기존회원과 통합회원을 구분해 주세요";
             }else{
                 if($params['existing_yn'] == 'Y'){
-            
+
                     $result = $this->apiMemberService->integratedTransform($params);
-                    
+
                     $returnData['code']=0;
                     $returnData['message']="통합회원 전환 완료";
                     $returnData['response']=$result;
 
                 }else{
-                    if(($params['snsKey'] == "" && $params['emailId'] == "") || $params['password'] == "" || $params['sign_site'] == "" || $params['name'] == "" || $params['mem_nickname'] == "" || $params['nationality'] == "" 
+                    if(($params['snsKey'] == "" && $params['emailId'] == "") || $params['password'] == "" || $params['sign_site'] == "" || $params['name'] == "" || $params['mem_nickname'] == "" || $params['nationality'] == ""
                     || $params['phone_number'] == "" || $params['marketing_consent'] == ""){
 
                         $returnData['code'] = 2;
@@ -215,9 +215,9 @@ class ApiMemberController extends Controller
                         if($params['sns'] != 'email'){
                             $params[$params['sns'].'_key'] = $params['snsKey'];
                         }
-                
+
                         $result = $this->apiMemberService->apiJoin($params);
-                        
+
                         $returnData['code']=0;
                         $returnData['message']="회원가입 완료";
                         $returnData['response']=$result;
@@ -228,7 +228,7 @@ class ApiMemberController extends Controller
             //throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
             echo $exception;
         }
-        
+
         return json_encode($returnData);
     }
 
