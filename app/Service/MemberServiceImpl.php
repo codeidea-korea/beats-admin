@@ -29,7 +29,7 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
             ->select(
                 'member_data.mem_id',
                 'member_data.name',
-                'member_data.phoneno',
+                'member_data.phone_number',
                 'member_data.email',
                 'member_data.class',
                 'member_data.gubun',
@@ -156,6 +156,76 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
         }
 
         return $result;
+    }
+
+    public function getMusicList($params){
+        $result = $this->statDB->table('music_head')
+            ->select(
+                'music_head.idx',
+                'music_head.music_title',
+                'music_head.play_time',
+                'music_head.open_status',
+                'music_head.sales_status',
+                'music_head.tag',
+                'music_head.common_composition',
+                'music_head.moddate',
+            ) 
+            ->where('music_head.mem_id', $params['idx'])
+            ->when(isset($params['common_composition']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('members.common_composition',  $params['common_composition']);
+                });
+            })
+            ->when(isset($params['sales_status']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.sales_status',  $params['sales_status']);
+                });
+            })
+            ->when(isset($params['open_status']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.open_status',  $params['open_status']);
+                });
+            })
+            ->when(isset($params['search_text']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('music_head.music_title', 'like' , '%'.$params['search_text'].'%');
+                });
+            })
+            ->orderby('crdate','desc')
+            ->skip(($params['page']-1)*$params['limit'])
+            ->take($params['limit'])
+            ->get();
+        return $result;
+    }
+
+    public function getMusicTotal($params) {
+
+        $result = $this->statDB->table('music_head')
+            ->select(DB::raw("COUNT(idx) AS cnt"))
+            ->where('music_head.mem_id', $params['idx'])
+            ->when(isset($params['common_composition']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('members.common_composition',  $params['common_composition']);
+                });
+            })
+            ->when(isset($params['sales_status']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.sales_status',  $params['sales_status']);
+                });
+            })
+            ->when(isset($params['open_status']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.open_status',  $params['open_status']);
+                });
+            })
+            ->when(isset($params['search_text']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('music_head.music_title', 'like' , '%'.$params['search_text'].'%');
+                });
+            })
+            ->first();
+        return $result;
+
     }
 
     public function bannerSample(){

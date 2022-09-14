@@ -147,7 +147,7 @@
                                         <td class="whitespace-nowrap text-center">{{$rs->channel}}</td>
                                         <td class="whitespace-nowrap text-center">{{$rs->nationality}}</td>
 
-                                        <td class="whitespace-nowrap text-center">ip address</td>
+                                        <td class="whitespace-nowrap text-center">{{$rs->mem_id}}</td>
                                         <td class="whitespace-nowrap text-center">{{$rs->mem_nickname}}</td>
                                         <td class="whitespace-nowrap text-center">{{$rs->mem_sanctions}}</td>
                                         <td class="whitespace-nowrap text-center">{{$rs->mem_status}}</td>

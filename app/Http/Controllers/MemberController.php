@@ -127,4 +127,27 @@ class MemberController extends Controller
 
         return json_encode($result);
     }
+
+    public function getMusicList($idx)
+    {
+        $params = $this->request->input();
+        $params['menuCode'] = "AD030100";
+        $params['type'] = $params['type'] ?? 0;
+        $params['page'] = $params['page'] ?? 1;
+        $params['limit'] = $params['limit'] ?? 10;
+        $params['idx'] = $idx ?? '';
+        //$sample = $this->memberService->bannerSample($params);
+
+        $musicList = $this->memberService->getMusicList($params);
+        $musicTotal = $this->memberService->getMusicTotal($params);
+        $totalCount = $musicTotal->cnt;
+        $params['totalCnt'] = $totalCount;
+
+        return view('member.musicList',[
+            'params' => $params
+            ,'searchData' => $params
+            ,'musicList' => $musicList
+            ,'totalCount' => $totalCount
+        ]);
+    }
 }

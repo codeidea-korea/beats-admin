@@ -264,6 +264,7 @@ class ApiMemberController extends Controller
 
         return json_encode($returnData);
     }
+    
     public function testList()
     {
 
