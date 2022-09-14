@@ -38,7 +38,7 @@ class ApiMemberController extends Controller
             $params = $this->request->input();
             $params['sns'] = $params['sns'] ?? "email";
             $params['snsKey'] = $params['snsKey'] ?? "";
-            $params['emailId'] = $params['email+Id'] ?? "";
+            $params['emailId'] = $params['emailId'] ?? "";
             $params['password'] = $params['password'] ?? "";
 
 
@@ -264,6 +264,7 @@ class ApiMemberController extends Controller
 
         return json_encode($returnData);
     }
+    
     public function testList()
     {
 
