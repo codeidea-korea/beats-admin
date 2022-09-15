@@ -145,7 +145,7 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
             $point_log = $this->statDB->table('point_log')
             ->insert([
                 'increase' => $params['increase'], 'amount' => $params['amount'], 'reason' => $params['reason'],
-                'mem_id' => auth()->user()->idx, 'created_at' => \Carbon\Carbon::now(),
+                'send_mem_id' => $value,'mem_id' => auth()->user()->idx, 'created_at' => \Carbon\Carbon::now(),
             ]);
         }
 
@@ -171,6 +171,11 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
                 'music_head.moddate',
             ) 
             ->where('music_head.mem_id', $params['idx'])
+            ->when(isset($params['progress_rate']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('members.progress_rate',  $params['progress_rate'] , '100');
+                });
+            })
             ->when(isset($params['common_composition']), function($query) use ($params){
                 return $query->where(function($query) use ($params) {
                     $query->where('members.common_composition',  $params['common_composition']);
@@ -203,6 +208,11 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
         $result = $this->statDB->table('music_head')
             ->select(DB::raw("COUNT(idx) AS cnt"))
             ->where('music_head.mem_id', $params['idx'])
+            ->when(isset($params['progress_rate']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('members.progress_rate',  $params['progress_rate'] , '100');
+                });
+            })
             ->when(isset($params['common_composition']), function($query) use ($params){
                 return $query->where(function($query) use ($params) {
                     $query->where('members.common_composition',  $params['common_composition']);
