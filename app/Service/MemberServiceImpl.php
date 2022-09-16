@@ -131,29 +131,39 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
 
     public function sendPoint($params) {
 
-        if($params['increase'] == 0){
-            $increase = $this->statDB->table('member_data')
-                ->whereIn('mem_id',$params['send_member'])
-                ->increment('mem_point',$params["amount"]);
-        }else{
-            $increase = $this->statDB->table('member_data')
-                ->whereIn('mem_id',$params['send_member'])
-                ->decrement('mem_point',$params["amount"]);
-        }
+        // if($params['increase'] == 0){
+        //     $increase = $this->statDB->table('member_data')
+        //         ->whereIn('mem_id',$params['send_member'])
+        //         ->increment('mem_point',$params["amount"]);
+        // }else{
+        //     $increase = $this->statDB->table('member_data')
+        //         ->whereIn('mem_id',$params['send_member'])
+        //         ->decrement('mem_point',$params["amount"]);
+        // }
+
+        $success = 0;
+        $fails = 0;
 
         foreach($params['send_member'] as $value){
-            $point_log = $this->statDB->table('point_log')
-            ->insert([
-                'increase' => $params['increase'], 'amount' => $params['amount'], 'reason' => $params['reason'],
-                'send_mem_id' => $value,'mem_id' => auth()->user()->idx, 'created_at' => \Carbon\Carbon::now(),
-            ]);
+            DB::select('call INSERT_SEND_POINT(?,?,?,?,?, @result)',array($params['increase'],$params['amount'],$params['reason'],$value,auth()->user()->idx));
+            $result = DB::select('select @result as result');
+
+            if($result[0]->result == 0){
+                $fails += 1;
+            }else{
+                $success += 1;
+            }
+            // $point_log = $this->statDB->table('point_log')
+            // ->insert([
+            //     'increase' => $params['increase'], 'amount' => $params['amount'], 'reason' => $params['reason'],
+            //     'send_mem_id' => $value,'mem_id' => auth()->user()->idx, 'created_at' => \Carbon\Carbon::now(),
+            // ]);
         }
 
-        if($point_log && $increase){
-            $result = 1;
-        }else{
-            $result = 0;
-        }
+        $result = array(
+            'success' => $success,
+            'fails' => $fails
+        );
 
         return $result;
     }
