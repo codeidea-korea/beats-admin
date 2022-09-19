@@ -25,6 +25,7 @@ Route::prefix('/v1/')->group(function () {
     Route::group(['prefix' => 'member'], function() {
         Route::put('login', [ApiMemberController::class, 'apiLogin']);
         Route::put('loginCheck', [ApiMemberController::class, 'loginCheck']);
+        Route::get('joinCheck', [ApiMemberController::class, 'joinCheck']);
         Route::put('join', [ApiMemberController::class, 'apiJoin']);
         Route::get('nationality', [ApiMemberController::class, 'getNationality']);
     });
