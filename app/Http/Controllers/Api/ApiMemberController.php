@@ -84,8 +84,8 @@ class ApiMemberController extends Controller
                 }
             }else{
 
-                //SNS로 로그인할경우
-                if($params['snsKey']==""||$params['password']=="") {
+                //SNS로 로그인할경우 ||$params['password']==""
+                if($params['snsKey']=="") {
                     $returnData['code'] = 301;
                     $returnData['message'] = "SNS 키값이 누락되었습니다.";
 
@@ -101,25 +101,25 @@ class ApiMemberController extends Controller
                         $returnData['code'] = 303;
                         $returnData['message'] = "존재하지 않는  SNS 입니다.";
                     }else{
-                        $ckPw = Hash::check($params['password'], $result->password);
-                        if($ckPw==1){
+                        //$ckPw = Hash::check($params['password'], $result->password);
+                        //if($ckPw==1){
 
-                            $result2 = $this->apiMemberService->putLogin($params);
-                            if($result2){
-                                $result3 = $this->apiMemberService->getMemberData($params);
-                                $returnData['code']=0;
-                                $returnData['message']="로그인 완료";
-                                $returnData['response']=$result3;
-                                $returnData['_token']=$params['_token'];
-                            }else{
-                                $returnData['code'] = 600;
-                                $returnData['message'] = "시스템 장애가 발생하였습니다. 다시 시도해 주세요.";
-                            }
-
+                        $result2 = $this->apiMemberService->putLogin($params);
+                        if($result2){
+                            $result3 = $this->apiMemberService->getMemberData($params);
+                            $returnData['code']=0;
+                            $returnData['message']="로그인 완료";
+                            $returnData['response']=$result3;
+                            $returnData['_token']=$params['_token'];
                         }else{
+                            $returnData['code'] = 600;
+                            $returnData['message'] = "시스템 장애가 발생하였습니다. 다시 시도해 주세요.";
+                        }
+
+                        /*}else{
                             $returnData['code'] = 302;
                             $returnData['message'] = "비밀번호가 일치하지 않습니다.";
-                        }
+                        }*/
                     }
 
                 }
