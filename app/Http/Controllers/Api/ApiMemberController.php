@@ -193,6 +193,24 @@ class ApiMemberController extends Controller
         return json_encode($returnData);
     }
 
+    public function nicknameCheck()
+    {
+        $params = $this->request->input();
+        $params['nickName'] = $params['nickName'] ?? "";
+
+        $result = $this->apiMemberService->nicknameCheck($params);
+
+        if(empty($result)){
+            $returnData['code']=1;
+            $returnData['message']="닉네임 중복 없음";
+        }else{
+            $returnData['code']=0;
+            $returnData['message']="닉네임 중복";
+        }
+
+        return json_encode($returnData);
+    }
+
     public function apiJoin()
     {
         $returnData['code'] = -1;

@@ -174,6 +174,15 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
         return $result;
     }
 
+    public function nicknameCheck($params){
+
+        $result = $this->statDB->table('member_data')
+            ->where('mem_nickname',$params['nickName'])
+            ->first();
+
+        return $result;
+    }
+
     public function joinCheck($params){
 
         $result = $this->statDB->table('members')
