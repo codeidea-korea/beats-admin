@@ -174,6 +174,56 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
         return $result;
     }
 
+    public function joinCheck($params){
+
+        $result = $this->statDB->table('members')
+            ->leftJoin('member_data','members.idx','member_data.mem_id')
+            ->where('isuse',"Y")
+            ->when($params['sns']=="email", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('email_id',$params['emailId']);
+                });
+            })
+            ->when($params['sns']=="apple", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('apple_key',$params['snsKey']);
+                });
+            })
+            ->when($params['sns']=="naver", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('naver_key',$params['snsKey']);
+                });
+            })
+            ->when($params['sns']=="kakao", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('kakao_key',$params['snsKey']);
+                });
+            })
+            ->when($params['sns']=="google", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('google_key',$params['snsKey']);
+                });
+            })
+            ->when($params['sns']=="facebook", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('facebook_key',$params['snsKey']);
+                });
+            })
+            ->when($params['sns']=="twitter", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('twitter_key',$params['snsKey']);
+                });
+            })
+            ->when($params['sns']=="soundcloud", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('soundcloud_key',$params['snsKey']);
+                });
+            })
+            ->first();
+
+        return $result;
+    }
+
     public function loginCheck($params){
 
         $result = $this->statDB->table('members')
@@ -296,7 +346,7 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
             ->insert([
                 'name' => $params['name'], 'phone_number' => $params['phone_number'], 'email' => $params['email'],
                 'nationality' => $params['nationality'], 'mem_nickname' => $params['mem_nickname'], 'marketing_consent' => $params['marketing_consent'],
-                'mem_sanctions' => 3,'mem_status' => 1,'mem_id' => $members_id, 'mem_regdate' => \Carbon\Carbon::now(),
+                'class' => 3,'mem_sanctions' => 3,'mem_status' => 1,'mem_id' => $members_id, 'mem_regdate' => \Carbon\Carbon::now(),
             ]);
 
         return $result;

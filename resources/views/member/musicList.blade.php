@@ -23,16 +23,16 @@
                                     <tr>
                                         <th class="bg-primary/10 whitespace-nowrap w-13 text-center">음원 상태</th>
                                         <td class="whitespace-nowrap">
-                                            <select class="form-select w-13" aria-label=".form-select-lg" name="class">
+                                            <select name="progress_rate" class="form-select w-13" aria-label=".form-select-lg" name="class">
                                                 <option value="">전체</option>
-                                                <option value="Y">작업 중</option>
-                                                <option value="N">최종본</option>
+                                                <option value="!=">작업 중</option>
+                                                <option value="=">최종본</option>
                                             </select>
                                             <!--<button class="btn btn-primary w-24">대상 설정</button>-->
                                         </td>
                                         <th class="bg-primary/10 whitespace-nowrap w-13 text-center">작업 방식</th>
                                         <td class="whitespace-nowrap">
-                                            <select class="form-select w-13" aria-label=".form-select-lg" name="gubun">
+                                            <select name="common_composition" class="form-select w-13" aria-label=".form-select-lg" name="gubun">
                                                 <option value="">전체</option>
                                                 <option value="Y">개인 작업</option>
                                                 <option value="N">공동 작업</option>
@@ -41,7 +41,7 @@
                                         </td>
                                         <th class="bg-primary/10 whitespace-nowrap w-13 text-center">판매 상태</th>
                                         <td class="whitespace-nowrap">
-                                            <select class="form-select w-13" aria-label=".form-select-lg" name="channel">
+                                            <select name="sales_status" class="form-select w-13" aria-label=".form-select-lg" name="channel">
                                                 <option value="">전체</option>
                                                 <option value="Y">판매중</option>
                                                 <option value="N">미 판매중</option>
@@ -50,7 +50,7 @@
                                         </td>
                                         <th class="bg-primary/10 whitespace-nowrap w-13 text-center">공개 상태</th>
                                         <td class="whitespace-nowrap">
-                                            <select class="form-select w-13" aria-label=".form-select-lg" name="nationality">
+                                            <select name="open_status" class="form-select w-13" aria-label=".form-select-lg" name="nationality">
                                                 <option value="">전체</option>
                                                 <option value="Y">공개</option>
                                                 <option value="N">비 공개</option>
@@ -60,7 +60,7 @@
                                     <tr>
                                         <th class="bg-primary/10 whitespace-nowrap w-13 text-center">검색</th>
                                         <td class="whitespace-nowrap" colspan="7">
-                                            <input id="regular-form-1" type="text">
+                                            <input name="search_text" id="regular-form-1" type="text">
                                         </td>
                                     </tr>
                                 </table>

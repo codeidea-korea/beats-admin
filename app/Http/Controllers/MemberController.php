@@ -96,11 +96,12 @@ class MemberController extends Controller
 
         $sendPoint = $this->memberService->sendPoint($params);
 
-        if($sendPoint){
-            $result['resultMessage'] = "포인트가 지급되었습니다.";
+        $result['resultSuccess'] = $sendPoint['success'];
+        $result['resultFails'] = $sendPoint['fails'];
+        if($sendPoint['fails'] > 0){
+            $result['resultMessage'] = "포인트 지급에 ".$sendPoint['success']."명 성공 ".$sendPoint['fails']."명 실패하였습니다.";
         }else{
-            $result['resultCode'] = "FAIL";
-            $result['resultMessage'] = "포인트 지급에 실패하였습니다. 다시 시도해주세요";
+            $result['resultMessage'] = "포인트가 모두 지급되었습니다.";
         }
 
         return json_encode($result);

@@ -164,6 +164,35 @@ class ApiMemberController extends Controller
         return json_encode($returnData);
     }
 
+    public function joinCheck()
+    {
+        $params = $this->request->input();
+        $params['sns'] = $params['sns'] ?? "email";
+        $params['snsKey'] = $params['snsKey'] ?? "";
+        $params['emailId'] = $params['emailId'] ?? "";
+
+        if(($params['sns'] != '' && $params['snsKey'] != '') || $params['sns'] != '' && $params['emailId'] != ''){
+            $result = $this->apiMemberService->joinCheck($params);
+
+            if(empty($result)){
+                $response = 0;
+            }else{
+                $response = $result->class;
+            }
+
+            $returnData['code']=0;
+            $returnData['message']="회원가입 확인";
+            $returnData['response']=$response;
+
+        }else{
+
+            $returnData['code']=1;
+            $returnData['message']="회원가입 확인 실패";
+        }
+
+        return json_encode($returnData);
+    }
+
     public function apiJoin()
     {
         $returnData['code'] = -1;
