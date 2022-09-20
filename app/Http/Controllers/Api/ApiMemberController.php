@@ -231,7 +231,7 @@ class ApiMemberController extends Controller
             $params['facebook_key'] = $params['facebookKey'] ?? null;
             $params['twitter_key'] = $params['twitterKey'] ?? null;
             $params['soundcloud_key'] = $params['soundcloudKey'] ?? null;
-            $params['email'] = $params['email'] ?? null;
+            $params['email'] = $params['email'] ?? $params['emailId'];
             $params['name'] = $params['name'] ?? "";
             $params['mem_nickname'] = $params['memNickname'] ?? "";
             $params['nationality'] = $params['nationality'] ?? "";
