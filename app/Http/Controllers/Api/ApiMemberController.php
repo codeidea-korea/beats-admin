@@ -84,8 +84,8 @@ class ApiMemberController extends Controller
                 }
             }else{
 
-                //SNS로 로그인할경우
-                if($params['snsKey']==""||$params['password']=="") {
+                //SNS로 로그인할경우 ||$params['password']==""
+                if($params['snsKey']=="") {
                     $returnData['code'] = 301;
                     $returnData['message'] = "SNS 키값이 누락되었습니다.";
 
