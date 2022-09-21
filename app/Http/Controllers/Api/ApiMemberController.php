@@ -171,7 +171,7 @@ class ApiMemberController extends Controller
         $params['snsKey'] = $params['snsKey'] ?? "";
         $params['emailId'] = $params['emailId'] ?? "";
 
-        if(($params['sns'] != '' && $params['snsKey'] != '') || $params['sns'] != '' && $params['emailId'] != ''){
+        if(($params['sns'] != '' && $params['snsKey'] != '') || ($params['sns'] != '' && $params['emailId'] != '')){
             $result = $this->apiMemberService->joinCheck($params);
 
             if(empty($result)){
@@ -237,6 +237,7 @@ class ApiMemberController extends Controller
             $params['nationality'] = $params['nationality'] ?? "";
             $params['phone_number'] = $params['phoneNumber'] ?? "";
             $params['marketing_consent'] = $params['marketingConsent'] ?? "";
+            $params['existingEmailId'] = $params['existingEmailId'] ?? "";
 
             if($params['existing_yn'] == ''){
                 $returnData['code'] = 1;
@@ -264,6 +265,10 @@ class ApiMemberController extends Controller
                         }
 
                         $result = $this->apiMemberService->apiJoin($params);
+
+                        if($params['existingEmailId'] != ""){
+                            $memberStatusTransform = $this->apiMemberService->memberStatusTransform($params);
+                        }
 
                         $returnData['code']=0;
                         $returnData['message']="회원가입 완료";

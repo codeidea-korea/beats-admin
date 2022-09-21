@@ -187,7 +187,6 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
 
         $result = $this->statDB->table('members')
             ->leftJoin('member_data','members.idx','member_data.mem_id')
-            ->where('isuse',"Y")
             ->when($params['sns']=="email", function($query) use ($params){
                 return $query->where(function($query) use ($params) {
                     $query->where('email_id',$params['emailId']);
@@ -336,6 +335,16 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
             ->where('mem_id',$members_id->idx)
             ->update([
                 'class' => 3, 'mem_moddate' => \Carbon\Carbon::now()
+            ]);
+
+        return $result;
+    }
+
+    public function memberStatusTransform(){
+        $result = $this->statDB->table('members')
+            ->where('email_id',$params['existingEmailId'])
+            ->update([
+                'is_use' => 'N', 'mem_moddate' => \Carbon\Carbon::now()
             ]);
 
         return $result;
