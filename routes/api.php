@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ApiHomeController;
 use App\Http\Controllers\Api\ApiMemberController;
+use App\Http\Controllers\Api\ApiSmsController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -26,8 +27,13 @@ Route::prefix('/v1/')->group(function () {
         Route::put('login', [ApiMemberController::class, 'apiLogin']);
         Route::put('loginCheck', [ApiMemberController::class, 'loginCheck']);
         Route::get('joinCheck', [ApiMemberController::class, 'joinCheck']);
+        Route::get('nickNameCheck', [ApiMemberController::class, 'nickNameCheck']);
         Route::put('join', [ApiMemberController::class, 'apiJoin']);
         Route::get('nationality', [ApiMemberController::class, 'getNationality']);
+    });
+
+    Route::group(['prefix' => 'sms'], function() {
+        Route::get('send_one_message', [ApiSmsController::class, 'send_one_message']);
     });
 
     // get

@@ -96,7 +96,7 @@ class AdminAuthorityController extends Controller
         if($result){
             $rData['result']="SUCCESS";
         }else{
-            $rData['result']="FAIL-";
+            $rData['result']="FAIL";
         }
         return json_encode($rData);
     }
