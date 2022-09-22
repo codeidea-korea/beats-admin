@@ -128,6 +128,35 @@ class AdminAuthorityServiceImpl extends DBConnection  implements AdminAuthorityS
 
     }
 
+    public function setChangePassword($params) {
+
+        $result = $this->statDB->table('users')
+            ->where('idx',$params['idx'])
+            ->update([
+                'password'=>bcrypt($params['password'])
+                ,'updated_at' => now()
+            ]);
+        return $result;
+
+    }
+
+    public function setAdminUpdate($params) {
+
+        $result = $this->statDB->table('users')
+            ->where('idx',$params['idx'])
+            ->update([
+                'isuse' => $params['isuse']
+                ,'group_code' => $params['group_code']
+                ,'name' => $params['name']
+                ,'phoneno' => $params['phoneno']
+                ,'email' => $params['email']
+                ,'updated_at' => now()
+            ]);
+        return $result;
+
+    }
+
+
     public function getAdminId($params) {
 
         $result = $this->statDB->table('users')

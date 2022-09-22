@@ -23,6 +23,12 @@ interface AdminAuthorityServiceInterface
     // 관리자 등록
     public function getAdminAdd($params);
 
+    // 비밀번호 변경
+    public function setChangePassword($params);
+
+    // 관리자 계정 정보 수정
+    public function setAdminUpdate($params);
+
     // 관리자 id 체크
     public function getAdminId($params);
 
