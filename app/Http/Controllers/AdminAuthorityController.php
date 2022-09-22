@@ -145,6 +145,24 @@ class AdminAuthorityController extends Controller
         return json_encode($rData);
     }
 
+    public function setAdminDel(){
+        $params = $this->request->input();
+        $data = array();
+        $data['idx'] = $params['idx'];
+
+        $result = $this->adminAuthorityService->setAdminDelete($data);
+
+        if($result){
+            $rData['result']="SUCCESS";
+        }else{
+            $rData['result']="FAIL";
+        }
+        return json_encode($rData);
+    }
+
+
+
+
 
 
 

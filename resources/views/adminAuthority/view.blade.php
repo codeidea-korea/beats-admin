@@ -88,7 +88,7 @@
                                 </div>
                                 <div>
                                     <button class="btn btn-primary w-24 ml-2 btn_update" type="button">수정</button>
-                                    <button class="btn btn-primary w-24 ml-2" type="button" onClick="alert();">삭제</button>
+                                    <button class="btn btn-primary w-24 ml-2 btn_delete" type="button">삭제</button>
                                 </div>
                             </div>
                         </div>
@@ -174,6 +174,42 @@
                  });
             });
 
+            $(".btn_delete").on('click', function(){
+
+                if (!confirm("삭제를 진행후 관리자 정보는 복구가 불가능합니다. 그래도 진행하시겠습니까?")) {
+                    return false;
+                } else {
+                    var idx = $('input[name=idx]').val();
+
+                    var data = {
+                        idx:idx
+                    };
+
+                    jQuery.ajax({
+                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        type:"post",
+                        dataType:'json',
+                        data: data,
+                        url: '{{ url('/admin/ajax/adminDel') }}',
+                        success: function searchSuccess(data) {
+                            if(data.result=="SUCCESS"){
+                                alert('삭제가 완료되었습니다.');
+                                location.reload();
+                                location.href='{{ url('/admin/list') }}';
+                            }else{
+                                alert('처리 중 오류가 발생 하였습니다. 다시 시도해주세요.');
+                            }
+                        },
+                        error: function (e) {
+                            alert('로딩 중 오류가 발생 하였습니다.');
+                        }
+                    });
+                }
+
+
+
+            });
+
             $(".pwCahnge").on('click', function(){
 
                 var idx = $('input[name=idx]').val();
@@ -211,6 +247,8 @@
                     }
                 });
             });
+
+
 
         </script>
 @endsection

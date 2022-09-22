@@ -166,4 +166,13 @@ class AdminAuthorityServiceImpl extends DBConnection  implements AdminAuthorityS
         return $result;
     }
 
+    public function setAdminDelete($params) {
+
+        $result = $this->statDB->table('users')
+            ->where('idx',$params['idx'])
+            ->delete();
+        return $result;
+
+    }
+
 }

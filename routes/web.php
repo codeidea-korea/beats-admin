@@ -49,6 +49,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('ajax/adminAdd', [AdminAuthorityController::class, 'setAdminAdd']);
         Route::post('ajax/changePw', [AdminAuthorityController::class, 'setChangePw']);
         Route::post('ajax/adminUpdate', [AdminAuthorityController::class, 'setAdminUpdate']);
+        Route::post('ajax/adminDel', [AdminAuthorityController::class, 'setAdminDel']);
 
     });
 

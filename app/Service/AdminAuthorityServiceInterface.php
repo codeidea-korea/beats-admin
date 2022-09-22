@@ -32,5 +32,8 @@ interface AdminAuthorityServiceInterface
     // 관리자 id 체크
     public function getAdminId($params);
 
+    // 관리자 삭제
+    public function setAdminDelete($params);
+
 
 }
