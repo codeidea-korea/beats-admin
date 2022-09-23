@@ -29,35 +29,27 @@ class ApiSmsController extends Controller
         return "Authorization: HMAC-SHA256 apiKey={$apiKey}, date={$date}, salt={$salt}, signature={$signature}";
     }
 
-    public function request($method, $resource, $data = false, $headers = null)
+    public function requestSms($method, $resource, $data = false, $headers = null)
     {
-        $url = "https://api.coolsms.co.kr";
+        $url = "http://api.coolsms.co.kr";
         $url .= $resource;
 
         try {
             $curl = curl_init();
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
-            switch ($method) {
-                case "POST":
-                case "PUT":
-                case "DELETE":
-                    if ($data) curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
-                    break;
-                default: // GET
-                    if ($data) $url = sprintf("%s?%s", $url, http_build_query($data));
-            }
+            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
             $http_headers = array($this->get_header(), "Content-Type: application/json");
             if (is_array($headers)) $http_headers = array_merge($http_headers, $headers);
             curl_setopt($curl, CURLOPT_HTTPHEADER, $http_headers);
             curl_setopt($curl, CURLOPT_URL, $url);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            $result = curl_exec($curl);
             if (curl_error($curl)) {
                 print curl_error($curl);
             }
-            $result = curl_exec($curl);
             curl_close($curl);
             return json_decode($result);
-        } catch (Exception $err) {
+        } catch (\Exception $err) {
             return $err;
         }
     }
@@ -67,9 +59,9 @@ class ApiSmsController extends Controller
         $request = $this->request->input();
         $params = new stdClass();
         $message = new stdClass();
-        $message->text = $request['text'];
+        $message->text = '[Web발신] [BY BEATS X BEAT SOMEONE] 통합회원가입 인증번호는 '.$request['smsNumber'].'입니다. 정확히 입력해주세요';
         $message->to = $request['to'];
-        $message->from = "010-3210-8045"; // $from
+        $message->from = "01032108045"; // $from
         $request['subject'] = $request['subject'] ?? "";
         $request['imageId'] = $request['imageId'] ?? "";
         if ($request['subject'] != '') $message->subject = $request['subject'];
@@ -79,11 +71,12 @@ class ApiSmsController extends Controller
             "osPlatform" => 'Linux | '.phpversion()
         );
         $params->message = $message;
+
         return $this->send_one_message_params($params);
     }
 
     public function send_one_message_params($params)
     {
-        return $this->request("POST", "/messages/v4/send", $params);
+        return $this->requestSms("POST", "/messages/v4/send", $params);
     }
 }
