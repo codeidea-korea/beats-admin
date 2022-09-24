@@ -59,20 +59,35 @@ class ApiSmsController extends Controller
         $request = $this->request->input();
         $params = new stdClass();
         $message = new stdClass();
-        $message->text = '[Web발신] [BY BEATS X BEAT SOMEONE] 통합회원가입 인증번호는 '.$request['smsNumber'].'입니다. 정확히 입력해주세요';
-        $message->to = $request['to'];
-        $message->from = "01032108045"; // $from
-        $request['subject'] = $request['subject'] ?? "";
-        $request['imageId'] = $request['imageId'] ?? "";
-        if ($request['subject'] != '') $message->subject = $request['subject'];
-        if ($request['imageId'] != '') $message->imageId = $request['imageId'];
-        $params->agent = array(
-            "sdkVersion" => 'php/4.0.1',
-            "osPlatform" => 'Linux | '.phpversion()
-        );
-        $params->message = $message;
+        $request['to'] = $request['to'] ?? '';
+        $request['smsNumber'] = $request['smsNumber'] ?? '';
 
-        return $this->send_one_message_params($params);
+        $result = array(
+            'resultCode' => 'SUCCESS'
+        );
+
+        if($request['to'] == '' || $request['smsNumber'] == ''){
+            $result['resultCode'] = 'FAIL';
+            $result['resultMassage'] = '문자를 보낼 휴대폰 번호와 인증번호를 입력해주세요.';
+        }else{
+            $message->text = "[Web발신] [BY BEATS X BEAT SOMEONE] 통합회원가입 인증번호는 ".$request['smsNumber']."입니다. 정확히 입력해주세요";
+            $message->to = $request['to'];
+            $message->from = "01032108045"; // $from
+            $request['subject'] = $request['subject'] ?? "";
+            $request['imageId'] = $request['imageId'] ?? "";
+            if ($request['subject'] != '') $message->subject = $request['subject'];
+            if ($request['imageId'] != '') $message->imageId = $request['imageId'];
+            $params->agent = array(
+                "sdkVersion" => 'php/4.0.1',
+                "osPlatform" => 'Linux | '.phpversion()
+            );
+            $params->message = $message;
+
+            $result['smsResult'] = $this->send_one_message_params($params);
+            $result['resultMassage'] = '인증번호가 전송되었습니다.';
+        }
+
+        return $result;
     }
 
     public function send_one_message_params($params)
