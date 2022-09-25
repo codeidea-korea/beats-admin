@@ -109,4 +109,61 @@ class AdminAuthorityController extends Controller
         return $result->cnt;
     }
 
+    public function setChangePw(){
+        $params = $this->request->input();
+        $data = array();
+        $data['idx'] = $params['idx'];
+        $data['password'] = $params['password'];
+
+        $result = $this->adminAuthorityService->setChangePassword($data);
+
+        if($result){
+            $rData['result']="SUCCESS";
+        }else{
+            $rData['result']="FAIL";
+        }
+        return json_encode($rData);
+    }
+
+    public function setAdminUpdate(){
+        $params = $this->request->input();
+        $data = array();
+        $data['isuse'] = $params['isuse'];
+        $data['group_code'] = $params['group_code'];
+        $data['name'] = $params['name'];
+        $data['idx'] = $params['idx'];
+        $data['phoneno'] = $params['phoneno'];
+        $data['email'] = $params['email'];
+
+        $result = $this->adminAuthorityService->setAdminUpdate($data);
+
+        if($result){
+            $rData['result']="SUCCESS";
+        }else{
+            $rData['result']="FAIL";
+        }
+        return json_encode($rData);
+    }
+
+    public function setAdminDel(){
+        $params = $this->request->input();
+        $data = array();
+        $data['idx'] = $params['idx'];
+
+        $result = $this->adminAuthorityService->setAdminDelete($data);
+
+        if($result){
+            $rData['result']="SUCCESS";
+        }else{
+            $rData['result']="FAIL";
+        }
+        return json_encode($rData);
+    }
+
+
+
+
+
+
+
 }

@@ -53,7 +53,7 @@
                                 <tr>
                                     <th class="whitespace-nowrap text-center bg-primary/10" style="width:220px;">비밀번호 재설정</th>
                                     <td>
-                                        <input type="button" class="btn btn-primary w-24 ml-2" name="rePassword" value="비밀번호 재설정" data-tw-toggle="modal" data-tw-target="#superlarge-modal-size-preview2" style="width:220px;">
+                                        <input type="button" class="btn btn-primary w-24 ml-2" name="rePassword" value="비밀번호 재설정" data-tw-toggle="modal" data-tw-target="#superlarge-modal-size-preview3" style="width:220px;">
                                     </td>
                                 </tr>
                                 <tr>
@@ -88,7 +88,7 @@
                                 </div>
                                 <div>
                                     <button class="btn btn-primary w-24 ml-2 btn_update" type="button">수정</button>
-                                    <button class="btn btn-primary w-24 ml-2" type="button" onClick="alert();">삭제</button>
+                                    <button class="btn btn-primary w-24 ml-2 btn_delete" type="button">삭제</button>
                                 </div>
                             </div>
                         </div>
@@ -98,38 +98,38 @@
             </div>
         </div>
 
-        <!-- 포인트지급 설정 모달 시작 -->
-        <div id="superlarge-modal-size-preview2" class="modal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-lm">
+        <!-- 비밀번호 변경 모달 시작 -->
+        <div id="superlarge-modal-size-preview3" class="modal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
 
-                    <div class="modal-body p-10 text-center">
-
-                        <div class="overflow-x-auto">
-                            <div class="intro-y box mt-5">
-                                <div class="flex items-center w-full">
-                                    <div class="flex items-center mr-5">
-                                        <span class="mr-2">검색</span>
-                                        <input id="regular-form-1" type="text" class="form-control w-52" placeholder="금액 입력">
-                                    </div>
-                                </div>
-                                <div class="flex items-center w-full">
-                                    <div class="flex items-center mr-5">
-                                        <span class="mr-2">검색</span>
-                                        <input id="regular-form-1" type="text" class="form-control w-52" placeholder="금액 입력">
-                                    </div>
-                                </div>
+                    <!-- BEGIN: Modal Header -->
+                    <div class="modal-header pl-10 pr-10 pt-10">
+                        <h2 class="font-medium text-base mr-auto">비밀번호 변경</h2>
+                    </div>
+                    <!-- END: Modal Header -->
+                    <!-- BEGIN: Modal Body -->
+                    <div class="modal-body p-10 grid grid-cols-12 gap-4 gap-y-3">
+                        <div class="col-span-12">
+                            <label for="modal-form-1" class="form-label">새로운 비밀번호</label>
+                            <input id="modal-form-1" type="password" name="password" id="password" class="form-control" placeholder="변경하실 비밀번호를 입력해주세요.">
+                        </div>
+                        <div class="col-span-12">
+                            <label for="modal-form-2" class="form-label">새로운 비밀번호 재입력</label>
+                            <input id="modal-form-2" type="password" name="password2" class="form-control" placeholder="새로운 비밀번호 재입력">
+                        </div>
+                        <div class="col-span-12">
+                            <div class="flex items-center justify-center mt-5">
+                                <button class="btn btn-primary w-32 mr-5 pwCahnge">변경하기</button>
+                                <button class="btn btn-secondary w-32 modalCancel" data-tw-dismiss="modal">취소</button>
                             </div>
                         </div>
-
-                        <div class="flex items-center justify-center mt-5">
-                            <button class="btn btn-primary w-32 mr-5">설정</button>
-                            <button class="btn btn-secondary w-32">닫기</button>
-                        </div>
                     </div>
+                    <!-- END: Modal Body -->
                 </div>
             </div>
         </div>
+        <!-- 비밀번호 변경 modal 끝 -->
 
 
 
@@ -137,47 +137,118 @@
 
 
             $(".btn_update").on('click', function(){
-
                  var isuse = $('select[name=isuse]').val();
                  var group_code = $('select[name=group_code]').val();
                  var name = $('input[name=name]').val();
                  var idx = $('input[name=idx]').val();
-                // var password = $('input[name=password]').val();
-                // var password2 = $('input[name=password2]').val();
                  var phoneno = $('input[name=phoneno]').val();
                  var email = $('input[name=email]').val();
-                 alert(idx);
-//
-                // var data = {
-                //     isuse:isuse
-                //     ,group_code:group_code
-                //     ,name:name
-                //     ,id:id
-                //     ,password:password
-                //     ,password2:password2
-                //     ,phoneno:phoneno
-                //     ,email:email
-                // };
 
-                // jQuery.ajax({
-                //     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                //     type:"post",
-                //     dataType:'json',
-                //     data: data,
-                //     url: '{{ url('/admin/ajax/adminAdd') }}',
-                //     success: function searchSuccess(data) {
-                //         if(data.result=="SUCCESS"){
-                //             alert('관리자계정이 추가되었습니다.');
-                //             location.reload();
-                //         }else{
-                //             alert('로딩 중 오류가 발생 하였습니다. 다시 시도해주세요.');
-                //         }
-                //     },
-                //     error: function (e) {
-                //         alert('로딩 중 오류가 발생 하였습니다.');
-                //     }
-                // });
+
+                 var data = {
+                     isuse:isuse
+                     ,group_code:group_code
+                     ,name:name
+                     ,idx:idx
+                     ,phoneno:phoneno
+                     ,email:email
+                 };
+
+                 jQuery.ajax({
+                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                     type:"post",
+                     dataType:'json',
+                     data: data,
+                     url: '{{ url('/admin/ajax/adminUpdate') }}',
+                     success: function searchSuccess(data) {
+                         if(data.result=="SUCCESS"){
+                             alert('관리자정보가 수정되었습니다.');
+                             location.reload();
+                         }else{
+                             alert('처리 중 오류가 발생 하였습니다. 다시 시도해주세요.');
+                         }
+                     },
+                     error: function (e) {
+                         alert('로딩 중 오류가 발생 하였습니다.');
+                     }
+                 });
             });
+
+            $(".btn_delete").on('click', function(){
+
+                if (!confirm("삭제를 진행후 관리자 정보는 복구가 불가능합니다. 그래도 진행하시겠습니까?")) {
+                    return false;
+                } else {
+                    var idx = $('input[name=idx]').val();
+
+                    var data = {
+                        idx:idx
+                    };
+
+                    jQuery.ajax({
+                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        type:"post",
+                        dataType:'json',
+                        data: data,
+                        url: '{{ url('/admin/ajax/adminDel') }}',
+                        success: function searchSuccess(data) {
+                            if(data.result=="SUCCESS"){
+                                alert('삭제가 완료되었습니다.');
+                                location.reload();
+                                location.href='{{ url('/admin/list') }}';
+                            }else{
+                                alert('처리 중 오류가 발생 하였습니다. 다시 시도해주세요.');
+                            }
+                        },
+                        error: function (e) {
+                            alert('로딩 중 오류가 발생 하였습니다.');
+                        }
+                    });
+                }
+
+
+
+            });
+
+            $(".pwCahnge").on('click', function(){
+
+                var idx = $('input[name=idx]').val();
+                var password = $('input[name=password]').val();
+                var password2 = $('input[name=password2]').val();
+
+                if(password != password2){
+                    alert("비밀번호가 일치하지 않습니다.");
+                    $('input[name=password]').val('');
+                    $('input[name=password2]').val('');
+                    return false;
+                }
+
+                var data = {
+                    idx:idx
+                    ,password:password
+                };
+
+                jQuery.ajax({
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    type:"post",
+                    dataType:'json',
+                    data: data,
+                    url: '{{ url('/admin/ajax/changePw') }}',
+                    success: function searchSuccess(data) {
+                        if(data.result=="SUCCESS"){
+                            alert('비밀번호가 변경되었습니다.');
+                            location.reload();
+                        }else{
+                            alert('처리 중 오류가 발생 하였습니다. 다시 시도해주세요.');
+                        }
+                    },
+                    error: function (e) {
+                        alert('로딩 중 오류가 발생 하였습니다.');
+                    }
+                });
+            });
+
+
 
         </script>
 @endsection
