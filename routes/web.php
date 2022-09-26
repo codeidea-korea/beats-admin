@@ -50,7 +50,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('ajax/changePw', [AdminAuthorityController::class, 'setChangePw']);
         Route::post('ajax/adminUpdate', [AdminAuthorityController::class, 'setAdminUpdate']);
         Route::post('ajax/adminDel', [AdminAuthorityController::class, 'setAdminDel']);
-
+        Route::get('authority', [AdminAuthorityController::class, 'getAdminAuthority']);
     });
 
     //메인 관리

@@ -163,10 +163,17 @@ class AdminAuthorityController extends Controller
         return json_encode($rData);
     }
 
+    public function getAdminAuthority(){
+        $params = $this->request->input();
+        $params['menuCode'] = "AD120200";
+        $params['group_code'] = $params['group_code'] ?? "AD000";
 
+        $groupList = $this->adminAuthorityService->getAdmGroupList($params);
 
-
-
-
+        return view('adminAuthority.authority',[
+            'params' => $params
+            ,'groupList' => $groupList
+        ]);
+    }
 
 }
