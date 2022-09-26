@@ -178,6 +178,7 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
                 'music_head.sales_status',
                 'music_head.tag',
                 'music_head.common_composition',
+                'music_head.progress_rate',
                 'music_head.moddate',
             ) 
             ->where('music_head.mem_id', $params['idx'])
