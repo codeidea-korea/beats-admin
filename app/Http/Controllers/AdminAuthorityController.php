@@ -34,11 +34,14 @@ class AdminAuthorityController extends Controller
         $params['limit'] = $params['limit'] ?? 10;
 
         $params['group_code'] = $params['group_code'] ?? "";
-        $params['group_code'] = $params['group_code'] ?? "";
-
-
-
-
+        $params['isuse'] = $params['isuse'] ?? "";
+        $params['sType'] = $params['sType'] ?? "";
+        $params['sWord'] = $params['sWord'] ?? "";
+        $params['searchDate'] = $params['searchDate'] ?? "2022-01-01 - ".date("Y-m-d");
+        $tempData = trim(str_replace('-','',$params['searchDate']));
+        $params['sDate']=substr($tempData,0,8);
+        $params['eDate']=substr($tempData,8,16);
+        $params['eDate'] = date("Ymd",strtotime($params['eDate'].' +1 days'));
         $groupList = $this->adminAuthorityService->getAdmGroupList($params);
         $adminList = $this->adminAuthorityService->getAdminList($params);
         $adminTotal = $this->adminAuthorityService->getAdminTotal($params);

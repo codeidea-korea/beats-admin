@@ -25,7 +25,7 @@
                                             <select class="form-select w-60" aria-label=".form-select-lg" name="group_code">
                                                 <option value="">미 선택</option>
                                                 @foreach($groupList as $rs)
-                                                    <option value="{{$rs->group_code}}" >{{$rs->group_name}}</option>
+                                                    <option value="{{$rs->group_code}}" @if($rs->group_code==$params['group_code']) selected @endif>{{$rs->group_name}}</option>
                                                 @endforeach
                                             </select>
                                             <!--<button class="btn btn-primary w-24">대상 설정</button>-->
@@ -33,26 +33,26 @@
 
                                         <th class="bg-primary/10 whitespace-nowrap w-32 text-center">등록일</th>
                                         <td class="whitespace-nowrap">
-                                            <input type="text" class="datepicker form-control sm:w-56 box pl-10" name="searchDate">
+                                            <input type="text" class="datepicker form-control sm:w-56 box pl-10" value="{{$params['searchDate']}}" name="searchDate">
                                         </td>
                                     </tr>
                                     <tr>
                                         <th class="bg-primary/10 whitespace-nowrap w-32 text-center">상태</th>
                                         <td class="whitespace-nowrap">
                                             <select class="form-select w-60" aria-label=".form-select-lg" name="isuse">
-                                                <option value="">전체</option>
-                                                <option value="Y">활성화</option>
-                                                <option value="N">비활성화</option>
+                                                <option value=""  @if($params['isuse'] == "") selected @endif>전체</option>
+                                                <option value="Y" @if($params['isuse'] == "Y") selected @endif>활성화</option>
+                                                <option value="N" @if($params['isuse'] == "N") selected @endif>비활성화</option>
                                             </select>
                                         </td>
                                         <th class="bg-primary/10 whitespace-nowrap w-32 text-center">검색</th>
                                         <td class="whitespace-nowrap">
                                             <select class="form-select w-60" aria-label=".form-select-lg" name="sType">
-                                                <option value="">미 선택</option>
-                                                <option value="">이름</option>
-                                                <option value="">이메일</option>
+                                                <option value=""      @if($params['sType'] == "") selected @endif >미 선택</option>
+                                                <option value="name"  @if($params['sType'] == "name") selected @endif >이름</option>
+                                                <option value="email" @if($params['sType'] == "email") selected @endif >이메일</option>
                                             </select>
-                                            <input id="regular-form-1" type="text" name="sWord">
+                                            <input id="regular-form-1" type="text" name="sWord" value="{{$params['sWord']}}">
                                             <button class="btn box  text-slate-600 border border-slate-400">
                                                 검색
                                             </button>
@@ -96,7 +96,7 @@
                                         <td class="whitespace-nowrap text-center"><a href="/admin/view?idx={{$rs->idx}}">{{$rs->name}}</a></td>
                                         <td class="whitespace-nowrap text-center">@if($rs->phoneno==null) 000-0000-0000 @else {{$rs->phoneno}} @endif</td>
                                         <td class="whitespace-nowrap text-center">{{$rs->email}}</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->isuse}}</td>
+                                        <td class="whitespace-nowrap text-center">@if($rs->isuse=="Y") 활성화 @else 비활성화 @endif</td>
                                         <td class="whitespace-nowrap text-center">{{$rs->created_at}}</td>
                                     </tr>
                                  @php $i++; @endphp
