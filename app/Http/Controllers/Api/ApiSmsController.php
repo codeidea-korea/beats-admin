@@ -84,7 +84,6 @@ class ApiSmsController extends Controller
             $params->message = $message;
 
             $result['smsResult'] = $this->send_one_message_params($params);
-            $result['resultMassage'] = '인증번호가 전송되었습니다.';
         }
 
         return $result;

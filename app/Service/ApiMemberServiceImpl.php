@@ -340,7 +340,7 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
         return $result;
     }
 
-    public function memberStatusTransform(){
+    public function memberStatusTransform($params){
         $result = $this->statDB->table('members')
             ->where('email_id',$params['existingEmailId'])
             ->update([
@@ -362,7 +362,7 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
         
         $result = $this->statDB->table('member_data')
             ->insert([
-                'name' => $params['name'], 'phone_number' => $params['phone_number'], 'email' => $params['email'],
+                'name' => $params['name'], 'phone_number' => $params['phone_number'], 'email' => $params['email'], 'gubun' => $params['gubun'],
                 'nationality' => $params['nationality'], 'mem_nickname' => $params['mem_nickname'], 'marketing_consent' => $params['marketing_consent'],
                 'class' => 3,'mem_sanctions' => 3,'mem_status' => 1,'mem_id' => $members_id, 'mem_regdate' => \Carbon\Carbon::now(),
             ]);
