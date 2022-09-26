@@ -222,7 +222,7 @@ class ApiMemberController extends Controller
             $params['sns'] = $params['sns'] ?? "email";
             $params['snsKey'] = $params['snsKey'] ?? "";
             $params['emailId'] = $params['emailId'] ?? "";
-            $params['password'] = $params['password'] ?? "";
+            $params['password'] = $params['password'] ?? null;
             $params['sign_site'] = $params['signSite'] ?? "";
             $params['apple_key'] = $params['appleKey'] ?? null;
             $params['naver_key'] = $params['naverKey'] ?? null;
@@ -253,7 +253,7 @@ class ApiMemberController extends Controller
                     $returnData['response']=$result;
 
                 }else{
-                    if(($params['snsKey'] == "" && $params['emailId'] == "") || $params['password'] == "" || $params['sign_site'] == "" || $params['name'] == "" || $params['mem_nickname'] == "" || $params['nationality'] == ""
+                    if(($params['snsKey'] == "" && $params['emailId'] == "") || $params['sign_site'] == "" || $params['name'] == "" || $params['mem_nickname'] == "" || $params['nationality'] == ""
                     || $params['phone_number'] == "" || $params['marketing_consent'] == ""){
 
                         $returnData['code'] = 2;
@@ -261,19 +261,34 @@ class ApiMemberController extends Controller
 
                     }else{
 
-                        if($params['sns'] != 'email'){
+                        if($params['sns'] == 'email'){
+                            if($params['password'] == null){
+                                $returnData['code'] = 2;
+                                $returnData['message'] = "비밀번호가 누락되었습니다.";
+                            }else{
+                                $result = $this->apiMemberService->apiJoin($params);
+
+                                if($params['existingEmailId'] != ""){
+                                    $memberStatusTransform = $this->apiMemberService->memberStatusTransform($params);
+                                }
+
+                                $returnData['code']=0;
+                                $returnData['message']="회원가입 완료";
+                                $returnData['response']=$result;
+                            }
+                        }else{
                             $params[$params['sns'].'_key'] = $params['snsKey'];
+
+                            $result = $this->apiMemberService->apiJoin($params);
+
+                            if($params['existingEmailId'] != ""){
+                                $memberStatusTransform = $this->apiMemberService->memberStatusTransform($params);
+                            }
+
+                            $returnData['code']=0;
+                            $returnData['message']="회원가입 완료";
+                            $returnData['response']=$result;
                         }
-
-                        $result = $this->apiMemberService->apiJoin($params);
-
-                        if($params['existingEmailId'] != ""){
-                            $memberStatusTransform = $this->apiMemberService->memberStatusTransform($params);
-                        }
-
-                        $returnData['code']=0;
-                        $returnData['message']="회원가입 완료";
-                        $returnData['response']=$result;
                     }
                 }
             }
