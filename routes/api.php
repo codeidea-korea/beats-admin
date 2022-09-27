@@ -28,6 +28,7 @@ Route::prefix('/v1/')->group(function () {
         Route::put('loginCheck', [ApiMemberController::class, 'loginCheck']);
         Route::get('joinCheck', [ApiMemberController::class, 'joinCheck']);
         Route::get('nickNameCheck', [ApiMemberController::class, 'nickNameCheck']);
+        Route::get('memberBriefData', [ApiMemberController::class, 'memberBriefData']);
         Route::put('join', [ApiMemberController::class, 'apiJoin']);
         Route::get('nationality', [ApiMemberController::class, 'getNationality']);
     });
