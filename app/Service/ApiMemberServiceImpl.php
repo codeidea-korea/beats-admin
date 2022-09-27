@@ -24,8 +24,8 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
                 'member_data.phone_number as phoneNumber',
                 'member_data.email as email',
                 'member_data.mem_nickname as nickName',
+                'member_data.mem_status as memStatus',
             )
-            ->where('member_data.mem_status','1')
             ->when($params['sns']=="email", function($query) use ($params){
                 return $query->where(function($query) use ($params) {
                     $query->where('members.email_id',$params['emailId']);

@@ -66,10 +66,23 @@ class ApiMemberController extends Controller
 
                                 $result3 = $this->apiMemberService->getMemberData($params);
 
-                                $returnData['code']=0;
-                                $returnData['message']="로그인 완료";
-                                $returnData['response']=$result3;
-                                $returnData['_token']=$params['_token'];
+                                if($result3->memStatus == 1 || $result3->memStatus == 0){    
+                                    $returnData['code']=0;
+                                    $returnData['message']="로그인 완료";
+                                    $returnData['response']=$result3;
+                                    $returnData['_token']=$params['_token'];
+                                }else{
+                                    
+                                    $returnData['code']=601;
+
+                                    if($result3->memStatus == 2){
+                                        $returnData['message'] = "제재된 회원입니다. 로그인 할 수 없습니다";
+                                        $returnData['response'] = $result3;
+                                    }else{
+                                        $returnData['message'] = "휴면 회원입니다. 로그인 할 수 없습니다";
+                                        $returnData['response'] = $result3;
+                                    }
+                                }
                             }else{
                                 $returnData['code'] = 600;
                                 $returnData['message'] = "시스템 장애가 발생하였습니다. 다시 시도해 주세요.";
@@ -107,10 +120,24 @@ class ApiMemberController extends Controller
                         $result2 = $this->apiMemberService->putLogin($params);
                         if($result2){
                             $result3 = $this->apiMemberService->getMemberData($params);
-                            $returnData['code']=0;
-                            $returnData['message']="로그인 완료";
-                            $returnData['response']=$result3;
-                            $returnData['_token']=$params['_token'];
+                            
+                            if($result3->memStatus == 1 || $result3->memStatus == 0){    
+                                $returnData['code']=0;
+                                $returnData['message']="로그인 완료";
+                                $returnData['response']=$result3;
+                                $returnData['_token']=$params['_token'];
+                            }else{
+                                
+                                $returnData['code']=601;
+
+                                if($result3->memStatus == 2){
+                                    $returnData['message'] = "제재된 회원입니다. 로그인 할 수 없습니다";
+                                    $returnData['response'] = $result3;
+                                }else{
+                                    $returnData['message'] = "휴면 회원입니다. 로그인 할 수 없습니다";
+                                    $returnData['response'] = $result3;
+                                }
+                            }
                         }else{
                             $returnData['code'] = 600;
                             $returnData['message'] = "시스템 장애가 발생하였습니다. 다시 시도해 주세요.";
