@@ -211,6 +211,25 @@ class ApiMemberController extends Controller
         return json_encode($returnData);
     }
 
+    public function memberBriefData()
+    {
+        $params = $this->request->input();
+        $params['emailId'] = $params['emailId'] ?? "";
+
+        $result = $this->apiMemberService->memberBriefData($params);
+
+        if(empty($result)){
+            $returnData['code']=1;
+            $returnData['message']="일치하는 회원의 데이터가 없습니다";
+        }else{
+            $returnData['code']=0;
+            $returnData['message']="간략한 회원 데이터 전송";
+            $returnData['response']=$result;
+        }
+
+        return json_encode($returnData);
+    }
+
     public function apiJoin()
     {
         $returnData['code'] = -1;

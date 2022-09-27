@@ -56,12 +56,12 @@
                     <form name="searchForm" id="searchForm" class="form-horizontal" role="form"   method="get" action="{{ url('/member/musicList') }}">
                         <input type="hidden" name="page" value="{{$searchData['page']}}">
                         <div class="p-5">
-                            <div class="overflow-x-auto">
+                            <div class="">
                                 <table class="table table-bordered">
                                     <tr>
                                         <th class="whitespace-nowrap text-center bg-primary/10">음원 상태</th>
                                         <td class="whitespace-nowrap">
-                                            <select name="progress_rate" class="form-select w-48" aria-label=".form-select-lg example">
+                                            <select name="progress_rate" class="form-select" aria-label=".form-select-lg example">
                                                 <option value="">전체</option>
                                                 <option value="!=">작업 중</option>
                                                 <option value="=">최종본</option>
@@ -70,7 +70,7 @@
                                         </td>
                                         <th class="whitespace-nowrap text-center bg-primary/10">작업 방식</th>
                                         <td class="whitespace-nowrap">
-                                            <select name="common_composition" class="form-select w-48" aria-label=".form-select-lg example">
+                                            <select name="common_composition" class="form-select" aria-label=".form-select-lg example">
                                                 <option value="">전체</option>
                                                 <option value="Y">개인 작업</option>
                                                 <option value="N">공동 작업</option>
@@ -79,7 +79,7 @@
                                         </td>
                                         <th class="whitespace-nowrap text-center bg-primary/10">판매 상태</th>
                                         <td class="whitespace-nowrap">
-                                            <select name="sales_status" class="form-select w-48" aria-label=".form-select-lg example">
+                                            <select name="sales_status" class="form-select" aria-label=".form-select-lg example">
                                                 <option value="">전체</option>
                                                 <option value="Y">판매중</option>
                                                 <option value="N">미 판매중</option>
@@ -88,7 +88,7 @@
                                         </td>
                                         <th class="whitespace-nowrap text-center bg-primary/10">공개 상태</th>
                                         <td class="whitespace-nowrap">
-                                            <select name="open_status" class="form-select w-48" aria-label=".form-select-lg example">
+                                            <select name="open_status" class="form-select" aria-label=".form-select-lg example">
                                                 <option value="">전체</option>
                                                 <option value="Y">공개</option>
                                                 <option value="N">비 공개</option>
@@ -121,7 +121,7 @@
                     <div class="p-2 bg-slate-200 flex flex-wrap gap-3">
                         @php $i=0; @endphp
                         @foreach($musicList as $rs)
-                            <div class="intro-x box p-5">
+                            <div class="intro-x box p-5 w-full">
                                 <div class="w-full items-center flex gap-5">
                                     <!-- <div class="w-16 pl-5">
                                         <img src="./dist/images/play.svg" alt="">
@@ -134,7 +134,7 @@
                                             47
                                         </div>
                                     </div>
-                                    <div class="border-l flex gap-3 px-5">
+                                    <div class="border-l flex gap-3 px-5 ml-auto">
                                         <div class="border border-slate-300 rounded-md border-dashed p-3 text-center">
                                             <div class="font-bold">작업 방식</div>
                                             <div class="btn-warning p-1 rounded-md">{{$rs->common_composition}}</div>

@@ -183,6 +183,20 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
         return $result;
     }
 
+    public function memberBriefData($params){
+
+        $result = $this->statDB->table('members')
+            ->leftJoin('member_data','members.idx','member_data.mem_id')
+            ->select(
+                'member_data.mem_nickname as memNickname',
+                'members.created_at as createdAt',
+            )
+            ->where('members.email_id',$params['emailId'])
+            ->first();
+
+        return $result;
+    }
+
     public function joinCheck($params){
 
         $result = $this->statDB->table('members')
