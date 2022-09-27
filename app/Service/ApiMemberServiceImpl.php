@@ -378,7 +378,7 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
             ->insert([
                 'name' => $params['name'], 'phone_number' => $params['phone_number'], 'email' => $params['email'], 'gubun' => $params['gubun'],
                 'nationality' => $params['nationality'], 'mem_nickname' => $params['mem_nickname'], 'marketing_consent' => $params['marketing_consent'],
-                'class' => 3,'mem_sanctions' => 3,'mem_status' => 1,'mem_id' => $members_id, 'mem_regdate' => \Carbon\Carbon::now(),
+                'class' => 3,'mem_sanctions' => 0,'mem_status' => 'Y','mem_level' => 1,'mem_id' => $members_id, 'mem_regdate' => \Carbon\Carbon::now(),
             ]);
 
         return $result;
