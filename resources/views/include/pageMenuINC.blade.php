@@ -54,7 +54,7 @@
                         </a>
                     </li>
                 @endif
-                @endforeach
+            @endforeach
         </ul>
     </div>
 </div>
@@ -67,53 +67,58 @@
             <span class="hidden xl:block text-white text-lg ml-3"> 통합관리자 </span>
         </a>
 
-        <div class="side-nav__devider my-6"></div>
-        <ul>
-            @php
-            $tempDepth = 1;
-            @endphp
-            @foreach(session('ADMINMENULIST') as $rs)
-                @if($tempDepth==2 && $rs->depth == 1)
-                        </ul>
-                    </li>
-                    @php
-                        $tempDepth = 1;
-                    @endphp
-                @endif
+            <div class="side-nav__devider my-6"></div>
+            <ul>
+                @php
+                $tempDepth = 1;
+                @endphp
+                @foreach(session('ADMINMENULIST') as $rs)
+                    @if($tempDepth==2 && $rs->depth == 1)
+                            </ul>
+                        </li>
+                        @php
+                            $tempDepth = 1;
+                        @endphp
+                    @endif
 
-                @if($rs->depth == 1 && $rs->lcnt==0)
-                    <li>
-                        <a href="javascript:location.href='{{ url($rs->url) }}';" class="side-menu @if(substr($rs->menucode,0,5) == substr($params['menuCode'],0,5)) side-menu--active @endif">
-                            <div class="side-menu__icon"> <i data-lucide="{{$rs->description}}"></i> </div>
-                            <div class="side-menu__title">
-                                {{$rs->menuname}}
-                            </div>
-                        </a>
-                    </li>
-                @elseif($rs->depth == 1&&$rs->lcnt > 0)
-                    <li>
-                        <!--<a href="javascript:;" class="side-menu side-menu--active">-->
-                        <a href="javascript:;" class="side-menu @if(substr($rs->menucode,0,5) == substr($params['menuCode'],0,5)) side-menu--active @endif">
-                            <div class="side-menu__icon"> <i data-lucide="{{$rs->description}}"></i> </div>
-                            <div class="side-menu__title">
-                                {{$rs->menuname}}
-                                <div class="side-menu__sub-icon @if(substr($rs->menucode,0,5) == substr($params['menuCode'],0,5)) transform rotate-180 @endif"> <i data-lucide="chevron-down"></i> </div>
-                                <!--<div class="side-menu__sub-icon transform rotate-180"> <i data-lucide="chevron-down"></i> </div>-->
-                            </div>
-                        </a>
-                        <ul class="side-menu__sub-open" @if(substr($rs->menucode,0,5) != substr($params['menuCode'],0,5)) style="display:none" @endif >
-                    @php
-                        $tempDepth=2;
-                    @endphp
-                @elseif($rs->depth == 2)
-                    <li>
-                        <!--<a href="javascript:;" class="side-menu side-menu--active">-->
-                        <a href="javascript:location.href='{{ url($rs->url) }}';" class="side-menu @if($rs->menucode == $params['menuCode']) side-menu--active @endif">
-                            <div class="side-menu__icon"> <i data-lucide="activity"></i> </div>
-                            <div class="side-menu__title">  {{$rs->menuname}}</div>
-                        </a>
-                    </li>
-                @endif
-            @endforeach
-        </ul>
+                    @if($rs->depth == 1 && $rs->lcnt==0)
+                        <li>
+                            <a href="javascript:location.href='{{ url($rs->url) }}';" class="side-menu @if(substr($rs->menucode,0,5) == substr($params['menuCode'],0,5)) side-menu--active @endif">
+                                <div class="side-menu__icon"> <i data-lucide="{{$rs->description}}"></i> </div>
+                                <div class="side-menu__title">
+                                    {{$rs->menuname}}
+                                </div>
+                            </a>
+                        </li>
+                    @elseif($rs->depth == 1&&$rs->lcnt > 0)
+
+                        <li>
+                            <!--<a href="javascript:;" class="side-menu side-menu--active">-->
+                            <a href="javascript:;" class="side-menu @if(substr($rs->menucode,0,5) == substr($params['menuCode'],0,5)) side-menu--active @endif">
+                                <div class="side-menu__icon"> <i data-lucide="{{$rs->description}}"></i> </div>
+                                <div class="side-menu__title">
+                                    {{$rs->menuname}}
+                                    <div class="side-menu__sub-icon @if(substr($rs->menucode,0,5) == substr($params['menuCode'],0,5)) transform rotate-180 @endif"> <i data-lucide="chevron-down"></i> </div>
+                                    <!--<div class="side-menu__sub-icon transform rotate-180"> <i data-lucide="chevron-down"></i> </div>-->
+                                </div>
+                            </a>
+                            <ul class="side-menu__sub-open" @if(substr($rs->menucode,0,5) != substr($params['menuCode'],0,5)) style="display:none" @endif >
+                        @php
+                            $tempDepth=2;
+                        @endphp
+                    @elseif($rs->depth == 2)
+
+                        <li>
+                            <!--<a href="javascript:;" class="side-menu side-menu--active">-->
+                            <a href="javascript:location.href='{{ url($rs->url) }}';" class="side-menu @if($rs->menucode == $params['menuCode']) side-menu--active @endif">
+                                <div class="side-menu__icon"> <i data-lucide="activity"></i> </div>
+                                <div class="side-menu__title">  {{$rs->menuname}}</div>
+                            </a>
+                        </li>
+
+                    @endif
+                @endforeach
+                            </ul>
+                        </li>
+            </ul>
     </nav>

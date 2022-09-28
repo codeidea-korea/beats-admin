@@ -6,6 +6,7 @@
 <meta name="author" content="LEFT4CODE">
 <!--<script type="text/javascript" src="{{-- asset('js/jquery.min.js') --}}"></script>-->
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript" src="{{ asset('js/mustache.js') }}"></script>
 <title>비트썸원-바이비츠 통합관리자</title>
 <!-- BEGIN: CSS Assets-->

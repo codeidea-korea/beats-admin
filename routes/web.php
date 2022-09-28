@@ -51,6 +51,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('ajax/adminUpdate', [AdminAuthorityController::class, 'setAdminUpdate']);
         Route::post('ajax/adminDel', [AdminAuthorityController::class, 'setAdminDel']);
         Route::get('authority', [AdminAuthorityController::class, 'getAdminAuthority']);
+        Route::post('authUpdate', [AdminAuthorityController::class, 'getAuthUpdate']);
     });
 
     //메인 관리

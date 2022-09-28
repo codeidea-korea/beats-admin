@@ -176,4 +176,16 @@ class AdminAuthorityController extends Controller
         ]);
     }
 
+    public function getAuthUpdate(){
+        $params = $this->request->input();
+        //if($result){
+        //    $rData['result']="SUCCESS";
+        //}else{
+        //    $rData['result']="FAIL";
+        //}
+        $rData['result']="SUCCESS";
+
+        return json_encode($rData);
+    }
+
 }
