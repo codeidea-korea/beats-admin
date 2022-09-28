@@ -306,12 +306,31 @@ class ApiMemberController extends Controller
                         $returnData['message'] = "입력하지 않은 필수 값이 있습니다. 필수 값을 입력해 주세요";
 
                     }else{
+                        
+                        $joinCheck = $this->apiMemberService->joinCheck($params);
 
-                        if($params['sns'] == 'email'){
-                            if($params['password'] == null){
-                                $returnData['code'] = 2;
-                                $returnData['message'] = "비밀번호가 누락되었습니다.";
+                        if($joinCheck){
+                            $returnData['code']=3;
+                            $returnData['message']="이미 가입된 이메일입니다.";
+                        }else{
+                            if($params['sns'] == 'email'){
+                                if($params['password'] == null){
+                                    $returnData['code'] = 2;
+                                    $returnData['message'] = "비밀번호가 누락되었습니다.";
+                                }else{
+                                    $result = $this->apiMemberService->apiJoin($params);
+
+                                    if($params['existingEmailId'] != ""){
+                                        $memberStatusTransform = $this->apiMemberService->memberStatusTransform($params);
+                                    }
+
+                                    $returnData['code']=0;
+                                    $returnData['message']="회원가입 완료";
+                                    $returnData['response']=$result;
+                                }
                             }else{
+                                $params[$params['sns'].'_key'] = $params['snsKey'];
+
                                 $result = $this->apiMemberService->apiJoin($params);
 
                                 if($params['existingEmailId'] != ""){
@@ -322,18 +341,6 @@ class ApiMemberController extends Controller
                                 $returnData['message']="회원가입 완료";
                                 $returnData['response']=$result;
                             }
-                        }else{
-                            $params[$params['sns'].'_key'] = $params['snsKey'];
-
-                            $result = $this->apiMemberService->apiJoin($params);
-
-                            if($params['existingEmailId'] != ""){
-                                $memberStatusTransform = $this->apiMemberService->memberStatusTransform($params);
-                            }
-
-                            $returnData['code']=0;
-                            $returnData['message']="회원가입 완료";
-                            $returnData['response']=$result;
                         }
                     }
                 }

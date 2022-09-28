@@ -358,7 +358,7 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
         $result = $this->statDB->table('members')
             ->where('email_id',$params['existingEmailId'])
             ->update([
-                'isuse' => 'N', 'mem_moddate' => \Carbon\Carbon::now()
+                'isuse' => 'N', 'updated_at' => \Carbon\Carbon::now()
             ]);
 
         return $result;
