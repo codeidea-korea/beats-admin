@@ -41,7 +41,7 @@
                     </div>
                     <div class="overflow-x-auto">
                             <!-- 테이블 끝 -->
-                        <form id="authForm" name="authForm" method="post">
+                        <form id="authForm" name="authForm" class="form-horizontal" role="form"  method="post">
                             <input type="hidden" name="gCode" id="gCode" value="{{$params['group_code']}}">
                             <table class="table table-bordered">
 
@@ -83,6 +83,7 @@
 
                 </div>
             </div>
+
         </div>
     </div>
 
@@ -92,15 +93,17 @@
         });
         $(".btn_create").on('click', function(){
             alert(1);
-
-            var formData = $("#authForm").serialize();
+            //var formData = new FormData();
+            //var formData = $('#authForm').serialize();
+            console.log($('#authForm'));
+            //var formJson = $('#authForm').serializeFormJSON();
             alert(2);
             jQuery.ajax({
 
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 type:"post",
                 dataType:'json',
-                data: formData,
+                data: formJson,
                 url: '{{ url('/admin/authUpdate') }}',
                 success: function searchSuccess(data) {
                     alert();
