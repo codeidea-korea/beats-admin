@@ -204,7 +204,11 @@ class ApiMemberController extends Controller
             if(empty($result)){
                 $response = 0;
             }else{
-                $response = $result->class;
+                if($result->isuse == 'Y'){
+                    $response = $result->class;
+                }else{
+                    $response = 4;
+                }
             }
 
             $returnData['code']=0;
