@@ -112,7 +112,7 @@
 
             jQuery.ajax({
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                type:"get",
+                type:"post",
                 dataType:'json',
                 data: data,
                 url: '{{ url('/admin/authUpdate') }}',
