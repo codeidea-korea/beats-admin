@@ -20,7 +20,7 @@
                                 <tr>
                                     <th class="whitespace-nowrap text-center bg-primary/10" style="width:220px;">그룹</th>
                                     <td>
-                                        <select class="form-select w-60" aria-label=".form-select-lg" name="group_code" id="group_code" onChange="chGroup();">
+                                        <select class="form-select w-60" aria-label=".form-select-lg" name="group_code" id="group_code">
                                             @foreach($groupList as $rs)
                                                 <option value="{{$rs->group_code}}" @if($rs->group_code==$params['group_code']) selected @endif>{{$rs->group_name}}</option>
                                             @endforeach
@@ -41,7 +41,7 @@
                     </div>
                     <div class="overflow-x-auto">
                             <!-- 테이블 끝 -->
-                        <form id="authForm" name="authForm" class="form-horizontal" role="form"  method="post">
+                        <form id="authForm2" name="authForm2" class="form-horizontal" role="form"  method="post">
                             <input type="hidden" name="gCode" id="gCode" value="{{$params['group_code']}}">
                             <table class="table table-bordered">
 
@@ -50,23 +50,29 @@
 
                                 @if($rs->depth == 1 && $rs->lcnt==0)
                                         <tr>
-                                            <th class="whitespace-nowrap text-center bg-primary/10" style="text-align:left;" colspan ='2' >{{$rs->menuname}} / {{$rs->menucode}}</th>
+                                            <th class="whitespace-nowrap text-center bg-primary/10" style="text-align:left;" colspan ='2' >{{$rs->menuname}}</th>
                                         </tr>
                                         <tr>
-                                            <th class="whitespace-nowrap text-center bg-primary/10" style="text-align:left;width:120px;"><input type="checkbox" > {{$rs->menuname}} / {{$rs->menucode}}</th>
+                                            <th class="whitespace-nowrap text-center bg-primary/10" style="text-align:left;width:120px;"><input type="checkbox" > {{$rs->menuname}}</th>
                                             <td>
-                                                <input type="checkbox" > 읽기
+                                                <input type="checkbox" name="menuAuthCheck" value="{{$rs->menucode}}_s" @if(strpos($auth_arr,$rs->menucode."_s") !== false) checked @endif > 읽기
+                                                <input type="checkbox" name="menuAuthCheck" value="{{$rs->menucode}}_i" @if(strpos($auth_arr,$rs->menucode."_i") !== false) checked @endif > 등록
+                                                <input type="checkbox" name="menuAuthCheck" value="{{$rs->menucode}}_u" @if(strpos($auth_arr,$rs->menucode."_u") !== false) checked @endif > 수정
+                                                <input type="checkbox" name="menuAuthCheck" value="{{$rs->menucode}}_d" @if(strpos($auth_arr,$rs->menucode."_d") !== false) checked @endif > 삭제
                                             </td>
                                         </tr>
                                 @elseif($rs->depth == 1&&$rs->lcnt > 0)
                                         <tr>
-                                            <th class="whitespace-nowrap text-center bg-primary/10" style="text-align:left;" colspan ='2' >{{$rs->menuname}} / {{$rs->menucode}}</th>
+                                            <th class="whitespace-nowrap text-center bg-primary/10" style="text-align:left;" colspan ='2' >{{$rs->menuname}}</th>
                                         </tr>
                                 @elseif($rs->depth == 2)
                                         <tr>
-                                            <th class="whitespace-nowrap text-center bg-primary/10" style="text-align:left;width:120px;"><input type="checkbox" id="{{$rs->menucode}}_all" onClick="changeCheck('{{$rs->menucode}}');"> {{$rs->menuname}} / {{$rs->menucode}}</th>
+                                            <th class="whitespace-nowrap text-center bg-primary/10" style="text-align:left;width:120px;"><input type="checkbox" id="{{$rs->menucode}}_all" onClick="changeCheck('{{$rs->menucode}}');"> {{$rs->menuname}}</th>
                                             <td>
-                                                <input type="checkbox" id="{{$rs->menucode}}_s" name="{{$rs->menucode}}_s" value="{{$rs->menucode}}_s"> 읽기 <input type="checkbox" name="{{$rs->menucode}}_i"> 등록 <input type="checkbox" name="{{$rs->menucode}}_u"> 수정 <input type="checkbox" name="{{$rs->menucode}}_d"> 삭제
+                                                <input type="checkbox" name="menuAuthCheck" value="{{$rs->menucode}}_s" @if(strpos($auth_arr,$rs->menucode."_s") !== false) checked @endif > 읽기
+                                                <input type="checkbox" name="menuAuthCheck" value="{{$rs->menucode}}_i" @if(strpos($auth_arr,$rs->menucode."_i") !== false) checked @endif > 등록
+                                                <input type="checkbox" name="menuAuthCheck" value="{{$rs->menucode}}_u" @if(strpos($auth_arr,$rs->menucode."_u") !== false) checked @endif > 수정
+                                                <input type="checkbox" name="menuAuthCheck" value="{{$rs->menucode}}_d" @if(strpos($auth_arr,$rs->menucode."_d") !== false) checked @endif > 삭제
                                             </td>
                                         </tr>
                                 @endif
@@ -86,27 +92,36 @@
 
         </div>
     </div>
-
     <script>
         $("#group_code").on('change', function(){
             document.forms["RegForm"].submit();
         });
         $(".btn_create").on('click', function(){
-            alert(1);
-            //var formData = new FormData();
-            //var formData = $('#authForm').serialize();
-            console.log($('#authForm'));
-            //var formJson = $('#authForm').serializeFormJSON();
-            alert(2);
-            jQuery.ajax({
 
+            var chk_arr=[];
+            $("input[name=menuAuthCheck]:checked").each(function(){
+                var chk = $(this).val();
+                chk_arr.push(chk);
+            })
+
+            console.log(chk_arr);
+            var data = {
+                gCode:$("#gCode").val()
+                ,chk_arr:chk_arr
+            };
+
+            jQuery.ajax({
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                type:"post",
+                type:"get",
                 dataType:'json',
-                data: formJson,
+                data: data,
                 url: '{{ url('/admin/authUpdate') }}',
                 success: function searchSuccess(data) {
-                    alert();
+                   if(data.result=="SUCCESS"){
+                       alert('권한이 수정되었습니다.');
+                   }else if(data.result=="FAIL"){
+                       alert('권한 부여 처리중 문제가 발생하였습니다.');
+                   }
 
                 },
                 error: function (e) {

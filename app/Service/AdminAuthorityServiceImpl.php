@@ -234,4 +234,27 @@ class AdminAuthorityServiceImpl extends DBConnection  implements AdminAuthorityS
 
     }
 
+    public function setAdminGroupAuth($params) {
+        $result = $this->statDB->table('adm_authority')
+            ->where('group_code',$params['group_code'])
+            ->update([
+                'auth_arr' => $params['auth_arr']
+                ,'moddate' => now()
+            ]);
+        return $result;
+    }
+
+    public function getAdmGroupAuthList($params) {
+        $result = $this->statDB->table('adm_authority')
+            ->select(
+                'group_code',
+                'auth_arr'
+            )
+            ->where('group_code', $params['group_code'])
+            ->first();
+        return $result;
+    }
+
+
+
 }

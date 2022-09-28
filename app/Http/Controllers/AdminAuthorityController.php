@@ -169,21 +169,26 @@ class AdminAuthorityController extends Controller
         $params['group_code'] = $params['group_code'] ?? "AD000";
 
         $groupList = $this->adminAuthorityService->getAdmGroupList($params);
+        $authList = $this->adminAuthorityService->getAdmGroupAuthList($params);
 
         return view('adminAuthority.authority',[
             'params' => $params
             ,'groupList' => $groupList
+            ,'auth_arr' => $authList->auth_arr
         ]);
     }
 
     public function getAuthUpdate(){
         $params = $this->request->input();
-        //if($result){
-        //    $rData['result']="SUCCESS";
-        //}else{
-        //    $rData['result']="FAIL";
-        //}
-        $rData['result']="SUCCESS";
+
+        $pData['group_code']=$params['gCode'];
+        $pData['auth_arr']=implode( ',', $params['chk_arr'] );
+        $result = $this->adminAuthorityService->setAdminGroupAuth($pData);
+        if($result){
+            $rData['result']="SUCCESS";
+        }else{
+            $rData['result']="FAIL";
+        }
 
         return json_encode($rData);
     }
