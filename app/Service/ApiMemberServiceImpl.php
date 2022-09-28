@@ -189,7 +189,7 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
             ->leftJoin('member_data','members.idx','member_data.mem_id')
             ->select(
                 'member_data.mem_nickname as memNickname',
-                'members.created_at as createdAt',
+                DB::raw("date_format(members.created_at, '%Y년 %M월 %D일' ) as createdAt"),
             )
             ->where('members.email_id',$params['emailId'])
             ->first();
