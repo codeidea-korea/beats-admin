@@ -34,11 +34,14 @@ class AdminAuthorityController extends Controller
         $params['limit'] = $params['limit'] ?? 10;
 
         $params['group_code'] = $params['group_code'] ?? "";
-        $params['group_code'] = $params['group_code'] ?? "";
-
-
-
-
+        $params['isuse'] = $params['isuse'] ?? "";
+        $params['sType'] = $params['sType'] ?? "";
+        $params['sWord'] = $params['sWord'] ?? "";
+        $params['searchDate'] = $params['searchDate'] ?? "2022-01-01 - ".date("Y-m-d");
+        $tempData = trim(str_replace('-','',$params['searchDate']));
+        $params['sDate']=substr($tempData,0,8);
+        $params['eDate']=substr($tempData,8,16);
+        $params['eDate'] = date("Ymd",strtotime($params['eDate'].' +1 days'));
         $groupList = $this->adminAuthorityService->getAdmGroupList($params);
         $adminList = $this->adminAuthorityService->getAdminList($params);
         $adminTotal = $this->adminAuthorityService->getAdminTotal($params);
@@ -160,10 +163,34 @@ class AdminAuthorityController extends Controller
         return json_encode($rData);
     }
 
+    public function getAdminAuthority(){
+        $params = $this->request->input();
+        $params['menuCode'] = "AD120200";
+        $params['group_code'] = $params['group_code'] ?? "AD000";
 
+        $groupList = $this->adminAuthorityService->getAdmGroupList($params);
+        $authList = $this->adminAuthorityService->getAdmGroupAuthList($params);
 
+        return view('adminAuthority.authority',[
+            'params' => $params
+            ,'groupList' => $groupList
+            ,'auth_arr' => $authList->auth_arr
+        ]);
+    }
 
+    public function getAuthUpdate(){
+        $params = $this->request->input();
 
+        $pData['group_code']=$params['gCode'];
+        $pData['auth_arr']=implode( ',', $params['chk_arr'] );
+        $result = $this->adminAuthorityService->setAdminGroupAuth($pData);
+        if($result){
+            $rData['result']="SUCCESS";
+        }else{
+            $rData['result']="FAIL";
+        }
 
+        return json_encode($rData);
+    }
 
 }

@@ -3462,6 +3462,9 @@ select{
 .grid-cols-1{
     grid-template-columns: repeat(1, minmax(0, 1fr));
 }
+.grid-template-rows{
+  grid-template-rows: 1fr 1fr;
+}
 .flex-col{
     flex-direction: column;
 }
@@ -3479,6 +3482,9 @@ select{
 }
 .items-center{
     align-items: center;
+}
+.grow{
+    flex-grow: 1;
 }
 .justify-start{
     justify-content: flex-start;

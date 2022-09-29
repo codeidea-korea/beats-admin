@@ -265,6 +265,4 @@
 
         </div>
 
-        <script src="/dist/js/app.js"></script>
-        <script src="/dist/js/ckeditor-classic.js"></script>
 @endsection

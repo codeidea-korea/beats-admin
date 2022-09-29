@@ -66,10 +66,23 @@ class ApiMemberController extends Controller
 
                                 $result3 = $this->apiMemberService->getMemberData($params);
 
-                                $returnData['code']=0;
-                                $returnData['message']="로그인 완료";
-                                $returnData['response']=$result3;
-                                $returnData['_token']=$params['_token'];
+                                if($result3->memStatus == 1 || $result3->memStatus == 0){    
+                                    $returnData['code']=0;
+                                    $returnData['message']="로그인 완료";
+                                    $returnData['response']=$result3;
+                                    $returnData['_token']=$params['_token'];
+                                }else{
+                                    
+                                    $returnData['code']=601;
+
+                                    if($result3->memStatus == 2){
+                                        $returnData['message'] = "제재된 회원입니다. 로그인 할 수 없습니다";
+                                        $returnData['response'] = $result3;
+                                    }else{
+                                        $returnData['message'] = "휴면 회원입니다. 로그인 할 수 없습니다";
+                                        $returnData['response'] = $result3;
+                                    }
+                                }
                             }else{
                                 $returnData['code'] = 600;
                                 $returnData['message'] = "시스템 장애가 발생하였습니다. 다시 시도해 주세요.";
@@ -107,10 +120,24 @@ class ApiMemberController extends Controller
                         $result2 = $this->apiMemberService->putLogin($params);
                         if($result2){
                             $result3 = $this->apiMemberService->getMemberData($params);
-                            $returnData['code']=0;
-                            $returnData['message']="로그인 완료";
-                            $returnData['response']=$result3;
-                            $returnData['_token']=$params['_token'];
+                            
+                            if($result3->memStatus == 1 || $result3->memStatus == 0){    
+                                $returnData['code']=0;
+                                $returnData['message']="로그인 완료";
+                                $returnData['response']=$result3;
+                                $returnData['_token']=$params['_token'];
+                            }else{
+                                
+                                $returnData['code']=601;
+
+                                if($result3->memStatus == 2){
+                                    $returnData['message'] = "제재된 회원입니다. 로그인 할 수 없습니다";
+                                    $returnData['response'] = $result3;
+                                }else{
+                                    $returnData['message'] = "휴면 회원입니다. 로그인 할 수 없습니다";
+                                    $returnData['response'] = $result3;
+                                }
+                            }
                         }else{
                             $returnData['code'] = 600;
                             $returnData['message'] = "시스템 장애가 발생하였습니다. 다시 시도해 주세요.";
@@ -177,7 +204,11 @@ class ApiMemberController extends Controller
             if(empty($result)){
                 $response = 0;
             }else{
-                $response = $result->class;
+                if($result->isuse == 'Y'){
+                    $response = $result->class;
+                }else{
+                    $response = 4;
+                }
             }
 
             $returnData['code']=0;
@@ -211,6 +242,25 @@ class ApiMemberController extends Controller
         return json_encode($returnData);
     }
 
+    public function memberBriefData()
+    {
+        $params = $this->request->input();
+        $params['emailId'] = $params['emailId'] ?? "";
+
+        $result = $this->apiMemberService->memberBriefData($params);
+
+        if(empty($result)){
+            $returnData['code']=1;
+            $returnData['message']="일치하는 회원의 데이터가 없습니다";
+        }else{
+            $returnData['code']=0;
+            $returnData['message']="간략한 회원 데이터 전송";
+            $returnData['response']=$result;
+        }
+
+        return json_encode($returnData);
+    }
+
     public function apiJoin()
     {
         $returnData['code'] = -1;
@@ -222,7 +272,7 @@ class ApiMemberController extends Controller
             $params['sns'] = $params['sns'] ?? "email";
             $params['snsKey'] = $params['snsKey'] ?? "";
             $params['emailId'] = $params['emailId'] ?? "";
-            $params['password'] = $params['password'] ?? "";
+            $params['password'] = $params['password'] ?? null;
             $params['sign_site'] = $params['signSite'] ?? "";
             $params['apple_key'] = $params['appleKey'] ?? null;
             $params['naver_key'] = $params['naverKey'] ?? null;
@@ -231,6 +281,7 @@ class ApiMemberController extends Controller
             $params['facebook_key'] = $params['facebookKey'] ?? null;
             $params['twitter_key'] = $params['twitterKey'] ?? null;
             $params['soundcloud_key'] = $params['soundcloudKey'] ?? null;
+            $params['gubun'] = $params['gubun'] ?? 2;
             $params['email'] = $params['email'] ?? $params['emailId'];
             $params['name'] = $params['name'] ?? "";
             $params['mem_nickname'] = $params['memNickname'] ?? "";
@@ -252,27 +303,49 @@ class ApiMemberController extends Controller
                     $returnData['response']=$result;
 
                 }else{
-                    if(($params['snsKey'] == "" && $params['emailId'] == "") || $params['password'] == "" || $params['sign_site'] == "" || $params['name'] == "" || $params['mem_nickname'] == "" || $params['nationality'] == ""
+                    if(($params['snsKey'] == "" && $params['emailId'] == "") || $params['sign_site'] == "" || $params['name'] == "" || $params['mem_nickname'] == "" || $params['nationality'] == ""
                     || $params['phone_number'] == "" || $params['marketing_consent'] == ""){
 
                         $returnData['code'] = 2;
                         $returnData['message'] = "입력하지 않은 필수 값이 있습니다. 필수 값을 입력해 주세요";
 
                     }else{
+                        
+                        $joinCheck = $this->apiMemberService->joinCheck($params);
 
-                        if($params['sns'] != 'email'){
-                            $params[$params['sns'].'_key'] = $params['snsKey'];
+                        if($joinCheck){
+                            $returnData['code']=3;
+                            $returnData['message']="이미 가입된 이메일입니다.";
+                        }else{
+                            if($params['sns'] == 'email'){
+                                if($params['password'] == null){
+                                    $returnData['code'] = 2;
+                                    $returnData['message'] = "비밀번호가 누락되었습니다.";
+                                }else{
+                                    $result = $this->apiMemberService->apiJoin($params);
+
+                                    if($params['existingEmailId'] != ""){
+                                        $memberStatusTransform = $this->apiMemberService->memberStatusTransform($params);
+                                    }
+
+                                    $returnData['code']=0;
+                                    $returnData['message']="회원가입 완료";
+                                    $returnData['response']=$result;
+                                }
+                            }else{
+                                $params[$params['sns'].'_key'] = $params['snsKey'];
+
+                                $result = $this->apiMemberService->apiJoin($params);
+
+                                if($params['existingEmailId'] != ""){
+                                    $memberStatusTransform = $this->apiMemberService->memberStatusTransform($params);
+                                }
+
+                                $returnData['code']=0;
+                                $returnData['message']="회원가입 완료";
+                                $returnData['response']=$result;
+                            }
                         }
-
-                        $result = $this->apiMemberService->apiJoin($params);
-
-                        if($params['existingEmailId'] != ""){
-                            $memberStatusTransform = $this->apiMemberService->memberStatusTransform($params);
-                        }
-
-                        $returnData['code']=0;
-                        $returnData['message']="회원가입 완료";
-                        $returnData['response']=$result;
                     }
                 }
             }

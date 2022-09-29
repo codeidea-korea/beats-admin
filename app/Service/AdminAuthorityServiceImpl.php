@@ -54,6 +54,34 @@ class AdminAuthorityServiceImpl extends DBConnection  implements AdminAuthorityS
         $result = $this->statDB->table('users')
             ->select(DB::raw("COUNT(idx) AS cnt"))
             ->where('type', $params['type'])
+            ->where('created_at','>=', $params['sDate'])
+            ->where('created_at','<=', $params['eDate'])
+            ->when($params['sType']=="name", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->orWhere('users.name', 'like', '%' . $params['sWord'] . '%');
+                });
+            })
+            ->when($params['sType']=="email", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->orWhere('users.email', 'like', '%' . $params['sWord'] . '%');
+                });
+            })
+            ->when($params['sType']=="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->orWhere('users.name', 'like', '%' . $params['sWord'] . '%');
+                    $query->orWhere('users.email', 'like', '%' . $params['sWord'] . '%');
+                });
+            })
+            ->when($params['group_code']!="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('group_code',$params['group_code']);
+                });
+            })
+            ->when($params['isuse']!="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('users.isuse',$params['isuse']);
+                });
+            })
             ->first();
         return $result;
 
@@ -74,7 +102,38 @@ class AdminAuthorityServiceImpl extends DBConnection  implements AdminAuthorityS
                 'users.created_at',
                // $this->statDB->raw('SUM(name) AS CNT')
             )
-            ->where('type', $params['type'])
+            ->where('users.type', $params['type'])
+            ->where('users.created_at','>=', $params['sDate'])
+            ->where('users.created_at','<=', $params['eDate'])
+            //->orWhere('users.name', 'like', '%' . $params['sWord'] . '%')
+            ->when($params['sType']=="name", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->orWhere('users.name', 'like', '%' . $params['sWord'] . '%');
+                });
+            })
+            ->when($params['sType']=="email", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->orWhere('users.email', 'like', '%' . $params['sWord'] . '%');
+                });
+            })
+            ->when($params['sType']=="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->orWhere('users.name', 'like', '%' . $params['sWord'] . '%');
+                    $query->orWhere('users.email', 'like', '%' . $params['sWord'] . '%');
+                });
+            })
+
+            ->when($params['group_code']!="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('users.group_code',$params['group_code']);
+                });
+            })
+            ->when($params['isuse']!="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('users.isuse',$params['isuse']);
+                });
+            })
+
             ->orderby('created_at','desc')
             //->limit(0,$params['limit'])
             ->skip(($params['page']-1)*$params['limit'])
@@ -174,5 +233,28 @@ class AdminAuthorityServiceImpl extends DBConnection  implements AdminAuthorityS
         return $result;
 
     }
+
+    public function setAdminGroupAuth($params) {
+        $result = $this->statDB->table('adm_authority')
+            ->where('group_code',$params['group_code'])
+            ->update([
+                'auth_arr' => $params['auth_arr']
+                ,'moddate' => now()
+            ]);
+        return $result;
+    }
+
+    public function getAdmGroupAuthList($params) {
+        $result = $this->statDB->table('adm_authority')
+            ->select(
+                'group_code',
+                'auth_arr'
+            )
+            ->where('group_code', $params['group_code'])
+            ->first();
+        return $result;
+    }
+
+
 
 }

@@ -35,5 +35,10 @@ interface AdminAuthorityServiceInterface
     // 관리자 삭제
     public function setAdminDelete($params);
 
+    //그룹별 권한 등록
+    public function setAdminGroupAuth($params);
+
+    //그룹별 권한 리스트
+    public function getAdmGroupAuthList($params);
 
 }

@@ -24,8 +24,8 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
                 'member_data.phone_number as phoneNumber',
                 'member_data.email as email',
                 'member_data.mem_nickname as nickName',
+                'member_data.mem_status as memStatus',
             )
-            ->where('member_data.mem_status','1')
             ->when($params['sns']=="email", function($query) use ($params){
                 return $query->where(function($query) use ($params) {
                     $query->where('members.email_id',$params['emailId']);
@@ -183,6 +183,20 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
         return $result;
     }
 
+    public function memberBriefData($params){
+
+        $result = $this->statDB->table('members')
+            ->leftJoin('member_data','members.idx','member_data.mem_id')
+            ->select(
+                'member_data.mem_nickname as memNickname',
+                DB::raw("date_format(members.created_at, '%Y년 %m월 %d일' ) as createdAt"),
+            )
+            ->where('members.email_id',$params['emailId'])
+            ->first();
+
+        return $result;
+    }
+
     public function joinCheck($params){
 
         $result = $this->statDB->table('members')
@@ -334,17 +348,17 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
         $result = $this->statDB->table('member_data')
             ->where('mem_id',$members_id->idx)
             ->update([
-                'class' => 3, 'mem_moddate' => \Carbon\Carbon::now()
+                'class' => 3, 'marketing_consent' => $params['marketing_consent'], 'mem_moddate' => \Carbon\Carbon::now()
             ]);
 
         return $result;
     }
 
-    public function memberStatusTransform(){
+    public function memberStatusTransform($params){
         $result = $this->statDB->table('members')
             ->where('email_id',$params['existingEmailId'])
             ->update([
-                'is_use' => 'N', 'mem_moddate' => \Carbon\Carbon::now()
+                'isuse' => 'N', 'updated_at' => \Carbon\Carbon::now()
             ]);
 
         return $result;
@@ -362,9 +376,9 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
         
         $result = $this->statDB->table('member_data')
             ->insert([
-                'name' => $params['name'], 'phone_number' => $params['phone_number'], 'email' => $params['email'],
+                'name' => $params['name'], 'phone_number' => $params['phone_number'], 'email' => $params['email'], 'gubun' => $params['gubun'],
                 'nationality' => $params['nationality'], 'mem_nickname' => $params['mem_nickname'], 'marketing_consent' => $params['marketing_consent'],
-                'class' => 3,'mem_sanctions' => 3,'mem_status' => 1,'mem_id' => $members_id, 'mem_regdate' => \Carbon\Carbon::now(),
+                'class' => 3,'mem_sanctions' => 0,'mem_status' => 1,'mem_level' => 1,'mem_id' => $members_id, 'mem_regdate' => \Carbon\Carbon::now(),
             ]);
 
         return $result;

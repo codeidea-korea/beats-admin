@@ -498,9 +498,9 @@
             var change_idx = $(this).data("change_idx");
             var br_seq = $(this).data("br_seq");
             var change_seq = $(this).data("change_seq");
-            var contents = "{{$params['contents']}}";
-            var search_text = "{{$params['search_text']}}";
-            var created_at = "{{$params['created_at']}}";
+            var contents = "{{$params['search_contents']}}";
+            var search_text = "{{$params['fr_search_text']}}";
+            var created_at = "{{$params['search_created_at']}}";
             var banner_code = "{{$bannerData[0]->banner_code}}";
             var page = $("input[name=page]").val();
 

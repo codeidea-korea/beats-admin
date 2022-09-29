@@ -39,7 +39,7 @@ class HomeController extends Controller
     public function index()
     {
         $params = $this->request->input();
-        $params['menuCode'] = "AD000100";
+        $params['menuCode'] = "AD010000";
 
         return view('home',[
             'params' =>$params
