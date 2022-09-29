@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Service\MemberServiceImpl;
+use App\Service\ApiHomeServiceImpl;
 use Response;
 use Illuminate\Http\Request;
 use Session;
@@ -16,11 +17,13 @@ class MemberController extends Controller
      */
     private $request;
     private $memberService;
+    private $apiHomeService;
 
     public function __construct(Request $request)
     {
         $this->request = $request;
         $this->memberService = new MemberServiceImpl();
+        $this->apiHomeService = new ApiHomeServiceImpl();
 
         $this->middleware('auth');
     }
@@ -34,6 +37,9 @@ class MemberController extends Controller
         $params['limit'] = $params['limit'] ?? 10;
         //$sample = $this->memberService->bannerSample($params);
 
+        $params['codeIndex'] = $params['codeIndex'] ?? 'CT000000';
+        $nationality = $this->apiHomeService->getCodeList($params);
+
         $memberList = $this->memberService->getMemberList($params);
         $memberTotal = $this->memberService->getMemberTotal($params);
         $totalCount = $memberTotal->cnt;
@@ -44,6 +50,7 @@ class MemberController extends Controller
             ,'searchData' => $params
             ,'memberList' => $memberList
             ,'totalCount' => $totalCount
+            ,'nationality' => $nationality
         ]);
     }
 

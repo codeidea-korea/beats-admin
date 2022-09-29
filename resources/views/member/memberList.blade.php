@@ -13,7 +13,7 @@
         <div class="grid grid-cols-12 gap-6 mt-5">
 
             <div class="intro-y col-span-12 lg:col-span-12">
-                <form name="searchForm" id="searchForm" class="form-horizontal" role="form"   method="get" action="{{ url('/member/memberList') }}">
+                <form name="searchForm" id="searchForm" class="form-horizontal" role="form"   method="get" action="{{-- url('/member/memberList') --}}">
 
                     <input type="hidden" name="page" value="{{$searchData['page']}}">
                     <div class="intro-y box">
@@ -38,8 +38,8 @@
                                                 <option value="">전체</option>
                                                 <option value="1">일반</option>
                                                 <option value="2">작곡가</option>
-                                                <option value="3">멘토 뮤지션</option>
-                                                <option value="4">음원 구매자</option>
+                                                <option value="3">음원 구매자</option>
+                                                <option value="4">멘토 뮤지션</option>
                                             </select>
                                             <!--<button class="btn btn-primary w-24">대상 설정</button>-->
                                         </td>
@@ -60,12 +60,11 @@
                                         </td>
                                         <th class="bg-primary/10 whitespace-nowrap w-13 text-center">국적</th>
                                         <td class="whitespace-nowrap">
-                                            <select class="form-select w-13" aria-label=".form-select-lg" name="nationality">
+                                            <select class="form-select w-13" aria-label=".form-select-lg" name="nationality" style="width:120px;">
                                                 <option value="">전체</option>
-                                                <option value="kr">한국</option>
-                                                <option value="en">미국</option>
-                                                <option value="ch">중국</option>
-                                                <option value="jp">일본</option>
+                                                @foreach($nationality as $rs)
+                                                    <option value="{{$rs->codeName}}">{{$rs->codeValue}}</option>
+                                                @endforeach
                                             </select>
                                             <!--<button class="btn btn-primary w-24">대상 설정</button>-->
                                         </td>
@@ -73,9 +72,9 @@
                                         <td class="whitespace-nowrap">
                                             <select class="form-select w-13" aria-label=".form-select-lg" name="mem_status">
                                                 <option value="">전체</option>
-                                                <option value="1">임시</option>
-                                                <option value="2">정상</option>
-                                                <option value="3">제재</option>
+                                                <option value="0">임시</option>
+                                                <option value="1">정상</option>
+                                                <option value="2">제재</option>
                                             </select>
                                             <!--<button class="btn btn-primary w-24">대상 설정</button>-->
                                         </td>
@@ -142,15 +141,15 @@
                                 @foreach($memberList as $rs)
                                     <tr>
                                         <td class="whitespace-nowrap text-center">{{$totalCount-($i+(($params['page']-1)*10))}}</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->class}}</td>
-                                        <td class="whitespace-nowrap text-center"><a href="javascript:alert({{$rs->mem_id}});">{{$rs->gubun}}</a></td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->channel}}</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->nationality}}</td>
+                                        <td class="whitespace-nowrap text-center">{{$rs->classValue}}</td>
+                                        <td class="whitespace-nowrap text-center"><a href="javascript:alert({{$rs->mem_id}});">{{$rs->gubunValue}}</a></td>
+                                        <td class="whitespace-nowrap text-center">{{$rs->channelValue}}</td>
+                                        <td class="whitespace-nowrap text-center">{{$rs->nati}}</td>
 
                                         <td class="whitespace-nowrap text-center">{{$rs->mem_id}}</td>
                                         <td class="whitespace-nowrap text-center">{{$rs->mem_nickname}}</td>
                                         <td class="whitespace-nowrap text-center">{{$rs->mem_sanctions}}</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->mem_status}}</td>
+                                        <td class="whitespace-nowrap text-center">{{$rs->statusValue}}</td>
                                         <td class="whitespace-nowrap text-center">{{$rs->mem_regdate}}</td>
 
                                         <td class="whitespace-nowrap text-center">최근접속일</td>
@@ -362,6 +361,11 @@
     </div>
 
     <script>
+        function change(page) {
+            $("input[name=page]").val(page);
+            //$("form[name=searchForm]").submit();
+            document.forms["searchForm"].submit();
+        }
         $(function (){
             //$('#superlarge-modal-size-preview2').modal({ keyboard: false, backdrop: 'static' })
         })
@@ -507,7 +511,7 @@
         });
 
         $(document).on('click',"#searchPointBtn",function(){
-            
+
             search_mem_class = $('select[name="point_mem_class"]').val();
             search_nationality = $('select[name="point_nationality"]').val();
             search_text = $('input[name="point_search_text"]').val();
@@ -518,7 +522,7 @@
 
         function getPointMemList(page){
             $("#pointMemList").html('');
-            
+
             jQuery.ajax({
                 type:"get",
                 dataType:'json',
@@ -668,10 +672,7 @@
             getSendPointMemList(pointpage)
         }
 
-        function change(page) {
-            $("input[name=page]").val(page);
-            $("form[name=searchData]").submit();
-        }
+
 
         function sliceObj(obj, sliceCount){
             let newObj = {};

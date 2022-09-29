@@ -32,13 +32,32 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
                 'member_data.phone_number',
                 'member_data.email',
                 'member_data.class',
+                DB::raw("CASE WHEN member_data.class = '0' THEN '휴면회원' WHEN member_data.class = '1' THEN '임시회원' WHEN member_data.class = '2' THEN '비트썸원회원' WHEN member_data.class = '3' THEN '통합회원' ELSE '미지정' END AS classValue"),
                 'member_data.gubun',
+                DB::raw("CASE WHEN member_data.gubun = '1' THEN '일반' WHEN member_data.gubun = '2' THEN '작곡가' WHEN member_data.gubun = '3' THEN '음원구매자' WHEN member_data.gubun = '4' THEN '멘토뮤지션' ELSE '미지정' END AS gubunValue"),
                 'member_data.channel',
+                DB::raw("CASE
+                    WHEN member_data.channel = 'facebook' THEN '페이스북'
+                    WHEN member_data.channel = 'twitter' THEN '트위터'
+                    WHEN member_data.channel = 'google' THEN '구글'
+                    WHEN member_data.channel = 'apple' THEN '애플'
+                    WHEN member_data.channel = 'naver' THEN '네이버'
+                    WHEN member_data.channel = 'kakao' THEN '카카오'
+                    WHEN member_data.channel = 'soundcloud' THEN '사운드클라우드'
+                    WHEN member_data.channel = 'email' THEN '직접가입'
+                ELSE ' - ' END AS channelValue"),
                 'member_data.nationality',
+                DB::raw("(select codevalue from adm_code where codename = member_data.nationality limit 1) AS nati" ),
                 'member_data.mem_nickname',
                 'member_data.mem_sanctions',
                 'member_data.mem_status',
+                DB::raw("CASE
+                    WHEN member_data.mem_status = '0' THEN '임시'
+                    WHEN member_data.mem_status = '1' THEN '정상'
+                    WHEN member_data.mem_status = '2' THEN '제재'
+                ELSE ' - ' END AS statusValue"),
                 'member_data.mem_regdate',
+                DB::raw("CASE WHEN member_data.class = '0' THEN '휴면회원' WHEN member_data.class = '1' THEN '임시회원' WHEN member_data.class = '2' THEN '비트썸원회원' WHEN member_data.class = '3' THEN '통합회원' ELSE '미지정' END AS classValue")
             )
             ->where('members.isuse', 'Y')
             ->orderby('mem_regdate','desc')
@@ -180,7 +199,7 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
                 'music_head.common_composition',
                 'music_head.progress_rate',
                 'music_head.moddate',
-            ) 
+            )
             ->where('music_head.mem_id', $params['idx'])
             ->when(isset($params['progress_rate']), function($query) use ($params){
                 return $query->where(function($query) use ($params) {
