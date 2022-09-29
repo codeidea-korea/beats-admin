@@ -201,7 +201,6 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
 
         $result = $this->statDB->table('members')
             ->leftJoin('member_data','members.idx','member_data.mem_id')
-            ->where('isuse',"Y")
             ->when($params['sns']=="email", function($query) use ($params){
                 return $query->where(function($query) use ($params) {
                     $query->where('email_id',$params['emailId']);
