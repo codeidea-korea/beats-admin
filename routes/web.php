@@ -119,6 +119,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/ajax/memberList', [MemberController::class, 'getPointMemberList']);
         Route::get('/ajax/memberPaging', [MemberController::class, 'getPaging']);
         Route::get('/ajax/sendPoint', [MemberController::class, 'sendPoint']);
+        Route::get('memberView/{idx}', [MemberController::class, 'getMemberView']);
     });
 
     Route::post('ckeditor/upload', [BoardController::class, 'upload'])->name('ckeditor.upload');

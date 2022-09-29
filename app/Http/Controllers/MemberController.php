@@ -35,6 +35,12 @@ class MemberController extends Controller
         $params['type'] = $params['type'] ?? 0;
         $params['page'] = $params['page'] ?? 1;
         $params['limit'] = $params['limit'] ?? 10;
+        $params['class'] = $params['class'] ?? '';
+        $params['gubun'] = $params['gubun'] ?? '';
+        $params['channel'] = $params['channel'] ?? '';
+        $params['nationality'] = $params['nationality'] ?? '';
+        $params['mem_status'] = $params['mem_status'] ?? '';
+
         //$sample = $this->memberService->bannerSample($params);
 
         $params['codeIndex'] = $params['codeIndex'] ?? 'CT000000';
@@ -156,6 +162,16 @@ class MemberController extends Controller
             ,'searchData' => $params
             ,'musicList' => $musicList
             ,'totalCount' => $totalCount
+        ]);
+    }
+
+    public function getMemberView($idx){
+        $params = $this->request->input();
+        $params['menuCode'] = "AD030100";
+
+        return view('member.memberView',[
+            'params' => $params
+
         ]);
     }
 }

@@ -24,46 +24,46 @@
                                         <th class="bg-primary/10 whitespace-nowrap w-13 text-center">분류</th>
                                         <td class="whitespace-nowrap">
                                             <select class="form-select w-13" aria-label=".form-select-lg" name="class">
-                                                <option value="">전체</option>
-                                                <option value="3">통합회원</option>
-                                                <option value="1">임시회원</option>
-                                                <option value="2">비트썸원</option>
-                                                <option value="0">휴면회원</option>
+                                                <option value=""  @if($params['class'] == "")  selected @endif  >전체</option>
+                                                <option value="3" @if($params['class'] == "3") selected @endif >통합회원</option>
+                                                <option value="1" @if($params['class'] == "2") selected @endif >임시회원</option>
+                                                <option value="2" @if($params['class'] == "1") selected @endif >비트썸원</option>
+                                                <option value="0" @if($params['class'] == "0") selected @endif >휴면회원</option>
                                             </select>
                                             <!--<button class="btn btn-primary w-24">대상 설정</button>-->
                                         </td>
                                         <th class="bg-primary/10 whitespace-nowrap w-13 text-center">회원 구분</th>
                                         <td class="whitespace-nowrap">
                                             <select class="form-select w-13" aria-label=".form-select-lg" name="gubun">
-                                                <option value="">전체</option>
-                                                <option value="1">일반</option>
-                                                <option value="2">작곡가</option>
-                                                <option value="3">음원 구매자</option>
-                                                <option value="4">멘토 뮤지션</option>
+                                                <option value=""  @if($params['gubun'] == "")  selected @endif >전체</option>
+                                                <option value="1" @if($params['gubun'] == "1") selected @endif >일반</option>
+                                                <option value="2" @if($params['gubun'] == "2") selected @endif >작곡가</option>
+                                                <option value="3" @if($params['gubun'] == "3") selected @endif >음원 구매자</option>
+                                                <option value="4" @if($params['gubun'] == "4") selected @endif >멘토 뮤지션</option>
                                             </select>
                                             <!--<button class="btn btn-primary w-24">대상 설정</button>-->
                                         </td>
                                         <th class="bg-primary/10 whitespace-nowrap w-13 text-center">가입 채널</th>
                                         <td class="whitespace-nowrap">
                                             <select class="form-select w-13" aria-label=".form-select-lg" name="channel">
-                                                <option value="">전체</option>
-                                                <option value="facebook">페이스북</option>
-                                                <option value="twitter">트위터</option>
-                                                <option value="google">구글</option>
-                                                <option value="apple">애플</option>
-                                                <option value="naver">네이버</option>
-                                                <option value="kakao">카카오</option>
-                                                <option value="soundcloud">사운드클라우드</option>
-                                                <option value="email">직접가입</option>
+                                                <option value=""           @if($params['channel'] == "")  selected @endif >전체</option>
+                                                <option value="facebook"   @if($params['channel'] == "facebook") selected @endif >페이스북</option>
+                                                <option value="twitter"    @if($params['channel'] == "twitter") selected @endif >트위터</option>
+                                                <option value="google"     @if($params['channel'] == "google") selected @endif >구글</option>
+                                                <option value="apple"      @if($params['channel'] == "apple") selected @endif >애플</option>
+                                                <option value="naver"      @if($params['channel'] == "naver")  selected @endif >네이버</option>
+                                                <option value="kakao"      @if($params['channel'] == "kakao") selected @endif >카카오</option>
+                                                <option value="soundcloud" @if($params['channel'] == "soundcloud") selected @endif >사운드클라우드</option>
+                                                <option value="email"      @if($params['channel'] == "email") selected @endif >직접가입</option>
                                             </select>
                                             <!--<button class="btn btn-primary w-24">대상 설정</button>-->
                                         </td>
                                         <th class="bg-primary/10 whitespace-nowrap w-13 text-center">국적</th>
                                         <td class="whitespace-nowrap">
                                             <select class="form-select w-13" aria-label=".form-select-lg" name="nationality" style="width:120px;">
-                                                <option value="">전체</option>
+                                                <option value="" @if($params['nationality'] == "")  selected @endif >전체</option>
                                                 @foreach($nationality as $rs)
-                                                    <option value="{{$rs->codeName}}">{{$rs->codeValue}}</option>
+                                                    <option value="{{$rs->codeName}}" @if($rs->codeName == $params['nationality']) selected @endif >{{$rs->codeValue}}</option>
                                                 @endforeach
                                             </select>
                                             <!--<button class="btn btn-primary w-24">대상 설정</button>-->
@@ -71,10 +71,10 @@
                                         <th class="bg-primary/10 whitespace-nowrap w-13 text-center">상태</th>
                                         <td class="whitespace-nowrap">
                                             <select class="form-select w-13" aria-label=".form-select-lg" name="mem_status">
-                                                <option value="">전체</option>
-                                                <option value="0">임시</option>
-                                                <option value="1">정상</option>
-                                                <option value="2">제재</option>
+                                                <option value=""  @if($params['mem_status'] == "") @endif>전체</option>
+                                                <option value="0" @if($params['mem_status'] == "0") @endif>임시</option>
+                                                <option value="1" @if($params['mem_status'] == "1") @endif>정상</option>
+                                                <option value="2" @if($params['mem_status'] == "2") @endif>제재</option>
                                             </select>
                                             <!--<button class="btn btn-primary w-24">대상 설정</button>-->
                                         </td>

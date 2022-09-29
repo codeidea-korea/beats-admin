@@ -32,7 +32,7 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
                 'member_data.phone_number',
                 'member_data.email',
                 'member_data.class',
-                DB::raw("CASE WHEN member_data.class = '0' THEN '휴면회원' WHEN member_data.class = '1' THEN '임시회원' WHEN member_data.class = '2' THEN '비트썸원회원' WHEN member_data.class = '3' THEN '통합회원' ELSE '미지정' END AS classValue"),
+                DB::raw("CASE WHEN member_data.class = '0' THEN '휴면회원' WHEN member_data.class = '2' THEN '임시회원' WHEN member_data.class = '1' THEN '비트썸원회원' WHEN member_data.class = '3' THEN '통합회원' ELSE '미지정' END AS classValue"),
                 'member_data.gubun',
                 DB::raw("CASE WHEN member_data.gubun = '1' THEN '일반' WHEN member_data.gubun = '2' THEN '작곡가' WHEN member_data.gubun = '3' THEN '음원구매자' WHEN member_data.gubun = '4' THEN '멘토뮤지션' ELSE '미지정' END AS gubunValue"),
                 'member_data.channel',
