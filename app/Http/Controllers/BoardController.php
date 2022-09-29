@@ -30,6 +30,7 @@ class BoardController extends Controller
 
         $this->middleware('auth');
     }
+
     public function getBoardList()
     {
         $params = $this->request->input();
@@ -120,6 +121,103 @@ class BoardController extends Controller
 
 
         if(!$boardData){
+            $result['result'] = "컨텐츠 삭제에 실패하였습니다. 다시 시도해주세요";
+        }
+
+        return json_encode($result);
+    }
+
+    public function getEventList()
+    {
+        $params = $this->request->input();
+        $params['menuCode'] = "AD100200";
+        $params['type'] = $params['type'] ?? 0;
+        $params['page'] = $params['page'] ?? 1;
+        $params['limit'] = $params['limit'] ?? 10;
+        $params['fr_search_text'] = $params['search_text'] ?? '';
+        $params['search_created_at'] = $params['created_at'] ?? '';
+        $params['search_open_status'] = $params['open_status'] ?? '';
+
+        if($params['search_created_at'] != ''){
+            $atexplode = explode(' - ',$params['created_at']);
+            $params['fr_search_at'] = $atexplode[0];
+            $params['bk_search_at'] = $atexplode[1];
+        }
+
+        $eventData = $this->adminBoardService->getEventList($params);
+        $eventTotal = $this->adminBoardService->getEventTotal($params);
+        $totalCount = $eventTotal->cnt;
+        $params['totalCnt'] = $totalCount;
+
+        return view('service.eventList',[
+            'eventData' => $eventData
+            ,'params' => $params
+            ,'searchData' => $params
+            ,'totalCount' => $totalCount
+        ]);
+    }
+    
+    public function getEventView($bidx)
+    {
+        $params = $this->request->input();
+        $params['menuCode'] = "AD100200";
+        $params['type'] = $params['type'] ?? 0;
+        $params['page'] = $params['page'] ?? 1;
+        $params['limit'] = $params['limit'] ?? 10;
+        $eventData = $this->adminBoardService->getEventView($params, $bidx);
+
+        return view('service.eventView',[
+            'eventData' => $eventData
+            ,'params' => $params
+        ]);
+    }
+
+    public function getEventWrite()
+    {
+        $params = $this->request->input();
+        $params['menuCode'] = "AD100200";
+        return view('service.eventWrite',[
+            'params'=> $params
+        ]);
+    }
+
+    public function EventAdd()
+    {
+        $params = $this->request->input();
+        $file = $this->request->file('event_img');
+        $result = $this->adminBoardService->EventAdd($params,$file);
+
+        if($result){
+            return redirect('/service/event/view/'.$result)->with('alert', '등록되었습니다.');
+        }else{
+            return redirect()->back()->with('alert', '등록/수정에 실패하였습니다. \n관리자에게 문의 바랍니다.');
+        }
+    }
+
+    public function EventUpdate()
+    {
+        $params = $this->request->input();
+        $file = $this->request->file('event_img');
+        $result = $this->adminBoardService->EventUpdate($params,$file);
+
+        if($result){
+            return redirect('/service/event/list')->with('alert', '수정되었습니다.');
+        }else{
+            return redirect()->back()->with('alert', '등록/수정에 실패하였습니다. \n관리자에게 문의 바랍니다.');
+        }
+    }
+
+    public function EventDelete()
+    {
+        $params = $this->request->input();
+        $eventData = $this->adminBoardService->EventDelete($params);
+
+        $result = array(
+            'result' => 'SUCCESS'
+        );
+
+
+        if(!$eventData){
             $result['result'] = "컨텐츠 삭제에 실패하였습니다. 다시 시도해주세요";
         }
 

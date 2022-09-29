@@ -153,6 +153,171 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
 
     }
 
+    public function getEventList($params) {
+
+
+        $result = $this->statDB->table('adm_event')
+            ->leftJoin('users', 'adm_event.mem_id', '=', 'users.idx')
+            ->select(
+                'adm_event.idx',
+                'adm_event.mem_id',
+                'adm_event.title',
+                'adm_event.open_status',
+                'adm_event.fr_event_date',
+                'adm_event.bk_event_date',
+                'adm_event.created_at',
+                'users.name',
+               // $this->statDB->raw('SUM(name) AS CNT')
+            )
+            ->when(isset($params['open_status']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('open_status',  $params['open_status']);
+                });
+            })
+            ->when(isset($params['search_text']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('title', 'like', '%'.$params['search_text'].'%');
+                });
+            })
+            ->when(isset($params['fr_search_at']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->whereBetween('adm_event.created_at',  [$params['fr_search_at'],$params['bk_search_at']]);
+                });
+            })
+            ->orderby('created_at','desc')
+           // ->groupBy('name')
+            ->get();
+        return $result;
+
+    }
+
+    public function getEventTotal($params) {
+
+        $result = $this->statDB->table('adm_event')
+            ->select(DB::raw("COUNT(idx) AS cnt"))
+            ->when(isset($params['open_status']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('open_status',  $params['open_status']);
+                });
+            })
+            ->when(isset($params['search_text']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('title', 'like', '%'.$params['search_text'].'%');
+                });
+            })
+            ->when(isset($params['fr_search_at']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->whereBetween('adm_event.created_at',  [$params['fr_search_at'],$params['bk_search_at']]);
+                });
+            })
+            ->first();
+        return $result;
+
+    }
+
+    public function getEventView($params, $bidx) {
+
+        $result = $this->statDB->table('adm_event')
+            ->select(
+                'adm_event.idx',
+                'adm_event.mem_id',
+                'adm_event.title',
+                'adm_event.content',
+                'adm_event.open_status',
+                'adm_event.event_file',
+                'adm_event.event_source',
+                'adm_event.fr_event_date',
+                'adm_event.bk_event_date',
+                'adm_event.created_at',
+                'adm_event.updated_at',
+                'users.name',
+               // $this->statDB->raw('SUM(name) AS CNT')
+            )
+            ->where('adm_event.idx',$bidx)
+           // ->groupBy('name')
+           ->get();
+
+        return $result;
+
+    }
+
+    public function EventAdd($params, $file) {
+
+        if($file != ""){
+            $cfilename = $file->getClientOriginalName();
+            $cfilesource = $file->hashName();
+            $folderName = '/event/';
+            $file->storeAs($folderName, $file->hashName(), 'public');
+            $params['event_file'] = $cfilename;
+            $params['event_source'] = $cfilesource;
+        }
+
+        if($params['event_date'] != ''){
+            $showexplode = explode(' - ',$params['event_date']);
+            $params['fr_event_date'] = $showexplode[0];
+            $params['bk_event_date'] = $showexplode[1];
+        }
+
+        $result = $this->statDB->table('adm_event')
+            ->insertGetId([
+                'title' => $params['title'], 'content' => $params['content'], 'open_status' => $params['open_status'],
+                'event_file' => $params['event_file'], 'event_source' => $params['event_source'], 'fr_event_date' => $params['fr_event_date'],
+                'bk_event_date' => $params['bk_event_date'],'mem_id' => auth()->user()->idx, 'created_at' => \Carbon\Carbon::now(),
+            ]);
+
+        return $result;
+
+    }
+
+    public function EventUpdate($params, $file) {
+
+        $adm_event = DB::table('adm_event')->where('idx', $params['idx'])->first();
+
+        if ($adm_event->event_file != "" && $file != ""){
+            $dir = storage_path('app/public/event');
+            $path = "$dir/$adm_event->event_source";
+            if(!File::exists($path)) { return 1; }
+            File::delete($path);
+        }else{
+            $params['event_file'] = $adm_event->event_file;
+            $params['event_source'] = $adm_event->event_source;
+        }
+
+        if($file != ""){
+            $cfilename = $file->getClientOriginalName();
+            $cfilesource = $file->hashName();
+            $folderName = '/event/';
+            $file->storeAs($folderName, $file->hashName(), 'public');
+            $params['event_file'] = $cfilename;
+            $params['event_source'] = $cfilesource;
+        }
+
+        if($params['event_date'] != ''){
+            $showexplode = explode(' - ',$params['event_date']);
+            $params['fr_event_date'] = $showexplode[0];
+            $params['bk_event_date'] = $showexplode[1];
+        }
+
+        $result = $this->statDB->table('adm_event')
+            ->where('idx',$params['idx'])
+            ->update([
+                'title' => $params['title'], 'content' => $params['content'], 'open_status' => $params['open_status'],
+                'event_file' => $params['event_file'], 'event_source' => $params['event_source'], 'fr_event_date' => $params['fr_event_date'],
+                'bk_event_date' => $params['bk_event_date'],'updated_at' => \Carbon\Carbon::now(),
+            ]);
+
+        return $result;
+
+    }
+
+    public function EventDelete($params) {
+
+        $result = $this->statDB->table('adm_event')->where('idx', $params['idx'])->delete();
+
+        return $result;
+
+    }
+
     public function getTermsList($params) {
 
 

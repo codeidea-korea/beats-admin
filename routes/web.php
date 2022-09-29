@@ -82,6 +82,13 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/board/update', [BoardController::class, 'BoardUpdate']);
         Route::get('/board/delete', [BoardController::class, 'BoardDelete']);
 
+        Route::get('/event/list', [BoardController::class, 'getEventList']);
+        Route::get('/event/view/{bidx}', [BoardController::class, 'getEventView']);
+        Route::get('/event/write', [BoardController::class, 'getEventWrite']);
+        Route::post('/event/add', [BoardController::class, 'EventAdd']);
+        Route::post('/event/update', [BoardController::class, 'EventUpdate']);
+        Route::get('/event/delete', [BoardController::class, 'EventDelete']);
+
         Route::get('/terms/list', [BoardController::class, 'getTermsList']);
         Route::get('/terms/view/{bidx}', [BoardController::class, 'getTermsView']);
         Route::get('/terms/write', [BoardController::class, 'getTermsWrite']);
