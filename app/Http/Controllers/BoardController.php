@@ -137,6 +137,7 @@ class BoardController extends Controller
         $params['fr_search_text'] = $params['search_text'] ?? '';
         $params['search_created_at'] = $params['created_at'] ?? '';
         $params['search_open_status'] = $params['open_status'] ?? '';
+        $params['search_duration_status'] = $params['duration_status'] ?? '';
 
         if($params['search_created_at'] != ''){
             $atexplode = explode(' - ',$params['created_at']);

@@ -23,10 +23,10 @@
                                     <tr>
                                         <th class="bg-primary/10 whitespace-nowrap text-center">구분</th>
                                         <td class="whitespace-nowrap">
-                                            <select name="gubun" class="form-select" aria-label=".form-select-lg example">
+                                            <select name="duration_status" class="form-select" aria-label=".form-select-lg example">
                                                 <option value=''>전체</option>
-                                                <option value="0" @if($params['search_open_status'] == 0) selected @endif>일반</option>
-                                                <option value="1" @if($params['search_open_status'] == 1) selected @endif>우선 노출</option>
+                                                <option value="Y" @if($params['search_duration_status'] == 'Y') selected @endif>진행 중</option>
+                                                <option value="N" @if($params['search_duration_status'] == 'N') selected @endif>종료</option>
                                             </select>
                                         </td>
                                         <th class="bg-primary/10 whitespace-nowrap text-center">검색</th>
@@ -89,7 +89,7 @@
                                         <td class="whitespace-nowrap text-center">{{$totalCount-($i+(($params['page']-1)*10))}}</td>
                                         <td class="whitespace-nowrap text-center">@if($rs->open_status === 0) 일반 @else 우선 노출 @endif</td>
                                         <td class="whitespace-nowrap text-center"><a href="/service/event/view/{{$rs->idx}}">{{$rs->title}}</a></td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->fk_event_date}} ~ {{$rs->bk_event_date}}</td>
+                                        <td class="whitespace-nowrap text-center">{{$rs->fr_event_date}} ~ {{$rs->bk_event_date}}</td>
                                         <td class="whitespace-nowrap text-center">{{$rs->name}}</td>
                                         <td class="whitespace-nowrap text-center">@if($rs->open_status === 'Y') 노출 @else 미 노출 @endif</td>
                                         <td class="whitespace-nowrap text-center">{{$rs->created_at}}</td>

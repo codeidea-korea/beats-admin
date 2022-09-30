@@ -169,6 +169,16 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
                 'users.name',
                // $this->statDB->raw('SUM(name) AS CNT')
             )
+            ->when(isset($params['duration_status']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    if($params['duration_status'] == 'Y'){
+                        $query->where('adm_event.fr_event_date', '<=', DB::raw('NOW()'))
+                        ->where('adm_event.bk_event_date', '>=', DB::raw('NOW()'));
+                    }else{
+                        $query->where('adm_event.bk_event_date', '<' , DB::raw('NOW()'));
+                    }
+                });
+            })
             ->when(isset($params['open_status']), function($query) use ($params){
                 return $query->where(function($query) use ($params) {
                     $query->where('open_status',  $params['open_status']);
@@ -218,6 +228,7 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
     public function getEventView($params, $bidx) {
 
         $result = $this->statDB->table('adm_event')
+            ->leftJoin('users', 'adm_event.mem_id', '=', 'users.idx')
             ->select(
                 'adm_event.idx',
                 'adm_event.mem_id',
