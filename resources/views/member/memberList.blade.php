@@ -71,10 +71,10 @@
                                         <th class="bg-primary/10 whitespace-nowrap w-13 text-center">상태</th>
                                         <td class="whitespace-nowrap">
                                             <select class="form-select w-13" aria-label=".form-select-lg" name="mem_status">
-                                                <option value=""  @if($params['mem_status'] == "") @endif>전체</option>
-                                                <option value="0" @if($params['mem_status'] == "0") @endif>임시</option>
-                                                <option value="1" @if($params['mem_status'] == "1") @endif>정상</option>
-                                                <option value="2" @if($params['mem_status'] == "2") @endif>제재</option>
+                                                <option value=""  @if($params['mem_status'] == "")  selected @endif>전체</option>
+                                                <option value="0" @if($params['mem_status'] == "0") selected @endif>임시</option>
+                                                <option value="1" @if($params['mem_status'] == "1") selected @endif>정상</option>
+                                                <option value="2" @if($params['mem_status'] == "2") selected @endif>제재</option>
                                             </select>
                                             <!--<button class="btn btn-primary w-24">대상 설정</button>-->
                                         </td>
@@ -142,7 +142,9 @@
                                     <tr>
                                         <td class="whitespace-nowrap text-center">{{$totalCount-($i+(($params['page']-1)*10))}}</td>
                                         <td class="whitespace-nowrap text-center">{{$rs->classValue}}</td>
-                                        <td class="whitespace-nowrap text-center"><a href="javascript:alert({{$rs->mem_id}});">{{$rs->gubunValue}}</a></td>
+                                        <td class="whitespace-nowrap text-center">
+                                            <a href="/member/memberView/{{$rs->mem_id}}">{{$rs->gubunValue}}</a>
+                                        </td>
                                         <td class="whitespace-nowrap text-center">{{$rs->channelValue}}</td>
                                         <td class="whitespace-nowrap text-center">{{$rs->nati}}</td>
 

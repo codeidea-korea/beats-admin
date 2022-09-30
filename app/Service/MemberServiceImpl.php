@@ -13,6 +13,41 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
         parent::__construct();
     }
 
+    public function getMemberData($params){
+        $result = $this->statDB->table('members')
+            ->leftJoin('member_data', 'members.idx', '=', 'member_data.mem_id')
+            ->select(
+                DB::raw("CASE
+                    WHEN member_data.channel = 'apple'      THEN members.apple_key
+                    WHEN member_data.channel = 'naver'      THEN members.naver_key
+                    WHEN member_data.channel = 'kakao'      THEN members.kakao_key
+                    WHEN member_data.channel = 'google'     THEN members.google_key
+                    WHEN member_data.channel = 'facebook'   THEN members.facebook_key
+                    WHEN member_data.channel = 'twitter'    THEN members.twitter_key
+                    WHEN member_data.channel = 'soundcloud' THEN members.soundcloud_key
+                ELSE email_id END AS uid"),
+                'members.email_id',
+                'member_data.mem_id',
+                'member_data.name',
+                'member_data.phone_number',
+                'member_data.email',
+                'member_data.class',
+                'member_data.gubun',
+                'member_data.channel',
+                'member_data.nationality',
+                'member_data.mem_nickname',
+                'member_data.mem_sanctions',
+                'member_data.mem_status',
+                'member_data.mem_regdate',
+                'member_data.mem_point',
+                'member_data.mem_dormancy',
+                'members.last_login_at',
+            )
+            ->where('members.idx', $params['idx'])
+            ->first();
+        return $result;
+    }
+
     public function getMemberTotal($params) {
 
         $result = $this->statDB->table('members')

@@ -168,9 +168,12 @@ class MemberController extends Controller
     public function getMemberView($idx){
         $params = $this->request->input();
         $params['menuCode'] = "AD030100";
-
+        $params['idx'] =$idx;
+        $memberData = $this->memberService->getMemberData($params);
+        var_dump($memberData);
         return view('member.memberView',[
             'params' => $params
+            ,'memberData' => $memberData
 
         ]);
     }

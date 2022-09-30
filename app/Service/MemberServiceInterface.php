@@ -5,7 +5,8 @@ use Illuminate\Support\Facades\DB;
 
 interface MemberServiceInterface
 {
-
+    // 회원 데이터
+    public function getMemberData($params);
     // 회원 총수
     public function getMemberTotal($params);
     // 회원 리스트
