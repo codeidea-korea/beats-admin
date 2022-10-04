@@ -120,6 +120,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/ajax/memberPaging', [MemberController::class, 'getPaging']);
         Route::get('/ajax/sendPoint', [MemberController::class, 'sendPoint']);
         Route::get('memberView/{idx}', [MemberController::class, 'getMemberView']);
+
+        // 초대 내역
+        Route::get('inviteList', [MemberController::class, 'getInviteList']);
     });
 
     Route::post('ckeditor/upload', [BoardController::class, 'upload'])->name('ckeditor.upload');

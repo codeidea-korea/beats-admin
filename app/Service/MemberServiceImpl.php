@@ -51,8 +51,42 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
     public function getMemberTotal($params) {
 
         $result = $this->statDB->table('members')
-            ->select(DB::raw("COUNT(idx) AS cnt"))
-            ->where('isuse', 'Y')
+            ->leftJoin('member_data', 'members.idx', '=', 'member_data.mem_id')
+            ->select(DB::raw("COUNT(members.idx) AS cnt"))
+            ->where('members.isuse', 'Y')
+            ->where('member_data.mem_regdate','>=', $params['sDate'])
+            ->where('member_data.mem_regdate','<=', $params['eDate'])
+            ->when($params['class']!="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.class',$params['class']);
+                });
+            })
+            ->when($params['gubun']!="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.gubun',$params['gubun']);
+                });
+            })
+            ->when($params['channel']!="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.channel',$params['channel']);
+                });
+            })
+            ->when($params['nationality']!="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.nationality',$params['nationality']);
+                });
+            })
+            ->when($params['mem_status']!="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.mem_status',$params['mem_status']);
+                });
+            })
+            ->when($params['sWord']!="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->orWhere('member_data.mem_id', 'like', '%' . $params['sWord'] . '%');
+                    $query->orWhere('member_data.mem_nickname', 'like', '%' . $params['sWord'] . '%');
+                });
+            })
             ->first();
         return $result;
 
@@ -95,6 +129,39 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
                 DB::raw("CASE WHEN member_data.class = '0' THEN '휴면회원' WHEN member_data.class = '1' THEN '임시회원' WHEN member_data.class = '2' THEN '비트썸원회원' WHEN member_data.class = '3' THEN '통합회원' ELSE '미지정' END AS classValue")
             )
             ->where('members.isuse', 'Y')
+            ->where('member_data.mem_regdate','>=', $params['sDate'])
+            ->where('member_data.mem_regdate','<=', $params['eDate'])
+            ->when($params['class']!="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.class',$params['class']);
+                });
+            })
+            ->when($params['gubun']!="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.gubun',$params['gubun']);
+                });
+            })
+            ->when($params['channel']!="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.channel',$params['channel']);
+                });
+            })
+            ->when($params['nationality']!="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.nationality',$params['nationality']);
+                });
+            })
+            ->when($params['mem_status']!="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.mem_status',$params['mem_status']);
+                });
+            })
+            ->when($params['sWord']!="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->orWhere('member_data.mem_id', 'like', '%' . $params['sWord'] . '%');
+                    $query->orWhere('member_data.mem_nickname', 'like', '%' . $params['sWord'] . '%');
+                });
+            })
             ->orderby('mem_regdate','desc')
             ->skip(($params['page']-1)*$params['limit'])
             ->take($params['limit'])

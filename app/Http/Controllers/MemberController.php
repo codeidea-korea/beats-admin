@@ -40,7 +40,12 @@ class MemberController extends Controller
         $params['channel'] = $params['channel'] ?? '';
         $params['nationality'] = $params['nationality'] ?? '';
         $params['mem_status'] = $params['mem_status'] ?? '';
-
+        $params['sWord'] = $params['sWord'] ?? '';
+        $params['searchDate'] = $params['searchDate'] ?? "2022-01-01 - ".date("Y-m-d");
+        $tempData = trim(str_replace('-','',$params['searchDate']));
+        $params['sDate']=substr($tempData,0,8);
+        $params['eDate']=substr($tempData,8,16);
+        $params['eDate'] = date("Ymd",strtotime($params['eDate'].' +1 days'));
         //$sample = $this->memberService->bannerSample($params);
 
         $params['codeIndex'] = $params['codeIndex'] ?? 'CT000000';
@@ -177,4 +182,42 @@ class MemberController extends Controller
 
         ]);
     }
+
+    public function getInviteList()
+    {
+        $params = $this->request->input();
+        $params['menuCode'] = "AD030200";
+        $params['type'] = $params['type'] ?? 0;
+        $params['page'] = $params['page'] ?? 1;
+        $params['limit'] = $params['limit'] ?? 10;
+        $params['class'] = $params['class'] ?? '';
+        $params['gubun'] = $params['gubun'] ?? '';
+        $params['channel'] = $params['channel'] ?? '';
+        $params['nationality'] = $params['nationality'] ?? '';
+        $params['mem_status'] = $params['mem_status'] ?? '';
+        $params['sWord'] = $params['sWord'] ?? '';
+        $params['searchDate'] = $params['searchDate'] ?? "2022-01-01 - ".date("Y-m-d");
+        $tempData = trim(str_replace('-','',$params['searchDate']));
+        $params['sDate']=substr($tempData,0,8);
+        $params['eDate']=substr($tempData,8,16);
+        $params['eDate'] = date("Ymd",strtotime($params['eDate'].' +1 days'));
+
+        $params['codeIndex'] = $params['codeIndex'] ?? 'CT000000';
+        $nationality = $this->apiHomeService->getCodeList($params);
+
+        //$memberList = $this->memberService->getMemberList($params);
+        //$memberTotal = $this->memberService->getMemberTotal($params);
+        //$totalCount = $memberTotal->cnt;
+        //$params['totalCnt'] = $totalCount;
+        $params['totalCnt'] = 0;
+
+        return view('member.inviteList',[
+            'params' => $params
+            ,'searchData' => $params
+            //,'memberList' => $memberList
+            ,'totalCount' => $params['totalCnt']
+            ,'nationality' => $nationality
+        ]);
+    }
+
 }
