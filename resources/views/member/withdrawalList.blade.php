@@ -6,7 +6,7 @@
     @include('include.topBarINC')
     <!-- END: Top Bar -->
         <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
-            <h2 class="text-lg font-medium mr-auto">초대 내역</h2>
+            <h2 class="text-lg font-medium mr-auto">탈퇴 관리</h2>
         </div>
 
         <div class="grid grid-cols-12 gap-6 mt-5">
@@ -14,24 +14,13 @@
             <div class="intro-y col-span-12 lg:col-span-12">
 
 
-                    <div class="intro-y box">
-                        <div class="p-5">
-                            <div class="overflow-x-auto">
-                                <form name="searchForm"  id="searchForm" action="" method="get">
-                                    <input type="hidden" name="page" value="{{ $searchData['page'] }}">
+                <div class="intro-y box">
+                    <div class="p-5">
+                        <div class="overflow-x-auto">
+                            <form name="searchForm"  id="searchForm" action="" method="get">
+                                <input type="hidden" name="page" value="{{ $searchData['page'] }}">
                                 <table class="table table-bordered">
                                     <tr>
-                                        <th class="bg-primary/10 whitespace-nowrap w-13 text-center">분류</th>
-                                        <td class="whitespace-nowrap">
-                                            <select class="form-select w-13" aria-label=".form-select-lg" name="class">
-                                                <option value=""  @if($params['class'] == "")  selected @endif  >전체</option>
-                                                <option value="3" @if($params['class'] == "3") selected @endif >통합회원</option>
-                                                <option value="1" @if($params['class'] == "2") selected @endif >임시회원</option>
-                                                <option value="2" @if($params['class'] == "1") selected @endif >비트썸원</option>
-                                                <option value="0" @if($params['class'] == "0") selected @endif >휴면회원</option>
-                                            </select>
-                                            <!--<button class="btn btn-primary w-24">대상 설정</button>-->
-                                        </td>
                                         <th class="bg-primary/10 whitespace-nowrap w-13 text-center">회원 구분</th>
                                         <td class="whitespace-nowrap">
                                             <select class="form-select w-13" aria-label=".form-select-lg" name="gubun">
@@ -84,30 +73,30 @@
 
                                     </tr>
                                 </table>
-                                </form>
-                                <div style="float:right;">
-                                    <button class="btn box flex items-center text-slate-600 border border-slate-400" onClick="javascript:location.href = '/member/inviteList';">
-                                        초기화
-                                    </button>
-                                </div>
-                                <div style="float:right;">
-                                    &nbsp;
-                                </div>
-                                <div style="float:right;">
-                                    <button class="btn box flex items-center text-slate-600 border border-slate-400 formSearchBtn">
-                                        검색
-                                    </button>
-                                </div>
+                            </form>
+                            <div style="float:right;">
+                                <button class="btn box flex items-center text-slate-600 border border-slate-400" onClick="javascript:location.href = '/member/withdrawalList';">
+                                    초기화
+                                </button>
+                            </div>
+                            <div style="float:right;">
+                                &nbsp;
+                            </div>
+                            <div style="float:right;">
+                                <button class="btn box flex items-center text-slate-600 border border-slate-400 formSearchBtn">
+                                    검색
+                                </button>
                             </div>
                         </div>
                     </div>
+                </div>
 
 
 
 
                 <div class="intro-y box mt-5">
                     <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60">
-                        <h2 class="font-medium text-base mr-auto text-primary">총 {{number_format($totalCount)}}명의 초대받은 회원이 있습니다.</h2>
+                        <h2 class="font-medium text-base mr-auto text-primary">총 {{number_format($totalCount)}}명의 탈퇴한 회원이 있습니다.</h2>
                     </div>
                     <div class="p-5">
                         <div class="overflow-x-auto">
@@ -130,21 +119,21 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td class="whitespace-nowrap text-center"> - </td>
-                                        <td class="whitespace-nowrap text-center"> - </td>
-                                        <td class="whitespace-nowrap text-center"> - </td>
-                                        <td class="whitespace-nowrap text-center"> - </td>
-                                        <td class="whitespace-nowrap text-center"> - </td>
+                                <tr>
+                                    <td class="whitespace-nowrap text-center"> - </td>
+                                    <td class="whitespace-nowrap text-center"> - </td>
+                                    <td class="whitespace-nowrap text-center"> - </td>
+                                    <td class="whitespace-nowrap text-center"> - </td>
+                                    <td class="whitespace-nowrap text-center"> - </td>
 
-                                        <td class="whitespace-nowrap text-center"> - </td>
-                                        <td class="whitespace-nowrap text-center"> - </td>
-                                        <td class="whitespace-nowrap text-center"> - </td>
-                                        <td class="whitespace-nowrap text-center"> - </td>
-                                        <td class="whitespace-nowrap text-center"> - </td>
+                                    <td class="whitespace-nowrap text-center"> - </td>
+                                    <td class="whitespace-nowrap text-center"> - </td>
+                                    <td class="whitespace-nowrap text-center"> - </td>
+                                    <td class="whitespace-nowrap text-center"> - </td>
+                                    <td class="whitespace-nowrap text-center"> - </td>
 
-                                        <td class="whitespace-nowrap text-center"> - </td>
-                                    </tr>
+                                    <td class="whitespace-nowrap text-center"> - </td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>

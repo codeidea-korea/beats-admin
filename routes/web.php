@@ -123,7 +123,17 @@ Route::middleware(['auth'])->group(function () {
 
         // 초대 내역
         Route::get('inviteList', [MemberController::class, 'getInviteList']);
+
+        // 탈퇴 관리
+        Route::get('withdrawalList', [MemberController::class, 'getWithdrawalList']);
+
+        // 신고 내역
+        Route::get('notifyList', [MemberController::class, 'getNotifyList']);
+
+
+
     });
+
 
     Route::post('ckeditor/upload', [BoardController::class, 'upload'])->name('ckeditor.upload');
 });
