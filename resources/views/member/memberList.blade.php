@@ -411,7 +411,7 @@
         $(document).on('click','#pointOpen',function(){
             if(ajax_checked){
                 ajax_checked = false;
-                $("#pointMemList").html('');
+                $("#pointMemList")[0].innerHTML = '';
                 getPointMemList(g_page);
             }
         });
@@ -439,7 +439,7 @@
 
                 getSendPointMemList(g_send_page);
 
-                $("#pointMemList").html('');
+                $("#pointMemList")[0].innerHTML = '';
                 getPointMemList(g_page);
             }
         });
@@ -529,7 +529,7 @@
         });
 
         function getPointMemList(page){
-            $("#pointMemList").html('');
+            $("#pointMemList")[0].innerHTML = '';
 
             jQuery.ajax({
                 type:"get",
@@ -576,9 +576,9 @@
                             $("#pointMemList").append(dom);
                         });
 
-                        $('#pointMemCnt').html(data.totalCount);
+                        $("#pointMemCnt")[0].innerHTML = data.totalCount;
 
-                        $("#MemAllPaging").html('');
+                        $("#MemAllPaging")[0].innerHTML = '';
 
                         jQuery.ajax({
                             cache: false,
@@ -620,7 +620,7 @@
         }
 
         function getSendPointMemList(page){
-            $('#sendPointMemList').html('');
+            $("#sendPointMemList")[0].innerHTML = '';
             var Listobj = sliceObj(send_member_data, page);
             Object.keys(Listobj).forEach(function(key){
 
@@ -647,9 +647,9 @@
                 $('#sendPointMemList').append(dom);
             });
 
-            $("#sendPointMemPaging").html('');
+            $("#sendPointMemPaging")[0].innerHTML = '';
 
-            $('#sendPointMemCnt').html(Object.keys(send_member_data).length);
+            $("#sendPointMemCnt")[0].innerHTML = Object.keys(send_member_data).length;
 
             jQuery.ajax({
                 cache: false,
