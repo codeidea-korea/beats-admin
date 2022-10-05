@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ApiHomeController;
 use App\Http\Controllers\Api\ApiMemberController;
 use App\Http\Controllers\Api\ApiSmsController;
+use App\Http\Controllers\Api\ApiSoundSourceController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -36,6 +37,11 @@ Route::prefix('/v1/')->group(function () {
     Route::group(['prefix' => 'sms'], function() {
         Route::get('send_one_message', [ApiSmsController::class, 'send_one_message']);
     });
+
+    Route::group(['prefix' => 'soundSource'], function() {
+        Route::post('soundFileUpdate', [ApiSoundSourceController::class, 'soundFileUpdate']);
+    });
+
 
     // get
     Route::get('testList', [ApiMemberController::class, 'testList']);

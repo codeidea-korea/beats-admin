@@ -70,10 +70,9 @@ class HomeController extends Controller
     public function test()
     {
         $params = $this->request->input();
-        $params['type'] = $params['type'] ?? 0;
-        $data = $this->dashBoardService->getTestData($params);
-        var_dump($data);
-        exit();
-        return view('testDbConnect.blade');
+        $params['menuCode'] = "AD030100";
+        return view('test',[
+            'params' => $params
+        ]);
     }
 }

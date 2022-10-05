@@ -37,7 +37,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     // dbConnect 및 Service 별도 분리 테스트
-    //Route::get('/test', [HomeController::class, 'test']);
+    Route::get('/test', [HomeController::class, 'test']);
 
     //관리자 관리
     Route::group(['prefix' => 'admin'], function()
