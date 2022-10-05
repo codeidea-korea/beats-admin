@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\ApiHomeController;
 use App\Http\Controllers\Api\ApiMemberController;
 use App\Http\Controllers\Api\ApiSmsController;
 use App\Http\Controllers\Api\ApiSoundSourceController;
+use App\Http\Controllers\Api\ApiFeedController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -40,6 +41,10 @@ Route::prefix('/v1/')->group(function () {
 
     Route::group(['prefix' => 'soundSource'], function() {
         Route::post('soundFileUpdate', [ApiSoundSourceController::class, 'soundFileUpdate']);
+    });
+
+    Route::group(['prefix' => 'Feed'], function() {
+        Route::post('feedFileUpdate', [ApiFeedController::class, 'feedFileUpdate']);
     });
 
 
