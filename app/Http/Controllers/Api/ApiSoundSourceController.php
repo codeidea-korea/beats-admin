@@ -24,6 +24,7 @@ class ApiSoundSourceController extends Controller
 
     public function soundFileUpdate()
     {
+
         $returnData['code'] = -1;
         $returnData['message'] = "시스템 장애";
 
@@ -32,8 +33,10 @@ class ApiSoundSourceController extends Controller
             $params['mem_id'] = $params['mem_id'] ?? 0;
 
             $files = $this->request->file('music_file');
+
             // 음원파일 헤드 등록
             $resultData1 = $this->apiSoundSorceService->setDataUpdate($params,$files);
+
             // 첨부파일 db 등록 및 서버 저장
             $resultData2 = $this->apiSoundSorceService->setSoundFileUpdate($resultData1,$files);
 
