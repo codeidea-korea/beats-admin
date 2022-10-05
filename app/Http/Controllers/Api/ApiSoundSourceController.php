@@ -44,6 +44,7 @@ class ApiSoundSourceController extends Controller
 
             $returnData['code']=0;
             $returnData['message']="음원파일 등록 완료";
+            $returnData['response']['idx']=$resultData1['idx'];
 
         } catch(\Exception $exception){
             throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
