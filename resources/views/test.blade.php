@@ -26,6 +26,7 @@
                         <div class="overflow-x-auto">
                             {{ csrf_field() }}
                             <input type="hidden" name="banner_code" value=""/>
+                            <input type="hidden" name="mem_id" value="78"/>
                             <table class="table table-bordered">
 
                                 <tr>

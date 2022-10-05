@@ -18,7 +18,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
     //음원파일 업로드
     public function setSoundFileUpdate($params,$files)
     {
-        var_dump($params);exit();
+
         $sqlData['file_cnt'] = count($files);
         $sqlData['mem_id'] = $params['mem_id'];
         $sqlData['idx'] = $params['idx'];
