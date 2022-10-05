@@ -8,6 +8,7 @@ use App\Http\Controllers\MultilingualController;
 use App\Http\Controllers\MainManageController;
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\SoundSourceController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -130,9 +131,18 @@ Route::middleware(['auth'])->group(function () {
         // 신고 내역
         Route::get('notifyList', [MemberController::class, 'getNotifyList']);
 
+    });
 
+    //콘텐츠 관리
+    Route::group(['prefix' => 'contents'], function()
+    {
+        Route::get('/', [MemberController::class, 'getMemberList']);
+
+        // 음원관리
+        Route::get('soundSourceList', [SoundSourceController::class, 'getSoundSourceList']);
 
     });
+
 
 
     Route::post('ckeditor/upload', [BoardController::class, 'upload'])->name('ckeditor.upload');
