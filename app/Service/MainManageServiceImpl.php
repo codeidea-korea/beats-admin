@@ -101,9 +101,9 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
                 //DB::raw('IFNULL(COUNT(adm_banner_data.idx),0) as downcontents'),
             )
             ->where('adm_banner_data.banner_code',$banner_code)
-            ->when(isset($params['contents']), function($query) use ($params){
+            ->when(isset($params['s_contents']), function($query) use ($params){
                 return $query->where(function($query) use ($params) {
-                    $query->where('contents',  $params['contents']);
+                    $query->where('contents',  $params['s_contents']);
                 });
             })
             ->when(isset($params['search_text']), function($query) use ($params){
@@ -157,9 +157,9 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
                 //DB::raw('IFNULL(COUNT(adm_banner_data.idx),0) as downcontents'),
             )
             ->where('adm_banner_data.banner_code',$params['banner_code'])
-            ->when(isset($params['contents']), function($query) use ($params){
+            ->when(isset($params['s_contents']), function($query) use ($params){
                 return $query->where(function($query) use ($params) {
-                    $query->where('contents',  $params['contents']);
+                    $query->where('contents',  $params['s_contents']);
                 });
             })
             ->when(isset($params['search_text']), function($query) use ($params){

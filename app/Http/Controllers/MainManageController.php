@@ -53,7 +53,7 @@ class MainManageController extends Controller
         $params['page'] = $params['page'] ?? 1;
         $params['limit'] = $params['limit'] ?? 10;
         //왼쪽은 화면에서 보여주기 위한 변수 실제 검색할때는 오른쪽 값이 쓰인다
-        $params['search_contents'] = $params['contents'] ?? '';
+        $params['search_contents'] = $params['s_contents'] ?? '';
         $params['fr_search_text'] = $params['search_text'] ?? '';
         $params['search_created_at'] = $params['created_at'] ?? '';
         if($params['search_created_at'] != ''){
@@ -110,7 +110,7 @@ class MainManageController extends Controller
         $params['page'] = $params['page'] ?? 1;
         $params['limit'] = $params['limit'] ?? 10;
         //왼쪽은 화면에서 보여주기 위한 변수 실제 검색할때는 오른쪽 값이 쓰인다
-        $params['search_contents'] = $params['contents'] ?? '';
+        $params['search_contents'] = $params['s_contents'] ?? '';
         $params['fr_search_text'] = $params['search_text'] ?? '';
         $params['search_created_at'] = $params['created_at'] ?? '';
         if($params['search_created_at'] != ''){

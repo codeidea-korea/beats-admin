@@ -9,6 +9,7 @@ use App\Http\Controllers\MainManageController;
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\SoundSourceController;
+use App\Http\Controllers\FeedController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -140,6 +141,9 @@ Route::middleware(['auth'])->group(function () {
 
         // 음원관리
         Route::get('soundSourceList', [SoundSourceController::class, 'getSoundSourceList']);
+
+        //피드관리
+        Route::get('feedList', [FeedController::class, 'getFeedList']);
 
     });
 

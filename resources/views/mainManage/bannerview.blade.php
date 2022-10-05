@@ -61,7 +61,7 @@
                                 <tr>
                                     <th class="bg-primary/10 whitespace-nowrap w-32 text-center">구분</th>
                                     <td class="">
-                                        <select name="contents" class="form-select w-60" aria-label=".form-select-lg example">
+                                        <select name="s_contents" class="form-select w-60" aria-label=".form-select-lg example">
                                             <option value=''>전체</option>
                                             <option value="notice" @if($params['search_contents'] == 'notice') selected @endif>공지사항</option>
                                             <option value="event" @if($params['search_contents'] == 'event') selected @endif>이벤트</option>
