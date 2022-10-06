@@ -41,6 +41,7 @@ Route::prefix('/v1/')->group(function () {
 
     Route::group(['prefix' => 'soundSource'], function() {
         Route::post('soundFileUpdate', [ApiSoundSourceController::class, 'soundFileUpdate']);
+        Route::post('soundDataUpdate', [ApiSoundSourceController::class, 'soundDataUpdate']);
     });
 
     Route::group(['prefix' => 'Feed'], function() {

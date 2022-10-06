@@ -67,5 +67,24 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
         return $sqlData;
     }
 
+    //음원 정보 업로드 (상세정보)
+    public function setSoundDataUpdate($params)
+    {
+        $result = $this->statDB->table('music_head')
+            ->where('idx',$params['music_head_idx'])
+            ->update(
+                [
+                    'music_title' => $params['_token']
+                    ,'progress_rate' => $params['progress_rate']
+                    ,'sales_status' => $params['sales_status']
+                    ,'open_status' => $params['open_status']
+                    ,'tag' => $params['tag']
+                    ,'common_composition' => $params['common_composition']
+                    ,'contract' => $params['contract']
+                    ,'moddate' => DB::raw('now()')
+                ]
+            );
+        return $result;
+    }
 
 }

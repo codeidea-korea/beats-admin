@@ -24,12 +24,8 @@ class ApiSoundSourceController extends Controller
 
     public function soundFileUpdate()
     {
-
         $returnData['code'] = -1;
         $returnData['message'] = "시스템 장애";
-
-
-
         try{
             $params = $this->request->input();
             $params['mem_id'] = $params['mem_id'] ?? 0;
@@ -44,7 +40,37 @@ class ApiSoundSourceController extends Controller
 
             $returnData['code']=0;
             $returnData['message']="음원파일 등록 완료";
-            $returnData['response']['idx']=$resultData1['idx'];
+            $returnData['response']['music_head_idx']=$resultData1['idx'];
+
+        } catch(\Exception $exception){
+            throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+        }
+        return json_encode($returnData);
+    }
+
+    public function soundDataUpdate()
+    {
+
+        $returnData['code'] = -1;
+        $returnData['message'] = "시스템 장애";
+
+        try{
+            $params = $this->request->input();
+            $params['music_head_idx'] = $params['music_head_idx'] ?? 0;
+            $params['music_title'] = $params['music_title'] ?? "";
+            $params['progress_rate'] = $params['progress_rate'] ?? "10"; // 작업 진행율 10단위
+            $params['sales_status'] = $params['sales_status'] ?? "Y"; // 판매상태
+            $params['open_status'] = $params['open_status'] ?? "Y"; // 음원공개여부
+            $params['tag'] = $params['tag'] ?? "";
+            $params['common_composition'] = $params['common_composition'] ?? "N"; // 공동 작곡가 유무
+            $params['contract'] = $params['contract'] ?? "N"; // 공동 계약서 서명여부
+
+            // 음원파일 헤드 등록
+            $resultData1 = $this->apiSoundSorceService->setSoundDataUpdate($params);
+
+
+            $returnData['code']=0;
+            $returnData['message']="변경 사항이 저장되었습니다.";
 
         } catch(\Exception $exception){
             throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
