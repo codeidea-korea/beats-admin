@@ -56,6 +56,8 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
                 });
             })
             ->orderby('created_at','desc')
+            ->skip(($params['page']-1)*$params['limit'])
+            ->take($params['limit'])
            // ->groupBy('name')
             ->get();
         return $result;
@@ -195,6 +197,8 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
                 });
             })
             ->orderby('created_at','desc')
+            ->skip(($params['page']-1)*$params['limit'])
+            ->take($params['limit'])
            // ->groupBy('name')
             ->get();
         return $result;
@@ -369,6 +373,8 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
                 });
             })
             ->orderby('adm_terms.created_at','desc')
+            ->skip(($params['page']-1)*$params['limit'])
+            ->take($params['limit'])
            // ->groupBy('name')
             ->get();
         return $result;

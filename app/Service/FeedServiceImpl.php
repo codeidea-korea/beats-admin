@@ -45,8 +45,8 @@ class FeedServiceImpl extends DBConnection  implements FeedServiceInterface
             ->when(isset($params['search_text']), function($query) use ($params){
                 return $query->where(function($query) use ($params) {
                     $query->where('feed_board.wr_title', 'like', '%'.$params['search_text'].'%')
-                    ->whereOr('feed_board.wr_content', 'like', '%'.$params['search_text'].'%')
-                    ->whereOr('members.email_id', 'like', '%'.$params['search_text'].'%');
+                    ->orwhere('feed_board.wr_content', 'like', '%'.$params['search_text'].'%')
+                    ->orwhere('members.email_id', 'like', '%'.$params['search_text'].'%');
                 });
             })
             ->when(isset($params['wr_lng']), function($query) use ($params){
@@ -83,8 +83,8 @@ class FeedServiceImpl extends DBConnection  implements FeedServiceInterface
             ->when(isset($params['search_text']), function($query) use ($params){
                 return $query->where(function($query) use ($params) {
                     $query->where('feed_board.wr_title', 'like', '%'.$params['search_text'].'%')
-                    ->whereOr('feed_board.wr_content', 'like', '%'.$params['search_text'].'%')
-                    ->whereOr('members.email_id', 'like', '%'.$params['search_text'].'%');
+                    ->orwhere('feed_board.wr_content', 'like', '%'.$params['search_text'].'%')
+                    ->orwhere('members.email_id', 'like', '%'.$params['search_text'].'%');
                 });
             })
             ->when(isset($params['wr_lng']), function($query) use ($params){

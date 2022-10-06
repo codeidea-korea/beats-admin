@@ -84,4 +84,44 @@ class ApiHomeServiceImpl extends DBConnection  implements ApiHomeServiceInterfac
 
     }
 
+    public function getNoticeList($params) {
+
+        $result = $this->statDB->table('notice_board')
+            ->select(
+                'notice_board.idx',
+                'notice_board.wr_title',
+                'notice_board.created_at',
+            )
+            ->where('notice_board.wr_open','open')
+            ->when(isset($params['searchText']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('wr_title', 'like', '%'.$params['searchText'].'%')
+                    ->orwhere('wr_content', 'like', '%'.$params['searchText'].'%');
+                });
+            })
+            ->orderby('notice_board.idx','desc')
+            ->skip(($params['page']-1)*$params['limit'])
+            ->take($params['limit'])
+            ->get();
+
+        return $result;
+
+    }
+
+    public function getNoticeView($params) {
+
+        $result = $this->statDB->table('notice_board')
+            ->select(
+                'notice_board.idx',
+                'notice_board.wr_title',
+                'notice_board.wr_content',
+                'notice_board.created_at',
+            )
+            ->where('notice_board.idx',$params['idx'])
+            ->get();
+
+        return $result;
+
+    }
+
 }

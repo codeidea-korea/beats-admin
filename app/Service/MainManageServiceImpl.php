@@ -318,6 +318,8 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
                 });
             })
             ->orderby('adm_popup.idx','desc')
+            ->skip(($params['page']-1)*$params['limit'])
+            ->take($params['limit'])
             ->get();
 
         return $result;

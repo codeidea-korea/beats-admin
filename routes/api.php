@@ -25,6 +25,10 @@ Route::prefix('/v1/')->group(function () {
     // HOME > 메뉴
     Route::get('bannerList', [ApiHomeController::class, 'bannerList']);
 
+    Route::get('noticeList', [ApiHomeController::class, 'noticeList']);
+
+    Route::get('noticeView', [ApiHomeController::class, 'getNoticeView']);
+
     Route::group(['prefix' => 'member'], function() {
         Route::put('login', [ApiMemberController::class, 'apiLogin']);
         Route::put('loginCheck', [ApiMemberController::class, 'loginCheck']);

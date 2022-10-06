@@ -17,4 +17,10 @@ interface ApiHomeServiceInterface
     // 코드 list
     public function getCodeList($params);
 
+    // 공지사항 list
+    public function getNoticeList($params);
+
+    // 공지사항 view
+    public function getNoticeView($params);
+
 }

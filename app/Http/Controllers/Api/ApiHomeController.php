@@ -95,5 +95,58 @@ class ApiHomeController extends Controller
         }
     }
 
+    public function noticeList()
+    {
+        try{
+            $params = $this->request->input();
+            $params['page'] = $params['page'] ?? 1;
+            $params['limit'] = $params['limit'] ?? 10;
+
+            $noticeList = $this->apiHomeService->getNoticeList($params);
+
+            $returnData['code']=0;
+            $returnData['message']="complete";
+            $returnData['response']['count']=count($noticeList);
+            $returnData['response']['data']=$noticeList;
+
+
+            return json_encode($returnData);
+
+        } catch(\Exception $exception){
+            throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+        }
+    }
+
+    public function getNoticeView()
+    {
+        try{
+            $params = $this->request->input();
+            $params['idx'] = isset($params['idx']) ? $params['idx'] : ''; // 사이트 구분 =>  bb:byBeats , bs:Beat Someone
+
+
+            if($params['idx']==""){
+                $returnData['code']=-1;
+                $returnData['message']="고유번호가 누락되었습니다.";
+            }else{
+
+                $noticeView = $this->apiHomeService->getNoticeView($params);
+
+                if($noticeView->isEmpty()){
+                    $returnData['code'] = 1;
+                    $returnData['message'] = "유효하지 않은 고유번호입니다.";
+                }else{
+                    $returnData['code'] = 0;
+                    $returnData['message'] = "complete";
+                    $returnData['response'] = $noticeView;
+                }
+            }
+
+
+            return json_encode($returnData);
+
+        } catch(\Exception $exception){
+            throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+        }
+    }
 
 }
