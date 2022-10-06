@@ -56,7 +56,7 @@ class ApiSoundSourceController extends Controller
 
         try{
             $params = $this->request->input();
-            $params['music_head_idx'] = $params['music_head_idx'] ?? 0;
+            $params['music_head_idx'] = $params['music_head_idx'] ?? 1;
             $params['music_title'] = $params['music_title'] ?? "";
             $params['progress_rate'] = $params['progress_rate'] ?? "10"; // 작업 진행율 10단위
             $params['sales_status'] = $params['sales_status'] ?? "Y"; // 판매상태
