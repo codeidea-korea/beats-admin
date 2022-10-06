@@ -119,7 +119,7 @@
                             <div class="flex items-center justify-center mt-5">
                                 <button type="button" class="btn btn-secondary w-32 popupDeletebtn">삭제</button>
                                 <button class="btn btn-primary w-32 ml-2 mr-2 popupUpdatebtn">수정</button>
-                                <button type="button" class="btn btn-secondary w-32" onclick="history.back(-1)">취소</button>
+                                <button type="button" class="btn btn-secondary w-32" onclick="location.href='/mainmanage/popup/list'">취소</button>
                             </div>
                         </form>
                     </div>

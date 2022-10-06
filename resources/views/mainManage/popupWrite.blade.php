@@ -7,7 +7,7 @@
     @include('include.topBarINC')
     <!-- END: Top Bar -->
     <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
-        <h2 class="text-lg font-medium mr-auto">배너 관리</h2>
+        <h2 class="text-lg font-medium mr-auto">팝업 관리</h2>
     </div>
 
     <div class="grid grid-cols-12 gap-6 mt-5">
@@ -17,7 +17,7 @@
             <div class="intro-y box">
 
                 <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60">
-                    <h2 class="font-medium text-base mr-auto" onclick="location.href='/mainmanage/popup/write'">배너 등록</h2>
+                    <h2 class="font-medium text-base mr-auto" onclick="location.href='/mainmanage/popup/write'">팝업 등록</h2>
                 </div>
 
                 <div class="p-5">
@@ -100,7 +100,7 @@
 
                             <div class="flex items-center justify-center mt-5">
                                 <button class="btn btn-primary w-32 ml-2 mr-2 popupAddbtn">등록</button>
-                                <button type="button" class="btn btn-secondary w-32" onclick="history.back(-1)">취소</button>
+                                <button type="button" class="btn btn-secondary w-32" onclick="location.href='/mainmanage/popup/list'">취소</button>
                             </div>
                         </form>
                     </div>

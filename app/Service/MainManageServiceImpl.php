@@ -324,10 +324,30 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
 
     }
 
-    public function getPopupTotal() {
+    public function getPopupTotal($params) {
 
         $result = $this->statDB->table('adm_popup')
             ->select(DB::raw("COUNT(idx) AS cnt"))
+            ->when(isset($params['popup_type']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('adm_popup.type',  $params['popup_type']);
+                });
+            })
+            ->when(isset($params['search_text']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('pp_title', 'like', '%'.$params['search_text'].'%');
+                });
+            })
+            ->when(isset($params['isuse']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('isuse', $params['isuse']);
+                });
+            })
+            ->when(isset($params['fr_search_at']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->whereBetween('created_at',  [$params['fr_search_at'],$params['bk_search_at']]);
+                });
+            })
             ->first();
         return $result;
 
@@ -385,7 +405,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
         }
 
         $result = $this->statDB->table('adm_popup')
-            ->insert([
+            ->insertGetId([
                 'pp_title' => $params['pp_title'], 'connect_url' => $params['connect_url'], 'connect_type' => $params['connect_type'],
                 'fr_show_date' => $params['fr_show_date'], 'connect_contents' => $params['connect_contents'], 'type' => $params['type'], 
                 'bk_show_date' => $params['bk_show_date'],'popup_file' => $params['popup_file'], 'popup_source' => $params['popup_source'],

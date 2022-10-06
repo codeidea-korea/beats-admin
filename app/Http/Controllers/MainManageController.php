@@ -150,7 +150,7 @@ class MainManageController extends Controller
         $params['search_isuse'] = $params['isuse'] ?? '';
         $params['search_created_at'] = $params['created_at'] ?? '';
         $popupList = $this->adminMainmanageService->getPopupList($params);
-        $popupTotal = $this->adminMainmanageService->getPopupTotal();
+        $popupTotal = $this->adminMainmanageService->getPopupTotal($params);
         $totalCount = $popupTotal->cnt;
         $params['totalCnt'] = $totalCount;
         return view('mainManage.popupList',[
@@ -180,7 +180,7 @@ class MainManageController extends Controller
         $params = $this->request->input();
         $params['menuCode'] = "AD020200";
         $params['type'] = $params['type'] ?? 0;
-        $popupData = $this->adminMainmanageService->getPopupTotal();
+        $popupData = $this->adminMainmanageService->getPopupTotal($params);
 
         return view('mainManage.popupWrite',[
             'popupData' => $popupData
@@ -194,7 +194,7 @@ class MainManageController extends Controller
         $file = $this->request->file('popup_img');
         $result = $this->adminMainmanageService->PopupAdd($params,$file);
 
-        if($result == "fails"){
+        if($result == 0){
             return redirect()->back()->with('alert', '등록/수정에 실패하였습니다. \n관리자에게 문의 바랍니다.');
         }else{
             return redirect('/mainmanage/popup/view/'.$result);
@@ -207,7 +207,7 @@ class MainManageController extends Controller
         $file = $this->request->file('popup_img');
         $result = $this->adminMainmanageService->PopupUpdate($params,$file);
 
-        if($result == "fails"){
+        if($result == 0){
             return redirect()->back()->with('alert', '등록/수정에 실패하였습니다. \n관리자에게 문의 바랍니다.');
         }else{
             return redirect('/mainmanage/popup/view/'.$result);

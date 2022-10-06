@@ -29,7 +29,7 @@ interface MainManageServiceInterface
     //팝업 리스트
     public function getPopupList($params);
     //팝업 총수
-    public function getPopupTotal();
+    public function getPopupTotal($params);
     //팝업 상세
     public function getPopupView($params, $pidx);
     //팝업 등록
