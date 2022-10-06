@@ -78,4 +78,30 @@ class ApiSoundSourceController extends Controller
 
         return json_encode($returnData);
     }
+
+    public function soundSourceList(){
+        $returnData['code'] = -1;
+        $returnData['message'] = "시스템 장애";
+
+        $params = $this->request->input();
+        $params['mem_id'] = $params['mem_id'] ?? 0;
+
+        if($params['mem_id']==0){
+            $returnData['code'] = 302;
+            $returnData['message'] = "회원 고유키값이 누락되어 있습니다.";
+        }else{
+            try{
+
+                $resultData = $this->apiSoundSorceService->setSoundSourceList($params);
+                $returnData['code']=0;
+                $returnData['message']="complete";
+                $returnData['response']=$resultData;
+
+            } catch(\Exception $exception){
+                throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+            }
+        }
+
+        return json_encode($returnData);
+    }
 }

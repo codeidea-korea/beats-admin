@@ -70,7 +70,6 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
     //음원 정보 업로드 (상세정보)
     public function setSoundDataUpdate($params)
     {
-        //var_dump($params);exit();
         $result = $this->statDB->table('music_head')
             ->where('idx',$params['music_head_idx'])
             ->update(
@@ -85,6 +84,65 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                     ,'moddate' => \Carbon\Carbon::now()
                 ]
             );
+        return $result;
+    }
+
+    //음원 정보 리스트 (list)
+    public function setSoundSourceList($params)
+    {
+        //$result = $this->statDB->table('music_head as H')
+        //    ->leftJoin('music_file as F','H.idx','F.music_head_idx')
+        //    ->select(
+        //        'H.idx'
+        //        ,'H.mem_id'
+        //        ,'H.file_cnt'
+        //        ,'H.music_title'
+        //        ,'H.play_time'
+        //        ,'H.open_status'
+        //        ,'H.sales_status'
+        //        ,'H.contract'
+        //        ,'H.tag'
+        //        ,'H.progress_rate'
+        //        ,'H.common_composition'
+        //        ,'H.crdate'
+        //        ,'H.copyright'
+        //        ,'F.file_name'
+        //        ,'F.file_no'
+        //        ,'F.hash_name'
+        //        ,'F.file_url'
+        //    )
+        //    ->where('H.file_cnt','=',\Carbon\Carbon::F.file_no)
+        //    ->where('H.mem_id',$params['mem_id'])
+        //    ->orderby('H.idx','desc')
+        //    ->get();
+        $result = $this->statDB->select(
+            "
+                    SELECT
+                        H.idx
+                        ,H.mem_id
+                        ,H.file_cnt
+                        ,H.music_title
+                        ,H.play_time
+                        ,H.open_status
+                        ,H.sales_status
+                        ,H.contract
+                        ,H.tag
+                        ,H.progress_rate
+                        ,H.common_composition
+                        ,H.crdate
+                        ,H.copyright
+                        ,F.file_name
+                        ,F.file_no
+                        ,F.hash_name
+                        ,F.file_url
+                    FROM
+                    music_head H LEFT JOIN music_file F ON H.idx = F.music_head_idx
+                    WHERE
+                    H.mem_id = ".$params['mem_id']."
+                    AND H.file_cnt = F.file_no
+                    ORDER BY idx desc"
+        );
+
         return $result;
     }
 
