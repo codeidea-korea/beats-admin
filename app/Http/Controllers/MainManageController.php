@@ -63,7 +63,7 @@ class MainManageController extends Controller
         }
         $bannerData = $this->adminMainmanageService->getBannerView($params, $banner_code);
         $bannerDataList = $this->adminMainmanageService->getBannerDataList($params, $banner_code);
-        $bannerDataTotal = $this->adminMainmanageService->getBannerDataTotal();
+        $bannerDataTotal = $this->adminMainmanageService->getBannerDataTotal($params, $banner_code);
         $totalCount = $bannerDataTotal->cnt;
         $params['totalCnt'] = $totalCount;
 
@@ -130,7 +130,7 @@ class MainManageController extends Controller
 
         $result = "SUCCESS";
 
-        if(!$bannerdata){
+        if($bannerdata == 0){
             $result = "컨텐츠 삭제에 실패하였습니다. 다시 시도해주세요";
         }
 

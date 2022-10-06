@@ -391,15 +391,13 @@
         });
 
         $(document).on('click','#select_delete',function(){
-            var del_check = "";
+            var del_check = [];
             if(confirm("선택하신 목록들을 삭제하시겠습니까?")){
                 if($("input[name='del_check']:checked").length > 0){
 
                     $("input[name='del_check']:checked").each(function(e){
-                        del_check += $(this).val()+",";
+                        del_check.push($(this).val());
                     })
-
-                    del_check = del_check.slice(0, -1);
 
                     jQuery.ajax({
                         cache: false,
@@ -523,7 +521,7 @@
                     url: '/mainmanage/banner/seqchange',
                     success: function (data) {
 
-                        $("#banner_data_list").html("");
+                        $("#banner_data_list")[0].innerHTML = '';
 
                         data.forEach(function(item,index) {
 

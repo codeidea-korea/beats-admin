@@ -126,10 +126,26 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
 
     }
 
-    public function getBannerDataTotal() {
+    public function getBannerDataTotal($params, $banner_code) {
 
         $result = $this->statDB->table('adm_banner_data')
             ->select(DB::raw("COUNT(idx) AS cnt"))
+            ->where('adm_banner_data.banner_code',$banner_code)
+            ->when(isset($params['s_contents']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('contents',  $params['s_contents']);
+                });
+            })
+            ->when(isset($params['search_text']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('br_title', 'like', '%'.$params['search_text'].'%');
+                });
+            })
+            ->when(isset($params['fr_search_at']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->whereBetween('created_at',  [$params['fr_search_at'],$params['bk_search_at']]);
+                });
+            })
             ->first();
         return $result;
 
@@ -191,11 +207,18 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
             $params['banner_source'] = $cfilesource;
         }
 
+        $seq = $this->statDB->table('adm_banner_data')
+            ->select(DB::raw('MAX(br_seq) as br_seq'))
+            ->where('banner_code',$params['banner_code'])
+            ->orderby('br_seq','desc')
+            ->first();
+
         $result = $this->statDB->table('adm_banner_data')
             ->insert([
                 'br_title' => $params['br_title'], 'contents' => $params['contents'], 'contents_url' => $params['contents_url'],
                 'banner_file' => $params['banner_file'], 'banner_source' => $params['banner_source'], 'isuse' => $params['isuse'],
                 'banner_code' => $params['banner_code'],'mem_id' => auth()->user()->idx, 'created_at' => \Carbon\Carbon::now(),
+                'br_seq' => $seq->br_seq + 100,
             ]);
 
         if($result > 0){
@@ -252,7 +275,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
 
     public function SelectDelete($params) {
 
-        $result = $this->statDB->table('adm_banner_data')->whereIn('idx', [$params['del_check']])->delete();
+        $result = $this->statDB->table('adm_banner_data')->whereIn('idx', $params['del_check'])->delete();
 
         return $result;
 
