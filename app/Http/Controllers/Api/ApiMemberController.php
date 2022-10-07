@@ -8,7 +8,7 @@ use App\Service\ApiHomeServiceImpl;
 use App\Service\ApiMemberServiceImpl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Controllers\Api\HttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Response;
 use Session;
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Service\FeedServiceImpl;
 use Response;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Session;
 
 class FeedController extends Controller
@@ -64,10 +65,24 @@ class FeedController extends Controller
         $params = $this->request->input();
         $params['menuCode'] = "AD060100";
         $feedData = $this->adminFeedService->getFeedView($idx);
+        $feedFileData = $this->adminFeedService->getFeedFile($idx);
 
         return view('contents.feed.FeedView',[
             'feedData' => $feedData
+            ,'feedFileData' => $feedFileData
             ,'params' => $params
         ]);
+    }
+
+    public function feedUpdate()
+    {
+        $params = $this->request->input();
+        $result = $this->adminFeedService->feedUpdate($params);
+
+        if($result == 0){
+            return redirect()->back()->with('alert', '등록/수정에 실패하였습니다. \n관리자에게 문의 바랍니다.');
+        }else{
+            return redirect('/contents/feedView/'.$result);
+        }
     }
 }

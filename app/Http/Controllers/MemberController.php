@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Service\MemberServiceImpl;
 use App\Service\ApiHomeServiceImpl;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Response;
 use Illuminate\Http\Request;
 use Session;

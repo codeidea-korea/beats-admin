@@ -414,8 +414,13 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
                 'isuse' => $params['isuse'], 'mem_id' => auth()->user()->idx, 'created_at' => \Carbon\Carbon::now(),
             ]);
 
-        return $result;
+        if($result > 0){
+            $pidx = $result;
+        }else{
+            $pidx = "fails";
+        }
 
+        return $pidx;
     }
 
     public function PopupUpdate($params, $file) {

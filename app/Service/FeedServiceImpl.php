@@ -117,6 +117,7 @@ class FeedServiceImpl extends DBConnection  implements FeedServiceInterface
                 'feed_board.wr_lng',
                 'feed_board.feed_file',
                 'feed_board.feed_source',
+                'feed_board.file_url',
                 'feed_board.created_at',
                 'feed_board.updated_at',
                 'members.email_id'
@@ -128,5 +129,41 @@ class FeedServiceImpl extends DBConnection  implements FeedServiceInterface
 
         return $result;
 
+    }
+
+    public function getFeedFile($idx) {
+
+        $result = $this->statDB->table('feed_file')
+            ->select(
+                'feed_file.idx',
+                'feed_file.hash_name',
+                'feed_file.file_url',
+                'feed_file.file_type',
+                'feed_file.feed_content',
+            )
+            ->where('feed_file.feed_idx',$idx)
+            ->orderby('feed_file.file_no','asc')
+            ->get();
+
+        return $result;
+
+    }
+
+    
+    public function feedUpdate($params) {
+
+        $result = $this->statDB->table('feed_board')
+            ->where('idx',$params['idx'])
+            ->update([
+                'wr_open' => $params['wr_open'], 'updated_at' => \Carbon\Carbon::now(),
+            ]);
+
+        if($result > 0){
+            $idx = $params['idx'];
+        }else{
+            $idx = "fails";
+        }
+
+        return $idx;
     }
 }

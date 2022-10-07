@@ -46,8 +46,47 @@
                                     <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">내용</th>
                                     <td colspan="3" class="whitespace-nowrap">
                                         <div class="flex items-center">
+                                            @if($feedData[0]->feed_source != null && $feedData[0]->feed_source != '')
+                                                @php 
+                                                    $feed_source = $feedData[0]->feed_source;
+                                                    $ext = explode('.', $feed_source); 
+                                                    $ext = end($ext);
+                                                @endphp
+                                                @if($ext == 'jpg' || $ext == 'png' || $ext == 'svg' || $ext == 'jpeg')
+                                                    <img src="{{$feedData[0]->file_url.$feedData[0]->feed_source}}" alt="메인 이미지">
+                                                @elseif($ext == 'mp4')
+                                                    <video controls width="250">
+                                                        <source src="{{$feedData[0]->file_url.$feedData[0]->feed_source}}" type="video/mp4">
+                                                    </video>
+                                                @endif
+                                            @endif
+                                        </div>
+                                        <div class="mt-3">
                                             {{$feedData[0]->wr_content}}
                                         </div>
+                                        @php $i=0; @endphp
+                                        @foreach($feedFileData as $rs)
+                                            <div class="flex items-center">
+                                                @if($rs->hash_name != null && $rs->hash_name != '')
+                                                    @php 
+                                                        $feed_source = $rs->hash_name;
+                                                        $ext = explode('.', $feed_source);
+                                                        $ext = end($ext);
+                                                    @endphp
+                                                    @if($ext == 'jpg' || $ext == 'png' || $ext == 'svg' || $ext == 'jpeg')
+                                                        <img src="{{$rs->file_url.$rs->hash_name}}" alt="메인 이미지">
+                                                    @elseif($ext == 'mp4')
+                                                        <video controls width="250">
+                                                            <source src="{{$rs->file_url.$rs->hash_name}}" type="video/mp4">
+                                                        </video>
+                                                    @endif
+                                                @endif
+                                            </div>
+                                            <div class="mt-3">
+                                                {{$rs->feed_content}}
+                                            </div>
+                                            @php $i++; @endphp
+                                        @endforeach
                                     </td>
                                 </tr>
                                 <tr>
@@ -63,7 +102,7 @@
                                 <tr>
                                     <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">신고</th>
                                     <td colspan="3" class="whitespace-nowrap">
-                                        {{$feedData[0]->wr_report}} (외)
+                                        {{$feedData[0]->wr_report}} (회)
                                     </td>
                                 </tr>
                                 <tr>
@@ -89,7 +128,10 @@
                                 <tr>
                                     <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">노출 상태</th>
                                     <td colspan="3" class="whitespace-nowrap">
-                                        {{$feedData[0]->wr_open}}
+                                        <select name="wr_open" class="form-select w-60" aria-label=".form-select-lg example">
+                                            <option value="open" @if($feedData[0]->wr_open == 'open') selected @endif>노출</option>
+                                            <option value="secret" @if($feedData[0]->wr_open == 'secret') selected @endif>비 노출</option>
+                                        </select>
                                     </td>
                                 </tr>
                             </table>
@@ -115,7 +157,7 @@
 
         $(document).on('click','.feedUpdatebtn', function(){
 
-            if($("input[name='show_date']").val() == ""){
+            if($("select[name='wr_open']").val() == ""){
                 alert("노출기간을 입력해주세요.");
                 return false;
             }
@@ -148,36 +190,6 @@
                 }
             });*/
 
-        });
-
-        $(document).on('click','.popupDeletebtn',function(){
-            var idx = $("input[name='idx']").val();
-            if(confirm("팝업을 삭제하시겠습니까?")){
-                jQuery.ajax({
-                    cache: false,
-                    dataType:'json',
-                    data: {
-                        idx : idx
-                    },
-                    url: '/mainmanage/popup/delete',
-                    success: function (data) {
-                        if(data.result == "SUCCESS"){
-                            alert('팝업이 삭제되었습니다.');
-                            location.href="/mainmanage/popup/list"
-                        }else{
-                            alert(data.result);
-                            //console.log(data);
-                        }
-                    },
-                    error: function (e) {
-                        console.log('start');
-                        console.log(e);
-                        //alert('로딩 중 오류가 발생 하였습니다.');
-                    }
-                });
-            }else{
-                alert('선택한 목록이 없습니다');
-            }
         });
     </script>
 @endsection

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Response;
 use App\Service\MainManageServiceImpl;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Session;
 
 class MainManageController extends Controller
@@ -194,7 +195,7 @@ class MainManageController extends Controller
         $file = $this->request->file('popup_img');
         $result = $this->adminMainmanageService->PopupAdd($params,$file);
 
-        if($result == 0){
+        if($result == "fails"){
             return redirect()->back()->with('alert', '등록/수정에 실패하였습니다. \n관리자에게 문의 바랍니다.');
         }else{
             return redirect('/mainmanage/popup/view/'.$result);
@@ -207,7 +208,7 @@ class MainManageController extends Controller
         $file = $this->request->file('popup_img');
         $result = $this->adminMainmanageService->PopupUpdate($params,$file);
 
-        if($result == 0){
+        if($result == "fails"){
             return redirect()->back()->with('alert', '등록/수정에 실패하였습니다. \n관리자에게 문의 바랍니다.');
         }else{
             return redirect('/mainmanage/popup/view/'.$result);

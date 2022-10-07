@@ -49,7 +49,7 @@ Route::prefix('/v1/')->group(function () {
         Route::get('soundSourceList', [ApiSoundSourceController::class, 'soundSourceList']);
     });
 
-    Route::group(['prefix' => 'Feed'], function() {
+    Route::group(['prefix' => 'feed'], function() {
         Route::post('feedFileUpdate', [ApiFeedController::class, 'feedFileUpdate']);
     });
 

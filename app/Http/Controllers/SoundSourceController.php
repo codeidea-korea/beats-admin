@@ -10,6 +10,7 @@ use Session;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\UploadedFile;
 use App\Http\Requests\StoreFileRequest;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SoundSourceController extends Controller
 {

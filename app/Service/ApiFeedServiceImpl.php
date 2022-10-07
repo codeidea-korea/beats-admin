@@ -15,12 +15,12 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
         parent::__construct();
     }
 
-    //피드파일 업로드
+    //음원파일 업로드
     public function setFeedFileUpdate($params,$files)
     {
 
         $sqlData['file_cnt'] = count($files);
-        $sqlData['idx'] = $params['idx'];
+        $sqlData['idx'] = $params['feed_idx'];
 
         $folderName = '/feed/'.date("Y/m/d").'/';
         if($files != "" && $files !=null){
@@ -49,7 +49,7 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
 
     }
 
-    //피드데이터 업로드
+    //음원데이터 업로드
     public function setFeedUpdate($params,$files)
     {
 
@@ -67,10 +67,10 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
                 'mem_id' => $params['mem_id']
                 , 'wr_title' => $params['wr_title']
                 , 'wr_content' => $params['feed_content'][0]
-                , 'wr_open' => $params['wr_open']
+                , 'wr_open' => 'open'
                 , 'wr_type' => $params['wr_type']
                 , 'wr_file' => $params['wr_file']
-                , 'feed_source' => $params['file_source']
+                , 'feed_source' => $params['feed_source']
                 , 'feed_file' => $params['feed_file']
                 , 'file_url' => $folderName
                 , 'created_at' => \Carbon\Carbon::now()
