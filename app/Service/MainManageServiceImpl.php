@@ -18,7 +18,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
 
         $result = $this->statDB
             ->select('
-            SELECT 
+            SELECT
             adm_banner.idx,
             adm_banner.mem_id,
             adm_banner.banner_code,
@@ -26,14 +26,14 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
             adm_banner.type,
             adm_banner.created_at,
             adm_banner.updated_at,
-            IFNULL(adm_banner_data.downcontents,0) AS downcontents 
-            FROM adm_banner 
-            LEFT JOIN (SELECT banner_code,COUNT(idx) as downcontents FROM adm_banner_data GROUP BY banner_code) as adm_banner_data 
-            ON adm_banner.banner_code = adm_banner_data.banner_code 
+            IFNULL(adm_banner_data.downcontents,0) AS downcontents
+            FROM adm_banner
+            LEFT JOIN (SELECT banner_code,COUNT(idx) as downcontents FROM adm_banner_data GROUP BY banner_code) as adm_banner_data
+            ON adm_banner.banner_code = adm_banner_data.banner_code
             ORDER BY created_at desc LIMIT '.$params['limit'].' OFFSET '.($params['page']-1)*$params['limit']
             );
            // ->groupBy('name')
-        
+
         return $result;
 
     }
@@ -60,7 +60,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
     public function getBannerView($params, $banner_code) {
 
         $result = $this->statDB
-            ->select('SELECT 
+            ->select('SELECT
             adm_banner.idx,
             adm_banner.mem_id,
             adm_banner.banner_code,
@@ -68,9 +68,9 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
             adm_banner.type,
             adm_banner.created_at,
             adm_banner.updated_at,
-            IFNULL(adm_banner_data.downcontents,0) AS downcontents 
+            IFNULL(adm_banner_data.downcontents,0) AS downcontents
             FROM adm_banner
-            LEFT JOIN (SELECT banner_code,COUNT(idx) as downcontents FROM adm_banner_data GROUP BY banner_code) as adm_banner_data 
+            LEFT JOIN (SELECT banner_code,COUNT(idx) as downcontents FROM adm_banner_data GROUP BY banner_code) as adm_banner_data
             ON adm_banner.banner_code = adm_banner_data.banner_code
             WHERE adm_banner.banner_code = "'.$banner_code.'"
             ORDER BY created_at desc LIMIT '.$params['limit'].' OFFSET '.($params['page']-1)*$params['limit']);
@@ -121,7 +121,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
             ->take($params['limit'])
            // ->groupBy('name')
             ->get();
-        
+
         return $result;
 
     }
@@ -197,7 +197,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
     }
 
     public function BannerAdd($params,$file) {
-        
+
         if($file != ""){
             $cfilename = $file->getClientOriginalName();
             $cfilesource = $file->hashName();
@@ -269,7 +269,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
         }
 
         return $bannercode;
-    
+
 
     }
 
@@ -309,7 +309,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
             })
             ->when(isset($params['isuse']), function($query) use ($params){
                 return $query->where(function($query) use ($params) {
-                    $query->where('isuse', $params['isuse']);
+                    $query->where('adm_popup.isuse', $params['search_isuse']);
                 });
             })
             ->when(isset($params['fr_search_at']), function($query) use ($params){
@@ -342,7 +342,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
             })
             ->when(isset($params['isuse']), function($query) use ($params){
                 return $query->where(function($query) use ($params) {
-                    $query->where('isuse', $params['isuse']);
+                    $query->where('isuse', $params['search_isuse']);
                 });
             })
             ->when(isset($params['fr_search_at']), function($query) use ($params){
@@ -384,7 +384,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
     }
 
     public function PopupAdd($params,$file) {
-        
+
         if($file != ""){
             $cfilename = $file->getClientOriginalName();
             $cfilesource = $file->hashName();
@@ -409,7 +409,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
         $result = $this->statDB->table('adm_popup')
             ->insertGetId([
                 'pp_title' => $params['pp_title'], 'connect_url' => $params['connect_url'], 'connect_type' => $params['connect_type'],
-                'fr_show_date' => $params['fr_show_date'], 'connect_contents' => $params['connect_contents'], 'type' => $params['type'], 
+                'fr_show_date' => $params['fr_show_date'], 'connect_contents' => $params['connect_contents'], 'type' => $params['type'],
                 'bk_show_date' => $params['bk_show_date'],'popup_file' => $params['popup_file'], 'popup_source' => $params['popup_source'],
                 'isuse' => $params['isuse'], 'mem_id' => auth()->user()->idx, 'created_at' => \Carbon\Carbon::now(),
             ]);
@@ -457,7 +457,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
             ->where('idx',$params['idx'])
             ->update([
                 'pp_title' => $params['pp_title'], 'connect_url' => $params['connect_url'], 'connect_type' => $params['connect_type'],
-                'fr_show_date' => $params['fr_show_date'], 'connect_contents' => $params['connect_contents'], 'type' => $params['type'], 
+                'fr_show_date' => $params['fr_show_date'], 'connect_contents' => $params['connect_contents'], 'type' => $params['type'],
                 'bk_show_date' => $params['bk_show_date'],'popup_file' => $params['popup_file'], 'popup_source' => $params['popup_source'],
                 'isuse' => $params['isuse'], 'updated_at' => \Carbon\Carbon::now(),
             ]);
@@ -469,7 +469,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
         }
 
         return $pidx;
-    
+
 
     }
 
