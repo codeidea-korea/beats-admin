@@ -90,6 +90,7 @@
                                     <div class="w-16 pl-5">
                                         <img src="/dist/images/play.svg" alt="">
                                     </div>
+                                    <script src="https://unpkg.com/wavesurfer.js"></script>
                                     <div class="grow px-5">
                                         <div class="font-medium text-lg">사용자가 입력한 곡 제목 표기</div>
                                         <div class="text-slate-400 mt-1"> <span class="font-bold">최근 수정일 :</span>2022. 03. 17</div>
@@ -97,7 +98,12 @@
                                             <i data-lucide="circle" class="w-4 h-4 mr-1"></i>
                                             47
                                         </div>
+                                        <div class="font-medium text-lg" id="waveform"></div>
                                     </div>
+
+                                    <audio controls  src="/music/Blueming.mp3">
+
+                                    </audio>
                                     <div class="border-l flex gap-3 px-5">
                                         <div class="border border-slate-300 rounded-md border-dashed p-3 text-center">
                                             <div class="font-bold">작업 방식</div>
