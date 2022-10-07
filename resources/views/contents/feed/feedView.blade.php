@@ -53,10 +53,10 @@
                                                     $ext = end($ext);
                                                 @endphp
                                                 @if($ext == 'jpg' || $ext == 'png' || $ext == 'svg' || $ext == 'jpeg')
-                                                    <img src="{{$feedData[0]->file_url.$feedData[0]->feed_source}}" alt="메인 이미지">
+                                                    <img src="/storage/{$feedData[0]->file_url.$feedData[0]->feed_source}}" alt="메인 이미지">
                                                 @elseif($ext == 'mp4')
                                                     <video controls width="250">
-                                                        <source src="{{$feedData[0]->file_url.$feedData[0]->feed_source}}" type="video/mp4">
+                                                        <source src="/storage/{{$feedData[0]->file_url.$feedData[0]->feed_source}}" type="video/mp4">
                                                     </video>
                                                 @endif
                                             @endif
@@ -74,10 +74,10 @@
                                                         $ext = end($ext);
                                                     @endphp
                                                     @if($ext == 'jpg' || $ext == 'png' || $ext == 'svg' || $ext == 'jpeg')
-                                                        <img src="{{$rs->file_url.$rs->hash_name}}" alt="메인 이미지">
+                                                        <img src="/storage/{{$rs->file_url.$rs->hash_name}}" alt="메인 이미지">
                                                     @elseif($ext == 'mp4')
                                                         <video controls width="250">
-                                                            <source src="{{$rs->file_url.$rs->hash_name}}" type="video/mp4">
+                                                            <source src="/storage/{{$rs->file_url.$rs->hash_name}}" type="video/mp4">
                                                         </video>
                                                     @endif
                                                 @endif

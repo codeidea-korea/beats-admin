@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\DB;
 interface ApiFeedServiceInterface
 {
 
+    //피드 리스트
+    public function getFeedList($params);
+    
     //피드등록 1step
     public function setFeedFileUpdate($params,$files);
 

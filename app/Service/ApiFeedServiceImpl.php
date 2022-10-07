@@ -15,7 +15,41 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
         parent::__construct();
     }
 
-    //음원파일 업로드
+    public function getFeedList($params) {
+
+        $result = $this->statDB->table('feed_board')
+            ->leftJoin('member_data', 'feed_board.mem_id', '=', 'member_data.mem_id')
+            ->select(
+                'feed_board.idx',
+                'feed_board.wr_title',
+                'feed_board.wr_bit',
+                'feed_board.wr_comment',
+                'feed_board.wr_content',
+                'feed_board.feed_source',
+                DB::raw("CONCAT_WS('', '/storage', feed_board.file_url) AS file_url"),
+                DB::raw("CASE WHEN feed_board.wr_type = 'daily' THEN '일상' WHEN feed_board.wr_type = 'cover' THEN '커버곡' ELSE '자작곡' END AS wr_type"),
+                'member_data.mem_nickname',
+            )
+            ->where('feed_board.wr_open','open')
+            ->when($params['sorting'] == 2, function($query) use ($params){
+                return $query->orderby('feed_board.wr_bit','desc');
+            })
+            ->when($params['sorting'] == 3, function($query) use ($params){
+                return $query->orderby('feed_board.wr_comment','desc');
+            })
+            ->orderby('feed_board.idx','desc')
+            ->skip(($params['page']-1)*$params['limit'])
+            ->take($params['limit'])
+            ->get();
+            
+            // ->skip(($params['page']-1)*$params['limit'])
+            // ->take($params['limit'])
+
+        return $result;
+
+    }
+
+    //피드파일 업로드
     public function setFeedFileUpdate($params,$files)
     {
 
@@ -49,7 +83,7 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
 
     }
 
-    //음원데이터 업로드
+    //피드데이터 업로드
     public function setFeedUpdate($params,$files)
     {
 

@@ -13,13 +13,32 @@ use Session;
 class ApiFeedController extends Controller
 {
     private $request;
-    private $apiSoundSorceService;
+    private $apiFeedService;
 
 
     public function __construct(Request $request)
     {
         $this->request = $request;
-        $this->apiSoundSorceService = new ApiFeedServiceImpl();
+        $this->apiFeedService = new ApiFeedServiceImpl();
+    }
+
+    public function getFeedList()
+    {
+        $params = $this->request->input();
+
+        $params['type'] = $params['type'] ?? 0;
+        $params['page'] = $params['page'] ?? 1;
+        $params['limit'] = $params['limit'] ?? 10;
+        //정렬 최신순 1 비트 많은 순 2 댓글 많은순 3
+        $params['sorting'] = $params['sorting'] ?? '';
+
+        $resultData = $this->apiFeedService->getFeedList($params);
+
+        $returnData['code'] = 0;
+        $returnData['message'] = "피드 리스트";
+        $returnData['response'] = $resultData;
+
+        return json_encode($returnData);
     }
 
     public function feedFileUpdate()
@@ -44,13 +63,13 @@ class ApiFeedController extends Controller
 
             if($params['wr_file'] == $params['content_cnt']){
                 // 음원파일 헤드 등록
-                $resultData1 = $this->apiSoundSorceService->setFeedUpdate($params,$main_files);
+                $resultData1 = $this->apiFeedService->setFeedUpdate($params,$main_files);
 
                 if($sub_files != null){    
                     $params['feed_idx'] = $resultData1;
                     
                     // 첨부파일 db 등록 및 서버 저장
-                    $resultData2 = $this->apiSoundSorceService->setFeedFileUpdate($params,$sub_files);
+                    $resultData2 = $this->apiFeedService->setFeedFileUpdate($params,$sub_files);
                 }
 
                 $returnData['code'] = 0;
