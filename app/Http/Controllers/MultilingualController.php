@@ -93,7 +93,14 @@ class MultilingualController extends Controller
     public function menuDownloadExcel(){
 
         $params = $this->request->input();
-        $beatSomeoneMenuList = $this->langManageService->getBeatSomeoneMenuList($params);
+        $params['siteCode'] = $params['siteCode'] ?? '01';
+
+        if($params['siteCode'] =="01"){
+            $menuList = $this->langManageService->getByBeatMenuList($params);
+        }elseif($params['siteCode'] =="02"){
+            $menuList = $this->langManageService->getBeatSomeoneMenuList($params);
+        }
+
 
         /*
 
@@ -140,7 +147,7 @@ class MultilingualController extends Controller
 
         return view('multilingual.menuExcel',[
             'params' => $params
-            ,'beatSomeoneMenuList' => $beatSomeoneMenuList
+            ,'menuList' => $menuList
         ]);
 
     }

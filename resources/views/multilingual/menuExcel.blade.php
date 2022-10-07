@@ -40,7 +40,7 @@ header("Pragma: no-cache");
     </tr>
     </thead>
     <!-- 데이터 내용 x-->
-    @if(count($beatSomeoneMenuList)==0)
+    @if(count($menuList)==0)
         <tbody>
         <tr>
             <td colspan="6">
@@ -51,7 +51,7 @@ header("Pragma: no-cache");
     @else
     <!-- 데이터 내용 o-->
         <tbody>
-        @foreach($beatSomeoneMenuList as $rs)
+        @foreach($menuList as $rs)
             <tr>
                 <td>{{$rs->menu_code}}</td>
                 <td>{{$rs->lang_kr}}</td>
