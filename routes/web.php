@@ -108,6 +108,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('ajax/langUpdate', [MultilingualController::class, 'setLangUpdate']);
         Route::get('menuManage/{siteCode}', [MultilingualController::class, 'menuManage']);
         Route::post('updateMenuManage', [MultilingualController::class, 'setMenuManage']);
+        Route::get('menuDownloadExcel', [MultilingualController::class, 'menuDownloadExcel']);
 
     });
 

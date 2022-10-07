@@ -11,6 +11,12 @@
         <div class="grid grid-cols-12 gap-6 mt-5">
 
             <div class="intro-y col-span-12 lg:col-span-12">
+                <div class="flex w-full box pt-5">
+                    <div class="ml-auto">
+                        <button class="btn btn-primary w-24 ml-2" onClick="excelDownload()">Excel Download</button>
+                        <button class="btn btn-primary w-24 ml-2" onClick="alert('엑셀 업로드 폼이 없음');">Excel Upload</button>
+                    </div>
+                </div>
                 <div class="intro-y box">
                     <!-- BEGIN: Boxed Tab -->
                     <div id="boxed-tab" class="p-5">
@@ -102,19 +108,25 @@
                 </div>
             </div>
         </div>
+        <input type="hidden" id="excelCode" value="01">
         <script>
             function chTab(no){
                 if(no==1){
                     $(".tabform2").hide();
                     $(".tabform1").show();
-
+                    document.getElementById('excelCode').value = '01';
                 }else if(no==2){
                     $(".tabform1").hide();
                     $(".tabform2").show();
-
+                    document.getElementById('excelCode').value = '02';
                 }else{
                     alert("스크립트 오류입니다.");
                 }
+            }
+
+            function excelDownload(){
+                var scode = document.getElementById('excelCode').value;
+                location.href = '/multilingual/menuDownloadExcel?siteCode='+scode;
             }
         </script>
 @endsection
