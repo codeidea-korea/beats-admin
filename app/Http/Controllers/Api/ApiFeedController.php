@@ -36,16 +36,22 @@ class ApiFeedController extends Controller
             $main_files = $this->request->file('main_file');
             $sub_files = $this->request->file('sub_file');
 
-            $params['wr_file'] = count($sub_files) + count($main_files);
-            
+            if($sub_files == null){
+                $params['wr_file'] = 1;
+            }else{
+                $params['wr_file'] = count($sub_files) + 1;
+            }
+
             if($params['wr_file'] == $params['content_cnt']){
                 // 음원파일 헤드 등록
                 $resultData1 = $this->apiSoundSorceService->setFeedUpdate($params,$main_files);
 
-                $params['feed_idx'] = $resultData1;
-                
-                // 첨부파일 db 등록 및 서버 저장
-                $resultData2 = $this->apiSoundSorceService->setFeedFileUpdate($params,$sub_files);
+                if($sub_files != null){    
+                    $params['feed_idx'] = $resultData1;
+                    
+                    // 첨부파일 db 등록 및 서버 저장
+                    $resultData2 = $this->apiSoundSorceService->setFeedFileUpdate($params,$sub_files);
+                }
 
                 $returnData['code'] = 0;
                 $returnData['message'] = "피드 등록 완료";
