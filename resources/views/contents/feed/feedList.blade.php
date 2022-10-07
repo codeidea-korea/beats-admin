@@ -6,7 +6,7 @@
     @include('include.topBarINC')
     <!-- END: Top Bar -->
         <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
-            <h2 class="text-lg font-medium mr-auto">신고 내역</h2>
+            <h2 class="text-lg font-medium mr-auto">피드</h2>
         </div>
 
         <div class="grid grid-cols-12 gap-6 mt-5">
@@ -112,9 +112,9 @@
                                     @foreach($feedList as $rs)
                                         <tr>
                                             <td class="whitespace-nowrap text-center">{{$totalCount-($i+(($params['page']-1)*10))}}</td>
-                                            <td class="whitespace-nowrap text-center">{{$rs->wr_open}}</td>
-                                            <td class="whitespace-nowrap text-center">{{$rs->wr_type}}</td>
-                                            <td class="whitespace-nowrap text-center"><a href="/content/feed/view/{{$rs->idx}}">{{$rs->wr_title}}</a></td>
+                                            <td class="whitespace-nowrap text-center">@if($rs->wr_open == 'open') 노출 @else 비 노출 @endif</td>
+                                            <td class="whitespace-nowrap text-center">@if($rs->wr_type == 'daily') 일상 @elseif($rs->wr_type == 'cover') 커버곡 @else 자작곡 @endif</td>
+                                            <td class="whitespace-nowrap text-center"><a href="/contents/feedView/{{$rs->idx}}">{{$rs->wr_title}}</a></td>
                                             <td class="whitespace-nowrap text-center">{{$rs->email_id}}</td>
                                             <td class="whitespace-nowrap text-center">{{$rs->wr_lng}}</td>
                                             <td class="whitespace-nowrap text-center">{{$rs->wr_file}}</td>
@@ -126,8 +126,6 @@
                                         </tr>
                                         @php $i++; @endphp
                                     @endforeach
-
-
                                     </tbody>
                                 </table>
                             </div>

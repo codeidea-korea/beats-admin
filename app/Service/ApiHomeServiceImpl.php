@@ -90,7 +90,7 @@ class ApiHomeServiceImpl extends DBConnection  implements ApiHomeServiceInterfac
             ->select(
                 'notice_board.idx',
                 'notice_board.wr_title',
-                'notice_board.created_at',
+                DB::raw("date_format(notice_board.created_at, '%Y-%m-%d' ) as created_at"),
             )
             ->where('notice_board.wr_open','open')
             ->when(isset($params['searchText']), function($query) use ($params){
@@ -100,9 +100,10 @@ class ApiHomeServiceImpl extends DBConnection  implements ApiHomeServiceInterfac
                 });
             })
             ->orderby('notice_board.idx','desc')
-            ->skip(($params['page']-1)*$params['limit'])
-            ->take($params['limit'])
             ->get();
+            
+            // ->skip(($params['page']-1)*$params['limit'])
+            // ->take($params['limit'])
 
         return $result;
 
@@ -115,7 +116,7 @@ class ApiHomeServiceImpl extends DBConnection  implements ApiHomeServiceInterfac
                 'notice_board.idx',
                 'notice_board.wr_title',
                 'notice_board.wr_content',
-                'notice_board.created_at',
+                DB::raw("date_format(notice_board.created_at, '%Y-%m-%d' ) as created_at"),
             )
             ->where('notice_board.idx',$params['idx'])
             ->get();

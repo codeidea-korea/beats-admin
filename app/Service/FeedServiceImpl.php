@@ -101,4 +101,32 @@ class FeedServiceImpl extends DBConnection  implements FeedServiceInterface
         return $result;
 
     }
+
+    public function getFeedView($idx) {
+
+        $result = $this->statDB->table('feed_board')
+            ->select(
+                'feed_board.idx',
+                'feed_board.wr_title',
+                'feed_board.wr_content',
+                'feed_board.wr_open',
+                'feed_board.wr_type',
+                'feed_board.wr_bit',
+                'feed_board.wr_comment',
+                'feed_board.wr_report',
+                'feed_board.wr_lng',
+                'feed_board.feed_file',
+                'feed_board.feed_source',
+                'feed_board.created_at',
+                'feed_board.updated_at',
+                'members.email_id'
+            )
+            ->where('feed_board.idx',$idx)
+            ->leftJoin('members','feed_board.mem_id','=','members.idx')
+            ->orderby('feed_board.idx','desc')
+            ->get();
+
+        return $result;
+
+    }
 }

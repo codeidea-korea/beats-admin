@@ -58,4 +58,16 @@ class FeedController extends Controller
             ,'totalCount' => $totalCount
         ]);
     }
+
+    public function getFeedView($idx)
+    {
+        $params = $this->request->input();
+        $params['menuCode'] = "AD060100";
+        $feedData = $this->adminFeedService->getFeedView($idx);
+
+        return view('contents.feed.FeedView',[
+            'feedData' => $feedData
+            ,'params' => $params
+        ]);
+    }
 }

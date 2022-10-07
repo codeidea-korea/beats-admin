@@ -184,6 +184,16 @@ class ApiMemberController extends Controller
             $returnData['message']="로그인 유지 확인";
             $returnData['response']=$result;
 
+            // if($result){
+            //     $result3 = $this->apiMemberService->getMemberData($params);
+            //     $returnData['code']=0;
+            //     $returnData['message']="로그인 유지 성공";
+            //     $returnData['response']=$result3;
+            // }else{
+            //     $returnData['code']=1;
+            //     $returnData['message']="로그인 유지 실패";
+            // }
+
         } catch(\Exception $exception){
             throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
         }

@@ -15,7 +15,7 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
         parent::__construct();
     }
 
-    //음원파일 업로드
+    //피드파일 업로드
     public function setFeedFileUpdate($params,$files)
     {
 
@@ -49,7 +49,7 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
 
     }
 
-    //음원데이터 업로드
+    //피드데이터 업로드
     public function setFeedUpdate($params,$files)
     {
 
@@ -66,6 +66,7 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
             ->insertGetId([
                 'mem_id' => $params['mem_id']
                 , 'wr_title' => $params['wr_title']
+                , 'wr_content' => $params['feed_content'][0]
                 , 'wr_open' => $params['wr_open']
                 , 'wr_type' => $params['wr_type']
                 , 'wr_file' => $params['wr_file']
