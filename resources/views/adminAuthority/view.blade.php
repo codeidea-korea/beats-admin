@@ -71,7 +71,7 @@
                                 <tr>
                                     <th class="whitespace-nowrap text-center bg-primary/10">등록자</th>
                                     <td>
-                                        {{$adminData->adminid}}
+                                        {{$adminData->cname}} ({{$adminData->cid}})
                                     </td>
                                 </tr>
                                 <tr>
