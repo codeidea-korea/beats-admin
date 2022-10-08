@@ -15,6 +15,7 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
         parent::__construct();
     }
 
+    //피드 리스트
     public function getFeedList($params) {
 
         $result = $this->statDB->table('feed_board')
@@ -42,11 +43,49 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
             ->take($params['limit'])
             ->get();
             
-            // ->skip(($params['page']-1)*$params['limit'])
-            // ->take($params['limit'])
-
         return $result;
 
+    }
+
+    //피드 상세
+    public function getFeedView($params) {
+
+        $result = $this->statDB->table('feed_board')
+            ->leftJoin('member_data', 'feed_board.mem_id', '=', 'member_data.mem_id')
+            ->select(
+                'feed_board.idx',
+                'feed_board.mem_id',
+                'feed_board.wr_title',
+                'feed_board.wr_bit',
+                'feed_board.wr_comment',
+                'feed_board.wr_content',
+                'feed_board.feed_source',
+                'feed_board.created_at',
+                DB::raw("CONCAT_WS('', '/storage', feed_board.file_url) AS file_url"),
+                DB::raw("CASE WHEN feed_board.wr_type = 'daily' THEN '일상' WHEN feed_board.wr_type = 'cover' THEN '커버곡' ELSE '자작곡' END AS wr_type"),
+                'member_data.mem_nickname',
+            )
+            ->where('feed_board.idx',$params['idx'])
+            ->where('feed_board.wr_open','open')
+            ->get();
+            
+        return $result;
+
+    }
+
+    public function getFeedFile($params) {
+
+        $result = $this->statDB->table('feed_file')
+            ->select(
+                'feed_file.file_no',
+                'feed_file.feed_content as wr_content',
+                'feed_file.hash_name as feed_source',
+                DB::raw("CONCAT_WS('', '/storage', feed_file.file_url) AS file_url"),
+            )
+            ->where('feed_file.feed_idx',$params['idx'])
+            ->get();
+            
+        return $result;
     }
 
     //피드파일 업로드

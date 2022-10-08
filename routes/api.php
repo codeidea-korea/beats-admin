@@ -51,6 +51,7 @@ Route::prefix('/v1/')->group(function () {
 
     Route::group(['prefix' => 'feed'], function() {
         Route::get('feedList', [ApiFeedController::class, 'getFeedList']);
+        Route::get('feedView', [ApiFeedController::class, 'getFeedView']);
         Route::post('feedFileUpdate', [ApiFeedController::class, 'feedFileUpdate']);
     });
 
