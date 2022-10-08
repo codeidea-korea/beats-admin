@@ -88,6 +88,35 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
         return $result;
     }
 
+    public function feedDelete($params) {
+
+        $feed_board = DB::table('feed_board')->where('idx', $params['idx'])->first();
+
+        if ($feed_board->feed_file != ""){
+            $dir = storage_path('app/public/feed');
+            $path = "$dir/$feed_board->feed_source";
+            if(!File::exists($path)) { return -1; }
+            File::delete($path);
+        }
+
+        if($feed_board->wr_file > 1){
+            $feed_file = DB::table('feed_file')->where('feed_idx', $params['idx'])->get();
+
+            foreach ($feed_file as $file){
+                $dir = storage_path('app/public/feed');
+                $path = "$dir/$file->hash_name";
+                if(!File::exists($path)) { return -1; }
+                File::delete($path);
+            }
+
+            $result = $this->statDB->table('feed_file')->where('feed_idx', $params['idx'])->delete();
+        }
+
+        $result = $this->statDB->table('feed_board')->where('idx', $params['idx'])->delete();
+
+        return $result;
+    }
+
     //피드파일 업로드
     public function setFeedFileUpdate($params,$files)
     {
@@ -151,6 +180,4 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
 
         return $result;
     }
-
-
 }

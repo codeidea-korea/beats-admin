@@ -129,4 +129,30 @@ class ApiFeedController extends Controller
 
         return json_encode($returnData);
     }
+
+    public function feedDelete()
+    {
+        $returnData['code'] = -1;
+        $returnData['message'] = "시스템 장애";
+
+        try{
+
+            $params = $this->request->input();
+            $result = $this->apiFeedService->feedDelete($params);
+
+            if($result == -1 || $result == 0){
+                $returnData['code'] = 1;
+                $returnData['message'] = "피드 삭제 실패";
+            }else{
+                $returnData['code'] = 0;
+                $returnData['message'] = "피드 삭제 완료";
+                $returnData['response'] = $result;
+            }
+
+        } catch(\Exception $exception){
+            throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+        }
+
+        return json_encode($returnData);
+    }
 }

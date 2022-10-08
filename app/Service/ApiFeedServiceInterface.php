@@ -13,6 +13,9 @@ interface ApiFeedServiceInterface
     public function getFeedView($params);
 
     public function getFeedFile($params);
+
+    //피드 삭제
+    public function feedDelete($params);
     
     //피드등록 1step
     public function setFeedFileUpdate($params,$files);
