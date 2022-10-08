@@ -88,6 +88,39 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
         return $result;
     }
 
+    //피드 삭제
+    public function feedDelete($params) {
+
+        $feed_board = DB::table('feed_board')->where('idx', $params['idx'])->first();
+
+        if ($feed_board->feed_file != ""){
+            $dir = storage_path('app/public');
+            $path = "$dir"."$feed_board->file_url"."$feed_board->feed_source";
+            if(!File::exists($path)) { return -1; }
+            File::delete($path);
+        }
+
+        $result = $this->statDB->table('feed_board')->where('idx', $params['idx'])->delete();
+
+        return $result;
+    }
+
+    public function feedFileDelete($params) {
+        
+        $feed_file = DB::table('feed_file')->where('feed_idx', $params['idx'])->get();
+
+        foreach ($feed_file as $file){
+            $dir = storage_path('app/public');
+            $path = "$dir"."$file->file_url"."$file->hash_name";
+            if(!File::exists($path)) { return -1; }
+            File::delete($path);
+        }
+
+        $result = $this->statDB->table('feed_file')->where('feed_idx', $params['idx'])->delete();
+
+        return $result;
+    }
+
     //피드파일 업로드
     public function setFeedFileUpdate($params,$files)
     {
@@ -148,36 +181,6 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
                 , 'file_url' => $folderName
                 , 'created_at' => \Carbon\Carbon::now()
             ]);
-
-        return $result;
-    }
-
-    //피드 삭제
-    public function feedDelete($params) {
-
-        $feed_board = DB::table('feed_board')->where('idx', $params['idx'])->first();
-
-        if ($feed_board->feed_file != ""){
-            $dir = storage_path('app/public');
-            $path = "$dir"."$feed_board->file_url"."$feed_board->feed_source";
-            if(!File::exists($path)) { return -1; }
-            File::delete($path);
-        }
-
-        if($feed_board->wr_file > 1){
-            $feed_file = DB::table('feed_file')->where('feed_idx', $params['idx'])->get();
-
-            foreach ($feed_file as $file){
-                $dir = storage_path('app/public');
-                $path = "$dir"."$feed_file->file_url"."$file->hash_name";
-                if(!File::exists($path)) { return -1; }
-                File::delete($path);
-            }
-
-            $result = $this->statDB->table('feed_file')->where('feed_idx', $params['idx'])->delete();
-        }
-
-        $result = $this->statDB->table('feed_board')->where('idx', $params['idx'])->delete();
 
         return $result;
     }

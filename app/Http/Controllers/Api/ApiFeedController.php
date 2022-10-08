@@ -138,11 +138,15 @@ class ApiFeedController extends Controller
         try{
 
             $params = $this->request->input();
+            $params['idx'] = $params['idx'] ?? 0;
+            
             $result = $this->apiFeedService->feedDelete($params);
+            $result2 = $this->apiFeedService->feedFileDelete($params);
 
             if($result == -1 || $result == 0){
                 $returnData['code'] = 1;
                 $returnData['message'] = "피드 삭제 실패";
+                $returnData['response'] = $result;
             }else{
                 $returnData['code'] = 0;
                 $returnData['message'] = "피드 삭제 완료";
