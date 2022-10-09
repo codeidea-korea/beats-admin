@@ -17,22 +17,25 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
         $result = $this->statDB->table('members')
             ->leftJoin('member_data', 'members.idx', '=', 'member_data.mem_id')
             ->select(
-                DB::raw("CASE
-                    WHEN member_data.channel = 'apple'      THEN members.apple_key
-                    WHEN member_data.channel = 'naver'      THEN members.naver_key
-                    WHEN member_data.channel = 'kakao'      THEN members.kakao_key
-                    WHEN member_data.channel = 'google'     THEN members.google_key
-                    WHEN member_data.channel = 'facebook'   THEN members.facebook_key
-                    WHEN member_data.channel = 'twitter'    THEN members.twitter_key
-                    WHEN member_data.channel = 'soundcloud' THEN members.soundcloud_key
-                ELSE email_id END AS uid"),
+                'member_data.u_id',
                 'members.email_id',
                 'member_data.mem_id',
                 'member_data.name',
                 'member_data.phone_number',
                 'member_data.email',
+                'member_data.class_h',
+                DB::raw("CASE WHEN member_data.class_h = 1 THEN '활성회원' WHEN member_data.class_h = 0 THEN '휴면회원' ELSE '' END AS class_h_value"),
                 'member_data.class',
+                DB::raw("CASE WHEN member_data.class = 1 THEN '비트썸원회원'
+                WHEN member_data.class = 2 THEN '바이비츠회원'
+                WHEN member_data.class = 3 THEN '통합회원'
+                ELSE '' END AS class_value"),
                 'member_data.gubun',
+                DB::raw("CASE WHEN member_data.gubun = 1 THEN '일반'
+                WHEN member_data.gubun = 2 THEN '작곡가'
+                WHEN member_data.gubun = 3 THEN '음원 구매자'
+                WHEN member_data.gubun = 4 THEN '멘토 뮤지션'
+                ELSE '' END AS gubun_value"),
                 'member_data.channel',
                 'member_data.nationality',
                 'member_data.mem_nickname',
