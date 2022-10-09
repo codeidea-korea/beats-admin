@@ -6,6 +6,7 @@ use Agent;
 use Session;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
 {

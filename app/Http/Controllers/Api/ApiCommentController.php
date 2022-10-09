@@ -1,0 +1,115 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Service\ApiCommentServiceImpl;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Response;
+use Session;
+
+class ApiCommentController extends Controller
+{
+    private $request;
+    private $apiCommentService;
+
+
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+        $this->apiCommentService = new ApiCommentServiceImpl();
+    }
+
+    public function getCommentList()
+    {
+        $params = $this->request->input();
+
+        $params['type'] = $params['type'] ?? 0;
+        $params['page'] = $params['page'] ?? 1;
+        $params['limit'] = $params['limit'] ?? 10;
+        $params['wr_idx'] = $params['wr_idx'] ?? 0;
+        $params['wr_type'] = $params['wr_type'] ?? '';
+
+        if($params['wr_idx'] == 0 || $params['wr_type'] == ''){
+
+            $returnData['code'] = 2;
+            $returnData['message'] = "입력하지 않은 필수 값이 있습니다. 필수 값을 입력해 주세요";
+        
+        }else{
+            
+            $resultData = $this->apiCommentService->getCommentList($params);
+
+            $i = 0;
+            foreach($resultData as $data){
+                $diff = time() - strtotime($data->created_at);
+
+                $s = 60; //1분 = 60초
+                $h = $s * 60; //1시간 = 60분
+                $d = $h * 24; //1일 = 24시간
+                $y = $d * 30; //1달 = 30일 기준
+                $a = $y * 12; //1년
+
+                if ($diff < $s) {
+                    $result = $diff . '초전';
+                } elseif ($h > $diff && $diff >= $s) {
+                    $result = round($diff/$s) . '분전';
+                } elseif ($d > $diff && $diff >= $h) {
+                    $result = round($diff/$h) . '시간전';
+                } elseif ($y > $diff && $diff >= $d) {
+                    $result = round($diff/$d) . '일전';
+                } elseif ($a > $diff && $diff >= $y) {
+                    $result = round($diff/$y) . '달전';
+                } else {
+                    $result = round($diff/$a) . '년전';
+                }
+
+                $resultData[$i]->created_at = $result;
+                $i++;
+            }
+
+            $returnData['code'] = 0;
+            $returnData['message'] = "댓글 리스트";
+            $returnData['response'] = $resultData;
+        }
+
+        return json_encode($returnData);
+    }
+
+    public function commentAdd()
+    {
+
+        $returnData['code'] = -1;
+        $returnData['message'] = "시스템 장애";
+
+        try{
+            $params = $this->request->input();
+            $params['mem_id'] = $params['mem_id'] ?? 0;
+            $params['wr_idx'] = $params['wr_idx'] ?? 0;
+            $params['cm_idx'] = $params['cm_idx'] ?? 0;
+            $params['dir_cm_idx'] = $params['dir_cm_idx'] ?? 0;
+            $params['cm_main'] = $params['cm_main'] ?? 0;
+            $params['cm_depth'] = $params['cm_depth'] ?? 1;
+            $params['cm_content'] = $params['cm_content'] ?? '';
+            $params['wr_type'] = $params['wr_type'] ?? '';
+
+            if($params['mem_id'] == 0 || $params['wr_idx'] == 0 || $params['cm_main'] == 0 || $params['cm_content'] == '' || $params['wr_type'] == ''){
+
+                $returnData['code'] = 2;
+                $returnData['message'] = "입력하지 않은 필수 값이 있습니다. 필수 값을 입력해 주세요";
+            
+            }else{
+                $result = $this->apiCommentService->commentAdd($params);
+                $result2 = $this->apiCommentService->feedCommentCntAdd($params);
+
+                $returnData['code'] = 0;
+                $returnData['message'] = "댓글 등록 완료";
+            }
+
+        } catch(\Exception $exception){
+            throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+        }
+
+        return json_encode($returnData);
+    }
+}

@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ApiMemberController;
 use App\Http\Controllers\Api\ApiSmsController;
 use App\Http\Controllers\Api\ApiSoundSourceController;
 use App\Http\Controllers\Api\ApiFeedController;
+use App\Http\Controllers\Api\ApiCommentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -56,6 +57,10 @@ Route::prefix('/v1/')->group(function () {
         Route::delete('feedDelete', [ApiFeedController::class, 'feedDelete']);
     });
 
+    Route::group(['prefix' => 'comment'], function() {
+        Route::get('getCommentList', [ApiCommentController::class, 'getCommentList']);
+        Route::post('commentAdd', [ApiCommentController::class, 'commentAdd']);
+    });
 
     // get
     Route::get('testList', [ApiMemberController::class, 'testList']);
