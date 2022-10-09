@@ -66,13 +66,13 @@ class ApiMemberController extends Controller
 
                                 $result3 = $this->apiMemberService->getMemberData($params);
 
-                                if($result3->memStatus == 1 || $result3->memStatus == 0){    
+                                if($result3->memStatus == 1 || $result3->memStatus == 0){
                                     $returnData['code']=0;
                                     $returnData['message']="로그인 완료";
                                     $returnData['response']=$result3;
                                     $returnData['_token']=$params['_token'];
                                 }else{
-                                    
+
                                     $returnData['code']=601;
 
                                     if($result3->memStatus == 2){
@@ -120,14 +120,14 @@ class ApiMemberController extends Controller
                         $result2 = $this->apiMemberService->putLogin($params);
                         if($result2){
                             $result3 = $this->apiMemberService->getMemberData($params);
-                            
-                            if($result3->memStatus == 1 || $result3->memStatus == 0){    
+
+                            if($result3->memStatus == 1 || $result3->memStatus == 0){
                                 $returnData['code']=0;
                                 $returnData['message']="로그인 완료";
                                 $returnData['response']=$result3;
                                 $returnData['_token']=$params['_token'];
                             }else{
-                                
+
                                 $returnData['code']=601;
 
                                 if($result3->memStatus == 2){
@@ -300,6 +300,14 @@ class ApiMemberController extends Controller
             $params['marketing_consent'] = $params['marketingConsent'] ?? "";
             $params['existingEmailId'] = $params['existingEmailId'] ?? "";
 
+            // 고유id값 [u_id]추출 start
+            do {
+                $tempUid = $this->apiMemberService->getRandStr();
+                $checkUid = $this->apiMemberService->getUidCheck($tempUid);
+            }while($checkUid > 0);
+            $params['u_id'] = $tempUid;
+            // 고유id값 [u_id]추출 end
+
             if($params['existing_yn'] == ''){
                 $returnData['code'] = 1;
                 $returnData['message'] = "기존회원과 통합회원을 구분해 주세요";
@@ -320,7 +328,7 @@ class ApiMemberController extends Controller
                         $returnData['message'] = "입력하지 않은 필수 값이 있습니다. 필수 값을 입력해 주세요";
 
                     }else{
-                        
+
                         $joinCheck = $this->apiMemberService->joinCheck($params);
 
                         if($joinCheck){
@@ -399,7 +407,7 @@ class ApiMemberController extends Controller
 
         return json_encode($returnData);
     }
-    
+
     public function testList()
     {
 
