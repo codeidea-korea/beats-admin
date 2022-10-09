@@ -39,6 +39,7 @@ class ApiCommentController extends Controller
         }else{
             
             $resultData = $this->apiCommentService->getCommentList($params);
+            $total = $this->apiCommentService->getCommentTotal($params);
 
             $i = 0;
             foreach($resultData as $data){
@@ -70,6 +71,7 @@ class ApiCommentController extends Controller
 
             $returnData['code'] = 0;
             $returnData['message'] = "댓글 리스트";
+            $returnData['total'] = $total->cnt;
             $returnData['response'] = $resultData;
         }
 

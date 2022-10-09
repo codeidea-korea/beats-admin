@@ -71,6 +71,18 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
 
     }
 
+    public function getCommentTotal($params) {
+
+        $result = $this->statDB->table('comment')
+            ->select(DB::raw("COUNT(idx) AS cnt"))
+            ->where('wr_idx', $params['wr_idx'])
+            ->where('wr_type', $params['wr_type'])
+            ->where('cm_main', 1)
+            ->first();
+        return $result;
+
+    }
+
     //댓글 업로드
     public function commentAdd($params)
     {
