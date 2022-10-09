@@ -143,16 +143,41 @@
                                 @php $i=0; @endphp
                                 @foreach($memberList as $rs)
                                     <tr>
-                                        <td class="whitespace-nowrap text-center">{{$totalCount-($i+(($params['page']-1)*10))}}</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->classValue}}</td>
                                         <td class="whitespace-nowrap text-center">
-                                            <a href="/member/memberView/{{$rs->mem_id}}">{{$rs->gubunValue}}</a>
+                                            <a href="/member/memberView/{{$rs->mem_id}}">
+                                                {{$totalCount-($i+(($params['page']-1)*10))}}
+                                            </a>
                                         </td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->channelValue}}</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->nati}}</td>
-
-                                        <td class="whitespace-nowrap text-center">{{$rs->mem_id}}</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->mem_nickname}}</td>
+                                        <td class="whitespace-nowrap text-center">
+                                            <a href="/member/memberView/{{$rs->mem_id}}">
+                                                {{$rs->classValue}}
+                                            </a>
+                                        </td>
+                                        <td class="whitespace-nowrap text-center">
+                                            <a href="/member/memberView/{{$rs->mem_id}}">
+                                                {{$rs->gubunValue}}
+                                            </a>
+                                        </td>
+                                        <td class="whitespace-nowrap text-center">
+                                            <a href="/member/memberView/{{$rs->mem_id}}">
+                                                {{$rs->channelValue}}
+                                            </a>
+                                        </td>
+                                        <td class="whitespace-nowrap text-center">
+                                            <a href="/member/memberView/{{$rs->mem_id}}">
+                                                {{$rs->nati}}
+                                            </a>
+                                        </td>
+                                        <td class="whitespace-nowrap text-center">
+                                            <a href="/member/memberView/{{$rs->mem_id}}">
+                                                {{$rs->mem_id}}
+                                            </a>
+                                        </td>
+                                        <td class="whitespace-nowrap text-center">
+                                            <a href="/member/memberView/{{$rs->mem_id}}">
+                                                {{$rs->mem_nickname}}
+                                            </a>
+                                        </td>
                                         <td class="whitespace-nowrap text-center">{{$rs->mem_sanctions}}</td>
                                         <td class="whitespace-nowrap text-center">{{$rs->statusValue}}</td>
                                         <td class="whitespace-nowrap text-center">{{$rs->mem_regdate}}</td>
