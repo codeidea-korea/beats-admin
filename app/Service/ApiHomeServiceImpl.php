@@ -125,4 +125,56 @@ class ApiHomeServiceImpl extends DBConnection  implements ApiHomeServiceInterfac
 
     }
 
+    public function getEventList($params) {
+
+        $result = $this->statDB->table('adm_event')
+            ->select(
+                'adm_event.idx',
+                'adm_event.title',
+                'adm_event.fr_event_date',
+                'adm_event.bk_event_date',
+                'adm_event.event_source',
+                DB::raw('CASE WHEN adm_event.fr_event_date <= NOW() and adm_event.bk_event_date >= NOW() THEN 1
+                WHEN adm_event.bk_event_date < NOW() THEN 2
+                Else 0 END as gubun'),
+            )
+            ->when(isset($params['duration_status']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    if($params['duration_status'] == 'Y'){
+                        $query->where('gubun', 1);
+                    }else{
+                        $query->where('gubun', 2);
+                    }
+                });
+            })
+            ->where('adm_event.open_status','open')
+            ->orderby('adm_event.idx','desc')
+            ->skip(($params['page']-1)*$params['limit'])
+            ->take($params['limit'])
+            ->get();
+
+        return $result;
+
+    }
+
+    public function getEventView($params) {
+
+        $result = $this->statDB->table('adm_event')
+            ->select(
+                'adm_event.idx',
+                'adm_event.title',
+                'adm_event.content',
+                'adm_event.fr_event_date',
+                'adm_event.bk_event_date',
+                DB::raw('CASE WHEN adm_event.fr_event_date <= NOW() and adm_event.bk_event_date >= NOW() THEN 1
+                WHEN adm_event.bk_event_date < NOW() THEN 2
+                Else 0 END as gubun'),
+            )
+            ->where('adm_event.idx',$params['idx'])
+            ->get();
+
+        return $result;
+
+    }
+
 }

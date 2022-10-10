@@ -117,7 +117,7 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
                 'comment.created_at',
                 'member_data.mem_nickname',
             )
-            ->where('cm_idx', $params['cm_idx'])
+            ->where('dir_cm_idx', $params['cm_idx'])
             ->orderBy('comment.created_at','desc')
             ->get();
             

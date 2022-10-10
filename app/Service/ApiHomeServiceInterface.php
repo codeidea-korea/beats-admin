@@ -23,4 +23,10 @@ interface ApiHomeServiceInterface
     // 공지사항 view
     public function getNoticeView($params);
 
+    // 이벤트 list
+    public function getEventList($params);
+
+    // 이벤트 view
+    public function getEventView($params);
+
 }

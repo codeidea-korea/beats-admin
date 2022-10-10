@@ -150,4 +150,58 @@ class ApiHomeController extends Controller
         }
     }
 
+    public function eventList()
+    {
+        try{
+            $params = $this->request->input();
+            $params['page'] = $params['page'] ?? 1;
+            $params['limit'] = $params['limit'] ?? 10;
+
+            $eventList = $this->apiHomeService->getEventList($params);
+
+            $returnData['code']=0;
+            $returnData['message']="complete";
+            $returnData['response']['count']=count($eventList);
+            $returnData['response']['data']=$eventList;
+
+
+            return json_encode($returnData);
+
+        } catch(\Exception $exception){
+            throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+        }
+    }
+
+    public function getEventView()
+    {
+        try{
+            $params = $this->request->input();
+            $params['idx'] = isset($params['idx']) ? $params['idx'] : '';
+
+
+            if($params['idx']==""){
+                $returnData['code']=-1;
+                $returnData['message']="고유번호가 누락되었습니다.";
+            }else{
+
+                $eventView = $this->apiHomeService->getEventView($params);
+
+                if($eventView->isEmpty()){
+                    $returnData['code'] = 1;
+                    $returnData['message'] = "유효하지 않은 고유번호입니다.";
+                }else{
+                    $returnData['code'] = 0;
+                    $returnData['message'] = "complete";
+                    $returnData['response'] = $eventView;
+                }
+            }
+
+
+            return json_encode($returnData);
+
+        } catch(\Exception $exception){
+            throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+        }
+    }
+
 }

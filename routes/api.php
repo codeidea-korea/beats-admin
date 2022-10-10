@@ -30,6 +30,10 @@ Route::prefix('/v1/')->group(function () {
 
     Route::get('noticeView', [ApiHomeController::class, 'getNoticeView']);
 
+    Route::get('eventList', [ApiHomeController::class, 'eventList']);
+
+    Route::get('eventView', [ApiHomeController::class, 'getEventView']);
+
     Route::group(['prefix' => 'member'], function() {
         Route::put('login', [ApiMemberController::class, 'apiLogin']);
         Route::put('loginCheck', [ApiMemberController::class, 'loginCheck']);
