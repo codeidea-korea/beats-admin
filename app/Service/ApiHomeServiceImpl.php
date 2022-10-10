@@ -138,12 +138,13 @@ class ApiHomeServiceImpl extends DBConnection  implements ApiHomeServiceInterfac
                 WHEN adm_event.bk_event_date < NOW() THEN 2
                 Else 0 END as gubun'),
             )
-            ->when(isset($params['duration_status']), function($query) use ($params){
+            ->when(isset($params['gubun']), function($query) use ($params){
                 return $query->where(function($query) use ($params) {
-                    if($params['duration_status'] == 'Y'){
-                        $query->where('gubun', 1);
+                    if($params['gubun'] == 'Y'){
+                        $query->where('adm_event.fr_event_date', '<=', DB::raw('NOW()'))
+                        ->where('adm_event.bk_event_date', '>=', DB::raw('NOW()'));
                     }else{
-                        $query->where('gubun', 2);
+                        $query->where('adm_event.bk_event_date', '<' , DB::raw('NOW()'));
                     }
                 });
             })
@@ -166,6 +167,7 @@ class ApiHomeServiceImpl extends DBConnection  implements ApiHomeServiceInterfac
                 'adm_event.content',
                 'adm_event.fr_event_date',
                 'adm_event.bk_event_date',
+                'adm_event.event_source',
                 DB::raw('CASE WHEN adm_event.fr_event_date <= NOW() and adm_event.bk_event_date >= NOW() THEN 1
                 WHEN adm_event.bk_event_date < NOW() THEN 2
                 Else 0 END as gubun'),

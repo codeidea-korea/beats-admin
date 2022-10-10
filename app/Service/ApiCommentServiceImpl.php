@@ -200,4 +200,18 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
         return $result;
 
     }
+
+    public function commentUpdate($params)
+    {
+
+        $result = $this->statDB->table('comment')
+            ->where('idx', $params['cm_idx'])
+            ->update([
+                'cm_content' => $params['cm_content']
+                , 'updated_at' => \Carbon\Carbon::now()
+            ]);
+
+        return $result;
+
+    }
 }
