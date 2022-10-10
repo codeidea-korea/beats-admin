@@ -90,6 +90,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 
-Route::fallback(function () {
-    return "유효한 값이 아닙니다.";
-});
+//Route::fallback(function () {
+//    return "유효한 값이 아닙니다.";
+//});
