@@ -78,6 +78,117 @@ class ApiCommentController extends Controller
         return json_encode($returnData);
     }
 
+    public function getCommentDataList()
+    {
+        $params = $this->request->input();
+
+        $params['type'] = $params['type'] ?? 0;
+        $params['page'] = $params['page'] ?? 1;
+        $params['limit'] = $params['limit'] ?? 10;
+        $params['wr_idx'] = $params['wr_idx'] ?? 0;
+        $params['wr_type'] = $params['wr_type'] ?? '';
+
+        if($params['wr_idx'] == 0 || $params['wr_type'] == ''){
+
+            $returnData['code'] = 2;
+            $returnData['message'] = "입력하지 않은 필수 값이 있습니다. 필수 값을 입력해 주세요";
+        
+        }else{
+            
+            $resultData = $this->apiCommentService->getCommentDataList($params);
+            $total = $this->apiCommentService->getCommentTotal($params);
+
+            $i = 0;
+            foreach($resultData as $data){
+                $diff = time() - strtotime($data->created_at);
+
+                $s = 60; //1분 = 60초
+                $h = $s * 60; //1시간 = 60분
+                $d = $h * 24; //1일 = 24시간
+                $y = $d * 30; //1달 = 30일 기준
+                $a = $y * 12; //1년
+
+                if ($diff < $s) {
+                    $result = $diff . '초전';
+                } elseif ($h > $diff && $diff >= $s) {
+                    $result = round($diff/$s) . '분전';
+                } elseif ($d > $diff && $diff >= $h) {
+                    $result = round($diff/$h) . '시간전';
+                } elseif ($y > $diff && $diff >= $d) {
+                    $result = round($diff/$d) . '일전';
+                } elseif ($a > $diff && $diff >= $y) {
+                    $result = round($diff/$y) . '달전';
+                } else {
+                    $result = round($diff/$a) . '년전';
+                }
+
+                $resultData[$i]->created_at = $result;
+                $i++;
+            }
+
+            $returnData['code'] = 0;
+            $returnData['message'] = "댓글 리스트";
+            $returnData['total'] = $total->cnt;
+            $returnData['response'] = $resultData;
+        }
+
+        return json_encode($returnData);
+    }
+
+    public function getCommentChildList()
+    {
+        $params = $this->request->input();
+
+        $params['type'] = $params['type'] ?? 0;
+        $params['page'] = $params['page'] ?? 1;
+        $params['limit'] = $params['limit'] ?? 10;
+        $params['cm_idx'] = $params['cm_idx'] ?? 0;
+
+        if($params['cm_idx'] == 0){
+
+            $returnData['code'] = 2;
+            $returnData['message'] = "입력하지 않은 필수 값이 있습니다. 필수 값을 입력해 주세요";
+        
+        }else{
+            
+            $resultData = $this->apiCommentService->getCommentChildList($params);
+
+            $i = 0;
+            foreach($resultData as $data){
+                $diff = time() - strtotime($data->created_at);
+
+                $s = 60; //1분 = 60초
+                $h = $s * 60; //1시간 = 60분
+                $d = $h * 24; //1일 = 24시간
+                $y = $d * 30; //1달 = 30일 기준
+                $a = $y * 12; //1년
+
+                if ($diff < $s) {
+                    $result = $diff . '초전';
+                } elseif ($h > $diff && $diff >= $s) {
+                    $result = round($diff/$s) . '분전';
+                } elseif ($d > $diff && $diff >= $h) {
+                    $result = round($diff/$h) . '시간전';
+                } elseif ($y > $diff && $diff >= $d) {
+                    $result = round($diff/$d) . '일전';
+                } elseif ($a > $diff && $diff >= $y) {
+                    $result = round($diff/$y) . '달전';
+                } else {
+                    $result = round($diff/$a) . '년전';
+                }
+
+                $resultData[$i]->created_at = $result;
+                $i++;
+            }
+
+            $returnData['code'] = 0;
+            $returnData['message'] = "대댓글 리스트";
+            $returnData['response'] = $resultData;
+        }
+
+        return json_encode($returnData);
+    }
+
     public function commentAdd()
     {
 

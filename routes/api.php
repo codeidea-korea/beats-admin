@@ -59,6 +59,8 @@ Route::prefix('/v1/')->group(function () {
 
     Route::group(['prefix' => 'comment'], function() {
         Route::get('getCommentList', [ApiCommentController::class, 'getCommentList']);
+        Route::get('getCommentDataList', [ApiCommentController::class, 'getCommentDataList']);
+        Route::get('getCommentChildList', [ApiCommentController::class, 'getCommentChildList']);
         Route::post('commentAdd', [ApiCommentController::class, 'commentAdd']);
     });
 

@@ -71,6 +71,60 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
 
     }
 
+    //피드 리스트
+    public function getCommentDataList($params) {
+
+        $result = $this->statDB->table('comment')
+            ->leftJoin('member_data', 'comment.mem_id', '=', 'member_data.mem_id')
+            ->select(
+                'comment.idx',
+                'comment.cm_idx',
+                'comment.dir_cm_idx',
+                'comment.cm_content',
+                'comment.cm_depth',
+                'comment.cm_open',
+                'comment.cm_content',
+                'comment.cm_bit',
+                'comment.created_at',
+                'member_data.mem_nickname',
+            )
+            ->where('wr_idx', $params['wr_idx'])
+            ->where('wr_type', $params['wr_type'])
+            ->where('cm_main', 1)
+            ->orderby('cm_seq','desc')
+            ->skip(($params['page']-1)*$params['limit'])
+            ->take($params['limit'])
+            ->get();
+            
+        return $result;
+
+    }
+
+    //피드 리스트
+    public function getCommentChildList($params) {
+
+        $result = $this->statDB->table('comment')
+            ->leftJoin('member_data', 'comment.mem_id', '=', 'member_data.mem_id')
+            ->select(
+                'comment.idx',
+                'comment.cm_idx',
+                'comment.dir_cm_idx',
+                'comment.cm_content',
+                'comment.cm_depth',
+                'comment.cm_open',
+                'comment.cm_content',
+                'comment.cm_bit',
+                'comment.created_at',
+                'member_data.mem_nickname',
+            )
+            ->where('cm_idx', $params['cm_idx'])
+            ->orderBy('comment.created_at','desc')
+            ->get();
+            
+        return $result;
+
+    }
+
     public function getCommentTotal($params) {
 
         $result = $this->statDB->table('comment')
