@@ -255,4 +255,33 @@ class ApiCommentController extends Controller
 
         return json_encode($returnData);
     }
+
+    public function commentDelete()
+    {
+
+        $returnData['code'] = -1;
+        $returnData['message'] = "시스템 장애";
+
+        try{
+            $params = $this->request->input();
+            $params['cm_idx'] = $params['cm_idx'] ?? 0;
+
+            if($params['cm_idx'] == 0){
+
+                $returnData['code'] = 2;
+                $returnData['message'] = "입력하지 않은 필수 값이 있습니다. 필수 값을 입력해 주세요";
+            
+            }else{
+                $result = $this->apiCommentService->commentDelete($params);
+
+                $returnData['code'] = 0;
+                $returnData['message'] = "댓글 삭제 완료";
+            }
+
+        } catch(\Exception $exception){
+            throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+        }
+
+        return json_encode($returnData);
+    }
 }

@@ -51,6 +51,7 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
             ->select(
                 'comment.idx',
                 DB::raw('CASE WHEN comment.cm_idx = 0 THEN comment.idx ELSE comment.cm_idx END as sort_idx'),
+                'comment.mem_id',
                 'comment.cm_idx',
                 'comment.dir_cm_idx',
                 'comment.cm_content',
@@ -86,6 +87,7 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
                 'comment.cm_content',
                 'comment.cm_bit',
                 'comment.created_at',
+                'comment.del_status',
                 'member_data.mem_nickname',
             )
             ->where('wr_idx', $params['wr_idx'])
@@ -115,6 +117,7 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
                 'comment.cm_content',
                 'comment.cm_bit',
                 'comment.created_at',
+                'comment.del_status',
                 'member_data.mem_nickname',
             )
             ->where('dir_cm_idx', $params['cm_idx'])
@@ -208,6 +211,20 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
             ->where('idx', $params['cm_idx'])
             ->update([
                 'cm_content' => $params['cm_content']
+                , 'updated_at' => \Carbon\Carbon::now()
+            ]);
+
+        return $result;
+
+    }
+
+    public function commentDelete($params)
+    {
+
+        $result = $this->statDB->table('comment')
+            ->where('idx', $params['cm_idx'])
+            ->update([
+                'del_status' => 'Y'
                 , 'updated_at' => \Carbon\Carbon::now()
             ]);
 

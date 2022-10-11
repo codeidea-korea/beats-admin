@@ -23,4 +23,7 @@ interface ApiCommentServiceInterface
 
     //댓글수정
     public function commentUpdate($params);
+
+    //댓글 삭제
+    public function commentDelete($params);
 }
