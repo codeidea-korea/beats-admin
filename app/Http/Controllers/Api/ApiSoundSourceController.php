@@ -110,8 +110,7 @@ class ApiSoundSourceController extends Controller
         $returnData['message'] = "시스템 장애";
 
         $params = $this->request->input();
-        //$params['music_head_idx'] = $params['music_head_idx'] ?? 0;
-        $params['music_head_idx'] = $params['music_head_idx'] ?? 1;
+        $params['music_head_idx'] = $params['music_head_idx'] ?? 0;
 
         if($params['music_head_idx']==0){
             $returnData['code'] = 302;
