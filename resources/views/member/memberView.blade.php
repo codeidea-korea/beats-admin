@@ -57,6 +57,7 @@
 
                         <div class="p-5">
                             <div class="">
+                                <input type="hidden" name="mem_id" value="{{$memberData->mem_id}}" >
                                 @if($memberData->gubun == 3) <!-- 3.음원 구매자 -->
                                     <table class="table table-bordered">
                                         <tr>
@@ -399,7 +400,7 @@
                                                 마케팅 정보 수신 동의(선택)
                                             </td>
                                             <td colspan="2">
-                                                미동의
+                                                @if($memberData->marketing_consent == "Y") 동의 @else 미동의 @endif
                                             </td>
                                         </tr>
                                         <tr>
@@ -613,21 +614,61 @@
                                                 00(건) <input type="button" class="btn btn-primary w-24 ml-2" value="자세히 보기">
                                             </td>
                                         </tr>
+                                        <tr>
+                                            <th class="whitespace-nowrap text-center bg-primary/10">멘토 뮤지션 전환일</th>
+                                            <td> - </td>
+                                            <th class="whitespace-nowrap text-center bg-primary/10">휴면 전환일</th>
+                                            <td> @if(trim($memberData->mem_dormancy)=="") - @else {{$memberData->mem_dormancy}} @endif</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th class="whitespace-nowrap text-center bg-primary/10" rowspan="3">전문 분야</th>
+                                            <td>
+                                                전문 분야
+                                            </td>
+                                            <td colspan="2">
+                                               -
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                추가 분야
+                                            </td>
+                                            <td colspan="2">
+                                                -
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                추가 분야
+                                            </td>
+                                            <td colspan="2">
+                                                -
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="whitespace-nowrap text-center bg-primary/10">증빙 자료</th>
+                                            <td colspan="3" class="whitespace-nowrap">
+                                                증빙자료가 없습니다.
+                                                <!--
+                                                    파일이름.확장자
+                                                    파일이름.확장자
+                                                     <button class="btn btn-primary w-24 ml-2 fileDownLoad">증빙자료 전체 다운로드</button>
+                                                -->
+                                            </td>
+                                        </tr>
+
 
                                         <tr>
                                             <th class="whitespace-nowrap text-center bg-primary/10">보유 포인트</th>
-                                            <td>
+                                            <td colspan="3" class="whitespace-nowrap">
                                                 {{$memberData->mem_point}} Point
-                                            </td>
-                                            <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">휴면 전환일</th>
-                                            <td rowspan="2">
-                                                {{$memberData->mem_dormancy}}
                                             </td>
                                         </tr>
 
                                         <tr>
                                             <th class="whitespace-nowrap text-center bg-primary/10">보유 쿠폰</th>
-                                            <td>
+                                            <td colspan="3" class="whitespace-nowrap">
                                                 {{$memberData->nationality}}
                                             </td>
                                         </tr>
@@ -643,8 +684,8 @@
                                 @endif
                                 <div class="flex w-full box pt-5">
                                     <div class="ml-auto">
-                                        <button class="btn btn-secondary w-24">목록</button>
-                                        <button class="btn btn-primary w-24 ml-2">수정</button>
+                                        <button class="btn btn-secondary w-24" onClick="javascript:location.href = '/member/memberList';">목록</button>
+                                        <button class="btn btn-primary w-24 ml-2 btn_update">수정</button>
                                     </div>
                                 </div>
                             </div>
@@ -658,8 +699,35 @@
     </div>
 
     <script>
-        $(function (){
-            //$('#superlarge-modal-size-preview2').modal({ keyboard: false, backdrop: 'static' })
-        })
+        $(".btn_update").on('click', function(){
+
+            var mem_id = $('input[name=mem_id]').val();
+            var mem_status = $('select[name=mem_status]').val();
+
+
+            var data = {
+                mem_id:mem_id
+                ,mem_status:mem_status
+            };
+
+            jQuery.ajax({
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                type:"post",
+                dataType:'json',
+                data: data,
+                url: '{{ url('/member/ajax/memberUpdate') }}',
+                success: function searchSuccess(data) {
+                    if(data.result=="SUCCESS"){
+                        alert('회원정보가 수정되었습니다.');
+                        location.reload();
+                    }else{
+                        alert('처리 중 오류가 발생 하였습니다. 다시 시도해주세요.');
+                    }
+                },
+                error: function (e) {
+                    alert('로딩 중 오류가 발생 하였습니다.');
+                }
+            });
+        });
     </script>
 @endsection

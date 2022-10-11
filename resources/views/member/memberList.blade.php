@@ -28,8 +28,8 @@
                                                 <select class="form-select w-13" aria-label=".form-select-lg" name="class">
                                                     <option value=""  @if($params['class'] == "")  selected @endif  >전체</option>
                                                     <option value="3" @if($params['class'] == "3") selected @endif >통합회원</option>
-                                                    <option value="1" @if($params['class'] == "2") selected @endif >임시회원</option>
-                                                    <option value="2" @if($params['class'] == "1") selected @endif >비트썸원</option>
+                                                    <option value="2" @if($params['class'] == "2") selected @endif >임시회원</option>
+                                                    <option value="1" @if($params['class'] == "1") selected @endif >비트썸원</option>
                                                     <option value="0" @if($params['class'] == "0") selected @endif >휴면회원</option>
                                                 </select>
                                                 <!--<button class="btn btn-primary w-24">대상 설정</button>-->

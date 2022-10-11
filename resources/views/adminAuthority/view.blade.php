@@ -136,6 +136,8 @@
         <script>
 
 
+
+
             $(".btn_update").on('click', function(){
                  var isuse = $('select[name=isuse]').val();
                  var group_code = $('select[name=group_code]').val();
@@ -247,8 +249,6 @@
                     }
                 });
             });
-
-
 
         </script>
 @endsection

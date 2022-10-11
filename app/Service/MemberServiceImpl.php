@@ -27,8 +27,9 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
                 DB::raw("CASE WHEN member_data.class_h = 1 THEN '활성회원' WHEN member_data.class_h = 0 THEN '휴면회원' ELSE '' END AS class_h_value"),
                 'member_data.class',
                 DB::raw("CASE WHEN member_data.class = 1 THEN '비트썸원회원'
-                WHEN member_data.class = 2 THEN '바이비츠회원'
+                WHEN member_data.class = 2 THEN '임시회원'
                 WHEN member_data.class = 3 THEN '통합회원'
+                WHEN member_data.class = 0 THEN '휴면회원'
                 ELSE '' END AS class_value"),
                 'member_data.gubun',
                 DB::raw("CASE WHEN member_data.gubun = 1 THEN '일반'
@@ -44,6 +45,7 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
                 'member_data.mem_regdate',
                 'member_data.mem_point',
                 'member_data.mem_dormancy',
+                'member_data.marketing_consent',
                 'members.last_login_at',
             )
             ->where('members.idx', $params['idx'])
@@ -104,9 +106,19 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
                 'member_data.phone_number',
                 'member_data.email',
                 'member_data.class',
-                DB::raw("CASE WHEN member_data.class = '0' THEN '휴면회원' WHEN member_data.class = '2' THEN '임시회원' WHEN member_data.class = '1' THEN '비트썸원회원' WHEN member_data.class = '3' THEN '통합회원' ELSE '미지정' END AS classValue"),
+                DB::raw("CASE
+                WHEN member_data.class = '0' THEN '휴면회원'
+                WHEN member_data.class = '2' THEN '임시회원'
+                WHEN member_data.class = '1' THEN '비트썸원회원'
+                WHEN member_data.class = '3' THEN '통합회원'
+                ELSE '미지정' END AS classValue"),
                 'member_data.gubun',
-                DB::raw("CASE WHEN member_data.gubun = '1' THEN '일반' WHEN member_data.gubun = '2' THEN '작곡가' WHEN member_data.gubun = '3' THEN '음원구매자' WHEN member_data.gubun = '4' THEN '멘토뮤지션' ELSE '미지정' END AS gubunValue"),
+                DB::raw("CASE
+                    WHEN member_data.gubun = '1' THEN '일반'
+                    WHEN member_data.gubun = '2' THEN '작곡가'
+                    WHEN member_data.gubun = '3' THEN '음원구매자'
+                    WHEN member_data.gubun = '4' THEN '멘토뮤지션'
+                    ELSE '미지정' END AS gubunValue"),
                 'member_data.channel',
                 DB::raw("CASE
                     WHEN member_data.channel = 'facebook' THEN '페이스북'
@@ -129,7 +141,6 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
                     WHEN member_data.mem_status = '2' THEN '제재'
                 ELSE ' - ' END AS statusValue"),
                 'member_data.mem_regdate',
-                DB::raw("CASE WHEN member_data.class = '0' THEN '휴면회원' WHEN member_data.class = '1' THEN '임시회원' WHEN member_data.class = '2' THEN '비트썸원회원' WHEN member_data.class = '3' THEN '통합회원' ELSE '미지정' END AS classValue")
             )
             ->where('members.isuse', 'Y')
             ->where('member_data.mem_regdate','>=', $params['sDate'])
@@ -373,6 +384,15 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
 
     }
 
+    public function setMemberUpdate($params){
+        $result = $this->statDB->table('member_data')
+            ->where('mem_id',$params['mem_id'])
+            ->update([
+                'mem_status' => $params['mem_status']
+            ]);
+        return $result;
+    }
+
     public function bannerSample(){
         $result = $this->statDB->select(
             "SELECT
@@ -395,8 +415,7 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
                         GROUP BY banner_code
                     ) tb2 ON tb1.banner_code = tb2.banner_code
                     "
-            );
+        );
         return $result;
     }
-
 }

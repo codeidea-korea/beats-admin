@@ -119,10 +119,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [MemberController::class, 'getMemberList']);
         Route::get('memberList', [MemberController::class, 'getMemberList']);
         Route::get('musicList/{idx}', [MemberController::class, 'getMusicList']);
-        Route::get('/ajax/memberList', [MemberController::class, 'getPointMemberList']);
-        Route::get('/ajax/memberPaging', [MemberController::class, 'getPaging']);
-        Route::get('/ajax/sendPoint', [MemberController::class, 'sendPoint']);
+        Route::get('ajax/memberList', [MemberController::class, 'getPointMemberList']);
+        Route::get('ajax/memberPaging', [MemberController::class, 'getPaging']);
+        Route::get('ajax/sendPoint', [MemberController::class, 'sendPoint']);
         Route::get('memberView/{idx}', [MemberController::class, 'getMemberView']);
+        Route::post('ajax/memberUpdate', [MemberController::class, 'setMemberUpdate']);
 
         // 초대 내역
         Route::get('inviteList', [MemberController::class, 'getInviteList']);

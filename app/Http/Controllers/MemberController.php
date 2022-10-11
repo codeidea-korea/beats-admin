@@ -176,13 +176,30 @@ class MemberController extends Controller
         $params['menuCode'] = "AD030100";
         $params['idx'] =$idx;
         $memberData = $this->memberService->getMemberData($params);
-        var_dump($memberData);
+
         return view('member.memberView',[
             'params' => $params
             ,'memberData' => $memberData
 
         ]);
     }
+
+    public function setMemberUpdate(){
+        $params = $this->request->input();
+        $data = array();
+        $data['mem_id'] = $params['mem_id'];
+        $data['mem_status'] = $params['mem_status'];
+
+        $result = $this->memberService->setMemberUpdate($data);
+
+        if($result){
+            $rData['result']="SUCCESS";
+        }else{
+            $rData['result']="FAIL";
+        }
+        return json_encode($rData);
+    }
+
 
     public function getInviteList()
     {
@@ -293,5 +310,7 @@ class MemberController extends Controller
 
         ]);
     }
+
+
 
 }
