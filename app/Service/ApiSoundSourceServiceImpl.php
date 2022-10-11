@@ -90,31 +90,6 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
     //음원 정보 리스트 (list)
     public function setSoundSourceList($params)
     {
-        //$result = $this->statDB->table('music_head as H')
-        //    ->leftJoin('music_file as F','H.idx','F.music_head_idx')
-        //    ->select(
-        //        'H.idx'
-        //        ,'H.mem_id'
-        //        ,'H.file_cnt'
-        //        ,'H.music_title'
-        //        ,'H.play_time'
-        //        ,'H.open_status'
-        //        ,'H.sales_status'
-        //        ,'H.contract'
-        //        ,'H.tag'
-        //        ,'H.progress_rate'
-        //        ,'H.common_composition'
-        //        ,'H.crdate'
-        //        ,'H.copyright'
-        //        ,'F.file_name'
-        //        ,'F.file_no'
-        //        ,'F.hash_name'
-        //        ,'F.file_url'
-        //    )
-        //    ->where('H.file_cnt','=',\Carbon\Carbon::F.file_no)
-        //    ->where('H.mem_id',$params['mem_id'])
-        //    ->orderby('H.idx','desc')
-        //    ->get();
         $result = $this->statDB->select(
             "
                     SELECT
@@ -143,6 +118,90 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                     ORDER BY idx desc"
         );
 
+        return $result;
+    }
+
+    //음원 상세정보 (data)
+    public function setSoundSourceData($params)
+    {
+        $result = $this->statDB->table('music_head')
+            ->select(
+                'idx'
+                ,'mem_id'
+                ,'file_cnt'
+                ,'music_title'
+                ,'play_time'
+                ,'open_status'
+                ,'sales_status'
+                ,'contract'
+                ,'tag'
+                ,'progress_rate'
+                ,'common_composition'
+                ,'crdate'
+                ,'copyright'
+                ,'moddate'
+            )
+            ->where('idx',$params['music_head_idx'])
+            ->first();
+        return $result;
+    }
+
+    //음원 파일 (data)
+    public function getSoundSourceData($params)
+    {
+        $result = $this->statDB->table('music_head')
+            ->select(
+                'idx'
+                ,'mem_id as  memId'
+                ,'file_cnt as fileCnt'
+                ,'music_title as musicTitle'
+                ,'play_time as playTime'
+                ,'open_status as openStatus'
+                ,'sales_status as salesStatus'
+                ,'contract as contract'
+                ,'tag'
+                ,'progress_rate as progressRate'
+                ,'common_composition as commonComposition'
+                ,'crdate'
+                ,'copyright'
+                ,'moddate'
+            )
+            ->where('idx',$params['music_head_idx'])
+            ->first();
+        return $result;
+    }
+
+    public function getMusicFileList($params)
+    {
+        $result = $this->statDB->table('music_file')
+            ->select(
+                'idx',
+                'file_no as fileNo',
+                'file_name as fileName',
+                'hash_name as hashName',
+                'file_url as fileUrl',
+                'crdate as crDate',
+            )
+            ->where('music_head_idx',$params['music_head_idx'])
+            ->orderby('file_no','asc')
+            ->get();
+        return $result;
+    }
+
+    public function getCommonCompositionList($params)
+    {
+        $result = $this->statDB->table('music_common_composition')
+            ->select(
+                'cc_idx',
+                'mem_id as memId',
+                'cc_email as fileName',
+                'cc_nickname as nickname',
+                'cc_name as name',
+                'cc_status as status',
+            )
+            ->where('music_head_idx',$params['music_head_idx'])
+            ->orderby('cc_idx','desc')
+            ->get();
         return $result;
     }
 

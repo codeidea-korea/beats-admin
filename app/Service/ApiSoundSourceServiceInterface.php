@@ -17,4 +17,13 @@ interface ApiSoundSourceServiceInterface
 
     //음원 정보 리스트 (list)
     public function setSoundSourceList($params);
+
+    //음원 상세정보 (data)
+    public function getSoundSourceData($params);
+
+    //음원 파일 정보 (data)
+    public function getMusicFileList($params);
+
+    //공동 작곡가 (data)
+    public function getCommonCompositionList($params);
 }
