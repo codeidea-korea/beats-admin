@@ -73,8 +73,8 @@
                                     <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">노출 여부</th>
                                     <td colspan="3" class="whitespace-nowrap">
                                         <select name="open_status" class="form-select w-60" aria-label=".form-select-lg example">
-                                            <option value="open" @if($eventData[0]->open_status == 'Y') selected @endif>노출</option>
-                                            <option value="secret" @if($eventData[0]->open_status == 'N') selected @endif>미 노출</option>
+                                            <option value="Y" @if($eventData[0]->open_status == 'Y') selected @endif>노출</option>
+                                            <option value="N" @if($eventData[0]->open_status == 'N') selected @endif>미 노출</option>
                                         </select>
                                     </td>
                                 </tr>

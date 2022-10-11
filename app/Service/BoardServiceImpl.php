@@ -141,7 +141,7 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
             ->where('idx',$params['idx'])
             ->update([
                 'wr_title' => $params['wr_title'], 'wr_content' => $params['wr_content'], 'wr_open' => $params['wr_open'],
-                'updated_at' => \Carbon\Carbon::now()
+                'gubun' => $params['gubun'],'updated_at' => \Carbon\Carbon::now()
             ]);
 
         return $result;
@@ -169,6 +169,9 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
                 'adm_event.fr_event_date',
                 'adm_event.bk_event_date',
                 'adm_event.created_at',
+                DB::raw('CASE WHEN adm_event.fr_event_date <= NOW() and adm_event.bk_event_date >= NOW() THEN 1
+                WHEN adm_event.bk_event_date < NOW() THEN 2
+                Else 0 END as gubun'),
                 'users.name',
                // $this->statDB->raw('SUM(name) AS CNT')
             )
@@ -373,7 +376,7 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
                     $query->whereBetween('adm_terms.apply_date',  [$params['fr_search_at'],$params['bk_search_at']]);
                 });
             })
-            ->orderby('adm_terms.created_at','desc')
+            ->orderby('adm_terms.version','desc')
             ->skip(($params['page']-1)*$params['limit'])
             ->take($params['limit'])
            // ->groupBy('name')

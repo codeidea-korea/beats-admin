@@ -158,9 +158,11 @@ class ApiHomeController extends Controller
             $params['limit'] = $params['limit'] ?? 10;
 
             $eventList = $this->apiHomeService->getEventList($params);
+            $total = $this->apiHomeService->getEventTotal($params);
 
             $returnData['code']=0;
             $returnData['message']="complete";
+            $returnData['response']['total']=$total->cnt;
             $returnData['response']['count']=count($eventList);
             $returnData['response']['data']=$eventList;
 

@@ -148,7 +148,7 @@ class ApiHomeServiceImpl extends DBConnection  implements ApiHomeServiceInterfac
                     }
                 });
             })
-            ->where('adm_event.open_status','open')
+            ->where('adm_event.open_status','Y')
             ->orderby('adm_event.idx','desc')
             ->skip(($params['page']-1)*$params['limit'])
             ->take($params['limit'])
@@ -175,6 +175,26 @@ class ApiHomeServiceImpl extends DBConnection  implements ApiHomeServiceInterfac
             ->where('adm_event.idx',$params['idx'])
             ->get();
 
+        return $result;
+
+    }
+
+    public function getEventTotal($params){
+
+        $result = $this->statDB->table('adm_event')
+            ->select(DB::raw("COUNT(idx) AS cnt"))
+            ->when(isset($params['gubun']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    if($params['gubun'] == 'Y'){
+                        $query->where('adm_event.fr_event_date', '<=', DB::raw('NOW()'))
+                        ->where('adm_event.bk_event_date', '>=', DB::raw('NOW()'));
+                    }else{
+                        $query->where('adm_event.bk_event_date', '<' , DB::raw('NOW()'));
+                    }
+                });
+            })
+            ->where('adm_event.open_status','Y')
+            ->first();
         return $result;
 
     }

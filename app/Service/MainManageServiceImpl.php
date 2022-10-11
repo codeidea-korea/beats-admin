@@ -67,9 +67,11 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
             adm_banner.banner_name,
             adm_banner.type,
             adm_banner.created_at,
-            adm_banner.updated_at,
+            banner_data.updated_at,
             IFNULL(adm_banner_data.downcontents,0) AS downcontents
             FROM adm_banner
+            LEFT JOIN (SELECT updated_at,banner_code FROM adm_banner_data ORDER BY updated_at desc limit 1) as banner_data
+            ON adm_banner.banner_code = banner_data.banner_code
             LEFT JOIN (SELECT banner_code,COUNT(idx) as downcontents FROM adm_banner_data GROUP BY banner_code) as adm_banner_data
             ON adm_banner.banner_code = adm_banner_data.banner_code
             WHERE adm_banner.banner_code = "'.$banner_code.'"

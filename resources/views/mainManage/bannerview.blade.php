@@ -44,7 +44,7 @@
                             <tr>
                                 <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">최근 수정일자</th>
                                 <td colspan="3" class="whitespace-nowrap">
-                                    <span>{{$bannerData[0]->created_at}}</span>
+                                    <span>{{$bannerData[0]->updated_at}}</span>
                                 </td>
                             </tr>
                         </table>
@@ -86,7 +86,7 @@
                         </div>
                         <div class="intro-y col-span-12 flex items-center justify-center sm:justify-end mt-5">
                             <button class="btn btn-primary w-24 ml-2" onclick="$('#searchData').submit();">검색</button>
-                            <button class="btn btn-secondary w-24">초기화</button>
+                                <div class="btn btn-secondary w-24 ml-5" onClick="javascript:location.href = '/mainmanage/banner/view/{{$bannerData[0]->banner_code}}';">초기화</div>
                         </div>
                     </div>
                 </div>

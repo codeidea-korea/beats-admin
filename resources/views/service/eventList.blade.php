@@ -55,7 +55,7 @@
                             </div>
                             <div class="intro-y col-span-12 flex items-center justify-center sm:justify-end mt-5">
                                 <button class="btn btn-primary w-24 ml-2" onclick="$('#searchData').submit();">검색</button>
-                                <button class="btn btn-secondary w-24">초기화</button>
+                                <div class="btn btn-secondary w-24 ml-5" onClick="javascript:location.href = '/service/event/list';">초기화</div>
                             </div>
                         </div>
                     </div>
@@ -87,7 +87,7 @@
                                 @foreach($eventData as $rs)
                                     <tr>
                                         <td class="whitespace-nowrap text-center">{{$totalCount-($i+(($params['page']-1)*10))}}</td>
-                                        <td class="whitespace-nowrap text-center">@if($rs->open_status === 0) 일반 @else 우선 노출 @endif</td>
+                                        <td class="whitespace-nowrap text-center">@if($rs->gubun === 1) 진행중 @elseif($rs->gubun === 2) 종료 @else 대기중 @endif</td>
                                         <td class="whitespace-nowrap text-center"><a href="/service/event/view/{{$rs->idx}}">{{$rs->title}}</a></td>
                                         <td class="whitespace-nowrap text-center">{{$rs->fr_event_date}} ~ {{$rs->bk_event_date}}</td>
                                         <td class="whitespace-nowrap text-center">{{$rs->name}}</td>
