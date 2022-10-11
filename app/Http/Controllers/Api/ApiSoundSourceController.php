@@ -123,6 +123,8 @@ class ApiSoundSourceController extends Controller
                 $resultData = $this->apiSoundSorceService->getSoundSourceData($params);
                 $returnData['response']['data']=$resultData;
 
+                $params['file_vesrsion'] = $resultData->file_vesrsion;
+
                 $fileData = $this->apiSoundSorceService->getMusicFileList($params);
                 $returnData['response']['fileData']=$fileData;
 

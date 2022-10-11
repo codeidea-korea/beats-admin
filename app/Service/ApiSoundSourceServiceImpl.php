@@ -111,6 +111,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                         ,F.hash_name
                         ,F.file_url
                         ,H.moddate
+                        ,H.file_version
                     FROM
                     music_head H LEFT JOIN music_file F ON H.idx = F.music_head_idx
                     WHERE
@@ -141,6 +142,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                 ,'crdate'
                 ,'copyright'
                 ,'moddate'
+                ,'file_version'
             )
             ->where('idx',$params['music_head_idx'])
             ->first();
@@ -166,6 +168,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                 ,'crdate'
                 ,'copyright'
                 ,'moddate'
+                ,'file_version'
             )
             ->where('idx',$params['music_head_idx'])
             ->first();
@@ -182,8 +185,11 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                 'hash_name as hashName',
                 'file_url as fileUrl',
                 'crdate as crDate',
+                'version',
+
             )
             ->where('music_head_idx',$params['music_head_idx'])
+            ->where('version',$params['file_version'])
             ->orderby('file_no','asc')
             ->get();
         return $result;
