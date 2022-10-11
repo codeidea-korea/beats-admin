@@ -54,12 +54,14 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
                 'comment.mem_id',
                 'comment.cm_idx',
                 'comment.dir_cm_idx',
+                DB::raw('(select b.mem_nickname from comment a left join member_data b ON a.mem_id = b.mem_id where a.idx = comment.dir_cm_idx ) as dir_nickname'),
                 'comment.cm_content',
                 'comment.cm_depth',
                 'comment.cm_open',
                 'comment.cm_content',
                 'comment.cm_bit',
                 'comment.created_at',
+                'comment.del_status',
                 'member_data.mem_nickname',
             )
             ->whereIn('comment.idx', $result3)
@@ -180,30 +182,6 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
 
     }
 
-    public function feedCommentCntAdd($params)
-    {
-        $wr_comment = DB::table('feed_board')
-            ->select('wr_comment')
-            ->where('idx', $params['wr_idx'])
-            ->first();
-
-        if($wr_comment->wr_comment === null){
-            $wr_comment = 0;
-        }else{
-            $wr_comment = $wr_comment->wr_comment + 1;
-        }
-
-        $result = $this->statDB->table('feed_board')
-            ->where('idx', $params['wr_idx'])
-            ->update([
-                'wr_comment' => $wr_comment
-                , 'updated_at' => \Carbon\Carbon::now()
-            ]);
-
-        return $result;
-
-    }
-
     public function commentUpdate($params)
     {
 
@@ -220,7 +198,6 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
 
     public function commentDelete($params)
     {
-
         $result = $this->statDB->table('comment')
             ->where('idx', $params['cm_idx'])
             ->update([

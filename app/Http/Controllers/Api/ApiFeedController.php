@@ -159,4 +159,35 @@ class ApiFeedController extends Controller
 
         return json_encode($returnData);
     }
+
+    public function feedUpdate()
+    {
+
+        $returnData['code'] = -1;
+        $returnData['message'] = "시스템 장애";
+
+        try{
+            $params = $this->request->input();
+            $params['feed_idx'] = $params['feed_idx'] ?? 0;
+            $params['file_idx'] = $params['file_idx'] ?? [];
+
+            $main_files = $this->request->file('main_file');
+            $sub_files = $this->request->file('sub_file');
+
+            // 음원파일 헤드 수정
+            $resultData1 = $this->apiFeedService->feedUpdate($params,$main_files);
+
+            // 첨부파일 db 수정 및 서버 저장
+            $resultData2 = $this->apiFeedService->feedFileUpdate($params,$sub_files);
+
+            $returnData['code'] = 0;
+            $returnData['message'] = "피드 수정 완료";
+            $returnData['response'] = $resultData2;
+
+        } catch(\Exception $exception){
+            throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+        }
+
+        return json_encode($returnData);
+    }
 }

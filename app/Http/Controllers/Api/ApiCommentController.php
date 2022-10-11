@@ -213,7 +213,6 @@ class ApiCommentController extends Controller
             
             }else{
                 $result = $this->apiCommentService->commentAdd($params);
-                $result2 = $this->apiCommentService->feedCommentCntAdd($params);
 
                 $returnData['code'] = 0;
                 $returnData['message'] = "댓글 등록 완료";

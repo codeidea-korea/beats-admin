@@ -24,7 +24,7 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
                 'feed_board.idx',
                 'feed_board.wr_title',
                 'feed_board.wr_bit',
-                'feed_board.wr_comment',
+                DB::raw("(select count(idx) from comment where wr_type = 'feed' and wr_idx = feed_board.idx) as wr_comment"),
                 'feed_board.wr_content',
                 'feed_board.feed_source',
                 DB::raw("CONCAT_WS('', '/storage', feed_board.file_url) AS file_url"),
@@ -57,7 +57,7 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
                 'feed_board.mem_id',
                 'feed_board.wr_title',
                 'feed_board.wr_bit',
-                'feed_board.wr_comment',
+                DB::raw("(select count(idx) from comment where wr_type = 'feed' and wr_idx = feed_board.idx) as wr_comment"),
                 'feed_board.wr_content',
                 'feed_board.feed_source',
                 'feed_board.created_at',
@@ -77,6 +77,7 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
 
         $result = $this->statDB->table('feed_file')
             ->select(
+                'feed_file.idx',
                 'feed_file.file_no',
                 'feed_file.feed_content as wr_content',
                 'feed_file.hash_name as feed_source',
@@ -121,6 +122,35 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
         return $result;
     }
 
+    //피드데이터 업로드
+    public function setFeedUpdate($params,$files)
+    {
+
+        if($files != ""){
+            $cfilename = $files->getClientOriginalName();
+            $cfilesource = $files->hashName();
+            $folderName = '/feed/'.date("Y/m/d").'/';
+            $files->storeAs($folderName, $files->hashName(), 'public');
+            $params['feed_file'] = $cfilename;
+            $params['feed_source'] = $cfilesource;
+        }
+
+        $result = $this->statDB->table('feed_board')
+            ->insertGetId([
+                'mem_id' => $params['mem_id']
+                , 'wr_title' => $params['wr_title']
+                , 'wr_content' => $params['feed_content'][0]
+                , 'wr_open' => 'open'
+                , 'wr_type' => $params['wr_type']
+                , 'feed_source' => $params['feed_source']
+                , 'feed_file' => $params['feed_file']
+                , 'file_url' => $folderName
+                , 'created_at' => \Carbon\Carbon::now()
+            ]);
+
+        return $result;
+    }
+
     //피드파일 업로드
     public function setFeedFileUpdate($params,$files)
     {
@@ -155,32 +185,96 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
 
     }
 
-    //피드데이터 업로드
-    public function setFeedUpdate($params,$files)
+    //피드데이터 수정
+    public function feedUpdate($params,$files)
     {
 
-        if($files != ""){
+        $feed_board = DB::table('feed_board')->where('idx', $params['feed_idx'])->first();
+
+        if ($feed_board->feed_file != "" && $files != ""){
+            $dir = storage_path('app/public/event');
+            $path = "$dir"."$feed_board->file_url"."$feed_board->feed_source";
+            if(!File::exists($path)) { return 1; }
+            File::delete($path);
+
             $cfilename = $files->getClientOriginalName();
             $cfilesource = $files->hashName();
             $folderName = '/feed/'.date("Y/m/d").'/';
             $files->storeAs($folderName, $files->hashName(), 'public');
             $params['feed_file'] = $cfilename;
             $params['feed_source'] = $cfilesource;
+            $params['file_url'] = $folderName;
+        }else{
+            $params['feed_file'] = $feed_board->feed_file;
+            $params['feed_source'] = $feed_board->feed_source;
+            $params['file_url'] = $feed_board->file_url;
         }
 
         $result = $this->statDB->table('feed_board')
-            ->insertGetId([
-                'mem_id' => $params['mem_id']
-                , 'wr_title' => $params['wr_title']
-                , 'wr_content' => $params['feed_content'][0]
-                , 'wr_open' => 'open'
-                , 'wr_type' => $params['wr_type']
-                , 'wr_file' => $params['wr_file']
+            ->where('idx',$params['feed_idx'])
+            ->update([
+                'wr_content' => $params['feed_content'][0]
                 , 'feed_source' => $params['feed_source']
                 , 'feed_file' => $params['feed_file']
-                , 'file_url' => $folderName
-                , 'created_at' => \Carbon\Carbon::now()
+                , 'file_url' => $params['file_url']
+                , 'updated_at' => \Carbon\Carbon::now()
             ]);
+
+        return $result;
+    }
+
+    //피드데이터 수정
+    public function feedFileUpdate($params,$files)
+    {
+
+        $feed_file = DB::table('feed_file')->whereIn('idx', $params['file_idx'])->get();
+
+        if(!$feed_file->isEmpty()){
+            foreach ($feed_file as $file){
+                $dir = storage_path('app/public');
+                $path = "$dir"."$file->file_url"."$file->hash_name";
+                if(!File::exists($path)) { return -1; }
+                File::delete($path);
+            }
+        }
+
+        $result = DB::table('feed_file')->whereIn('idx', $params['file_idx'])->delete();
+
+        $file_content = DB::table('feed_file')->where('feed_idx', $params['feed_idx'])->whereNotIn('idx', $params['file_idx'])->get();
+        $i = 1;
+
+        foreach($file_content as $content){
+            DB::table('feed_file')->where('idx', $content->idx)
+            ->update([
+                'feed_content' => $params['feed_content'][$i]
+                , 'file_no' => $i
+            ]);
+            $i++;
+        }
+
+        $sqlData['idx'] = $params['feed_idx'];
+
+        $folderName = '/feed/'.date("Y/m/d").'/';
+        if($files != "" && $files !=null){
+            foreach($files as $fa){
+
+                $sqlData['file_name'] = $fa->getClientOriginalName();
+                $sqlData['hash_name'] = $fa->hashName();
+                $sqlData['file_url'] =  $folderName;
+                $fa->storeAs($folderName, $fa->hashName(), 'public');
+
+                $result = $this->statDB->table('feed_file')
+                    ->insert([
+                        'feed_idx' => $sqlData['idx']
+                        , 'file_name' => $sqlData['file_name']
+                        , 'hash_name' => $sqlData['hash_name']
+                        , 'file_url' => $sqlData['file_url']
+                        , 'feed_content' => $params['feed_content'][$i]
+                        , 'file_no' => $i
+                    ]);
+                $i++;
+            }
+        }
 
         return $result;
     }

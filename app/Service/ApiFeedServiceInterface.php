@@ -22,4 +22,10 @@ interface ApiFeedServiceInterface
 
     //피드데이터 업로드
     public function setFeedUpdate($params,$files);
+
+    //피드 데이터 수정
+    public function feedUpdate($params,$files);
+
+    //피드 데이터 수정
+    public function feedFileUpdate($params,$files);
 }

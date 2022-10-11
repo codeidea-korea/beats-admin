@@ -60,6 +60,7 @@ Route::prefix('/v1/')->group(function () {
         Route::get('feedList', [ApiFeedController::class, 'getFeedList']);
         Route::get('feedView', [ApiFeedController::class, 'getFeedView']);
         Route::post('feedFileUpdate', [ApiFeedController::class, 'feedFileUpdate']);
+        Route::post('feedUpdate', [ApiFeedController::class, 'feedUpdate']);
         Route::delete('feedDelete', [ApiFeedController::class, 'feedDelete']);
     });
 
