@@ -187,6 +187,7 @@ class MemberController extends Controller
     public function setMemberUpdate(){
         $params = $this->request->input();
         $data = array();
+
         $data['mem_id'] = $params['mem_id'];
         $data['mem_status'] = $params['mem_status'];
 
