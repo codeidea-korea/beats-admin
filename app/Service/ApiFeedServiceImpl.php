@@ -192,7 +192,7 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
         $feed_board = DB::table('feed_board')->where('idx', $params['feed_idx'])->first();
 
         if ($feed_board->feed_file != "" && $files != ""){
-            $dir = storage_path('app/public/event');
+            $dir = storage_path('app/public');
             $path = "$dir"."$feed_board->file_url"."$feed_board->feed_source";
             if(!File::exists($path)) { return 1; }
             File::delete($path);
