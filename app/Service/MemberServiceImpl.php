@@ -343,8 +343,8 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
                 });
             })
             ->orderby('crdate','desc')
-            ->skip(($params['page']-1)*$params['limit'])
-            ->take($params['limit'])
+            //->skip(($params['page']-1)*$params['limit'])
+            //->take($params['limit'])
             ->get();
         return $result;
     }
@@ -416,6 +416,49 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
                     ) tb2 ON tb1.banner_code = tb2.banner_code
                     "
         );
+        return $result;
+    }
+
+    public function getMemoList($params){
+        $result = $this->statDB->table('adm_memo')
+            ->select(
+                'idx',
+                'mem_id',
+                'adminindex',
+                'crdate',
+                'memo',
+            )
+            ->where('mem_id', $params['mem_id'])
+            ->orderby('idx','desc')
+            ->skip(($params['page']-1)*$params['limit'])
+            ->take($params['limit'])
+            ->get();
+        return $result;
+    }
+
+    public function getMemoTotal($params){
+        $result = $this->statDB->table('adm_memo')
+            ->select(DB::raw("COUNT(idx) AS cnt"))
+            ->where('mem_id', $params['mem_id'])
+            ->first();
+        return $result;
+    }
+
+    public function setMemoInsert($params){
+        $result = $this->statDB->table('adm_memo')
+            ->insert([
+                'mem_id' => $params['mem_id']
+                ,'adminindex' => $params['adminindex']
+                ,'memo' => $params['memo']
+            ]);
+
+        return $result;
+    }
+
+    public function setMemoDelete($params){
+        $result = $this->statDB->table('adm_memo')
+            ->where('idx',$params['idx'])
+            ->delete();
         return $result;
     }
 }

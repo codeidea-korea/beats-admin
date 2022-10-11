@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Service\MemberServiceImpl;
 use App\Service\ApiHomeServiceImpl;
+use App\Service\ApiSoundSourceServiceImpl;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+
 use Response;
 use Illuminate\Http\Request;
 use Session;
@@ -25,6 +27,7 @@ class MemberController extends Controller
         $this->request = $request;
         $this->memberService = new MemberServiceImpl();
         $this->apiHomeService = new ApiHomeServiceImpl();
+        $this->apiSoundSorceService = new ApiSoundSourceServiceImpl();
 
         $this->middleware('auth');
     }
@@ -156,18 +159,13 @@ class MemberController extends Controller
         $params['page'] = $params['page'] ?? 1;
         $params['limit'] = $params['limit'] ?? 10;
         $params['idx'] = $idx ?? '';
-        //$sample = $this->memberService->bannerSample($params);
-
-        $musicList = $this->memberService->getMusicList($params);
-        $musicTotal = $this->memberService->getMusicTotal($params);
-        $totalCount = $musicTotal->cnt;
-        $params['totalCnt'] = $totalCount;
+        $params['mem_id']= $params['idx'];
+        $musicList = $this->apiSoundSorceService->setSoundSourceList($params);
 
         return view('member.musicList',[
             'params' => $params
             ,'searchData' => $params
             ,'musicList' => $musicList
-            ,'totalCount' => $totalCount
         ]);
     }
 
@@ -184,7 +182,7 @@ class MemberController extends Controller
         ]);
     }
 
-    public function setMemberUpdate(){
+    public function memberUpdate(){
         $params = $this->request->input();
         $data = array();
 
@@ -311,6 +309,69 @@ class MemberController extends Controller
 
         ]);
     }
+
+    public function getMemoList(){
+        $params = $this->request->input();
+        $params['menuCode'] = "AD120100";
+
+        $params['type'] = $params['type'] ?? 0;
+        $params['page'] = $params['page'] ?? 1;
+        $params['limit'] = $params['limit'] ?? 10;
+        $params['mem_id'] = $params['mem_id'] ?? 0;
+        $memoList = $this->memberService->getMemoList($params);
+        $memoTotal = $this->memberService->getMemoTotal($params);
+        $totalCount = $memoTotal->cnt;
+        $params['totalCnt'] = $totalCount;
+
+        return view('member.ajax.memoList',[
+            'params' => $params
+            ,'searchData' => $params
+            ,'memoList' => $memoList
+            ,'totalCount' => $totalCount
+
+        ]);
+    }
+
+    public function setMemoInsert(){
+
+        $params = $this->request->input();
+        $data = array();
+        $data['mem_id'] = $params['mem_id'];
+        $data['adminindex'] = $params['adminindex'];
+        $data['memo'] = $params['memo'];
+
+
+
+
+        $result = $this->memberService->setMemoInsert($data);
+
+        if($result){
+            $rData['result']="SUCCESS";
+        }else{
+            $rData['result']="FAIL";
+        }
+        return json_encode($rData);
+    }
+
+    public function setMemoDel(){
+
+        $params = $this->request->input();
+        $data = array();
+        $data['idx'] = $params['idx'];
+
+        $result = $this->memberService->setMemoDelete($data);
+
+        if($result){
+            $rData['result']="SUCCESS";
+        }else{
+            $rData['result']="FAIL";
+        }
+        return json_encode($rData);
+    }
+
+
+
+
 
 
 

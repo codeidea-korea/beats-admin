@@ -123,7 +123,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('ajax/memberPaging', [MemberController::class, 'getPaging']);
         Route::get('ajax/sendPoint', [MemberController::class, 'sendPoint']);
         Route::get('memberView/{idx}', [MemberController::class, 'getMemberView']);
-        Route::post('ajax/memberUpdate', [MemberController::class, 'setMemberUpdate']);
+        Route::post('ajax/memberUpdate', [MemberController::class, 'memberUpdate']);
+        Route::post('ajax/memoInsert', [MemberController::class, 'setMemoInsert']);
+        Route::post('ajax/memoDel', [MemberController::class, 'setMemoDel']);
+
+        Route::get('ajax/memoList', [MemberController::class, 'getMemoList']);
+
 
         // 초대 내역
         Route::get('inviteList', [MemberController::class, 'getInviteList']);

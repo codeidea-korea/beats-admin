@@ -26,4 +26,13 @@ interface MemberServiceInterface
 
     //셈플
     public function bannerSample();
+
+    //메모 list
+    public function getMemoList($params);
+
+    //메모 total
+    public function getMemoTotal($params);
+
+    //메모 등록
+    public function setMemoInsert($params);
 }

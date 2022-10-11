@@ -110,6 +110,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                         ,F.file_no
                         ,F.hash_name
                         ,F.file_url
+                        ,H.moddate
                     FROM
                     music_head H LEFT JOIN music_file F ON H.idx = F.music_head_idx
                     WHERE

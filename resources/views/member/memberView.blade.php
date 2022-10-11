@@ -7,7 +7,7 @@
     @include('include.topBarINC')
     <!-- END: Top Bar -->
         <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
-            <h2 class="text-lg font-medium mr-auto">회원관리{{$memberData->class}}</h2>
+            <h2 class="text-lg font-medium mr-auto">회원관리</h2>
         </div>
 
         <div class="grid grid-cols-12 gap-6 mt-5">
@@ -18,7 +18,7 @@
                             <ul class="nav nav-boxed-tabs" role="tablist">
 
                                 <li class="nav-item flex-1" role="presentation">
-                                    <button class="nav-link w-full py-2 active" type="button" role="tab">기본 정보</button>
+                                    <button class="nav-link w-full py-2 active" type="button" role="tab" onClick="javascript:location.href = '/member/memberView/{{$params['idx']}}';">기본 정보</button>
                                 </li>
                                 @if($memberData->class == 3)
                                 <li class="nav-item flex-1" role="presentation">
@@ -31,7 +31,7 @@
                                     <button class="nav-link w-full py-2" type="button" role="tab">포트폴리오</button>
                                 </li>
                                 <li class="nav-item flex-1" role="presentation">
-                                    <button class="nav-link w-full py-2" type="button" role="tab">음원</button>
+                                    <button class="nav-link w-full py-2" type="button" role="tab" onClick="javascript:location.href = '/member/musicList/{{$params['idx']}}';">음원</button>
                                 </li>
                                 <li class="nav-item flex-1" role="presentation">
                                     <button class="nav-link w-full py-2" type="button" role="tab">앨범</button>
@@ -55,9 +55,9 @@
                         </div>
                     </div>
 
-                        <div class="p-5">
-                            <div class="">
-                                <input type="hidden" name="mem_id" value="{{$memberData->mem_id}}" >
+                    <div class="p-5">
+                        <div class="">
+                            <input type="hidden" name="mem_id" value="{{$memberData->mem_id}}" >
                                 @if($memberData->gubun == 3) <!-- 3.음원 구매자 -->
                                     <table class="table table-bordered">
                                         <tr>
@@ -682,23 +682,146 @@
                                         </tr>
                                     </table>
                                 @endif
-                                <div class="flex w-full box pt-5">
-                                    <div class="ml-auto">
-                                        <button class="btn btn-secondary w-24" onClick="javascript:location.href = '/member/memberList';">목록</button>
-                                        <button class="btn btn-primary w-24 ml-2 btn_update">수정</button>
+
+
+                                <div class="intro-y box">
+                                    <div class="p-5">
+                                        <div class="overflow-x-auto">
+                                            <div style="font-size:18px;">관리자메모</div>
+                                                <table class="table table-bordered">
+                                                    <tr>
+                                                        <th class="bg-primary/10 whitespace-nowrap w-8 text-center">작성자</th>
+                                                        <td class="whitespace-nowrap">
+                                                            {{auth()->user()->name}}
+                                                            <input type="hidden" name="adminindex" id="adminindex" value="{{auth()->user()->idx}}" >
+                                                        </td>
+                                                    <tr>
+                                                        <th class="bg-primary/10 whitespace-nowrap w-8 text-center">메모입력</th>
+                                                        <td>
+                                                            <input type="text" id="memo" name="memo" value="" style="width:80%;">
+                                                            <button class="btn btn-primary w-24 ml-2 btn_memoin" >메모등록</button>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                        </div>
                                     </div>
+
+                                    <div class="p-5" id="memoList">
+
+                                    </div>
+
+                                </div>
+
+
+                            <div class="flex w-full box pt-5">
+                                <div class="ml-auto">
+                                    <button class="btn btn-secondary w-24" onClick="javascript:location.href = '/member/memberList';">목록</button>
+                                    <button class="btn btn-primary w-24 ml-2 btn_update">수정</button>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
                 </div>
             </div>
 
         </div>
 
+
     </div>
 
     <script>
+
+        function memoList(page){
+            var mem_id = $('input[name=mem_id]').val();
+            var data = {
+                page:page
+                , mem_id:mem_id
+            };
+            jQuery.ajax({
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                type:"GET",
+                data: data,
+                url: '{{ url('/member/ajax/memoList') }}',
+                success: function searchSuccess(data) {
+                    $("#memoList")[0].innerHTML = '';
+                    $("#memoList").append(data);
+                },
+                error: function (e) {
+                    alert('로딩 중 오류가 발생 하였습니다.');
+                }
+            });
+
+        }
+
+        function memoDel(idx){
+
+            if (!confirm("삭제를 진행후 메모는 복구가 불가능합니다. 그래도 진행하시겠습니까?")) {
+                return false;
+            } else {
+                var data = {
+                    idx:idx
+                };
+                jQuery.ajax({
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    type:"post",
+                    dataType:'json',
+                    data: data,
+                    url: '{{ url('/member/ajax/memoDel') }}',
+                    success: function searchSuccess(data) {
+                        if(data.result=="SUCCESS"){
+                            alert('메모가 삭제되었습니다.');
+                            memoList(1);
+                        }else{
+                            alert('처리 중 오류가 발생 하였습니다. 다시 시도해주세요.');
+                        }
+                    },
+                    error: function (e) {
+                        alert('로딩 중 오류가 발생 하였습니다.');
+                    }
+                });
+            }
+
+        }
+
+        $(".btn_memoin").on('click', function(){
+
+            var mem_id = $('input[name=mem_id]').val();
+            var adminindex = $('input[name=adminindex]').val();
+            var memo = $('input[name=memo]').val();
+            if(memo.trim() == ""){
+                alert('메모를 입력해주세요.');
+                return false;
+            }
+
+
+            var data = {
+                mem_id:mem_id
+                ,adminindex:adminindex
+                ,memo:memo
+            };
+
+            jQuery.ajax({
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                type:"post",
+                dataType:'json',
+                data: data,
+                url: '{{ url('/member/ajax/memoInsert') }}',
+                success: function searchSuccess(data) {
+                    if(data.result=="SUCCESS"){
+                        alert('메모가 등록되었습니다.');
+                        $('input[name=memo]').val('');
+                        memoList(1);
+                    }else{
+                        alert('처리 중 오류가 발생 하였습니다. 다시 시도해주세요.');
+                    }
+                },
+                error: function (e) {
+                    alert('로딩 중 오류가 발생 하였습니다.');
+                }
+            });
+        });
+
         $(".btn_update").on('click', function(){
 
             var mem_id = $('input[name=mem_id]').val();
@@ -729,5 +852,9 @@
                 }
             });
         });
+        $(function() {
+            memoList(1);
+        });
+
     </script>
 @endsection
