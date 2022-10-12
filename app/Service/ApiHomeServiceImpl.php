@@ -199,4 +199,27 @@ class ApiHomeServiceImpl extends DBConnection  implements ApiHomeServiceInterfac
 
     }
 
+    public function beatAdd($params){
+
+        $result = $this->statDB->table('beat_data')
+            ->insert([
+                'mem_id' => $params['mem_id'],
+                'service_idx' => $params['service_idx'],
+                'service_name' => $params['service_name'],
+            ]);
+        
+        return $result;
+    }
+
+    public function beatDelete($params){
+
+        $result = $this->statDB->table('beat_data')
+            ->where('mem_id',$params['mem_id'])
+            ->where('service_idx',$params['service_idx'])
+            ->where('service_name',$params['service_name'])
+            ->delete();
+        
+        return $result;
+    }
+
 }

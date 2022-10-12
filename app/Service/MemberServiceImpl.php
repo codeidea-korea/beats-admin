@@ -226,8 +226,8 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
             ->select(
                 'members.idx',
                 'member_data.mem_id',
-                'member_data.class',
-                'member_data.email',
+                'member_data.channel',
+                'member_data.u_id',
                 'member_data.mem_nickname',
             )
             ->where('members.isuse', 'Y')
@@ -236,9 +236,9 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
                     $query->whereNotIn('members.idx',  $params['send_member_data']);
                 });
             })
-            ->when(isset($params['class']), function($query) use ($params){
+            ->when(isset($params['channel']), function($query) use ($params){
                 return $query->where(function($query) use ($params) {
-                    $query->where('member_data.class',  $params['class']);
+                    $query->where('member_data.channel',  $params['channel']);
                 });
             })
             ->when(isset($params['nationality']), function($query) use ($params){
@@ -248,7 +248,7 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
             })
             ->when(isset($params['search_text']), function($query) use ($params){
                 return $query->where(function($query) use ($params) {
-                    $query->where('member_data.email', 'like' , '%'.$params['search_text'].'%')
+                    $query->where('member_data.u_id', 'like' , '%'.$params['search_text'].'%')
                     ->orWhere('member_data.mem_nickname', 'like' , '%'.$params['search_text'].'%');
                 });
             })

@@ -206,4 +206,62 @@ class ApiHomeController extends Controller
         }
     }
 
+    public function beatAdd()
+    {
+        try{
+            $params = $this->request->input();
+            $params['mem_id'] = isset($params['mem_id']) ? $params['mem_id'] : '';
+            $params['service_name'] = isset($params['service_name']) ? $params['service_name'] : '';
+            $params['service_idx'] = isset($params['service_idx']) ? $params['service_idx'] : '';
+
+
+            if($params['mem_id']=="" || $params['service_idx']=="" || $params['service_name']==""){
+                $returnData['code']=-1;
+                $returnData['message']="필수 입력 값이 누락되었습니다.";
+            }else{
+
+                $beat = $this->apiHomeService->beatAdd($params);
+
+                $returnData['code'] = 0;
+                $returnData['message'] = "complete";
+                $returnData['response'] = $beat;
+            }
+
+
+            return json_encode($returnData);
+
+        } catch(\Exception $exception){
+            throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+        }
+    }
+
+    public function beatDelete()
+    {
+        try{
+            $params = $this->request->input();
+            $params['mem_id'] = isset($params['mem_id']) ? $params['mem_id'] : '';
+            $params['service_name'] = isset($params['service_name']) ? $params['service_name'] : '';
+            $params['service_idx'] = isset($params['service_idx']) ? $params['service_idx'] : '';
+
+
+            if($params['mem_id']=="" || $params['service_idx']=="" || $params['service_name']==""){
+                $returnData['code']=-1;
+                $returnData['message']="필수 입력 값이 누락되었습니다.";
+            }else{
+
+                $beat = $this->apiHomeService->beatDelete($params);
+
+                $returnData['code'] = 0;
+                $returnData['message'] = "complete";
+                $returnData['response'] = $beat;
+            }
+
+
+            return json_encode($returnData);
+
+        } catch(\Exception $exception){
+            throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+        }
+    }
+
 }

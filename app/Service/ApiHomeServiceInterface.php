@@ -29,4 +29,10 @@ interface ApiHomeServiceInterface
     // 이벤트 view
     public function getEventView($params);
 
+    //비트 추가
+    public function beatAdd($params);
+
+    //비트 삭제
+    public function beatDelete($params);
+
 }

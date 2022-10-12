@@ -252,10 +252,16 @@
                             <div class="flex items-center w-full">
                                 <div class="flex items-center mr-5">
                                     <span class="mr-2">가입 채널</span>
-                                    <select name="point_mem_class" class="form-select w-32" aria-label=".form-select-lg example">
-                                        <option value="0">비트썸원</option>
-                                        <option value="1">바이비트</option>
-                                        <option value="2">통합회원</option>
+                                    <select name="point_channel" class="form-select w-32" aria-label=".form-select-lg example">
+                                        <option value=""           @if($params['channel'] == "")  selected @endif >전체</option>
+                                        <option value="facebook"   @if($params['channel'] == "facebook") selected @endif >페이스북</option>
+                                        <option value="twitter"    @if($params['channel'] == "twitter") selected @endif >트위터</option>
+                                        <option value="google"     @if($params['channel'] == "google") selected @endif >구글</option>
+                                        <option value="apple"      @if($params['channel'] == "apple") selected @endif >애플</option>
+                                        <option value="naver"      @if($params['channel'] == "naver")  selected @endif >네이버</option>
+                                        <option value="kakao"      @if($params['channel'] == "kakao") selected @endif >카카오</option>
+                                        <option value="soundcloud" @if($params['channel'] == "soundcloud") selected @endif >사운드클라우드</option>
+                                        <option value="email"      @if($params['channel'] == "email") selected @endif >직접가입</option>
                                     </select>
                                 </div>
 
@@ -313,9 +319,9 @@
                                                         <input id="checkbox-switch-1" class="form-check-input all_check" type="checkbox" value="">
                                                     </div>
                                                 </th>
-                                                <th class="whitespace-nowrap text-cente bg-primary/10">서비스</th>
-                                                <th class="whitespace-nowrap text-center bg-primary/10">회원 구분</th>
-                                                <th class="whitespace-nowrap text-center bg-primary/10">가입 채널</th>
+                                                <th class="whitespace-nowrap text-cente bg-primary/10">가입 채널</th>
+                                                <th class="whitespace-nowrap text-center bg-primary/10">고유 ID</th>
+                                                <th class="whitespace-nowrap text-center bg-primary/10">닉네임</th>
                                             </tr>
                                             </thead>
                                             <tbody id="pointMemList">
@@ -361,9 +367,9 @@
                                                         <input id="checkbox-switch-1" class="form-check-input all_back_check" type="checkbox" value="">
                                                     </div>
                                                 </th>
-                                                <th class="whitespace-nowrap text-cente bg-primary/10">서비스</th>
-                                                <th class="whitespace-nowrap text-center bg-primary/10">회원 구분</th>
-                                                <th class="whitespace-nowrap text-center bg-primary/10">가입 채널</th>
+                                                <th class="whitespace-nowrap text-cente bg-primary/10">가입 채널</th>
+                                                <th class="whitespace-nowrap text-center bg-primary/10">고유 ID</th>
+                                                <th class="whitespace-nowrap text-center bg-primary/10">닉네임</th>
                                             </tr>
                                             </thead>
                                             <tbody id="sendPointMemList">
@@ -412,7 +418,7 @@
 
         var send_member_data = {};
 
-        var search_mem_class = "";
+        var point_channel = "";
         var search_nationality = "";
         var search_text = "";
         var search_mem_regdate = "";
@@ -449,13 +455,13 @@
 
                 $('input[name="send_check"]:checked').each(function(){
                     var idx = $(this).val();
-                    var mem_class = $(this).data("mem_class");
-                    var email = $(this).data("email");
+                    var channel = $(this).data("channel");
+                    var u_id = $(this).data("u_id");
                     var mem_nickname = $(this).data("mem_nickname");
 
                     send_member_data[idx] = {
-                            mem_class : mem_class,
-                            email : email,
+                            channel : channel,
+                            u_id : u_id,
                             mem_nickname : mem_nickname,
                     };
 
@@ -545,7 +551,7 @@
 
         $(document).on('click',"#searchPointBtn",function(){
 
-            search_mem_class = $('select[name="point_mem_class"]').val();
+            point_channel = $('select[name="point_channel"]').val();
             search_nationality = $('select[name="point_nationality"]').val();
             search_text = $('input[name="point_search_text"]').val();
             search_mem_regdate = $('input[name="point_mem_regdate"]').val();
@@ -563,7 +569,7 @@
                     page : page,
                     limit : 10,
                     send_member_data : send_member,
-                    class : search_mem_class,
+                    channel : point_channel,
                     nationality : search_nationality,
                     search_text : search_text,
                     mem_regdate : search_mem_regdate,
@@ -579,21 +585,13 @@
                             var mem_class = "";
                             var gubun = "";
 
-                            if(item.class == 1){
-                                mem_class = "비트썸원";
-                            }else if(item.class == 2){
-                                mem_class = "바이비트";
-                            }else{
-                                mem_class = "통합회원";
-                            }
-
                             ihtml =  '<tr>'
                             ihtml +=    '<td class="whitespace-nowrap text-center">';
                             ihtml +=    '<div class="form-check">';
-                            ihtml +=    '<input name="send_check" id="checkbox-switch-1" class="form-check-input send_check" type="checkbox" value="'+item.idx+'" data-mem_class="'+mem_class+'" data-email="'+item.email+'" data-mem_nickname="'+item.mem_nickname+'">';
+                            ihtml +=    '<input name="send_check" id="checkbox-switch-1" class="form-check-input send_check" type="checkbox" value="'+item.idx+'" data-channel="'+item.channel+'" data-u_id="'+item.u_id+'" data-mem_nickname="'+item.mem_nickname+'">';
                             ihtml +=    '</div>';
-                            ihtml +=    '<td class="whitespace-nowrap text-center">'+mem_class+'</td>';
-                            ihtml +=    '<td class="whitespace-nowrap text-center">'+item.email+'</td>';
+                            ihtml +=    '<td class="whitespace-nowrap text-center">'+item.channel+'</td>';
+                            ihtml +=    '<td class="whitespace-nowrap text-center">'+item.u_id+'</td>';
                             ihtml +=    '<td class="whitespace-nowrap text-center">'+item.mem_nickname+'</td>';
                             ihtml +=    '</tr>';
                             dom.innerHTML = ihtml;
@@ -653,8 +651,8 @@
 
                 var ihtml = "";
 
-                var mem_class = Listobj[key].mem_class;
-                var email = Listobj[key].email;
+                var channel = Listobj[key].channel;
+                var u_id = Listobj[key].u_id;
                 var mem_nickname = Listobj[key].mem_nickname;
 
                 ihtml =  '<tr>'
@@ -662,8 +660,8 @@
                 ihtml +=    '<div class="form-check">';
                 ihtml +=    '<input name="send_back_check" id="checkbox-switch-1" class="form-check-input send_back_check" type="checkbox" value="'+key+'">';
                 ihtml +=    '</div>';
-                ihtml +=    '<td class="whitespace-nowrap text-center">'+mem_class+'</td>';
-                ihtml +=    '<td class="whitespace-nowrap text-center">'+email+'</td>';
+                ihtml +=    '<td class="whitespace-nowrap text-center">'+channel+'</td>';
+                ihtml +=    '<td class="whitespace-nowrap text-center">'+u_id+'</td>';
                 ihtml +=    '<td class="whitespace-nowrap text-center">'+mem_nickname+'</td>';
                 ihtml +=    '</tr>';
 

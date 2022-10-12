@@ -34,6 +34,10 @@ Route::prefix('/v1/')->group(function () {
 
     Route::get('eventView', [ApiHomeController::class, 'getEventView']);
 
+    Route::post('beatAdd', [ApiHomeController::class, 'beatAdd']);
+
+    Route::delete('beatDelete', [ApiHomeController::class, 'beatDelete']);
+
     Route::group(['prefix' => 'member'], function() {
         Route::put('login', [ApiMemberController::class, 'apiLogin']);
         Route::put('loginCheck', [ApiMemberController::class, 'loginCheck']);
