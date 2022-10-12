@@ -107,6 +107,7 @@ class FeedServiceImpl extends DBConnection  implements FeedServiceInterface
         $result = $this->statDB->table('feed_board')
             ->select(
                 'feed_board.idx',
+                'feed_board.mem_id',
                 'feed_board.wr_title',
                 'feed_board.wr_content',
                 'feed_board.wr_open',
@@ -120,10 +121,10 @@ class FeedServiceImpl extends DBConnection  implements FeedServiceInterface
                 'feed_board.file_url',
                 'feed_board.created_at',
                 'feed_board.updated_at',
-                'members.email_id'
+                'member_data.u_id'
             )
             ->where('feed_board.idx',$idx)
-            ->leftJoin('members','feed_board.mem_id','=','members.idx')
+            ->leftJoin('member_data','feed_board.mem_id','=','member_data.mem_id')
             ->orderby('feed_board.idx','desc')
             ->get();
 

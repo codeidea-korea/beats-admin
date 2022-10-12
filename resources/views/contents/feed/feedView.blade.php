@@ -124,7 +124,7 @@
                                 <tr>
                                     <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">작성자</th>
                                     <td colspan="1" class="whitespace-nowrap">
-                                        {{$feedData[0]->email_id}}
+                                        {{$feedData[0]->u_id}}<div class="btn btn-primary w-32 ml-2 mr-2" onclick="window.open('/member/memberView/{{$feedData[0]->mem_id}}')">자세히 보기</div>
                                     </td>
                                     <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">언어</th>
                                     <td colspan="1" class="whitespace-nowrap">
