@@ -155,6 +155,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('feedBeatView/{idx}', [FeedController::class, 'getFeedBeatView']);
         Route::get('feedCommentView/{idx}', [FeedController::class, 'getFeedCommentView']);
         Route::post('feedUpdate', [FeedController::class, 'feedUpdate']);
+
+        Route::get('/comment/commentDetail', [FeedController::class, 'getCommentDetail']);
+        Route::get('/comment/commentUpdate', [FeedController::class, 'commentUpdate']);
     });
 
 

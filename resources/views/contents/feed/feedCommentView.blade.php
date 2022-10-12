@@ -107,7 +107,7 @@
                                             <td class="whitespace-nowrap text-center">{{$totalCount-($i+(($params['page']-1)*10))}}</td>
                                             <td class="whitespace-nowrap text-center">@if($rs->cm_open == 'open') 노출 @else 비 노출 @endif</td>
                                             <td class="whitespace-nowrap text-center">{{$rs->u_id}}</td>
-                                            <td class="whitespace-nowrap text-center">{{$rs->cm_content}}</td>
+                                            <td class="whitespace-nowrap text-center detailOpen" data-idx="{{$rs->idx}}" data-tw-toggle="modal" data-tw-target="#superlarge-modal-size-preview2">{{$rs->cm_content}}</td>
                                             <td class="whitespace-nowrap text-center">{{$rs->cm_bit}}</td>
                                             <td class="whitespace-nowrap text-center">{{$rs->created_at}}</td>
                                         </tr>
@@ -133,6 +133,60 @@
 
     </div>
 
+    <!-- 포인트지급 설정 모달 시작 -->
+    <div id="superlarge-modal-size-preview2" class="modal" tabindex="-1" aria-hidden="false">
+        <div class="modal-dialog modal-2xl">
+            <div class="modal-content">
+                <div class="modal-body p-10 text-center">
+                    <div class="overflow-x-auto">
+                        <table class="table table-bordered">
+                        <tr>
+                            <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">닉네임</th>
+                            <td colspan="3" class="whitespace-nowrap" id="mem_nickname">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">댓글 내용</th>
+                            <td colspan="3" class="whitespace-nowrap" id="cm_content">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">비트 수</th>
+                            <td colspan="3" class="whitespace-nowrap" id="cm_bit">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">신고</th>
+                            <td colspan="3" class="whitespace-nowrap" id="cm_report">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">최초 등록일</th>
+                            <td colspan="1" class="whitespace-nowrap" id="created_at">
+                            </td>
+                            <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">최근 수정일</th>
+                            <td colspan="1" class="whitespace-nowrap" id="updated_at">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">상태</th>
+                            <td colspan="3" class="whitespace-nowrap">
+                                <select name="cm_open" class="form-select w-60" aria-label=".form-select-lg example" id="cm_open">
+                                    <option value="open">노출</option>
+                                    <option value="secret">비 노출</option>
+                                </select>
+                            </td>
+                        </tr>
+                        </table>
+                    <div class="flex items-center justify-center mt-5">
+                        <button class="btn btn-primary w-32 mr-5 commentUpdateBtn">설정</button>
+                        <button class="btn btn-secondary w-32 modalCancel" data-tw-dismiss="modal">닫기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         $(".formSearchBtn").on('click', function(){
             document.forms["searchForm"].submit();
@@ -141,6 +195,66 @@
             $("input[name=page]").val(page);
             document.forms["searchForm"].submit();
         }
+
+        var idx = 0;
+
+        $(document).on('click','.detailOpen',function(){
+            idx = $(this).data('idx');
+
+            jQuery.ajax({
+                cache: false,
+                dataType:'json',
+                data: {
+                    idx : idx,
+                },
+                url: '/contents/comment/commentDetail',
+                success: function (data) {
+                    if(data.resultCode=="SUCCESS"){
+                        $('#mem_nickname')[0].innerHTML = data['response'][0].mem_nickname;
+                        $('#cm_content')[0].innerHTML = data['response'][0].cm_content;
+                        $('#cm_bit')[0].innerHTML = data['response'][0].cm_bit;
+                        $('#cm_report')[0].innerHTML = 0;//data['response'][0].cm_report;
+                        $('#created_at')[0].innerHTML = data['response'][0].created_at;
+                        $('#updated_at')[0].innerHTML = data['response'][0].updated_at;
+                        $('#cm_open').val(data['response'][0].cm_open);
+                    }else{
+                        alert(data.resultMessage);
+                    }
+                },
+                error: function (e) {
+                    console.log('start');
+                    console.log(e);
+                    //alert('로딩 중 오류가 발생 하였습니다.');
+                }
+            });
+        });
+
+        $(document).on('click','.commentUpdateBtn',function(){
+            var cm_open = $('#cm_open').val();
+            
+            jQuery.ajax({
+                cache: false,
+                dataType:'json',
+                data: {
+                    idx : idx,
+                    cm_open : cm_open,
+                },
+                url: '/contents/comment/commentUpdate',
+                success: function (data) {
+                    if(data.resultCode=="SUCCESS"){
+                        alert(data.resultMessage);
+                        location.reload();
+                    }else{
+                        alert(data.resultMessage);
+                    }
+                },
+                error: function (e) {
+                    console.log('start');
+                    console.log(e);
+                    //alert('로딩 중 오류가 발생 하였습니다.');
+                }
+            });
+        });
 
     </script>
 @endsection

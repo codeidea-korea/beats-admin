@@ -280,7 +280,6 @@ class FeedServiceImpl extends DBConnection  implements FeedServiceInterface
 
     }
 
-    
     public function feedUpdate($params) {
 
         $result = $this->statDB->table('feed_board')
@@ -296,5 +295,37 @@ class FeedServiceImpl extends DBConnection  implements FeedServiceInterface
         }
 
         return $idx;
+    }
+
+    public function getCommentDetail($params) {
+
+        $result = $this->statDB->table('comment')
+            ->leftJoin('member_data','comment.mem_id','=','member_data.mem_id')
+            ->select(
+                'comment.idx',
+                'comment.cm_open',
+                'comment.cm_content',
+                DB::raw("(select count(idx) from beat_data where service_name = 'comment' and service_idx = comment.idx and is_beat = 1) as cm_bit"),
+                'comment.created_at',
+                'comment.updated_at',
+                'comment.del_status',
+                'member_data.mem_nickname',
+            )
+            ->where('comment.idx',$params['idx'])
+            ->get();
+
+        return $result;
+
+    }
+
+    public function commentUpdate($params) {
+
+        $result = $this->statDB->table('comment')
+            ->where('idx',$params['idx'])
+            ->update([
+                'cm_open' => $params['cm_open'], 'updated_at' => \Carbon\Carbon::now(),
+            ]);
+
+        return $result;
     }
 }

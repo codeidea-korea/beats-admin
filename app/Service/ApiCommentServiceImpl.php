@@ -87,7 +87,6 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
                 'comment.cm_content',
                 'comment.cm_depth',
                 'comment.cm_open',
-                'comment.cm_content',
                 DB::raw("(select count(idx) from beat_data where service_name = 'comment' and service_idx = comment.idx and is_beat = 1) as cm_bit"),
                 'comment.created_at',
                 'comment.del_status',

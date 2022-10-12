@@ -150,4 +150,35 @@ class FeedController extends Controller
             return redirect('/contents/feedView/'.$result);
         }
     }
+
+    public function getCommentDetail()
+    {
+        $params = $this->request->input();
+        $params['menuCode'] = "AD060100";
+
+        $commentData = $this->adminFeedService->getCommentDetail($params);
+
+        $returnData['resultCode']='SUCCESS';
+        $returnData['response']=$commentData;
+
+        return json_encode($returnData);
+    }
+
+    public function commentUpdate()
+    {
+        $params = $this->request->input();
+        $params['menuCode'] = "AD060100";
+
+        $commentData = $this->adminFeedService->commentUpdate($params);
+
+        if($commentData > 0){
+            $returnData['resultCode']='SUCCESS';
+            $returnData['resultMessage']='수정되었습니다.';
+        }else{
+            $returnData['resultCode']='FAIL';
+            $returnData['resultMessage']='수정 중 오류가 발생하였습니다. 다시 시도해 주세요.';
+        }
+
+        return json_encode($returnData);
+    }
 }
