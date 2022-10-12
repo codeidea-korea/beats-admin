@@ -64,10 +64,11 @@ class FeedController extends Controller
     {
         $params = $this->request->input();
         $params['menuCode'] = "AD060100";
-        $feedData = $this->adminFeedService->getFeedView($idx);
-        $feedFileData = $this->adminFeedService->getFeedFile($idx);
 
-        return view('contents.feed.FeedView',[
+        $feedData = $this->adminFeedService->getFeedView($idx);
+
+        $feedFileData = $this->adminFeedService->getFeedFile($idx);
+        return view('contents.feed.feedView',[
             'feedData' => $feedData
             ,'feedFileData' => $feedFileData
             ,'params' => $params
