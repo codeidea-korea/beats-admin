@@ -381,6 +381,7 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
                 'nationality' => $params['nationality'], 'mem_nickname' => $params['mem_nickname'], 'marketing_consent' => $params['marketing_consent'],
                 'class' => 3,'mem_sanctions' => 0,'mem_status' => 1,'mem_level' => 1,'mem_id' => $members_id, 'mem_regdate' => \Carbon\Carbon::now(),
                 'u_id' => $params['u_id'],
+                'channel' => $params['channel']
             ]);
 
         return $result;

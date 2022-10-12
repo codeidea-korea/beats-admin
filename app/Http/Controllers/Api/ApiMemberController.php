@@ -300,6 +300,15 @@ class ApiMemberController extends Controller
             $params['marketing_consent'] = $params['marketingConsent'] ?? "";
             $params['existingEmailId'] = $params['existingEmailId'] ?? "";
 
+            $params['channel'] = "email";
+            if($params['apple_key']!=null){ $params['channel'] = "apple"; }
+            if($params['naver_key']!=null){ $params['channel'] = "naver"; }
+            if($params['kakao_key']!=null){ $params['channel'] = "kakao"; }
+            if($params['google_key']!=null){ $params['channel'] = "google"; }
+            if($params['facebook_key']!=null){ $params['channel'] = "facebook"; }
+            if($params['twitter_key']!=null){ $params['channel'] = "twitter"; }
+            if($params['soundcloud_key']!=null){ $params['channel'] = "soundcloud"; }
+
             // 고유id값 [u_id]추출 start
             do {
                 $tempUid = $this->apiMemberService->getRandStr();
