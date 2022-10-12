@@ -17,7 +17,7 @@
                         <div class="preview">
                             <ul class="nav nav-boxed-tabs" role="tablist">
                                 <li class="nav-item flex-1" role="presentation">
-                                    <button class="nav-link w-full py-2" type="button" role="tab" onClick="javascript:location.href = '/member/musicList/{{$params['idx']}}';">기본 정보</button>
+                                    <button class="nav-link w-full py-2" type="button" role="tab" onClick="javascript:location.href = '/member/memberView/{{$params['idx']}}';">기본 정보</button>
                                 </li>
                                 <li class="nav-item flex-1" role="presentation">
                                     <button class="nav-link w-full py-2" type="button" role="tab">코칭 상품</button>
@@ -122,9 +122,13 @@
                             <div class="intro-x box p-5 w-full">
                                 <div class="w-full items-center flex gap-5">
                                     <script src="https://unpkg.com/wavesurfer.js"></script>
+                                    <div class="border-l flex gap-3 px-5 ml-auto">
+                                        <audio id="player" controls  src="{{url('/storage'.$rs->file_url.'/'.$rs->hash_name)}}">
+                                        </audio>
+                                    </div>
                                     <div class="grow px-5">
-                                        <div class="font-medium text-lg">사용자가 입력한 곡 제목 표기</div>
-                                        <div class="text-slate-400 mt-1"> <span class="font-bold">최근 수정일 :</span>2022. 03. 17</div>
+                                        <div class="font-medium text-lg">{{$rs->music_title}}</div>
+                                        <div class="text-slate-400 mt-1"> <span class="font-bold"><a href="javascript:test123();">최근 수정일</a> :</span>{{$rs->moddate}}</div>
                                         <div class="text-slate-400 flex items-center mt-1">
                                             <i data-lucide="circle" class="w-4 h-4 mr-1"></i>
                                             47
@@ -132,20 +136,11 @@
                                         <div class="font-medium text-lg" id="waveform"></div>
                                     </div>
 
-                                    <audio controls  src="/music/Blueming.mp3">
-                                    </audio>
-                                    <div class="grow px-5">
-                                        <div class="font-medium text-lg">{{$rs->music_title}}</div>
-                                        <div class="text-slate-400 mt-1"> <span class="font-bold">최근 수정일 :</span>{{$rs->moddate}}</div>
-                                        <div class="text-slate-400 flex items-center mt-1">
-                                            <i data-lucide="circle" class="w-4 h-4 mr-1"></i>
-                                            47
-                                        </div>
-                                    </div>
+
                                     <div class="border-l flex gap-3 px-5 ml-auto">
                                         <div class="border border-slate-300 rounded-md border-dashed p-3 text-center">
                                             <div class="font-bold">작업 방식</div>
-                                            <div class="btn-warning p-1 rounded-md">{{$rs->common_composition}}</div>
+                                            <div class="btn-warning p-1 rounded-md">@if($rs->common_composition=="Y") 공동작업 @else 개인작업 @endif</div>
                                         </div>
                                         <div class="border border-slate-300 rounded-md border-dashed p-3 text-center">
                                             <div class="font-bold">작업 진행률</div>
@@ -157,11 +152,11 @@
                                         </div>
                                         <div class="border border-slate-300 rounded-md border-dashed p-3 text-center">
                                             <div class="font-bold">판매 상태</div>
-                                            <div class="btn-secondary p-1 rounded-md">{{$rs->sales_status}}</div>
+                                            <div class="btn-secondary p-1 rounded-md">@if($rs->sales_status=="Y") 판매중 @else 미판매중 @endif</div>
                                         </div>
                                         <div class="border border-slate-300 rounded-md border-dashed p-3 text-center">
                                             <div class="font-bold">공개 상태</div>
-                                            <div class="btn-secondary p-1 rounded-md">{{$rs->open_status}}</div>
+                                            <div class="btn-secondary p-1 rounded-md">@if($rs->open_status=="Y") 공개 @else 비공개 @endif</div>
                                         </div>
                                     </div>
                                 </div>

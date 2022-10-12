@@ -15,6 +15,7 @@
                     <div class="ml-auto">
                         <button class="btn btn-primary w-24 ml-2" onClick="excelDownload()">Excel Download</button>
                         <button class="btn btn-primary w-24 ml-2" onClick="alert('엑셀 업로드 폼이 없음');">Excel Upload</button>
+                        <input type="file" >
                     </div>
                 </div>
                 <div class="intro-y box">
