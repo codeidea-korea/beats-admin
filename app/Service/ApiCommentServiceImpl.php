@@ -60,6 +60,7 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
                 'comment.cm_open',
                 'comment.cm_content',
                 DB::raw("(select count(idx) from beat_data where service_name = 'comment' and service_idx = comment.idx and is_beat = 1) as cm_bit"),
+                DB::raw("(select count(idx) from beat_data where service_name = 'comment' and service_idx = comment.idx and mem_id = {$params['mem_id']} and is_beat = 1) as like_status"),
                 'comment.created_at',
                 'comment.del_status',
                 'member_data.mem_nickname',

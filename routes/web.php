@@ -152,6 +152,8 @@ Route::middleware(['auth'])->group(function () {
         //피드관리
         Route::get('feedList', [FeedController::class, 'getFeedList']);
         Route::get('feedView/{idx}', [FeedController::class, 'getFeedView']);
+        Route::get('feedBeatView/{idx}', [FeedController::class, 'getFeedBeatView']);
+        Route::get('feedCommentView/{idx}', [FeedController::class, 'getFeedCommentView']);
         Route::post('feedUpdate', [FeedController::class, 'feedUpdate']);
     });
 

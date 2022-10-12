@@ -131,6 +131,137 @@ class FeedServiceImpl extends DBConnection  implements FeedServiceInterface
 
     }
 
+    public function getFeedBeatView($params,$idx) {
+
+        $result = $this->statDB->table('beat_data')
+            ->leftJoin('member_data','beat_data.mem_id','=','member_data.mem_id')
+            ->select(
+                'beat_data.idx',
+                'beat_data.create_date',
+                'member_data.u_id',
+                'member_data.mem_nickname',
+                'member_data.nationality',
+            )
+            ->where('beat_data.service_name','feed')
+            ->where('beat_data.service_idx', $idx)
+            ->when(isset($params['nationality']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.nationality',  $params['nationality']);
+                });
+            })
+            ->when(isset($params['search_text']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.u_id', 'like', '%'.$params['search_text'].'%')
+                    ->orwhere('member_data.mem_nickname', 'like', '%'.$params['search_text'].'%');
+                });
+            })
+            ->when(isset($params['fr_search_at']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->whereBetween('beat_data.create_date',  [$params['fr_search_at'],$params['bk_search_at']]);
+                });
+            })
+            ->orderby('beat_data.idx','desc')
+            ->skip(($params['page']-1)*$params['limit'])
+            ->take($params['limit'])
+            ->get();
+
+        return $result;
+
+    }
+
+    public function getFeedBeatTotal($params,$idx) {
+
+        $result = $this->statDB->table('beat_data')
+            ->leftJoin('member_data','beat_data.mem_id','=','member_data.mem_id')
+            ->select(DB::raw("COUNT(beat_data.idx) AS cnt"))
+            ->where('beat_data.service_name','feed')
+            ->where('beat_data.service_idx', $idx)
+            ->when(isset($params['nationality']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.nationality',  $params['nationality']);
+                });
+            })
+            ->when(isset($params['search_text']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.u_id', 'like', '%'.$params['search_text'].'%')
+                    ->orwhere('member_data.mem_nickname', 'like', '%'.$params['search_text'].'%');
+                });
+            })
+            ->when(isset($params['fr_search_at']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->whereBetween('beat_data.create_date',  [$params['fr_search_at'],$params['bk_search_at']]);
+                });
+            })
+            ->first();
+        return $result;
+
+    }
+
+    public function getFeedCommentView($params,$idx) {
+
+        $result = $this->statDB->table('comment')
+            ->leftJoin('member_data','comment.mem_id','=','member_data.mem_id')
+            ->select(
+                'comment.idx',
+                'comment.cm_open',
+                'member_data.u_id',
+                'comment.cm_content',
+                DB::raw("(select count(idx) from beat_data where service_name = 'comment' and service_idx = comment.idx and is_beat = 1) as cm_bit"),
+                'comment.created_at',
+            )
+            ->where('comment.wr_idx',$idx)
+            ->when(isset($params['cm_open']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('comment.cm_open',  $params['cm_open']);
+                });
+            })
+            ->when(isset($params['search_text']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.u_id', 'like', '%'.$params['search_text'].'%')
+                    ->orwhere('member_data.mem_nickname', 'like', '%'.$params['search_text'].'%');
+                });
+            })
+            ->when(isset($params['fr_search_at']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->whereBetween('comment.created_at',  [$params['fr_search_at'],$params['bk_search_at']]);
+                });
+            })
+            ->orderby('comment.idx','desc')
+            ->skip(($params['page']-1)*$params['limit'])
+            ->take($params['limit'])
+            ->get();
+
+        return $result;
+
+    }
+
+    public function getFeedCommentTotal($params,$idx) {
+
+        $result = $this->statDB->table('comment')
+        ->leftJoin('member_data','comment.mem_id','=','member_data.mem_id')
+            ->select(DB::raw("COUNT(comment.idx) AS cnt"))
+            ->where('comment.wr_idx',$idx)
+            ->when(isset($params['cm_open']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('comment.cm_open',  $params['cm_open']);
+                });
+            })
+            ->when(isset($params['search_text']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.u_id', 'like', '%'.$params['search_text'].'%')
+                    ->orwhere('member_data.mem_nickname', 'like', '%'.$params['search_text'].'%');
+                });
+            })
+            ->when(isset($params['fr_search_at']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->whereBetween('comment.created_at',  [$params['fr_search_at'],$params['bk_search_at']]);
+                });
+            })
+            ->first();
+        return $result;
+
+    }
+
     public function getFeedFile($idx) {
 
         $result = $this->statDB->table('feed_file')

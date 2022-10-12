@@ -30,6 +30,7 @@ class ApiCommentController extends Controller
         $params['limit'] = $params['limit'] ?? 10;
         $params['wr_idx'] = $params['wr_idx'] ?? 0;
         $params['wr_type'] = $params['wr_type'] ?? '';
+        $params['mem_id'] = $params['mem_id'] ?? '';
 
         if($params['wr_idx'] == 0 || $params['wr_type'] == ''){
 

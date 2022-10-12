@@ -25,6 +25,7 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
                 'feed_board.wr_title',
                 DB::raw("(select count(idx) from beat_data where service_name = 'feed' and service_idx = feed_board.idx and is_beat = 1) as wr_bit"),
                 DB::raw("(select count(idx) from comment where wr_type = 'feed' and wr_idx = feed_board.idx) as wr_comment"),
+                DB::raw("(select count(idx) from beat_data where service_name = 'feed' and service_idx = feed_board.idx and mem_id = {$params['mem_id']} and is_beat = 1) as like_status"),
                 'feed_board.wr_content',
                 'feed_board.feed_source',
                 DB::raw("CONCAT_WS('', '/storage', feed_board.file_url) AS file_url"),
@@ -33,10 +34,10 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
             )
             ->where('feed_board.wr_open','open')
             ->when($params['sorting'] == 2, function($query) use ($params){
-                return $query->orderby('feed_board.wr_bit','desc');
+                return $query->orderby('wr_bit','desc');
             })
             ->when($params['sorting'] == 3, function($query) use ($params){
-                return $query->orderby('feed_board.wr_comment','desc');
+                return $query->orderby('wr_comment','desc');
             })
             ->orderby('feed_board.idx','desc')
             ->skip(($params['page']-1)*$params['limit'])
@@ -58,6 +59,7 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
                 'feed_board.wr_title',
                 DB::raw("(select count(idx) from beat_data where service_name = 'feed' and service_idx = feed_board.idx and is_beat = 1) as wr_bit"),
                 DB::raw("(select count(idx) from comment where wr_type = 'feed' and wr_idx = feed_board.idx) as wr_comment"),
+                DB::raw("(select count(idx) from beat_data where service_name = 'feed' and service_idx = feed_board.idx and mem_id = {$params['mem_id']} and is_beat = 1) as like_status"),
                 'feed_board.wr_content',
                 'feed_board.feed_source',
                 'feed_board.created_at',

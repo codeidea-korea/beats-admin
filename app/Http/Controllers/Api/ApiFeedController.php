@@ -31,6 +31,7 @@ class ApiFeedController extends Controller
         $params['limit'] = $params['limit'] ?? 10;
         //정렬 최신순 1 비트 많은 순 2 댓글 많은순 3
         $params['sorting'] = $params['sorting'] ?? '';
+        $params['mem_id'] = $params['mem_id'] ?? 0;
 
         $resultData = $this->apiFeedService->getFeedList($params);
 
@@ -47,6 +48,7 @@ class ApiFeedController extends Controller
 
         $params['type'] = $params['type'] ?? 0;
         $params['idx'] = $params['idx'] ?? 0;
+        $params['mem_id'] = $params['mem_id'] ?? 0;
 
         $resultData1 = $this->apiFeedService->getFeedView($params);
         $resultData2 = $this->apiFeedService->getFeedFile($params);

@@ -16,8 +16,24 @@
 
             <div class="intro-y box">
 
-                <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60">
-                    <h2 class="font-medium text-base mr-auto">피드 상세</h2>
+                <div id="boxed-tab" class="p-5">
+                    <div class="preview">
+                        <ul class="nav nav-boxed-tabs" role="tablist">
+
+                            <li class="nav-item flex-1" role="presentation">
+                                <button class="nav-link w-full py-2 active" type="button" role="tab" onClick="javascript:location.href = '/contents/feedView/{{$feedData[0]->idx}}';">기본 정보</button>
+                            </li>
+                            <li class="nav-item flex-1" role="presentation">
+                                <button class="nav-link w-full py-2" type="button" role="tab" onClick="javascript:location.href = '/contents/feedBeatView/{{$feedData[0]->idx}}';">비트 내역</button>
+                            </li>
+                            <li class="nav-item flex-1" role="presentation">
+                                <button class="nav-link w-full py-2" type="button" role="tab" onClick="javascript:location.href = '/contents/feedCommentView/{{$feedData[0]->idx}}';">댓글 내역</button>
+                            </li>
+                            <li class="nav-item flex-1" role="presentation">
+                                <button class="nav-link w-full py-2" type="button" role="tab">신고 내역</button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
 
                 <div class="p-5">
