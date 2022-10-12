@@ -85,6 +85,11 @@ class ApiSoundSourceController extends Controller
 
         $params = $this->request->input();
         $params['mem_id'] = $params['mem_id'] ?? 0;
+        $params['progress_rate'] = $params['progress_rate'] ?? '';
+        $params['common_composition'] = $params['common_composition'] ?? '';
+        $params['sales_status'] = $params['sales_status'] ?? '';
+        $params['open_status'] = $params['open_status'] ?? '';
+        $params['search_text'] = $params['search_text'] ?? '';
 
         if($params['mem_id']==0){
             $returnData['code'] = 302;

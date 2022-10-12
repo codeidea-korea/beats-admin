@@ -53,52 +53,51 @@
                         </div>
                     </div>
 
-                    <form name="searchForm" id="searchForm" class="form-horizontal" role="form"   method="get" action="{{ url('/member/musicList') }}">
-                        <input type="hidden" name="page" value="{{$searchData['page']}}">
+                    <form name="searchForm" id="searchForm" class="form-horizontal" role="form"   method="get" action="{{ url('/member/musicList/'.$params['idx']) }}">
                         <div class="p-5">
                             <div class="">
                                 <table class="table table-bordered">
                                     <tr>
                                         <th class="whitespace-nowrap text-center bg-primary/10">음원 상태</th>
                                         <td class="whitespace-nowrap">
-                                            <select name="progress_rate" class="form-select" aria-label=".form-select-lg example">
-                                                <option value="">전체</option>
-                                                <option value="!=">작업 중</option>
-                                                <option value="=">최종본</option>
+                                            <select name="progress_rate" class="form-select" aria-label=".form-select-lg">
+                                                <option value=""        @if($params['progress_rate']=="") selected @endif >전체</option>
+                                                <option value="working" @if($params['progress_rate']=="working") selected @endif >작업 중</option>
+                                                <option value="100"   @if($params['progress_rate']=="100") selected @endif >최종본</option>
                                             </select>
                                             <!--<button class="btn btn-primary w-24">대상 설정</button>-->
                                         </td>
                                         <th class="whitespace-nowrap text-center bg-primary/10">작업 방식</th>
                                         <td class="whitespace-nowrap">
                                             <select name="common_composition" class="form-select" aria-label=".form-select-lg example">
-                                                <option value="">전체</option>
-                                                <option value="Y">개인 작업</option>
-                                                <option value="N">공동 작업</option>
+                                                <option value=""  @if($params['common_composition']=="") selected @endif  >전체</option>
+                                                <option value="N" @if($params['common_composition']=="N") selected @endif >개인 작업</option>
+                                                <option value="Y" @if($params['common_composition']=="Y") selected @endif >공동 작업</option>
                                             </select>
                                             <!--<button class="btn btn-primary w-24">대상 설정</button>-->
                                         </td>
                                         <th class="whitespace-nowrap text-center bg-primary/10">판매 상태</th>
                                         <td class="whitespace-nowrap">
                                             <select name="sales_status" class="form-select" aria-label=".form-select-lg example">
-                                                <option value="">전체</option>
-                                                <option value="Y">판매중</option>
-                                                <option value="N">미 판매중</option>
+                                                <option value=""  @if($params['sales_status']=="") selected @endif >전체</option>
+                                                <option value="Y" @if($params['sales_status']=="Y") selected @endif >판매중</option>
+                                                <option value="N" @if($params['sales_status']=="N") selected @endif >미 판매중</option>
                                             </select>
                                             <!--<button class="btn btn-primary w-24">대상 설정</button>-->
                                         </td>
                                         <th class="whitespace-nowrap text-center bg-primary/10">공개 상태</th>
                                         <td class="whitespace-nowrap">
                                             <select name="open_status" class="form-select" aria-label=".form-select-lg example">
-                                                <option value="">전체</option>
-                                                <option value="Y">공개</option>
-                                                <option value="N">비 공개</option>
+                                                <option value=""  @if($params['open_status']=="") selected @endif  >전체</option>
+                                                <option value="Y" @if($params['open_status']=="Y") selected @endif >공개</option>
+                                                <option value="N" @if($params['open_status']=="N") selected @endif >비 공개</option>
                                             </select>
                                             <!--<button class="btn btn-primary w-24">대상 설정</button>-->
                                         </td>
                                     <tr>
                                         <th class="whitespace-nowrap text-center bg-primary/10">검색</th>
                                         <td colspan="7">
-                                            <input name="search_text" id="regular-form-1" type="text" class="form-control">
+                                            <input name="search_text" id="regular-form-1" type="text" value="{{$params['search_text']}}" class="form-control">
                                         </td>
                                     </tr>
                                 </table>

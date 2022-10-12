@@ -155,11 +155,14 @@ class MemberController extends Controller
     {
         $params = $this->request->input();
         $params['menuCode'] = "AD030100";
-        $params['type'] = $params['type'] ?? 0;
-        $params['page'] = $params['page'] ?? 1;
-        $params['limit'] = $params['limit'] ?? 10;
         $params['idx'] = $idx ?? '';
-        $params['mem_id']= $params['idx'];
+        $params['mem_id'] = $params['idx'];
+        $params['progress_rate'] = $params['progress_rate'] ?? '';
+        $params['common_composition'] = $params['common_composition'] ?? '';
+        $params['sales_status'] = $params['sales_status'] ?? '';
+        $params['open_status'] = $params['open_status'] ?? '';
+        $params['search_text'] = $params['search_text'] ?? '';
+
         $musicList = $this->apiSoundSorceService->setSoundSourceList($params);
 
         return view('member.musicList',[
