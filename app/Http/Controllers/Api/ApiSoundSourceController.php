@@ -117,6 +117,8 @@ class ApiSoundSourceController extends Controller
         $params = $this->request->input();
         $params['music_head_idx'] = $params['music_head_idx'] ?? 0;
 
+
+
         if($params['music_head_idx']==0){
             $returnData['code'] = 302;
             $returnData['message'] = "회원 고유키값이 누락되어 있습니다.";
@@ -128,8 +130,7 @@ class ApiSoundSourceController extends Controller
                 $resultData = $this->apiSoundSorceService->getSoundSourceData($params);
                 $returnData['response']['data']=$resultData;
 
-                $params['file_vesrsion'] = $resultData->file_vesrsion;
-
+                $params['file_version'] = $resultData->file_version;
                 $fileData = $this->apiSoundSorceService->getMusicFileList($params);
                 $returnData['response']['fileData']=$fileData;
 
