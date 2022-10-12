@@ -213,6 +213,7 @@ class ApiHomeController extends Controller
             $params['mem_id'] = isset($params['mem_id']) ? $params['mem_id'] : '';
             $params['service_name'] = isset($params['service_name']) ? $params['service_name'] : '';
             $params['service_idx'] = isset($params['service_idx']) ? $params['service_idx'] : '';
+            $params['beat'] = isset($params['beat']) ? $params['beat'] : 1;
 
 
             if($params['mem_id']=="" || $params['service_idx']=="" || $params['service_name']==""){
