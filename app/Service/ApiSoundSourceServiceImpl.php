@@ -25,6 +25,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
 
         $folderName = '/soundSource/'.date("Y/m/d").'/';
         if($files != "" && $files !=null){
+            $cnt = count($files);
             $i=1;
             foreach($files as $fa){
 
@@ -32,15 +33,27 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                 $sqlData['hash_name'] = $fa->hashName();
                 $sqlData['file_url'] =  $folderName;
                 $fa->storeAs($folderName, $fa->hashName(), 'public');
+                if($cnt==$i){
+                    $result = $this->statDB->table('music_file')
+                        ->insert([
+                            'music_head_idx' => $sqlData['idx']
+                            , 'file_name' => $sqlData['file_name']
+                            , 'hash_name' => $sqlData['hash_name']
+                            , 'file_url' => $sqlData['file_url']
+                            , 'file_no' => $i
+                            , 'representative_music' => 'Y'
+                        ]);
+                }else{
+                    $result = $this->statDB->table('music_file')
+                        ->insert([
+                            'music_head_idx' => $sqlData['idx']
+                            , 'file_name' => $sqlData['file_name']
+                            , 'hash_name' => $sqlData['hash_name']
+                            , 'file_url' => $sqlData['file_url']
+                            , 'representative_music' => 'N'
+                        ]);
+                }
 
-                $result = $this->statDB->table('music_file')
-                    ->insert([
-                        'music_head_idx' => $sqlData['idx']
-                        , 'file_name' => $sqlData['file_name']
-                        , 'hash_name' => $sqlData['hash_name']
-                        , 'file_url' => $sqlData['file_url']
-                        , 'file_no' => $i
-                    ]);
                 $i++;
             }
         }
@@ -60,6 +73,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
         $result = $this->statDB->table('music_head')
             ->insertGetId([
                 'mem_id' => $sqlData['mem_id']
+                , 'file_cnt' => $sqlData['file_cnt']
                 , 'file_cnt' => $sqlData['file_cnt']
             ]);
         $sqlData['idx']=$result;
@@ -145,6 +159,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                         ,H.common_composition
                         ,H.crdate
                         ,H.copyright
+                        ,F.representative_music
                         ,F.file_name
                         ,F.file_no
                         ,F.hash_name
@@ -155,8 +170,10 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                     music_head H LEFT JOIN music_file F ON H.idx = F.music_head_idx
                     WHERE
                     H.mem_id = ".$params['mem_id']."
+                    AND F.representative_music = 'Y'
+                    AND F.version = H.file_version
                     ".$_where."
-                    AND H.file_cnt = F.file_no
+
                     ORDER BY idx desc"
         );
 
@@ -226,6 +243,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                 'file_url as fileUrl',
                 'crdate as crDate',
                 'version',
+                'representative_music',
 
             )
             ->where('music_head_idx',$params['music_head_idx'])
