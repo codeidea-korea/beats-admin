@@ -23,7 +23,7 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
             ->select(
                 'feed_board.idx',
                 'feed_board.wr_title',
-                'feed_board.wr_bit',
+                DB::raw("(select count(idx) from beat_data where service_name = 'feed' and service_idx = feed_board.idx and is_beat = 1) as wr_bit"),
                 DB::raw("(select count(idx) from comment where wr_type = 'feed' and wr_idx = feed_board.idx) as wr_comment"),
                 'feed_board.wr_content',
                 'feed_board.feed_source',
@@ -56,7 +56,7 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
                 'feed_board.idx',
                 'feed_board.mem_id',
                 'feed_board.wr_title',
-                'feed_board.wr_bit',
+                DB::raw("(select count(idx) from beat_data where service_name = 'feed' and service_idx = feed_board.idx and is_beat = 1) as wr_bit"),
                 DB::raw("(select count(idx) from comment where wr_type = 'feed' and wr_idx = feed_board.idx) as wr_comment"),
                 'feed_board.wr_content',
                 'feed_board.feed_source',
