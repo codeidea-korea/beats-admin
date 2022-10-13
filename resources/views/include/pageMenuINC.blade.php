@@ -11,6 +11,8 @@
         <ul class="scrollable__content py-2">
             @php
                 $tempDepth = 1;
+
+
             @endphp
             @foreach(session('ADMINMENULIST') as $rs)
                 @if($tempDepth==2 && $rs->depth == 1)
@@ -23,7 +25,7 @@
 
                 @if($rs->depth == 1 && $rs->lcnt==0)
                     <li>
-                        <a href="javascript:location.href='{{ url($rs->url) }}';" class="menu @if(substr($rs->menucode,0,5) == substr($params['menuCode'],0,5)) menu--active @endif">
+                        <a href="javascript:location.href='{{ url($rs->url) }}';" class="menu @if(substr($rs->menucode,0,5) == substr($params['menuCode'],0,5)) menu--active @php $navi @endphp @endif">
                             <div class="menu__icon"> <i data-lucide="{{$rs->description}}"></i> </div>
                             <div class="menu__title">
                                 {{$rs->menuname}}
