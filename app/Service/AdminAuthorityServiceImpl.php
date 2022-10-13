@@ -26,6 +26,7 @@ class AdminAuthorityServiceImpl extends DBConnection  implements AdminAuthorityS
                 'menucode',
                 'sortorder',
                 'rootindex',
+                'navi',
             )
             ->where('isdisplay', 'Y')
             ->orderby('sortorder','asc')
