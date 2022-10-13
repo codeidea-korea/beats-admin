@@ -33,6 +33,9 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
                 'member_data.mem_nickname',
             )
             ->where('feed_board.wr_open','open')
+            ->when(isset($params['wr_type']), function($query) use ($params){
+                return $query->where('wr_type',$params['wr_type']);
+            })
             ->when($params['sorting'] == 2, function($query) use ($params){
                 return $query->orderby('wr_bit','desc');
             })

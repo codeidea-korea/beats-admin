@@ -69,7 +69,7 @@
                                                     $ext = end($ext);
                                                 @endphp
                                                 @if($ext == 'jpg' || $ext == 'png' || $ext == 'svg' || $ext == 'jpeg')
-                                                    <img src="/storage/{$feedData[0]->file_url.$feedData[0]->feed_source}}" alt="메인 이미지">
+                                                    <img src="/storage/{{$feedData[0]->file_url.$feedData[0]->feed_source}}" alt="메인 이미지">
                                                 @elseif($ext == 'mp4')
                                                     <video controls width="250">
                                                         <source src="/storage/{{$feedData[0]->file_url.$feedData[0]->feed_source}}" type="video/mp4">
