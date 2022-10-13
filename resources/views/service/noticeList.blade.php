@@ -47,7 +47,7 @@
                                         <td class="">
                                             <div class="sm:ml-auto mt-3 sm:mt-0 relative text-slate-500">
                                                 <i data-lucide="calendar" class="w-4 h-4 z-10 absolute my-auto inset-y-0 ml-3 left-0"></i>
-                                                <input name="created_at" type="text" class="datepicker form-control sm:w-56 box pl-10" value="{{$params['search_created_at']}}">
+                                                <input name="created_at" type="text" class="datepicker form-control sm:w-56 box pl-10" value="{{$params['created_at']}}">
                                             </div>
                                         </td>
                                     </tr>
@@ -105,9 +105,7 @@
                 <!-- 페이징처리 시작 -->
                 <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center mt-5">
                     <nav class="w-full">
-
                         @include('vendor.pagination.default')
-
                     </nav>
                 </div>
                 <!-- 페이징처리 종료 -->
@@ -116,14 +114,11 @@
         </div>
 
     </div>
-@endsection
 
-@section('scripts')
     <script>
         function change(page) {
             $("input[name=page]").val(page);
-            $("form[name=searchData]").submit();
+            $("form[name=searchData]")[0].submit();
         }
     </script>
 @endsection
-

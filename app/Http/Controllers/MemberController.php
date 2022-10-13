@@ -46,6 +46,7 @@ class MemberController extends Controller
         $params['mem_status'] = $params['mem_status'] ?? '';
         $params['sWord'] = $params['sWord'] ?? '';
         $params['searchDate'] = $params['searchDate'] ?? "2022-01-01 - ".date("Y-m-d");
+        $params['mem_regdate'] = $params['mem_regdate'] ?? "2022-01-01 - ".date("Y-m-d");
         $tempData = trim(str_replace('-','',$params['searchDate']));
         $params['sDate']=substr($tempData,0,8);
         $params['eDate']=substr($tempData,8,16);
@@ -81,7 +82,7 @@ class MemberController extends Controller
         if($params['mem_regdate'] != ''){
             $atexplode = explode(' - ',$params['mem_regdate']);
             $params['fr_search_at'] = $atexplode[0];
-            $params['bk_search_at'] = $atexplode[1];
+            $params['bk_search_at'] = date("Y-m-d",strtotime($atexplode[1].' +1 days'));
         }
 
         $memberList = $this->memberService->getPointMemberList($params);

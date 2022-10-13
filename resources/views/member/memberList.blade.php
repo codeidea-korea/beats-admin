@@ -285,7 +285,7 @@
                                     <span class="mr-2">가입일</span>
                                     <div class="sm:ml-auto mt-3 sm:mt-0 relative text-slate-500">
                                         <i data-lucide="calendar" class="w-4 h-4 z-10 absolute my-auto inset-y-0 ml-3 left-0"></i>
-                                        <input name="point_mem_regdate" type="text" class="datepicker form-control sm:w-56 box pl-10" value="">
+                                        <input name="point_mem_regdate" type="text" class="datepicker form-control sm:w-56 box pl-10" value="{{$params['mem_regdate']}}">
                                     </div>
                                 </div>
                             </div>

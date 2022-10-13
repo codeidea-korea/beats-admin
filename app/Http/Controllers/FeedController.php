@@ -36,15 +36,15 @@ class FeedController extends Controller
         $params['limit'] = $params['limit'] ?? 10;
 
         $params['fr_search_text'] = $params['search_text'] ?? '';
-        $params['search_created_at'] = $params['created_at'] ?? '';
+        $params['created_at'] = $params['created_at'] ?? "2022-01-01 - ".date("Y-m-d");
         $params['search_wr_open'] = $params['wr_open'] ?? '';
         $params['search_wr_lng'] = $params['wr_lng'] ?? '';
         $params['search_wr_type'] = $params['wr_type'] ?? '';
 
-        if($params['search_created_at'] != ''){
+        if($params['created_at'] != ''){
             $atexplode = explode(' - ',$params['created_at']);
             $params['fr_search_at'] = $atexplode[0];
-            $params['bk_search_at'] = $atexplode[1];
+            $params['bk_search_at'] = date("Y-m-d",strtotime($atexplode[1].' +1 days'));
         }
 
         $feedData = $this->adminFeedService->getFeedList($params);
@@ -86,11 +86,12 @@ class FeedController extends Controller
 
         $params['search_nationality'] = $params['nationality'] ?? '';
         $params['fr_search_text'] = $params['search_text'] ?? '';
-        $params['search_created_at'] = $params['created_at'] ?? '';
-        if($params['search_created_at'] != ''){
+        $params['created_at'] = $params['created_at'] ?? "2022-01-01 - ".date("Y-m-d");
+        
+        if($params['created_at'] != ''){
             $atexplode = explode(' - ',$params['created_at']);
             $params['fr_search_at'] = $atexplode[0];
-            $params['bk_search_at'] = $atexplode[1];
+            $params['bk_search_at'] = date("Y-m-d",strtotime($atexplode[1].' +1 days'));
         }
 
         $feedBeatData = $this->adminFeedService->getFeedBeatView($params,$idx);
@@ -118,11 +119,11 @@ class FeedController extends Controller
 
         $params['search_cm_open'] = $params['cm_open'] ?? '';
         $params['fr_search_text'] = $params['search_text'] ?? '';
-        $params['search_created_at'] = $params['created_at'] ?? '';
-        if($params['search_created_at'] != ''){
+        $params['created_at'] = $params['created_at'] ?? "2022-01-01 - ".date("Y-m-d");
+        if($params['created_at'] != ''){
             $atexplode = explode(' - ',$params['created_at']);
             $params['fr_search_at'] = $atexplode[0];
-            $params['bk_search_at'] = $atexplode[1];
+            $params['bk_search_at'] = date("Y-m-d",strtotime($atexplode[1].' +1 days'));
         }
 
         $feedCommentData = $this->adminFeedService->getFeedCommentView($params,$idx);

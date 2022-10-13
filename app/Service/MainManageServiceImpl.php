@@ -316,7 +316,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
             })
             ->when(isset($params['fr_search_at']), function($query) use ($params){
                 return $query->where(function($query) use ($params) {
-                    $query->whereBetween('created_at',  [$params['fr_search_at'],$params['bk_search_at']]);
+                    $query->whereBetween('adm_popup.created_at',  [$params['fr_search_at'],$params['bk_search_at']]);
                 });
             })
             ->orderby('adm_popup.idx','desc')

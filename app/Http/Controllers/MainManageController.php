@@ -56,11 +56,11 @@ class MainManageController extends Controller
         //왼쪽은 화면에서 보여주기 위한 변수 실제 검색할때는 오른쪽 값이 쓰인다
         $params['search_contents'] = $params['s_contents'] ?? '';
         $params['fr_search_text'] = $params['search_text'] ?? '';
-        $params['search_created_at'] = $params['created_at'] ?? '';
-        if($params['search_created_at'] != ''){
+        $params['created_at'] = $params['created_at'] ?? "2022-01-01 - ".date("Y-m-d");
+        if($params['created_at'] != ''){
             $atexplode = explode(' - ',$params['created_at']);
             $params['fr_search_at'] = $atexplode[0];
-            $params['bk_search_at'] = $atexplode[1];
+            $params['bk_search_at'] = date("Y-m-d",strtotime($atexplode[1].' +1 days'));
         }
         $bannerData = $this->adminMainmanageService->getBannerView($params, $banner_code);
         $bannerDataList = $this->adminMainmanageService->getBannerDataList($params, $banner_code);
@@ -113,11 +113,11 @@ class MainManageController extends Controller
         //왼쪽은 화면에서 보여주기 위한 변수 실제 검색할때는 오른쪽 값이 쓰인다
         $params['search_contents'] = $params['s_contents'] ?? '';
         $params['fr_search_text'] = $params['search_text'] ?? '';
-        $params['search_created_at'] = $params['created_at'] ?? '';
-        if($params['search_created_at'] != ''){
+        $params['created_at'] = $params['created_at'] ?? "2022-01-01 - ".date("Y-m-d");
+        if($params['created_at'] != ''){
             $atexplode = explode(' - ',$params['created_at']);
             $params['fr_search_at'] = $atexplode[0];
-            $params['bk_search_at'] = $atexplode[1];
+            $params['bk_search_at'] = date("Y-m-d",strtotime($atexplode[1].' +1 days'));
         }
         $bannerdata = $this->adminMainmanageService->SeqChange($params);
 
@@ -149,7 +149,12 @@ class MainManageController extends Controller
         $params['search_type'] = $params['popup_type'] ?? '';
         $params['fr_search_text'] = $params['search_text'] ?? '';
         $params['search_isuse'] = $params['isuse'] ?? '';
-        $params['search_created_at'] = $params['created_at'] ?? '';
+        $params['created_at'] = $params['created_at'] ?? "2022-01-01 - ".date("Y-m-d");
+        if($params['created_at'] != ''){
+            $atexplode = explode(' - ',$params['created_at']);
+            $params['fr_search_at'] = $atexplode[0];
+            $params['bk_search_at'] = date("Y-m-d",strtotime($atexplode[1].' +1 days'));
+        }
         $popupList = $this->adminMainmanageService->getPopupList($params);
         $popupTotal = $this->adminMainmanageService->getPopupTotal($params);
         $totalCount = $popupTotal->cnt;

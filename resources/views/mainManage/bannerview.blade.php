@@ -78,7 +78,7 @@
                                     <td class="">
                                         <div class="sm:ml-auto mt-3 sm:mt-0 relative text-slate-500">
                                             <i data-lucide="calendar" class="w-4 h-4 z-10 absolute my-auto inset-y-0 ml-3 left-0"></i>
-                                            <input name="created_at" type="text" class="datepicker form-control sm:w-56 box pl-10" value="{{$params['search_created_at']}}">
+                                            <input name="created_at" type="text" class="datepicker form-control sm:w-56 box pl-10" value="{{$params['created_at']}}">
                                         </div>
                                     </td>
                                 </tr>
@@ -498,7 +498,7 @@
             var change_seq = $(this).data("change_seq");
             var contents = "{{$params['search_contents']}}";
             var search_text = "{{$params['fr_search_text']}}";
-            var created_at = "{{$params['search_created_at']}}";
+            var created_at = "{{$params['created_at']}}";
             var banner_code = "{{$bannerData[0]->banner_code}}";
             var page = $("input[name=page]").val();
 

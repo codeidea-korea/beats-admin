@@ -41,13 +41,13 @@ class BoardController extends Controller
         $params['limit'] = $params['limit'] ?? 10;
         $params['search_gubun'] = $params['gubun'] ?? '';
         $params['fr_search_text'] = $params['search_text'] ?? '';
-        $params['search_created_at'] = $params['created_at'] ?? '';
+        $params['created_at'] = $params['created_at'] ?? "2022-01-01 - ".date("Y-m-d");
         $params['search_wr_open'] = $params['wr_open'] ?? '';
 
-        if($params['search_created_at'] != ''){
+        if($params['created_at'] != ''){
             $atexplode = explode(' - ',$params['created_at']);
             $params['fr_search_at'] = $atexplode[0];
-            $params['bk_search_at'] = $atexplode[1];
+            $params['bk_search_at'] = date("Y-m-d",strtotime($atexplode[1].' +1 days'));
         }
 
         $boardData = $this->adminBoardService->getBoardList($params);
@@ -136,14 +136,14 @@ class BoardController extends Controller
         $params['page'] = $params['page'] ?? 1;
         $params['limit'] = $params['limit'] ?? 10;
         $params['fr_search_text'] = $params['search_text'] ?? '';
-        $params['search_created_at'] = $params['created_at'] ?? '';
+        $params['created_at'] = $params['created_at'] ?? "2022-01-01 - ".date("Y-m-d");
         $params['search_open_status'] = $params['open_status'] ?? '';
         $params['search_duration_status'] = $params['duration_status'] ?? '';
 
-        if($params['search_created_at'] != ''){
+        if($params['created_at'] != ''){
             $atexplode = explode(' - ',$params['created_at']);
             $params['fr_search_at'] = $atexplode[0];
-            $params['bk_search_at'] = $atexplode[1];
+            $params['bk_search_at'] = date("Y-m-d",strtotime($atexplode[1].' +1 days'));
         }
 
         $eventData = $this->adminBoardService->getEventList($params);
@@ -236,12 +236,12 @@ class BoardController extends Controller
         $params['search_gubun'] = $params['gubun'] ?? '';
         $params['search_terms_type'] = $params['terms_type'] ?? '';
         $params['fr_search_text'] = $params['search_text'] ?? '';
-        $params['search_apply_date'] = $params['apply_date'] ?? '';
+        $params['apply_date'] = $params['apply_date'] ?? "2022-01-01 - ".date("Y-m-d");
 
-        if($params['search_apply_date'] != ''){
+        if($params['apply_date'] != ''){
             $atexplode = explode(' - ',$params['apply_date']);
             $params['fr_search_at'] = $atexplode[0];
-            $params['bk_search_at'] = $atexplode[1];
+            $params['bk_search_at'] = date("Y-m-d",strtotime($atexplode[1].' +1 days'));
         }
 
         if($params['search_gubun'] != ''){
