@@ -313,9 +313,11 @@ class ApiMemberController extends Controller
             do {
                 $tempUid = $this->apiMemberService->getRandStr();
                 $tempData['u_id']=$tempUid;
+
                 $checkUid = $this->apiMemberService->getUidCheck($tempData);
-            }while($checkUid > 0);
+            }while($checkUid->cnt > 0);
             $params['u_id'] = $tempData['u_id'];
+
             // 고유id값 [u_id]추출 end
 
             if($params['existing_yn'] == ''){

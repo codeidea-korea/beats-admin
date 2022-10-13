@@ -436,9 +436,9 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
     }
 
 
-    public function getUidCheck($tempUid){
+    public function getUidCheck($tempData){
         $result = $this->statDB->table('member_data')
-            ->select(DB::raw("COUNT(u_id) AS cnt"))
+            ->select(DB::raw("COUNT(idx) AS cnt"))
             ->where('u_id',$tempData['u_id'])
             ->first();
         return $result;
