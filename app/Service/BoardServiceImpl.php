@@ -56,6 +56,7 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
                     $query->whereBetween('notice_board.created_at',  [$params['fr_search_at'],$params['bk_search_at']]);
                 });
             })
+            //->orderby('notice_board.gubun','desc')
             ->orderby('notice_board.created_at','desc')
             ->orderby('notice_board.idx','desc')
             ->skip(($params['page']-1)*$params['limit'])

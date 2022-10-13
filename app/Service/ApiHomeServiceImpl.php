@@ -99,6 +99,7 @@ class ApiHomeServiceImpl extends DBConnection  implements ApiHomeServiceInterfac
                     ->orwhere('wr_content', 'like', '%'.$params['searchText'].'%');
                 });
             })
+            ->orderby('notice_board.gubun','desc')
             ->orderby('notice_board.created_at','desc')
             ->orderby('notice_board.idx','desc')
             ->get();
