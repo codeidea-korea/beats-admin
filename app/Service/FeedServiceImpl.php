@@ -32,6 +32,7 @@ class FeedServiceImpl extends DBConnection  implements FeedServiceInterface
                 'feed_board.updated_at',
                 'members.email_id'
             )
+            ->where('feed_board.del_status','N')
             ->when(isset($params['wr_open']), function($query) use ($params){
                 return $query->where(function($query) use ($params) {
                     $query->where('feed_board.wr_open',  $params['wr_open']);
@@ -70,6 +71,7 @@ class FeedServiceImpl extends DBConnection  implements FeedServiceInterface
 
         $result = $this->statDB->table('feed_board')
             ->select(DB::raw("COUNT(idx) AS cnt"))
+            ->where('feed_board.del_status','N')
             ->when(isset($params['wr_open']), function($query) use ($params){
                 return $query->where(function($query) use ($params) {
                     $query->where('feed_board.wr_open',  $params['wr_open']);

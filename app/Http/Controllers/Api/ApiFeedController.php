@@ -143,7 +143,7 @@ class ApiFeedController extends Controller
             $params['idx'] = $params['idx'] ?? 0;
             
             $result = $this->apiFeedService->feedDelete($params);
-            $result2 = $this->apiFeedService->feedFileDelete($params);
+            //$result2 = $this->apiFeedService->feedFileDelete($params);
 
             if($result == -1 || $result == 0){
                 $returnData['code'] = 1;

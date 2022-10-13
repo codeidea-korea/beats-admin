@@ -33,6 +33,7 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
                 'member_data.mem_nickname',
             )
             ->where('feed_board.wr_open','open')
+            ->where('feed_board.del_status','N')
             ->when(isset($params['wr_type']), function($query) use ($params){
                 return $query->where('wr_type',$params['wr_type']);
             })
@@ -97,16 +98,23 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
     //피드 삭제
     public function feedDelete($params) {
 
-        $feed_board = DB::table('feed_board')->where('idx', $params['idx'])->first();
+        // $feed_board = DB::table('feed_board')->where('idx', $params['idx'])->first();
 
-        if ($feed_board->feed_file != ""){
-            $dir = storage_path('app/public');
-            $path = "$dir"."$feed_board->file_url"."$feed_board->feed_source";
-            if(!File::exists($path)) { return -1; }
-            File::delete($path);
-        }
+        // if ($feed_board->feed_file != ""){
+        //     $dir = storage_path('app/public');
+        //     $path = "$dir"."$feed_board->file_url"."$feed_board->feed_source";
+        //     if(!File::exists($path)) { return -1; }
+        //     File::delete($path);
+        // }
 
-        $result = $this->statDB->table('feed_board')->where('idx', $params['idx'])->delete();
+        // $result = $this->statDB->table('feed_board')->where('idx', $params['idx'])->delete();
+
+        $result = $this->statDB->table('feed_board')
+            ->where('idx',$params['idx'])
+            ->update([
+                'del_status' => 'Y'
+                , 'updated_at' => \Carbon\Carbon::now()
+            ]);
 
         return $result;
     }
