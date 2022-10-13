@@ -67,7 +67,7 @@
                                             <option value="menu" @if($popupData[0]->connect_type == 'menu') selected @endif>메뉴선택</option>
                                             <option value="url" @if($popupData[0]->connect_type == 'url') selected @endif>URL 입력</option>
                                         </select>
-                                        <div class="inline items-center w-60 mt-3 ml-2" id="menu_area">
+                                        <div class="inline items-center w-60 mt-3 ml-2 @if($popupData[0]->connect_type == 'url') hidden @endif" id="menu_area">
                                             <select name="menu_connect_url" class="form-select w-60 none" aria-label=".form-select-lg example">
                                                 <option value="">메뉴 선택</option>
                                                 <option value="feed" @if($popupData[0]->connect_url == 'feed') selected @endif>피드</option>
@@ -84,7 +84,7 @@
                                                 <option value="contents" @if($popupData[0]->connect_contents == 'contents') selected @endif>콘텐츠</option>
                                             </select>
                                         </div>
-                                        <div class="hidden items-center mt-3 ml-2" id="url_area">
+                                        <div class="items-center mt-3 ml-2 @if($popupData[0]->connect_type == 'menu') hidden @endif" id="url_area">
                                             http:// <input name="url_connect_url" id="regular-form-1" type="text" class="form-control w-72" placeholder="Input text" value="{{$popupData[0]->connect_url}}">
                                         </div>
                                     </td>
@@ -135,6 +135,16 @@
     <script>
 
         var ajax_checked = false;
+
+        $(document).on('change','#connect_type',function(){
+            if($(this).val() == "menu"){
+                $("#menu_area").css("display","inline");
+                $("#url_area").css("display","none");
+            }else{
+                $("#menu_area").css("display","none");
+                $("#url_area").css("display","inline");
+            }
+        });
 
         $(document).on('click','.bannerUpdatebtn', function(){
 
