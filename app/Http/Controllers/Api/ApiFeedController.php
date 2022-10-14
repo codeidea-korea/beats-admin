@@ -34,9 +34,11 @@ class ApiFeedController extends Controller
         $params['mem_id'] = $params['mem_id'] ?? 0;
 
         $resultData = $this->apiFeedService->getFeedList($params);
+        $feedTotal = $this->apiFeedService->getFeedTotal($params);
 
         $returnData['code'] = 0;
         $returnData['message'] = "피드 리스트";
+        $returnData['total'] = $feedTotal->cnt;
         $returnData['response'] = $resultData;
 
         return json_encode($returnData);

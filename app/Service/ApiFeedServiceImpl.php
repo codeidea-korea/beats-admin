@@ -52,6 +52,20 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
 
     }
 
+    public function getFeedTotal($params) {
+
+        $result = $this->statDB->table('feed_board')
+            ->select(DB::raw("COUNT(idx) AS cnt"))
+            ->where('feed_board.wr_open','open')
+            ->where('feed_board.del_status','N')
+            ->when(isset($params['wr_type']), function($query) use ($params){
+                return $query->where('wr_type',$params['wr_type']);
+            })
+            ->first();
+        return $result;
+
+    }
+
     //피드 상세
     public function getFeedView($params) {
 

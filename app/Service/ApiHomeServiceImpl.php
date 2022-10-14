@@ -241,4 +241,17 @@ class ApiHomeServiceImpl extends DBConnection  implements ApiHomeServiceInterfac
         return $result;
     }
 
+    public function getPopup($params){
+        $result = $this->statDB->table('adm_popup')
+            ->select(
+                'adm_popup.idx',
+                'adm_popup.popup_source',
+            )
+            ->where('type',$params['site_type'])
+            ->orderby('adm_popup.idx','desc')
+            ->first();
+        return $result;
+
+    }
+
 }

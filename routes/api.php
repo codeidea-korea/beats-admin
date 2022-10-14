@@ -38,6 +38,8 @@ Route::prefix('/v1/')->group(function () {
 
     Route::delete('beatDelete', [ApiHomeController::class, 'beatDelete']);
 
+    Route::get('getPopup', [ApiHomeController::class, 'getPopup']);
+
     Route::group(['prefix' => 'member'], function() {
         Route::put('login', [ApiMemberController::class, 'apiLogin']);
         Route::put('loginCheck', [ApiMemberController::class, 'loginCheck']);

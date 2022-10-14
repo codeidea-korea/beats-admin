@@ -265,4 +265,23 @@ class ApiHomeController extends Controller
         }
     }
 
+    public function getPopup()
+    {
+        try{
+            $params = $this->request->input();
+            $params['site_type'] = $params['site_type'] ?? 'beatsomeone';
+
+            $popup = $this->apiHomeService->getPopup($params);
+
+            $returnData['code'] = 0;
+            $returnData['message'] = "complete";
+            $returnData['response'] = $popup;
+
+            return json_encode($returnData);
+
+        } catch(\Exception $exception){
+            throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+        }
+    }
+
 }
