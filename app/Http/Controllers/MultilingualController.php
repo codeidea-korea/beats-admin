@@ -7,9 +7,10 @@ use Response;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Session;
-use App\Models\User;
-use Maatwebsite\Excel\Facades\Excel;
 use Hash;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
 
 class MultilingualController extends Controller
@@ -94,8 +95,8 @@ class MultilingualController extends Controller
     }
 
     public function menuUploadExcel(){
-        $params = $this->request->input();
-        Excel::import(new UsersImport,request()->file('/storage/excel/excelTest.xlsx'));
+
+     //storage/excel/excelTest.xlsx
     }
     public function menuDownloadExcel(){
 

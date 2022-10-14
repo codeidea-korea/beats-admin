@@ -100,6 +100,9 @@ Route::prefix('/v1/')->group(function () {
 
     Route::get('getTerms', [ApiMemberController::class, 'getTerms']);
 
+    Route::get('test123', [ApiSoundSourceController::class, 'test123']);
+
+
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

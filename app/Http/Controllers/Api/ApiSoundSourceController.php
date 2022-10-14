@@ -10,6 +10,10 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Response;
 use Session;
 
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+
 class ApiSoundSourceController extends Controller
 {
     private $request;
@@ -292,6 +296,21 @@ class ApiSoundSourceController extends Controller
             throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
         }
         return json_encode($returnData);
+
+    }
+    public function test123(){
+
+        $params = $this->request->input();
+        //$files = $this->request->file('excel_file');
+        $excelFile =  $_SERVER['DOCUMENT_ROOT'].'\storage\excel\excelTest.xlsx';
+        $reader = IOFactory::createReader("Xlsx");
+        $spreadsheet = $reader->load($excelFile);
+        $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+        //var_dump($spreadsheet);
+        foreach ($sheetData as $jbexplode) {
+            print_r($jbexplode);
+            echo "<br><br><br>";
+        }
 
     }
 }
