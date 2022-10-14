@@ -286,4 +286,17 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
             );
         return $result;
     }
+
+    public function setMusicFileDel($params){
+
+        $result = $this->statDB->table('music_file')
+            ->where('idx',$params['music_file_idx'])
+            ->update(
+                [
+                    'del_status' => 'Y'
+                    ,'del_date' => $params['del_date']
+                ]
+            );
+        return $result;
+    }
 }

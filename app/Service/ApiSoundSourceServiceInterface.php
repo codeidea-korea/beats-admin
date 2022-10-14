@@ -29,4 +29,7 @@ interface ApiSoundSourceServiceInterface
 
     //음원데이터 삭제
     public function setSoundSourceDel($params);
+
+    //음원파일 삭제
+    public function setMusicFileDel($params);
 }

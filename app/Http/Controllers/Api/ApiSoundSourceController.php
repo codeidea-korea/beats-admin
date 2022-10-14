@@ -185,7 +185,41 @@ class ApiSoundSourceController extends Controller
         }
         return json_encode($returnData);
 
+    }
 
+    public function soundFileDel()
+    {
+        $returnData['code'] = -1;
+        $returnData['message'] = "시스템 장애";
+
+        $params = $this->request->input();
+
+        $params['music_file_idx'] = $params['music_file_idx'] ?? '';
+
+
+        try{
+            if($params['music_file_idx'] ==""||$params['music_file_idx'] == null){
+                $returnData['code'] = -1;
+                $returnData['message'] = "파라메터값 오류";
+            }else{
+                $qData['music_file_idx'] = $params['music_file_idx'];
+                $qData['del_date'] = date("Y-m-d H:m:s",strtotime(now().' +10 days'));
+                $resultData = $this->apiSoundSorceService->setMusicFileDel($qData);
+                if($resultData){
+                    $returnData['code']=0;
+                    $returnData['message']="complete";
+                }else{
+                    $returnData['code']=300;
+                    $returnData['message']="처리된 내용이 없습니다.";
+                }
+
+            }
+
+
+        } catch(\Exception $exception){
+            throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+        }
+        return json_encode($returnData);
 
     }
 }

@@ -59,6 +59,7 @@ Route::prefix('/v1/')->group(function () {
         Route::get('soundSourceData', [ApiSoundSourceController::class, 'soundSourceData']);
 
         Route::put('soundSourceDel', [ApiSoundSourceController::class, 'soundSourceDel']);
+        Route::put('soundFileDel', [ApiSoundSourceController::class, 'soundFileDel']);
 
 
     });
