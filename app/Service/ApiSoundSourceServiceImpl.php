@@ -277,9 +277,8 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
     }
 
     public function setSoundSourceDel($params){
-
         $result = $this->statDB->table('music_head')
-            ->where('idx',$params['music_head_idx'])
+            ->whereIn('idx',$params['music_head_idx'])
             ->update(
                 [
                     'del_status' => 'Y'
@@ -292,7 +291,33 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
     public function setMusicFileDel($params){
 
         $result = $this->statDB->table('music_file')
-            ->where('idx',$params['music_file_idx'])
+            ->whereIn('idx',$params['music_file_idx'])
+            ->update(
+                [
+                    'del_status' => 'Y'
+                    ,'del_date' => $params['del_date']
+                ]
+            );
+        return $result;
+    }
+
+
+    public function setSoundSourceDelAll($params){
+        $result = $this->statDB->table('music_head')
+            ->where('mem_id',$params['mem_id'])
+            ->update(
+                [
+                    'del_status' => 'Y'
+                    ,'del_date' => $params['del_date']
+                ]
+            );
+        return $result;
+    }
+
+    public function setMusicFileDelAll($params){
+
+        $result = $this->statDB->table('music_file')
+            ->where('music_head_idx',$params['music_head_idx'])
             ->update(
                 [
                     'del_status' => 'Y'
