@@ -248,6 +248,7 @@ class ApiHomeServiceImpl extends DBConnection  implements ApiHomeServiceInterfac
                 'adm_popup.popup_source',
             )
             ->where('type',$params['site_type'])
+            ->whereBetween(DB::raw('now()'), [DB::raw('adm_popup.fr_show_date'),DB::raw('adm_popup.bk_show_date')])
             ->orderby('adm_popup.idx','desc')
             ->first();
         return $result;
