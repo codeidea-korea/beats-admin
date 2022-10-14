@@ -166,11 +166,15 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                         ,F.file_url
                         ,H.moddate
                         ,H.file_version
+                        ,H.del_status as HeadDelStatus
+                        ,H.del_date as HeadDelDate
                     FROM
                     music_head H LEFT JOIN music_file F ON H.idx = F.music_head_idx
                     WHERE
                     H.mem_id = ".$params['mem_id']."
                     AND F.representative_music = 'Y'
+                    AND F.del_status = 'N'
+                    AND ((H.del_date IS  NULL AND H.del_status = 'N') OR (H.del_date > NOW() AND H.del_status = 'Y'))
                     AND F.version = H.file_version
                     ".$_where."
 
@@ -270,4 +274,16 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
         return $result;
     }
 
+    public function setSoundSourceDel($params){
+
+        $result = $this->statDB->table('music_head')
+            ->where('idx',$params['music_head_idx'])
+            ->update(
+                [
+                    'del_status' => 'Y'
+                    ,'del_date' => $params['del_date']
+                ]
+            );
+        return $result;
+    }
 }

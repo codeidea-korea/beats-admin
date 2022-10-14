@@ -26,4 +26,7 @@ interface ApiSoundSourceServiceInterface
 
     //공동 작곡가 (data)
     public function getCommonCompositionList($params);
+
+    //음원데이터 삭제
+    public function setSoundSourceDel($params);
 }

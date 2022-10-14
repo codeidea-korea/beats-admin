@@ -58,6 +58,9 @@ Route::prefix('/v1/')->group(function () {
         Route::get('soundSourceList', [ApiSoundSourceController::class, 'soundSourceList']);
         Route::get('soundSourceData', [ApiSoundSourceController::class, 'soundSourceData']);
 
+        Route::put('soundSourceDel', [ApiSoundSourceController::class, 'soundSourceDel']);
+
+
     });
 
     Route::group(['prefix' => 'feed'], function() {

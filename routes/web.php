@@ -10,6 +10,7 @@ use App\Http\Controllers\BoardController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\SoundSourceController;
 use App\Http\Controllers\FeedController;
+use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -109,6 +110,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('menuManage/{siteCode}', [MultilingualController::class, 'menuManage']);
         Route::post('updateMenuManage', [MultilingualController::class, 'setMenuManage']);
         Route::get('menuDownloadExcel', [MultilingualController::class, 'menuDownloadExcel']);
+        Route::get('menuUploadExcel', [MultilingualController::class, 'menuUploadExcel']);
+
+
 
     });
 
@@ -165,9 +169,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('ckeditor/upload', [BoardController::class, 'upload'])->name('ckeditor.upload');
 });
 
-Route::get('/pageSample', function () {
-    return view('pageSample');
-});
+Route::get('/file-import',[UserController::class,'importView'])->name('import-view');
+Route::post('/import',[UserController::class,'import'])->name('import');
+Route::get('/export-users',[UserController::class,'exportUsers'])->name('export-users');
 
 
 /*------------------------------------------
