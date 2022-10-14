@@ -248,6 +248,8 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                 'crdate as crDate',
                 'version',
                 'representative_music',
+                'del_status',
+                'del_date',
 
             )
             ->where('music_head_idx',$params['music_head_idx'])
