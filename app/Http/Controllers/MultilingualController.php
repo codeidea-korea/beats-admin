@@ -3,14 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Service\LangManageServiceImpl;
+use Illuminate\Contracts\Validation\ValidatorAwareRule;
 use Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Session;
-use Hash;
+use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+
+
+
+
 
 
 class MultilingualController extends Controller
@@ -80,12 +86,15 @@ class MultilingualController extends Controller
 
     public function menuManage($siteCode)
     {
+
         $params = $this->request->input();
         $params['siteCode'] = $siteCode;
         $params['menuCode'] = "AD000200";
 
+
         $beatSomeoneMenuList = $this->langManageService->getBeatSomeoneMenuList($params);
         $bybeatMenuList = $this->langManageService->getByBeatMenuList($params);
+
 
         return view('multilingual.menuManage',[
             'params' => $params
@@ -95,8 +104,42 @@ class MultilingualController extends Controller
     }
 
     public function menuUploadExcel(){
+        $params = $this->request->input();
+        $params['excelCodeUp'] = $params['excelCodeUp'] ?? "01";
 
-     //storage/excel/excelTest.xlsx
+        $folderName = '/excel/'.date("Y/m/d").'/';
+        $files = $this->request->file('excelFile');
+
+        $sqlData['file_name'] = $files->getClientOriginalName();
+        $sqlData['ext'] = $files->getClientOriginalExtension();
+        $sqlData['hash_name'] = $files->hashName();
+        $sqlData['file_url'] =  $folderName;
+        $files->storeAs($folderName, $files->getClientOriginalName(), 'public');
+        $excelFile =  storage_path('app/public'.$sqlData['file_url'].$sqlData['file_name']);
+
+        $reader = IOFactory::createReader("Xlsx");
+        $spreadsheet = $reader->load($excelFile);
+        $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+
+        $this->langManageService->clearMenu($params);
+
+        $i=0;
+        $sqlParams['excelCodeUp']=$params['excelCodeUp'];
+        foreach ($sheetData as $jbexplode) {
+            if($i > 0){
+                $sqlParams['menu_code'] =  $jbexplode['A'];
+                $sqlParams['lang_kr']   =  $jbexplode['B'];
+                $sqlParams['lang_en']   =  $jbexplode['C'];
+                $sqlParams['lang_ch']   =  $jbexplode['D'];
+                $sqlParams['lang_jp']   =  $jbexplode['E'];
+                $this->langManageService->setMenuInsert($sqlParams);
+            }
+            $i++;
+        }
+
+        return redirect('/multilingual/menuManage/'.$params['excelCodeUp']);
+
+
     }
     public function menuDownloadExcel(){
 
@@ -108,50 +151,6 @@ class MultilingualController extends Controller
         }elseif($params['siteCode'] =="02"){
             $menuList = $this->langManageService->getBeatSomeoneMenuList($params);
         }
-
-
-        /*
-
-                $spreadsheet = new Spreadsheet();
-                $sheet = $spreadsheet->getActiveSheet();
-
-                $sheet->setCellValue('A1','No');
-                $sheet->setCellValue('B1','코드');
-                $sheet->setCellValue('C1','한글');
-                $sheet->setCellValue('D1','영어');
-                $sheet->setCellValue('E1','중국어');
-                $sheet->setCellValue('F1','일본어');
-
-                $beatSomeoneMenuList = $this->langManageService->getBeatSomeoneMenuList($params);
-                $i=2;
-                foreach($beatSomeoneMenuList as $rs){
-
-                    $sheet->setCellValue('A'.$i, $rs->menu_index);
-                    $sheet->setCellValue('B'.$i, $rs->menu_code);
-                    $sheet->setCellValue('C'.$i, $rs->lang_kr);
-                    $sheet->setCellValue('D'.$i, $rs->lang_en);
-                    $sheet->setCellValue('E'.$i, $rs->lang_ch);
-                    $sheet->setCellValue('F'.$i, $rs->lang_jp);
-
-                    $i++;
-                }
-                $sheet->getColumnDimension('A')->setAutoSize(true);
-                $sheet->getColumnDimension('B')->setAutoSize(true);
-                $sheet->getColumnDimension('C')->setAutoSize(true);
-                $sheet->getColumnDimension('D')->setAutoSize(true);
-                $sheet->getColumnDimension('E')->setAutoSize(true);
-                $sheet->getColumnDimension('F')->setAutoSize(true);
-
-                $response = response()->streamDownload(function() use ($spreadsheet) {
-                    $writer = new Xlsx($spreadsheet);
-                    $writer->save('php://output');
-                });
-
-                $response->setStatusCode(200);
-                $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                $response->headers->set('Content-Disposition', 'attachment; filename="'.(\Carbon\Carbon::now()->toDateString()).'.xls"');
-                $response->send();
-        */
 
         return view('multilingual.menuExcel',[
             'params' => $params

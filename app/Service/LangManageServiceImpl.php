@@ -138,6 +138,41 @@ class LangManageServiceImpl extends DBConnection  implements LangManageServiceIn
 
     }
 
+    public function clearMenu($params){
+        if($params['excelCodeUp']=="01"){
+            $result = $this->statDB->table('bybeat_menu')->delete();
+        }elseif($params['excelCodeUp']=="02"){
+            $result = $this->statDB->table('beat_someone_menu')->delete();
+        }
+    }
 
+    public function setMenuInsert($params){
+        if($params['excelCodeUp']=="01"){
+
+            $result = $this->statDB->table('bybeat_menu')
+                ->insert([
+                    'menu_code' => $params['menu_code']
+                    ,'lang_kr' => $params['lang_kr']
+                    ,'lang_en' => $params['lang_en']
+                    ,'lang_ch' => $params['lang_ch']
+                    ,'lang_jp' => $params['lang_jp']
+                ]);
+
+            return $result;
+
+
+        }elseif($params['excelCodeUp']=="02"){
+            $result = $this->statDB->table('beat_someone_menu')
+                ->insert([
+                    'menu_code' => $params['menu_code']
+                    ,'lang_kr' => $params['lang_kr']
+                    ,'lang_en' => $params['lang_en']
+                    ,'lang_ch' => $params['lang_ch']
+                    ,'lang_jp' => $params['lang_jp']
+                ]);
+
+            return $result;
+        }
+    }
 
 }

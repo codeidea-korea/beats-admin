@@ -14,9 +14,14 @@
                 <div class="flex w-full box pt-5">
                     <div class="ml-auto">
                         <button class="btn btn-primary w-24 ml-2" onClick="excelDownload()">Excel Download</button>
-                        <button class="btn btn-primary w-24 ml-2" onClick="alert('엑셀 업로드 폼이 없음');">Excel Upload</button>
-                        <input type="file" >
+
                     </div>
+                    <form id="boardWriteForm" method="post" action="/multilingual/menuUploadExcel" onsubmit="return validateForm()" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="excelCodeUp" id="excelCodeUp" >
+                        <button class="btn btn-primary w-24 ml-2">Excel Upload</button>
+                        <input type="file" name="excelFile" id="excelFile" >
+                    </form>
                 </div>
                 <div class="intro-y box">
                     <!-- BEGIN: Boxed Tab -->
@@ -111,6 +116,17 @@
         </div>
         <input type="hidden" id="excelCode" value="01">
         <script>
+            function validateForm(){
+                var scode = document.getElementById('excelCode').value;
+                document.getElementById('excelCodeUp').value = scode;
+                var excelFileValue = document.getElementById('excelFile').value;
+                if(excelFileValue==""){
+                    return false;
+                }
+
+
+
+            }
             function chTab(no){
                 if(no==1){
                     $(".tabform2").hide();

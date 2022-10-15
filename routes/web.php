@@ -110,7 +110,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('menuManage/{siteCode}', [MultilingualController::class, 'menuManage']);
         Route::post('updateMenuManage', [MultilingualController::class, 'setMenuManage']);
         Route::get('menuDownloadExcel', [MultilingualController::class, 'menuDownloadExcel']);
-        Route::get('menuUploadExcel', [MultilingualController::class, 'menuUploadExcel']);
+        Route::post('menuUploadExcel', [MultilingualController::class, 'menuUploadExcel']);
 
 
 
