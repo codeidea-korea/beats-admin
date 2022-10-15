@@ -240,9 +240,7 @@
             }
         });
     </script>
-@endsection
 
-@section('scripts')
     <script>
         function change(page) {
             $("input[name=page]").val(page);
