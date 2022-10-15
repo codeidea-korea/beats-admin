@@ -132,14 +132,19 @@ class MultilingualController extends Controller
                 $sqlParams['lang_en']   =  $jbexplode['C'];
                 $sqlParams['lang_ch']   =  $jbexplode['D'];
                 $sqlParams['lang_jp']   =  $jbexplode['E'];
-                $this->langManageService->setMenuInsert($sqlParams);
+                $result = $this->langManageService->setMenuInsert($sqlParams);
             }
             $i++;
         }
 
-        //return redirect('/multilingual/menuManage/'.$params['excelCodeUp']);
-        return redirect('/multilingual/menuManage/'.$params['excelCodeUp'])->with('alert', '처리완료.');
 
+        return redirect('/multilingual/menuManage/'.$params['excelCodeUp'])->with('message', 'Success!.');
+        //if($result){
+        //    $rData['result']="SUCCESS";
+        //}else{
+        //    $rData['result']="FAIL";
+        //}
+        //return json_encode($rData);
 
     }
     public function menuDownloadExcel(){

@@ -16,10 +16,10 @@
                         <button class="btn btn-primary w-24 ml-2" onClick="excelDownload()">Excel Download</button>
 
                     </div>
-                    <form id="boardWriteForm" method="post" action="/multilingual/menuUploadExcel" onsubmit="return validateForm()" enctype="multipart/form-data">
+                    <form id="boardWriteForm" name="boardWriteForm" method="post" action="/multilingual/menuUploadExcel"  enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="excelCodeUp" id="excelCodeUp" >
-                        <button class="btn btn-primary w-24 ml-2">Excel Upload</button>
+                        <input type="button" class="btn btn-primary w-24 ml-2" value="Excel Upload" onClick="validateForm();">
                         <input type="file" name="excelFile" id="excelFile" onChange="checkFile(this)" >
                     </form>
                 </div>
@@ -125,13 +125,19 @@
                 f.outerHTML = f.outerHTML;
             }
             function validateForm(){
+
                 var scode = document.getElementById('excelCode').value;
+
                 document.getElementById('excelCodeUp').value = scode;
                 var excelFileValue = document.getElementById('excelFile').value;
+
                 if(excelFileValue==""){
+                    alert('첨부파일이 없습니다.');
                     return false;
                 }
+                document.forms["boardWriteForm"].submit();
             }
+
             function chTab(no){
                 if(no==1){
                     $(".tabform2").hide();
@@ -150,6 +156,12 @@
                 var scode = document.getElementById('excelCode').value;
                 location.href = '/multilingual/menuDownloadExcel?siteCode='+scode;
             }
+            $(document).ready(function (e) {
+                @if(session('message'))
+                alert('엑셀 업로드 및 적용이 완료되었습니다.');
+                @endif
+            });
+
         </script>
 @endsection
 
