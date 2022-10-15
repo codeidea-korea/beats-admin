@@ -20,7 +20,7 @@
                         @csrf
                         <input type="hidden" name="excelCodeUp" id="excelCodeUp" >
                         <button class="btn btn-primary w-24 ml-2">Excel Upload</button>
-                        <input type="file" name="excelFile" id="excelFile" >
+                        <input type="file" name="excelFile" id="excelFile" onChange="checkFile(this)" >
                     </form>
                 </div>
                 <div class="intro-y box">
@@ -116,6 +116,14 @@
         </div>
         <input type="hidden" id="excelCode" value="01">
         <script>
+            function checkFile(f){
+                var file = f.files;
+                if(!/\.(xlsx)$/i.test(file[0].name)) alert('xlsx 파일만 선택해 주세요.\n\n현재 파일 : ' + file[0].name);
+                else return;
+                if(/\.(xls)$/i.test(file[0].name)) alert('xls 파일은 xlsx로 변경하여 올려주세요.\n\n현재 파일 : ' + file[0].name);
+                else return;
+                f.outerHTML = f.outerHTML;
+            }
             function validateForm(){
                 var scode = document.getElementById('excelCode').value;
                 document.getElementById('excelCodeUp').value = scode;
@@ -123,9 +131,6 @@
                 if(excelFileValue==""){
                     return false;
                 }
-
-
-
             }
             function chTab(no){
                 if(no==1){

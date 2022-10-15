@@ -1,11 +1,10 @@
 @php
 header("Content-type: application/vnd.ms-excel; charset=UTF-8" );
-header("Content-Disposition: attachment; filename=test.xls");
+header("Content-Disposition: attachment; filename=".$params['fileName']);
 header("Content-Description: PHP8 Generated Data");
 header("Cache-Control: no-cache");
 header("Pragma: no-cache");
 @endphp
-
 <style>
     #list
     {

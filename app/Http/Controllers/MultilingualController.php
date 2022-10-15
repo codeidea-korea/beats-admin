@@ -137,7 +137,8 @@ class MultilingualController extends Controller
             $i++;
         }
 
-        return redirect('/multilingual/menuManage/'.$params['excelCodeUp']);
+        //return redirect('/multilingual/menuManage/'.$params['excelCodeUp']);
+        return redirect('/multilingual/menuManage/'.$params['excelCodeUp'])->with('alert', '처리완료.');
 
 
     }
@@ -148,9 +149,13 @@ class MultilingualController extends Controller
 
         if($params['siteCode'] =="01"){
             $menuList = $this->langManageService->getByBeatMenuList($params);
+            $params['fileName'] ="바이비츠".date("YmdHms").".xls";
         }elseif($params['siteCode'] =="02"){
             $menuList = $this->langManageService->getBeatSomeoneMenuList($params);
+            $params['fileName'] ="비트썸원".date("YmdHms").".xls";
         }
+
+
 
         return view('multilingual.menuExcel',[
             'params' => $params
