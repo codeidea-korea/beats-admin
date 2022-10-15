@@ -152,15 +152,11 @@
         });
     });
 </script>
-
-@endsection
-
-@section('scripts')
-    <script>
-        function change(page) {
-            $("input[name=page]").val(page);
-            $("form[name=searchData]").submit();
-        }
-    </script>
+<script>
+    function change(page) {
+        $("input[name=page]").val(page);
+        $("form[name=searchData]").submit();
+    }
+</script>
 @endsection
 
