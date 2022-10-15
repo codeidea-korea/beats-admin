@@ -35,4 +35,12 @@ interface ApiHomeServiceInterface
     //비트 삭제
     public function beatDelete($params);
 
+    //메인 팝업
+    public function getPopup($params);
+
+    //약관 샘플 적용날짜 리스트
+    public function getTermsApplyData($params);
+
+    //약관 내용
+    public function getTermsContent($params);
 }

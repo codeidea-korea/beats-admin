@@ -255,4 +255,28 @@ class ApiHomeServiceImpl extends DBConnection  implements ApiHomeServiceInterfac
 
     }
 
+    public function getTermsApplyData($params){
+        $result = $this->statDB->table('adm_terms')
+            ->select(
+                'adm_terms.idx',
+                DB::raw("date_format(adm_terms.apply_date, '%Y-%m-%d' ) as apply_date"),
+            )
+            ->where('terms_type',$params['terms_type'])
+            ->where('isuse','Y')
+            ->orderby('adm_terms.apply_date','desc')
+            ->get();
+        return $result;
+
+    }
+
+    public function getTermsContent($params){
+        $result = $this->statDB->table('adm_terms')
+            ->select(
+                'adm_terms.content',
+            )
+            ->where('idx',$params['idx'])
+            ->first();
+        return $result;
+
+    }
 }

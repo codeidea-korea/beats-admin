@@ -25,20 +25,24 @@ Route::prefix('/v1/')->group(function () {
     Route::get('menuList', [ApiHomeController::class, 'menuList']);
     // HOME > 메뉴
     Route::get('bannerList', [ApiHomeController::class, 'bannerList']);
-
+    // 공지사항 리스트
     Route::get('noticeList', [ApiHomeController::class, 'noticeList']);
-
+    // 공지사항 상세
     Route::get('noticeView', [ApiHomeController::class, 'getNoticeView']);
-
+    // 이벤트 리스트
     Route::get('eventList', [ApiHomeController::class, 'eventList']);
-
+    // 이벤트 상세
     Route::get('eventView', [ApiHomeController::class, 'getEventView']);
-
+    // 비트 추가
     Route::post('beatAdd', [ApiHomeController::class, 'beatAdd']);
-
+    // 비트 삭제
     Route::delete('beatDelete', [ApiHomeController::class, 'beatDelete']);
-
+    // 메인 팝업
     Route::get('getPopup', [ApiHomeController::class, 'getPopup']);
+    // 약관 적용날짜 리스트
+    Route::get('getTermsApplyData', [ApiHomeController::class, 'getTermsApplyData']);
+    // 약관 내용
+    Route::get('getTermsContent', [ApiHomeController::class, 'getTermsContent']);
 
     Route::group(['prefix' => 'member'], function() {
         Route::put('login', [ApiMemberController::class, 'apiLogin']);

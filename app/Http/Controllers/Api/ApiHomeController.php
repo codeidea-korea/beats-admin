@@ -284,4 +284,52 @@ class ApiHomeController extends Controller
         }
     }
 
+    public function getTermsApplyData()
+    {
+        try{
+            $params = $this->request->input();
+            $params['terms_type'] = $params['terms_type'] ?? '';
+
+            if($params['terms_type'] == ''){
+                $returnData['code']=-1;
+                $returnData['message']="필수 입력 값이 누락되었습니다.";
+            }else{
+                $apply_date = $this->apiHomeService->getTermsApplyData($params);
+
+                $returnData['code'] = 0;
+                $returnData['message'] = "complete";
+                $returnData['response'] = $apply_date;
+            }
+
+            return json_encode($returnData);
+
+        } catch(\Exception $exception){
+            throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+        }
+    }
+
+    public function getTermsContent()
+    {
+        try{
+            $params = $this->request->input();
+            $params['idx'] = $params['idx'] ?? '';
+
+            if($params['idx'] == ''){
+                $returnData['code']=-1;
+                $returnData['message']="필수 입력 값이 누락되었습니다.";
+            }else{
+                $content = $this->apiHomeService->getTermsContent($params);
+
+                $returnData['code'] = 0;
+                $returnData['message'] = "complete";
+                $returnData['response'] = $content;
+            }
+
+            return json_encode($returnData);
+
+        } catch(\Exception $exception){
+            throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+        }
+    }
+
 }
