@@ -1,3 +1,7 @@
+@php
+$menuAuthString =session('ADMINMENULISTAUTH');
+$menuAuth=explode(',',trim($menuAuthString) );
+@endphp
 <!-- BEGIN: Mobile Menu -->
 <div class="mobile-menu md:hidden">
     <div class="mobile-menu-bar">
@@ -11,51 +15,60 @@
         <ul class="scrollable__content py-2">
             @php
                 $tempDepth = 1;
-
-
             @endphp
             @foreach(session('ADMINMENULIST') as $rs)
-                @if($tempDepth==2 && $rs->depth == 1)
-                    </ul>
-                    </li>
-                    @php
-                        $tempDepth = 1;
-                    @endphp
-                @endif
 
-                @if($rs->depth == 1 && $rs->lcnt==0)
-                    <li>
-                        <a href="javascript:location.href='{{ url($rs->url) }}';" class="menu @if(substr($rs->menucode,0,5) == substr($params['menuCode'],0,5)) menu--active @php $navi @endphp @endif">
-                            <div class="menu__icon"> <i data-lucide="{{$rs->description}}"></i> </div>
-                            <div class="menu__title">
-                                {{$rs->menuname}}
-                            </div>
-                        </a>
-                    </li>
-                @elseif($rs->depth == 1&&$rs->lcnt > 0)
-                    <li>
-                        <!--<a href="javascript:;" class="side-menu side-menu--active">-->
-                        <a href="javascript:;" class="menu @if(substr($rs->menucode,0,5) == substr($params['menuCode'],0,5)) menu--active @endif">
-                            <div class="menu__icon"> <i data-lucide="{{$rs->description}}"></i> </div>
-                            <div class="menu__title">
-                                {{$rs->menuname}}
-                                <div class="menu__sub-icon @if(substr($rs->menucode,0,5) == substr($params['menuCode'],0,5)) transform rotate-180 @endif"> <i data-lucide="chevron-down"></i> </div>
-                                <!--<div class="side-menu__sub-icon transform rotate-180"> <i data-lucide="chevron-down"></i> </div>-->
-                            </div>
-                        </a>
-                        <ul class="menu__sub-open" @if(substr($rs->menucode,0,5) != substr($params['menuCode'],0,5)) style="display:none" @endif >
-                    @php
-                        $tempDepth=2;
-                    @endphp
-                @elseif($rs->depth == 2)
-                    <li>
-                        <!--<a href="javascript:;" class="side-menu side-menu--active">-->
-                        <a href="javascript:location.href='{{ url($rs->url) }}';" class="side-menu @if($rs->menucode == $params['menuCode']) menu--active @endif">
-                            <div class="menu__icon"> <i data-lucide="activity"></i> </div>
-                            <div class="menu__title">  {{$rs->menuname}}</div>
-                        </a>
-                    </li>
-                @endif
+                {{--@if(in_array($rs->menucode.'_s',$menuAuth))--}}
+
+                    @if($tempDepth==2 && $rs->depth == 1)
+                        </ul>
+                        </li>
+                        @php
+                            $tempDepth = 1;
+                        @endphp
+                    @endif
+
+                    @if($rs->depth == 1 && $rs->lcnt==0)
+                        @if(in_array($rs->menucode.'_s',$menuAuth))
+                        <li>
+                            <a href="javascript:location.href='{{ url($rs->url) }}';" class="menu @if(substr($rs->menucode,0,5) == substr($params['menuCode'],0,5)) menu--active @php $navi @endphp @endif">
+                                <div class="menu__icon"> <i data-lucide="{{$rs->description}}"></i> </div>
+                                <div class="menu__title">
+                                    {{$rs->menuname}}
+                                </div>
+                            </a>
+                        </li>
+                        @endif
+                    @elseif($rs->depth == 1&&$rs->lcnt > 0)
+                        @if(in_array($rs->menucode.'_s',$menuAuth))
+                            <li>
+                                <!--<a href="javascript:;" class="side-menu side-menu--active">-->
+                                <a href="javascript:;" class="menu @if(substr($rs->menucode,0,5) == substr($params['menuCode'],0,5)) menu--active @endif">
+                                    <div class="menu__icon"> <i data-lucide="{{$rs->description}}"></i> </div>
+                                    <div class="menu__title">
+                                        {{$rs->menuname}}
+                                        <div class="menu__sub-icon @if(substr($rs->menucode,0,5) == substr($params['menuCode'],0,5)) transform rotate-180 @endif"> <i data-lucide="chevron-down"></i> </div>
+                                        <!--<div class="side-menu__sub-icon transform rotate-180"> <i data-lucide="chevron-down"></i> </div>-->
+                                    </div>
+                                </a>
+                                <ul class="menu__sub-open" @if(substr($rs->menucode,0,5) != substr($params['menuCode'],0,5)) style="display:none" @endif >
+                            @php
+                                $tempDepth=2;
+                            @endphp
+                        @endif
+                    @elseif($rs->depth == 2)
+                        @if(in_array($rs->menucode.'_s',$menuAuth))
+                            <li>
+                                <!--<a href="javascript:;" class="side-menu side-menu--active">-->
+                                <a href="javascript:location.href='{{ url($rs->url) }}';" class="side-menu @if($rs->menucode == $params['menuCode']) menu--active @endif">
+                                    <div class="menu__icon"> <i data-lucide="activity"></i> </div>
+                                    <div class="menu__title">  {{$rs->menuname}}</div>
+                                </a>
+                            </li>
+                        @endif
+                    @endif
+
+
             @endforeach
         </ul>
     </div>
@@ -75,6 +88,7 @@
                 $tempDepth = 1;
                 @endphp
                 @foreach(session('ADMINMENULIST') as $rs)
+                    {{--@if(in_array($rs->menucode.'_s',$menuAuth))--}}
                     @if($tempDepth==2 && $rs->depth == 1)
                             </ul>
                         </li>
@@ -84,6 +98,7 @@
                     @endif
 
                     @if($rs->depth == 1 && $rs->lcnt==0)
+                        @if(in_array($rs->menucode.'_s',$menuAuth))
                         <li>
                             <a href="javascript:location.href='{{ url($rs->url) }}';" class="side-menu @if(substr($rs->menucode,0,5) == substr($params['menuCode'],0,5)) side-menu--active @endif">
                                 <div class="side-menu__icon"> <i data-lucide="{{$rs->description}}"></i> </div>
@@ -92,24 +107,27 @@
                                 </div>
                             </a>
                         </li>
+                        @endif
                     @elseif($rs->depth == 1&&$rs->lcnt > 0)
+                        @if(in_array($rs->menucode.'_s',$menuAuth))
 
-                        <li>
-                            <!--<a href="javascript:;" class="side-menu side-menu--active">-->
-                            <a href="javascript:;" class="side-menu @if(substr($rs->menucode,0,5) == substr($params['menuCode'],0,5)) side-menu--active @endif">
-                                <div class="side-menu__icon"> <i data-lucide="{{$rs->description}}"></i> </div>
-                                <div class="side-menu__title">
-                                    {{$rs->menuname}}
-                                    <div class="side-menu__sub-icon @if(substr($rs->menucode,0,5) == substr($params['menuCode'],0,5)) transform rotate-180 @endif"> <i data-lucide="chevron-down"></i> </div>
-                                    <!--<div class="side-menu__sub-icon transform rotate-180"> <i data-lucide="chevron-down"></i> </div>-->
-                                </div>
-                            </a>
-                            <ul class="side-menu__sub-open" @if(substr($rs->menucode,0,5) != substr($params['menuCode'],0,5)) style="display:none" @endif >
-                        @php
-                            $tempDepth=2;
-                        @endphp
+                            <li>
+                                <!--<a href="javascript:;" class="side-menu side-menu--active">-->
+                                <a href="javascript:;" class="side-menu @if(substr($rs->menucode,0,5) == substr($params['menuCode'],0,5)) side-menu--active @endif">
+                                    <div class="side-menu__icon"> <i data-lucide="{{$rs->description}}"></i> </div>
+                                    <div class="side-menu__title">
+                                        {{$rs->menuname}}
+                                        <div class="side-menu__sub-icon @if(substr($rs->menucode,0,5) == substr($params['menuCode'],0,5)) transform rotate-180 @endif"> <i data-lucide="chevron-down"></i> </div>
+                                        <!--<div class="side-menu__sub-icon transform rotate-180"> <i data-lucide="chevron-down"></i> </div>-->
+                                    </div>
+                                </a>
+                                <ul class="side-menu__sub-open" @if(substr($rs->menucode,0,5) != substr($params['menuCode'],0,5)) style="display:none" @endif >
+                            @php
+                                $tempDepth=2;
+                            @endphp
+                        @endif
                     @elseif($rs->depth == 2)
-
+                        @if(in_array($rs->menucode.'_s',$menuAuth))
                         <li>
                             <!--<a href="javascript:;" class="side-menu side-menu--active">-->
                             <a href="javascript:location.href='{{ url($rs->url) }}';" class="side-menu @if($rs->menucode == $params['menuCode']) side-menu--active @endif">
@@ -117,7 +135,7 @@
                                 <div class="side-menu__title">  {{$rs->menuname}}</div>
                             </a>
                         </li>
-
+                        @endif
                     @endif
                 @endforeach
                             </ul>

@@ -50,7 +50,13 @@
 
                                 @if($rs->depth == 1 && $rs->lcnt==0)
                                         <tr>
-                                            <th class="whitespace-nowrap text-center bg-primary/10" style="text-align:left;" colspan ='2' >{{$rs->menuname}}</th>
+                                            <th class="whitespace-nowrap text-center bg-primary/10" style="text-align:left;width:120px;">
+
+                                                {{$rs->menuname}}
+                                            </th>
+                                            <td>
+                                                <input type="checkbox" name="menuAuthCheck" value="{{$rs->menucode}}_s" id="{{$rs->menucode}}_s" @if(strpos($auth_arr,$rs->menucode."_s") !== false) checked @endif > 읽기
+                                            </td>
                                         </tr>
                                         <tr>
                                             <th class="whitespace-nowrap text-center bg-primary/10" style="text-align:left;width:120px;"><input type="checkbox" id="{{$rs->menucode}}_all" onClick="changeCheck('{{$rs->menucode}}');"> {{$rs->menuname}}</th>
@@ -65,7 +71,12 @@
                                         </tr>
                                 @elseif($rs->depth == 1&&$rs->lcnt > 0)
                                         <tr>
-                                            <th class="whitespace-nowrap text-center bg-primary/10" style="text-align:left;" colspan ='2' >{{$rs->menuname}}</th>
+                                            <th class="whitespace-nowrap text-center bg-primary/10" style="text-align:left;width:120px;">
+                                                {{$rs->menuname}}
+                                            </th>
+                                            <td>
+                                                <input type="checkbox" name="menuAuthCheck" value="{{$rs->menucode}}_s" id="{{$rs->menucode}}_s" @if(strpos($auth_arr,$rs->menucode."_s") !== false) checked @endif > 읽기
+                                            </td>
                                         </tr>
                                 @elseif($rs->depth == 2)
                                         <tr>

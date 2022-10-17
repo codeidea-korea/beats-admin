@@ -60,11 +60,12 @@ class LoginController extends Controller
 
         if(auth()->attempt(array('id' => $input['id'], 'password' => $input['password'])))
         {
+            $aParams['group_code']=auth()->user()->group_code;
+            $authData = $this->adminAuthorityService->getAdmGroupAuthList($aParams);
+            session(['ADMINMENULISTAUTH'=>$authData->auth_arr]);
             // 메뉴 session에 저장
             $menuList = $this->adminAuthorityService->getAdmMenuList();
             session(['ADMINMENULIST'=>$menuList]);
-            //var_dump( session('ADMINMENULIST'));
-
 
             //if (auth()->user()->type == 'admin') {
             //    return redirect()->route('admin.home');
