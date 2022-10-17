@@ -16,7 +16,7 @@ interface MainManageServiceInterface
     //하위 배너 리스트
     public function getBannerDataList($params, $banner_code);
     //배너 상세 하위 배너 총수
-    public function getBannerDataTotal();
+    public function getBannerDataTotal($params, $banner_code);
     //순서 바꾸기
     public function SeqChange($params);
     //배너 등록
@@ -29,7 +29,7 @@ interface MainManageServiceInterface
     //팝업 리스트
     public function getPopupList($params);
     //팝업 총수
-    public function getPopupTotal();
+    public function getPopupTotal($params);
     //팝업 상세
     public function getPopupView($params, $pidx);
     //팝업 등록

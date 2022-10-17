@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Session;
 
 class HomeController extends Controller
@@ -70,10 +71,9 @@ class HomeController extends Controller
     public function test()
     {
         $params = $this->request->input();
-        $params['type'] = $params['type'] ?? 0;
-        $data = $this->dashBoardService->getTestData($params);
-        var_dump($data);
-        exit();
-        return view('testDbConnect.blade');
+        $params['menuCode'] = "AD030100";
+        return view('test',[
+            'params' => $params
+        ]);
     }
 }

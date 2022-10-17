@@ -8,7 +8,7 @@ use App\Service\ApiHomeServiceImpl;
 use App\Service\ApiMemberServiceImpl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Controllers\Api\HttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Response;
 use Session;
 
@@ -66,13 +66,13 @@ class ApiMemberController extends Controller
 
                                 $result3 = $this->apiMemberService->getMemberData($params);
 
-                                if($result3->memStatus == 1 || $result3->memStatus == 0){    
+                                if($result3->memStatus == 1 || $result3->memStatus == 0){
                                     $returnData['code']=0;
                                     $returnData['message']="로그인 완료";
                                     $returnData['response']=$result3;
                                     $returnData['_token']=$params['_token'];
                                 }else{
-                                    
+
                                     $returnData['code']=601;
 
                                     if($result3->memStatus == 2){
@@ -120,14 +120,14 @@ class ApiMemberController extends Controller
                         $result2 = $this->apiMemberService->putLogin($params);
                         if($result2){
                             $result3 = $this->apiMemberService->getMemberData($params);
-                            
-                            if($result3->memStatus == 1 || $result3->memStatus == 0){    
+
+                            if($result3->memStatus == 1 || $result3->memStatus == 0){
                                 $returnData['code']=0;
                                 $returnData['message']="로그인 완료";
                                 $returnData['response']=$result3;
                                 $returnData['_token']=$params['_token'];
                             }else{
-                                
+
                                 $returnData['code']=601;
 
                                 if($result3->memStatus == 2){
@@ -183,6 +183,16 @@ class ApiMemberController extends Controller
             $returnData['code']=0;
             $returnData['message']="로그인 유지 확인";
             $returnData['response']=$result;
+
+            // if($result){
+            //     $result3 = $this->apiMemberService->getMemberData($params);
+            //     $returnData['code']=0;
+            //     $returnData['message']="로그인 유지 성공";
+            //     $returnData['response']=$result3;
+            // }else{
+            //     $returnData['code']=1;
+            //     $returnData['message']="로그인 유지 실패";
+            // }
 
         } catch(\Exception $exception){
             throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
@@ -290,6 +300,19 @@ class ApiMemberController extends Controller
             $params['marketing_consent'] = $params['marketingConsent'] ?? "";
             $params['existingEmailId'] = $params['existingEmailId'] ?? "";
 
+            $params['channel'] = $params['sns'];
+
+            // 고유id값 [u_id]추출 start
+            do {
+                $tempUid = $this->apiMemberService->getRandStr();
+                $tempData['u_id']=$tempUid;
+
+                $checkUid = $this->apiMemberService->getUidCheck($tempData);
+            }while($checkUid->cnt > 0);
+            $params['u_id'] = $tempData['u_id'];
+
+            // 고유id값 [u_id]추출 end
+
             if($params['existing_yn'] == ''){
                 $returnData['code'] = 1;
                 $returnData['message'] = "기존회원과 통합회원을 구분해 주세요";
@@ -304,13 +327,13 @@ class ApiMemberController extends Controller
 
                 }else{
                     if(($params['snsKey'] == "" && $params['emailId'] == "") || $params['sign_site'] == "" || $params['name'] == "" || $params['mem_nickname'] == "" || $params['nationality'] == ""
-                    || $params['phone_number'] == "" || $params['marketing_consent'] == ""){
+                    || $params['marketing_consent'] == ""){
 
                         $returnData['code'] = 2;
                         $returnData['message'] = "입력하지 않은 필수 값이 있습니다. 필수 값을 입력해 주세요";
 
                     }else{
-                        
+
                         $joinCheck = $this->apiMemberService->joinCheck($params);
 
                         if($joinCheck){
@@ -389,7 +412,7 @@ class ApiMemberController extends Controller
 
         return json_encode($returnData);
     }
-    
+
     public function testList()
     {
 

@@ -26,6 +26,7 @@ class AdminAuthorityServiceImpl extends DBConnection  implements AdminAuthorityS
                 'menucode',
                 'sortorder',
                 'rootindex',
+                'navi',
             )
             ->where('isdisplay', 'Y')
             ->orderby('sortorder','asc')
@@ -146,23 +147,27 @@ class AdminAuthorityServiceImpl extends DBConnection  implements AdminAuthorityS
 
     public function getAdminData($params) {
 
-        $result = $this->statDB->table('users')
-            ->leftJoin('adm_group', 'users.group_code', '=', 'adm_group.group_code')
+        $result = $this->statDB->table('users as A')
+            ->leftJoin('adm_group as B', 'A.group_code', '=', 'B.group_code')
+            ->leftJoin('users as C', 'A.adminindex', '=', 'C.idx')
             ->select(
-                'users.idx',
-                'users.id',
-                'users.name',
-                'users.group_code',
-                'adm_group.group_name',
-                'users.phoneno',
-                'users.email',
-                'users.isuse',
-                'users.created_at',
-                'users.adminid',
+                'A.idx',
+                'A.id',
+                'A.name',
+                'A.group_code',
+                'B.group_name',
+                'A.phoneno',
+                'A.email',
+                'A.isuse',
+                'A.created_at',
+                'A.adminid',
+                'A.adminindex',
+                'C.id as cid',
+                'C.name as cname',
             // $this->statDB->raw('SUM(name) AS CNT')
             )
-            ->where('users.type', $params['type'])
-            ->where('users.idx', $params['idx'])
+            ->where('A.type', $params['type'])
+            ->where('A.idx', $params['idx'])
             ->first();
         return $result;
 
@@ -181,6 +186,7 @@ class AdminAuthorityServiceImpl extends DBConnection  implements AdminAuthorityS
                 ,'password' => bcrypt($params['password'])
                 ,'type' => 0
                 ,'created_at' => now()
+                ,'adminindex' => auth()->user()->idx
             ]);
 
         return $result;
@@ -210,6 +216,7 @@ class AdminAuthorityServiceImpl extends DBConnection  implements AdminAuthorityS
                 ,'phoneno' => $params['phoneno']
                 ,'email' => $params['email']
                 ,'updated_at' => now()
+                ,'adminindex' => auth()->user()->idx
             ]);
         return $result;
 

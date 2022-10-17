@@ -44,7 +44,7 @@
                             <tr>
                                 <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">최근 수정일자</th>
                                 <td colspan="3" class="whitespace-nowrap">
-                                    <span>{{$bannerData[0]->created_at}}</span>
+                                    <span>{{$bannerData[0]->updated_at}}</span>
                                 </td>
                             </tr>
                         </table>
@@ -61,7 +61,7 @@
                                 <tr>
                                     <th class="bg-primary/10 whitespace-nowrap w-32 text-center">구분</th>
                                     <td class="">
-                                        <select name="contents" class="form-select w-60" aria-label=".form-select-lg example">
+                                        <select name="s_contents" class="form-select w-60" aria-label=".form-select-lg example">
                                             <option value=''>전체</option>
                                             <option value="notice" @if($params['search_contents'] == 'notice') selected @endif>공지사항</option>
                                             <option value="event" @if($params['search_contents'] == 'event') selected @endif>이벤트</option>
@@ -78,7 +78,7 @@
                                     <td class="">
                                         <div class="sm:ml-auto mt-3 sm:mt-0 relative text-slate-500">
                                             <i data-lucide="calendar" class="w-4 h-4 z-10 absolute my-auto inset-y-0 ml-3 left-0"></i>
-                                            <input name="created_at" type="text" class="datepicker form-control sm:w-56 box pl-10" value="{{$params['search_created_at']}}">
+                                            <input name="created_at" type="text" class="datepicker form-control sm:w-56 box pl-10" value="{{$params['created_at']}}">
                                         </div>
                                     </td>
                                 </tr>
@@ -86,7 +86,7 @@
                         </div>
                         <div class="intro-y col-span-12 flex items-center justify-center sm:justify-end mt-5">
                             <button class="btn btn-primary w-24 ml-2" onclick="$('#searchData').submit();">검색</button>
-                            <button class="btn btn-secondary w-24">초기화</button>
+                                <div class="btn btn-secondary w-24 ml-5" onClick="javascript:location.href = '/mainmanage/banner/view/{{$bannerData[0]->banner_code}}';">초기화</div>
                         </div>
                     </div>
                 </div>
@@ -391,15 +391,13 @@
         });
 
         $(document).on('click','#select_delete',function(){
-            var del_check = "";
+            var del_check = [];
             if(confirm("선택하신 목록들을 삭제하시겠습니까?")){
                 if($("input[name='del_check']:checked").length > 0){
 
                     $("input[name='del_check']:checked").each(function(e){
-                        del_check += $(this).val()+",";
+                        del_check.push($(this).val());
                     })
-
-                    del_check = del_check.slice(0, -1);
 
                     jQuery.ajax({
                         cache: false,
@@ -500,7 +498,7 @@
             var change_seq = $(this).data("change_seq");
             var contents = "{{$params['search_contents']}}";
             var search_text = "{{$params['fr_search_text']}}";
-            var created_at = "{{$params['search_created_at']}}";
+            var created_at = "{{$params['created_at']}}";
             var banner_code = "{{$bannerData[0]->banner_code}}";
             var page = $("input[name=page]").val();
 
@@ -523,7 +521,7 @@
                     url: '/mainmanage/banner/seqchange',
                     success: function (data) {
 
-                        $("#banner_data_list").html("");
+                        $("#banner_data_list")[0].innerHTML = '';
 
                         data.forEach(function(item,index) {
 
@@ -598,9 +596,7 @@
             }
         });
     </script>
-@endsection
 
-@section('scripts')
     <script>
         function change(page) {
             $("input[name=page]").val(page);

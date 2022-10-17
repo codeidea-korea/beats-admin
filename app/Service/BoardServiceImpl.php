@@ -6,6 +6,7 @@ use Agent;
 use Session;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
 {
@@ -55,7 +56,11 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
                     $query->whereBetween('notice_board.created_at',  [$params['fr_search_at'],$params['bk_search_at']]);
                 });
             })
-            ->orderby('created_at','desc')
+            //->orderby('notice_board.gubun','desc')
+            ->orderby('notice_board.created_at','desc')
+            ->orderby('notice_board.idx','desc')
+            ->skip(($params['page']-1)*$params['limit'])
+            ->take($params['limit'])
            // ->groupBy('name')
             ->get();
         return $result;
@@ -138,7 +143,7 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
             ->where('idx',$params['idx'])
             ->update([
                 'wr_title' => $params['wr_title'], 'wr_content' => $params['wr_content'], 'wr_open' => $params['wr_open'],
-                'updated_at' => \Carbon\Carbon::now()
+                'gubun' => $params['gubun'],'updated_at' => \Carbon\Carbon::now()
             ]);
 
         return $result;
@@ -166,9 +171,22 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
                 'adm_event.fr_event_date',
                 'adm_event.bk_event_date',
                 'adm_event.created_at',
+                DB::raw('CASE WHEN adm_event.fr_event_date <= NOW() and adm_event.bk_event_date >= NOW() THEN 1
+                WHEN adm_event.bk_event_date < NOW() THEN 2
+                Else 0 END as gubun'),
                 'users.name',
                // $this->statDB->raw('SUM(name) AS CNT')
             )
+            ->when(isset($params['duration_status']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    if($params['duration_status'] == 'Y'){
+                        $query->where('adm_event.fr_event_date', '<=', DB::raw('NOW()'))
+                        ->where('adm_event.bk_event_date', '>=', DB::raw('NOW()'));
+                    }else{
+                        $query->where('adm_event.bk_event_date', '<' , DB::raw('NOW()'));
+                    }
+                });
+            })
             ->when(isset($params['open_status']), function($query) use ($params){
                 return $query->where(function($query) use ($params) {
                     $query->where('open_status',  $params['open_status']);
@@ -185,6 +203,8 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
                 });
             })
             ->orderby('created_at','desc')
+            ->skip(($params['page']-1)*$params['limit'])
+            ->take($params['limit'])
            // ->groupBy('name')
             ->get();
         return $result;
@@ -218,6 +238,7 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
     public function getEventView($params, $bidx) {
 
         $result = $this->statDB->table('adm_event')
+            ->leftJoin('users', 'adm_event.mem_id', '=', 'users.idx')
             ->select(
                 'adm_event.idx',
                 'adm_event.mem_id',
@@ -357,7 +378,9 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
                     $query->whereBetween('adm_terms.apply_date',  [$params['fr_search_at'],$params['bk_search_at']]);
                 });
             })
-            ->orderby('adm_terms.created_at','desc')
+            ->orderby('adm_terms.version','desc')
+            ->skip(($params['page']-1)*$params['limit'])
+            ->take($params['limit'])
            // ->groupBy('name')
             ->get();
         return $result;
@@ -365,7 +388,7 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
     }
 
     public function getGubun($params) {
-        
+
         $result = $this->statDB->table('adm_code')
             ->select(
                 'adm_code.codename',
@@ -382,7 +405,7 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
     }
 
     public function getTermsType($params) {
-        
+
         $result = $this->statDB->table('adm_code')
             ->select(
                 'adm_code.codename',
@@ -513,6 +536,93 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
         }
 
         return response()->json(['fileName' => $file_name, 'uploaded'=> 1, 'url' => $urls]);
+    }
+
+
+    public function getContractList($params) {
+
+
+        $result = $this->statDB->table('contract')
+            ->leftJoin('users', 'contract.adminidx', '=', 'users.idx')
+            ->select(
+                'contract.idx',
+                'users.name',
+                'contract.contents',
+                'contract.version',
+                'contract.adminidx',
+                'contract.crdate',
+                'contract.start_date'
+            )
+            ->where('contract.crdate','>=', $params['sDate'])
+            ->where('contract.crdate','<=', $params['eDate'])
+            ->when(isset($params['search_text']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->orWhere('contract.contents', 'like', '%'.$params['search_text'].'%');
+                    $query->orWhere('contract.version', '=', $params['search_text']);
+                });
+            })
+            ->orderby('contract.crdate','desc')
+            ->skip(($params['page']-1)*$params['limit'])
+            ->take($params['limit'])
+            ->get();
+        return $result;
+
+    }
+
+    public function getContractTotal($params) {
+
+        $result = $this->statDB->table('contract')
+            ->select(DB::raw("COUNT(idx) AS cnt"))
+            ->where('crdate','>=', $params['sDate'])
+            ->where('crdate','<=', $params['eDate'])
+            ->when(isset($params['search_text']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->orWhere('contents', 'like', '%'.$params['search_text'].'%');
+                    $query->orWhere('version', '=', $params['search_text']);
+                });
+            })
+            ->first();
+        return $result;
+
+    }
+
+    public function setContractAdd($params) {
+
+        $result = $this->statDB->table('contract')
+            ->insert([
+                'contents' => $params['editor1']
+                ,'version' => $params['version']
+                ,'adminidx' => $params['adminidx']
+                ,'start_date' => $params['start_date']
+            ]);
+        return $result;
+
+    }
+
+
+    public function getContractView($idx) {
+
+        $result = $this->statDB->table('contract')
+            ->leftJoin('users', 'contract.adminidx', '=', 'users.idx')
+            ->select(
+                'contract.idx',
+                'users.name',
+                'contract.contents',
+                'contract.version',
+                'contract.adminidx',
+                'contract.crdate',
+                'contract.start_date'
+            )
+            ->where('contract.idx',$idx)
+            ->first();
+        return $result;
+
+    }
+
+    public function setContractDelete($params){
+        $result = $this->statDB->table('contract')->where('idx', $params['idx'])->delete();
+
+        return $result;
     }
 
 }

@@ -7,7 +7,7 @@
     @include('include.topBarINC')
     <!-- END: Top Bar -->
     <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
-        <h2 class="text-lg font-medium mr-auto">배너 관리</h2>
+        <h2 class="text-lg font-medium mr-auto">팝업 관리</h2>
     </div>
 
     <div class="grid grid-cols-12 gap-6 mt-5">
@@ -17,7 +17,7 @@
             <div class="intro-y box">
 
                 <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60">
-                    <h2 class="font-medium text-base mr-auto">배너 상세</h2>
+                    <h2 class="font-medium text-base mr-auto">팝업 상세</h2>
                 </div>
 
                 <div class="p-5">
@@ -67,7 +67,7 @@
                                             <option value="menu" @if($popupData[0]->connect_type == 'menu') selected @endif>메뉴선택</option>
                                             <option value="url" @if($popupData[0]->connect_type == 'url') selected @endif>URL 입력</option>
                                         </select>
-                                        <div class="inline items-center w-60 mt-3 ml-2" id="menu_area">
+                                        <div class="inline items-center w-60 mt-3 ml-2 @if($popupData[0]->connect_type == 'url') hidden @endif" id="menu_area">
                                             <select name="menu_connect_url" class="form-select w-60 none" aria-label=".form-select-lg example">
                                                 <option value="">메뉴 선택</option>
                                                 <option value="feed" @if($popupData[0]->connect_url == 'feed') selected @endif>피드</option>
@@ -84,7 +84,7 @@
                                                 <option value="contents" @if($popupData[0]->connect_contents == 'contents') selected @endif>콘텐츠</option>
                                             </select>
                                         </div>
-                                        <div class="hidden items-center mt-3 ml-2" id="url_area">
+                                        <div class="items-center mt-3 ml-2 @if($popupData[0]->connect_type == 'menu') hidden @endif" id="url_area">
                                             http:// <input name="url_connect_url" id="regular-form-1" type="text" class="form-control w-72" placeholder="Input text" value="{{$popupData[0]->connect_url}}">
                                         </div>
                                     </td>
@@ -119,7 +119,7 @@
                             <div class="flex items-center justify-center mt-5">
                                 <button type="button" class="btn btn-secondary w-32 popupDeletebtn">삭제</button>
                                 <button class="btn btn-primary w-32 ml-2 mr-2 popupUpdatebtn">수정</button>
-                                <button type="button" class="btn btn-secondary w-32" onclick="history.back(-1)">취소</button>
+                                <button type="button" class="btn btn-secondary w-32" onclick="location.href='/mainmanage/popup/list'">취소</button>
                             </div>
                         </form>
                     </div>
@@ -135,6 +135,16 @@
     <script>
 
         var ajax_checked = false;
+
+        $(document).on('change','#connect_type',function(){
+            if($(this).val() == "menu"){
+                $("#menu_area").css("display","inline");
+                $("#url_area").css("display","none");
+            }else{
+                $("#menu_area").css("display","none");
+                $("#url_area").css("display","inline");
+            }
+        });
 
         $(document).on('click','.bannerUpdatebtn', function(){
 
@@ -230,9 +240,7 @@
             }
         });
     </script>
-@endsection
 
-@section('scripts')
     <script>
         function change(page) {
             $("input[name=page]").val(page);

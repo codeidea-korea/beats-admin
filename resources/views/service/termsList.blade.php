@@ -49,7 +49,7 @@
                                         <td class="">
                                             <div class="sm:ml-auto mt-3 sm:mt-0 relative text-slate-500">
                                                 <i data-lucide="calendar" class="w-4 h-4 z-10 absolute my-auto inset-y-0 ml-3 left-0"></i>
-                                                <input name="created_at" type="text" class="datepicker form-control sm:w-56 box pl-10" value="{{$params['search_apply_date']}}">
+                                                <input name="created_at" type="text" class="datepicker form-control sm:w-56 box pl-10" value="{{$params['apply_date']}}">
                                             </div>
                                         </td>
                                     </tr>
@@ -57,7 +57,7 @@
                             </div>
                             <div class="intro-y col-span-12 flex items-center justify-center sm:justify-end mt-5">
                                 <button class="btn btn-primary w-24 ml-2" onclick="$('#searchData').submit();">검색</button>
-                                <button class="btn btn-secondary w-24">초기화</button>
+                                <div class="btn btn-secondary w-24 ml-5" onClick="javascript:location.href = '/service/terms/list';">초기화</div>
                             </div>
                         </div>
                     </div>
@@ -152,15 +152,11 @@
         });
     });
 </script>
-
-@endsection
-
-@section('scripts')
-    <script>
-        function change(page) {
-            $("input[name=page]").val(page);
-            $("form[name=searchData]").submit();
-        }
-    </script>
+<script>
+    function change(page) {
+        $("input[name=page]").val(page);
+        $("form[name=searchData]").submit();
+    }
+</script>
 @endsection
 

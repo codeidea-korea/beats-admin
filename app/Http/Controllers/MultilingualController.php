@@ -3,9 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Service\LangManageServiceImpl;
+use Illuminate\Contracts\Validation\ValidatorAwareRule;
 use Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Session;
+use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+
+
+
+
+
 
 class MultilingualController extends Controller
 {
@@ -69,26 +81,92 @@ class MultilingualController extends Controller
             );
         }
 
-
-
-
     }
 
 
     public function menuManage($siteCode)
     {
+
         $params = $this->request->input();
         $params['siteCode'] = $siteCode;
         $params['menuCode'] = "AD000200";
 
+
         $beatSomeoneMenuList = $this->langManageService->getBeatSomeoneMenuList($params);
         $bybeatMenuList = $this->langManageService->getByBeatMenuList($params);
+
 
         return view('multilingual.menuManage',[
             'params' => $params
             ,'beatSomeoneMenuList' => $beatSomeoneMenuList
             ,'bybeatMenuList' => $bybeatMenuList
         ]);
+    }
+
+    public function menuUploadExcel(){
+        $params = $this->request->input();
+        $params['excelCodeUp'] = $params['excelCodeUp'] ?? "01";
+
+        $folderName = '/excel/'.date("Y/m/d").'/';
+        $files = $this->request->file('excelFile');
+
+        $sqlData['file_name'] = $files->getClientOriginalName();
+        $sqlData['ext'] = $files->getClientOriginalExtension();
+        $sqlData['hash_name'] = $files->hashName();
+        $sqlData['file_url'] =  $folderName;
+        $files->storeAs($folderName, $files->getClientOriginalName(), 'public');
+        $excelFile =  storage_path('app/public'.$sqlData['file_url'].$sqlData['file_name']);
+
+        $reader = IOFactory::createReader("Xlsx");
+        $spreadsheet = $reader->load($excelFile);
+        $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+
+        $this->langManageService->clearMenu($params);
+
+        $i=0;
+        $sqlParams['excelCodeUp']=$params['excelCodeUp'];
+        foreach ($sheetData as $jbexplode) {
+            if($i > 0){
+                $sqlParams['menu_code'] =  $jbexplode['A'];
+                $sqlParams['lang_kr']   =  $jbexplode['B'];
+                $sqlParams['lang_en']   =  $jbexplode['C'];
+                $sqlParams['lang_ch']   =  $jbexplode['D'];
+                $sqlParams['lang_jp']   =  $jbexplode['E'];
+                $result = $this->langManageService->setMenuInsert($sqlParams);
+            }
+            $i++;
+        }
+
+
+        return redirect('/multilingual/menuManage/'.$params['excelCodeUp'])->with('message', 'Success!.');
+        //if($result){
+        //    $rData['result']="SUCCESS";
+        //}else{
+        //    $rData['result']="FAIL";
+        //}
+        //return json_encode($rData);
+
+    }
+    public function menuDownloadExcel(){
+
+        $params = $this->request->input();
+        $params['siteCode'] = $params['siteCode'] ?? '01';
+
+        if($params['siteCode'] =="01"){
+            $menuList = $this->langManageService->getByBeatMenuList($params);
+            $params['fileName'] ="바이비츠".date("YmdHms").".xls";
+        }elseif($params['siteCode'] =="02"){
+            $menuList = $this->langManageService->getBeatSomeoneMenuList($params);
+            $params['fileName'] ="비트썸원".date("YmdHms").".xls";
+        }
+
+
+
+        return view('multilingual.menuExcel',[
+            'params' => $params
+            ,'menuList' => $menuList
+        ]);
+
     }
 
     public function setMenuManage(){

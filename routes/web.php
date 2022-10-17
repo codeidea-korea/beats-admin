@@ -8,6 +8,9 @@ use App\Http\Controllers\MultilingualController;
 use App\Http\Controllers\MainManageController;
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\SoundSourceController;
+use App\Http\Controllers\FeedController;
+use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -36,7 +39,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     // dbConnect 및 Service 별도 분리 테스트
-    //Route::get('/test', [HomeController::class, 'test']);
+    Route::get('/test', [HomeController::class, 'test']);
 
     //관리자 관리
     Route::group(['prefix' => 'admin'], function()
@@ -96,6 +99,18 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/terms/update', [BoardController::class, 'TermsUpdate']);
         Route::get('/terms/delete', [BoardController::class, 'TermsDelete']);
         Route::get('/terms/termstype', [BoardController::class, 'getTermsType']);
+
+
+
+
+        //contract 계약서
+        Route::get('/contract/list', [BoardController::class, 'getContractList']);
+        Route::get('/contract/write', [BoardController::class, 'getContractWrite']);
+        Route::post('/contract/add', [BoardController::class, 'setContractAdd']);
+        Route::get('/contract/view/{idx}', [BoardController::class, 'getContractView']);
+        Route::post('/contract/delete', [BoardController::class, 'setContractDelete']);
+
+
     });
 
     //다국어설정
@@ -106,6 +121,10 @@ Route::middleware(['auth'])->group(function () {
         Route::post('ajax/langUpdate', [MultilingualController::class, 'setLangUpdate']);
         Route::get('menuManage/{siteCode}', [MultilingualController::class, 'menuManage']);
         Route::post('updateMenuManage', [MultilingualController::class, 'setMenuManage']);
+        Route::get('menuDownloadExcel', [MultilingualController::class, 'menuDownloadExcel']);
+        Route::post('menuUploadExcel', [MultilingualController::class, 'menuUploadExcel']);
+
+
 
     });
 
@@ -116,17 +135,53 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [MemberController::class, 'getMemberList']);
         Route::get('memberList', [MemberController::class, 'getMemberList']);
         Route::get('musicList/{idx}', [MemberController::class, 'getMusicList']);
-        Route::get('/ajax/memberList', [MemberController::class, 'getPointMemberList']);
-        Route::get('/ajax/memberPaging', [MemberController::class, 'getPaging']);
-        Route::get('/ajax/sendPoint', [MemberController::class, 'sendPoint']);
+        Route::get('ajax/memberList', [MemberController::class, 'getPointMemberList']);
+        Route::get('ajax/memberPaging', [MemberController::class, 'getPaging']);
+        Route::get('ajax/sendPoint', [MemberController::class, 'sendPoint']);
+        Route::get('memberView/{idx}', [MemberController::class, 'getMemberView']);
+        Route::post('ajax/memberUpdate', [MemberController::class, 'memberUpdate']);
+        Route::post('ajax/memoInsert', [MemberController::class, 'setMemoInsert']);
+        Route::post('ajax/memoDel', [MemberController::class, 'setMemoDel']);
+        Route::get('ajax/memoList', [MemberController::class, 'getMemoList']);
+
+        // 초대 내역
+        Route::get('inviteList', [MemberController::class, 'getInviteList']);
+
+        // 탈퇴 관리
+        Route::get('withdrawalList', [MemberController::class, 'getWithdrawalList']);
+
+        // 신고 내역
+        Route::get('notifyList', [MemberController::class, 'getNotifyList']);
+
     });
+
+    //콘텐츠 관리
+    Route::group(['prefix' => 'contents'], function()
+    {
+        Route::get('/', [MemberController::class, 'getMemberList']);
+
+        // 음원관리
+        Route::get('soundSourceList', [SoundSourceController::class, 'getSoundSourceList']);
+
+        //피드관리
+        Route::get('feedList', [FeedController::class, 'getFeedList']);
+        Route::get('feedView/{idx}', [FeedController::class, 'getFeedView']);
+        Route::get('feedBeatView/{idx}', [FeedController::class, 'getFeedBeatView']);
+        Route::get('feedCommentView/{idx}', [FeedController::class, 'getFeedCommentView']);
+        Route::post('feedUpdate', [FeedController::class, 'feedUpdate']);
+
+        Route::get('/comment/commentDetail', [FeedController::class, 'getCommentDetail']);
+        Route::get('/comment/commentUpdate', [FeedController::class, 'commentUpdate']);
+    });
+
+
 
     Route::post('ckeditor/upload', [BoardController::class, 'upload'])->name('ckeditor.upload');
 });
 
-Route::get('/pageSample', function () {
-    return view('pageSample');
-});
+//Route::get('/file-import',[UserController::class,'importView'])->name('import-view');
+//Route::post('/import',[UserController::class,'import'])->name('import');
+//Route::get('/export-users',[UserController::class,'exportUsers'])->name('export-users');
 
 
 /*------------------------------------------

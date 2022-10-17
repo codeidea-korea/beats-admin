@@ -16,4 +16,13 @@ interface BoardServiceInterface
     public function BoardDelete($params);
 
     public function upload($params);
+
+    public function getContractList($params);
+
+    public function getContractTotal($params);
+
+    public function setContractAdd($params);
+
+    public function getContractView($idx);
+
 }

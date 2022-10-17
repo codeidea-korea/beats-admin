@@ -18,7 +18,7 @@
 
                 <div class="p-5">
                     <div class="overflow-x-auto">
-                        <form id="termsWriteForm" method="post" action="/service/terms/add" enctype="multipart/form-data">
+                        <form id="termsUpdateForm" method="post" action="/service/terms/add" enctype="multipart/form-data">
                             {{ csrf_field() }}
                             <table class="table table-bordered">
                                 <tr>

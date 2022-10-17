@@ -53,12 +53,14 @@
                                             <th class="whitespace-nowrap text-center bg-primary/10" style="text-align:left;" colspan ='2' >{{$rs->menuname}}</th>
                                         </tr>
                                         <tr>
-                                            <th class="whitespace-nowrap text-center bg-primary/10" style="text-align:left;width:120px;"><input type="checkbox" > {{$rs->menuname}}</th>
+                                            <th class="whitespace-nowrap text-center bg-primary/10" style="text-align:left;width:120px;"><input type="checkbox" id="{{$rs->menucode}}_all" onClick="changeCheck('{{$rs->menucode}}');"> {{$rs->menuname}}</th>
                                             <td>
-                                                <input type="checkbox" name="menuAuthCheck" value="{{$rs->menucode}}_s" @if(strpos($auth_arr,$rs->menucode."_s") !== false) checked @endif > 읽기
-                                                <input type="checkbox" name="menuAuthCheck" value="{{$rs->menucode}}_i" @if(strpos($auth_arr,$rs->menucode."_i") !== false) checked @endif > 등록
-                                                <input type="checkbox" name="menuAuthCheck" value="{{$rs->menucode}}_u" @if(strpos($auth_arr,$rs->menucode."_u") !== false) checked @endif > 수정
-                                                <input type="checkbox" name="menuAuthCheck" value="{{$rs->menucode}}_d" @if(strpos($auth_arr,$rs->menucode."_d") !== false) checked @endif > 삭제
+                                                <input type="checkbox" name="menuAuthCheck" value="{{$rs->menucode}}_s" id="{{$rs->menucode}}_s" @if(strpos($auth_arr,$rs->menucode."_s") !== false) checked @endif > 읽기
+                                                @if($rs->menucode != "AD010000")
+                                                <input type="checkbox" name="menuAuthCheck" value="{{$rs->menucode}}_i" id="{{$rs->menucode}}_i" @if(strpos($auth_arr,$rs->menucode."_i") !== false) checked @endif > 등록
+                                                <input type="checkbox" name="menuAuthCheck" value="{{$rs->menucode}}_u" id="{{$rs->menucode}}_u" @if(strpos($auth_arr,$rs->menucode."_u") !== false) checked @endif > 수정
+                                                <input type="checkbox" name="menuAuthCheck" value="{{$rs->menucode}}_d" id="{{$rs->menucode}}_d" @if(strpos($auth_arr,$rs->menucode."_d") !== false) checked @endif > 삭제
+                                                @endif
                                             </td>
                                         </tr>
                                 @elseif($rs->depth == 1&&$rs->lcnt > 0)
@@ -69,10 +71,14 @@
                                         <tr>
                                             <th class="whitespace-nowrap text-center bg-primary/10" style="text-align:left;width:120px;"><input type="checkbox" id="{{$rs->menucode}}_all" onClick="changeCheck('{{$rs->menucode}}');"> {{$rs->menuname}}</th>
                                             <td>
-                                                <input type="checkbox" name="menuAuthCheck" value="{{$rs->menucode}}_s" @if(strpos($auth_arr,$rs->menucode."_s") !== false) checked @endif > 읽기
-                                                <input type="checkbox" name="menuAuthCheck" value="{{$rs->menucode}}_i" @if(strpos($auth_arr,$rs->menucode."_i") !== false) checked @endif > 등록
-                                                <input type="checkbox" name="menuAuthCheck" value="{{$rs->menucode}}_u" @if(strpos($auth_arr,$rs->menucode."_u") !== false) checked @endif > 수정
-                                                <input type="checkbox" name="menuAuthCheck" value="{{$rs->menucode}}_d" @if(strpos($auth_arr,$rs->menucode."_d") !== false) checked @endif > 삭제
+                                                <input type="checkbox" name="menuAuthCheck" value="{{$rs->menucode}}_s" id="{{$rs->menucode}}_s" @if(strpos($auth_arr,$rs->menucode."_s") !== false) checked @endif > 읽기
+                                                @if($rs->menucode != "AD120200")
+                                                <input type="checkbox" name="menuAuthCheck" value="{{$rs->menucode}}_i" id="{{$rs->menucode}}_i" @if(strpos($auth_arr,$rs->menucode."_i") !== false) checked @endif > 등록
+                                                @endif
+                                                <input type="checkbox" name="menuAuthCheck" value="{{$rs->menucode}}_u" id="{{$rs->menucode}}_u" @if(strpos($auth_arr,$rs->menucode."_u") !== false) checked @endif > 수정
+                                                @if($rs->menucode != "AD120200")
+                                                <input type="checkbox" name="menuAuthCheck" value="{{$rs->menucode}}_d" id="{{$rs->menucode}}_d" @if(strpos($auth_arr,$rs->menucode."_d") !== false) checked @endif > 삭제
+                                                @endif
                                             </td>
                                         </tr>
                                 @endif
@@ -132,108 +138,40 @@
             });
         });
         function changeCheck(code){
-            //$("input:checkbox[name='AD000100_s']").prop("checked", true);
-            //$('#AD000100_ss').prop("checked", true);
 
+            var codeId_s= code+'_s';
+            var codeId_i= code+'_i';
+            var codeId_u= code+'_u';
+            var codeId_d= code+'_d';
 
             if($('#'+code+'_all').is(":checked") == true){
-                var codeName= code+'_s';
+                if(code=='AD010000') {
+                    document.getElementById(codeId_s).checked = true;
+                }else if(code=='AD120200'){
+                    document.getElementById(codeId_s).checked = true;
+                    document.getElementById(codeId_u).checked = true;
+                }else{
+                    document.getElementById(codeId_s).checked = true;
+                    document.getElementById(codeId_i).checked = true;
+                    document.getElementById(codeId_u).checked = true;
+                    document.getElementById(codeId_d).checked = true;
+                }
 
-                $('#'+codeName).is('checked');
-
-                //$("input:checkbox[id='"+code+"_s']").prop("checked",true);
-
-                //$("input:checkbox[name='AD000100_s']").prop("checked", true);
-                //$("input:checkbox[id='AD000100_s']").prop("checked", true);
-                //$("input:checkbox[id='"+code+"_s']").prop("checked", true);
-                //$("input:checkbox[id='"+code+"_i']").prop("checked", true);
-                //$("input:checkbox[id='"+code+"_u']").prop("checked", true);
-                //$("input:checkbox[id='"+code+"_d']").prop("checked", true);
             }else{
-                alert('nop!');
+                if(code=='AD010000'){
+                    document.getElementById(codeId_s).checked = false;
+                }else if(code=='AD120200'){
+                    document.getElementById(codeId_s).checked = false;
+                    document.getElementById(codeId_u).checked = false;
+                }else{
+                    document.getElementById(codeId_s).checked = false;
+                    document.getElementById(codeId_i).checked = false;
+                    document.getElementById(codeId_u).checked = false;
+                    document.getElementById(codeId_d).checked = false;
+                }
+
             }
         }
-     //
-     //   $(".idck").on('click', function(){
-            //
-                 //       $(".idck_y").hide();
-                 //       $(".idck_n").hide();
-                 //       $("#idckYN").val("N");
-                 //       var data = {
-                 //           id:$('input[name=id]').val()
-                 //       };
-                 //       jQuery.ajax({
-                 //           headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                 //           type:"get",
-                 //           dataType:'json',
-                 //           data: data,
-                 //           url: '{{ url('/admin/ajax/adminIdCheck') }}',
-                 //           success: function searchSuccess(data) {
-            //
-                 //               if(data == 1){
-                 //                   alert("중복 있음");
-                 //                   $(".idck_y").hide();
-                 //                   $(".idck_n").show();
-                 //                   $("#idckYN").val("N");
-            //
-                 //               }else{
-                 //                   alert("중복 없음");
-                 //                   $(".idck_y").show();
-                 //                   $(".idck_n").hide();
-                 //                   $("#idckYN").val("Y");
-                 //               }
-                 //           },
-                 //           error: function (e) {
-                 //               console.log('start');
-                 //               console.log(e);
-                 //               alert('로딩 중 오류가 발생 하였습니다.');
-                 //           }
-                 //       });
-            //
-                 //   });
-            //
-            //
-                 //   $(".btn_create").on('click', function(){
-            //
-                 //       var isuse = $('select[name=isuse]').val();
-                 //       var group_code = $('select[name=group_code]').val();
-                 //       var name = $('input[name=name]').val();
-                 //       var id = $('input[name=id]').val();
-                 //       var password = $('input[name=password]').val();
-                 //       var password2 = $('input[name=password2]').val();
-                 //       var phoneno = $('input[name=phoneno]').val();
-                 //       var email = $('input[name=email]').val();
-            //
-                 //       var data = {
-                 //           isuse:isuse
-                 //           ,group_code:group_code
-                 //           ,name:name
-                 //           ,id:id
-                 //           ,password:password
-                 //           ,password2:password2
-                 //           ,phoneno:phoneno
-                 //           ,email:email
-                 //       };
-            //
-                 //       jQuery.ajax({
-                 //           headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                 //           type:"post",
-                 //           dataType:'json',
-                 //           data: data,
-                 //           url: '{{-- url('/admin/ajax/adminAdd') --}}',
-                 //           success: function searchSuccess(data) {
-                 //               if(data.result=="SUCCESS"){
-                 //                   alert('관리자계정이 추가되었습니다.');
-                 //                   location.reload();
-                 //               }else{
-                 //                   alert('로딩 중 오류가 발생 하였습니다. 다시 시도해주세요.');
-                 //               }
-                 //           },
-                 //           error: function (e) {
-                 //               alert('로딩 중 오류가 발생 하였습니다.');
-                 //           }
-                 //       });
-                 //   });
 
     </script>
 @endsection

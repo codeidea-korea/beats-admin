@@ -17,4 +17,30 @@ interface ApiHomeServiceInterface
     // 코드 list
     public function getCodeList($params);
 
+    // 공지사항 list
+    public function getNoticeList($params);
+
+    // 공지사항 view
+    public function getNoticeView($params);
+
+    // 이벤트 list
+    public function getEventList($params);
+
+    // 이벤트 view
+    public function getEventView($params);
+
+    //비트 추가
+    public function beatAdd($params);
+
+    //비트 삭제
+    public function beatDelete($params);
+
+    //메인 팝업
+    public function getPopup($params);
+
+    //약관 샘플 적용날짜 리스트
+    public function getTermsApplyData($params);
+
+    //약관 내용
+    public function getTermsContent($params);
 }

@@ -22,4 +22,12 @@ interface ApiMemberServiceInterface
 
     //약관 리스트
     public function getTerms($params);
+
+
+    //고유 id값 체크
+    public function getUidCheck($tempUid);
+
+    //고유 id값 난수 생성
+    public function getRandStr();
+
 }

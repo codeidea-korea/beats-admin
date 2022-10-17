@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Response;
 use App\Service\MainManageServiceImpl;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Session;
 
 class MainManageController extends Controller
@@ -53,17 +54,17 @@ class MainManageController extends Controller
         $params['page'] = $params['page'] ?? 1;
         $params['limit'] = $params['limit'] ?? 10;
         //왼쪽은 화면에서 보여주기 위한 변수 실제 검색할때는 오른쪽 값이 쓰인다
-        $params['search_contents'] = $params['contents'] ?? '';
+        $params['search_contents'] = $params['s_contents'] ?? '';
         $params['fr_search_text'] = $params['search_text'] ?? '';
-        $params['search_created_at'] = $params['created_at'] ?? '';
-        if($params['search_created_at'] != ''){
+        $params['created_at'] = $params['created_at'] ?? "2022-01-01 - ".date("Y-m-d");
+        if($params['created_at'] != ''){
             $atexplode = explode(' - ',$params['created_at']);
             $params['fr_search_at'] = $atexplode[0];
-            $params['bk_search_at'] = $atexplode[1];
+            $params['bk_search_at'] = date("Y-m-d",strtotime($atexplode[1].' +1 days'));
         }
         $bannerData = $this->adminMainmanageService->getBannerView($params, $banner_code);
         $bannerDataList = $this->adminMainmanageService->getBannerDataList($params, $banner_code);
-        $bannerDataTotal = $this->adminMainmanageService->getBannerDataTotal();
+        $bannerDataTotal = $this->adminMainmanageService->getBannerDataTotal($params, $banner_code);
         $totalCount = $bannerDataTotal->cnt;
         $params['totalCnt'] = $totalCount;
 
@@ -110,13 +111,13 @@ class MainManageController extends Controller
         $params['page'] = $params['page'] ?? 1;
         $params['limit'] = $params['limit'] ?? 10;
         //왼쪽은 화면에서 보여주기 위한 변수 실제 검색할때는 오른쪽 값이 쓰인다
-        $params['search_contents'] = $params['contents'] ?? '';
+        $params['search_contents'] = $params['s_contents'] ?? '';
         $params['fr_search_text'] = $params['search_text'] ?? '';
-        $params['search_created_at'] = $params['created_at'] ?? '';
-        if($params['search_created_at'] != ''){
+        $params['created_at'] = $params['created_at'] ?? "2022-01-01 - ".date("Y-m-d");
+        if($params['created_at'] != ''){
             $atexplode = explode(' - ',$params['created_at']);
             $params['fr_search_at'] = $atexplode[0];
-            $params['bk_search_at'] = $atexplode[1];
+            $params['bk_search_at'] = date("Y-m-d",strtotime($atexplode[1].' +1 days'));
         }
         $bannerdata = $this->adminMainmanageService->SeqChange($params);
 
@@ -130,7 +131,7 @@ class MainManageController extends Controller
 
         $result = "SUCCESS";
 
-        if(!$bannerdata){
+        if($bannerdata == 0){
             $result = "컨텐츠 삭제에 실패하였습니다. 다시 시도해주세요";
         }
 
@@ -148,9 +149,14 @@ class MainManageController extends Controller
         $params['search_type'] = $params['popup_type'] ?? '';
         $params['fr_search_text'] = $params['search_text'] ?? '';
         $params['search_isuse'] = $params['isuse'] ?? '';
-        $params['search_created_at'] = $params['created_at'] ?? '';
+        $params['created_at'] = $params['created_at'] ?? "2022-01-01 - ".date("Y-m-d");
+        if($params['created_at'] != ''){
+            $atexplode = explode(' - ',$params['created_at']);
+            $params['fr_search_at'] = $atexplode[0];
+            $params['bk_search_at'] = date("Y-m-d",strtotime($atexplode[1].' +1 days'));
+        }
         $popupList = $this->adminMainmanageService->getPopupList($params);
-        $popupTotal = $this->adminMainmanageService->getPopupTotal();
+        $popupTotal = $this->adminMainmanageService->getPopupTotal($params);
         $totalCount = $popupTotal->cnt;
         $params['totalCnt'] = $totalCount;
         return view('mainManage.popupList',[
@@ -180,7 +186,7 @@ class MainManageController extends Controller
         $params = $this->request->input();
         $params['menuCode'] = "AD020200";
         $params['type'] = $params['type'] ?? 0;
-        $popupData = $this->adminMainmanageService->getPopupTotal();
+        $popupData = $this->adminMainmanageService->getPopupTotal($params);
 
         return view('mainManage.popupWrite',[
             'popupData' => $popupData

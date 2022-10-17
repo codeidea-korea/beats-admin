@@ -29,4 +29,10 @@ interface LangManageServiceInterface
 
     // ByBeat 메뉴 수정
     public function setByBeatMenuList($params);
+
+    // 조건별 메뉴 clear(삭제)
+    public function clearMenu($params);
+
+    // 조건별 메뉴 등록
+    public function setMenuInsert($params);
 }

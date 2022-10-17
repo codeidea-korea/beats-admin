@@ -13,11 +13,85 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
         parent::__construct();
     }
 
+    public function getMemberData($params){
+        $result = $this->statDB->table('members')
+            ->leftJoin('member_data', 'members.idx', '=', 'member_data.mem_id')
+            ->select(
+                'member_data.u_id',
+                'members.email_id',
+                'member_data.mem_id',
+                'member_data.name',
+                'member_data.phone_number',
+                'member_data.email',
+                'member_data.class_h',
+                DB::raw("CASE WHEN member_data.class_h = 1 THEN '활성회원' WHEN member_data.class_h = 0 THEN '휴면회원' ELSE '' END AS class_h_value"),
+                'member_data.class',
+                DB::raw("CASE WHEN member_data.class = 1 THEN '비트썸원회원'
+                WHEN member_data.class = 2 THEN '임시회원'
+                WHEN member_data.class = 3 THEN '통합회원'
+                WHEN member_data.class = 0 THEN '휴면회원'
+                ELSE '' END AS class_value"),
+                'member_data.gubun',
+                DB::raw("CASE WHEN member_data.gubun = 1 THEN '일반'
+                WHEN member_data.gubun = 2 THEN '작곡가'
+                WHEN member_data.gubun = 3 THEN '음원 구매자'
+                WHEN member_data.gubun = 4 THEN '멘토 뮤지션'
+                ELSE '' END AS gubun_value"),
+                'member_data.channel',
+                'member_data.nationality',
+                'member_data.mem_nickname',
+                'member_data.mem_sanctions',
+                'member_data.mem_status',
+                'member_data.mem_regdate',
+                'member_data.mem_point',
+                'member_data.mem_dormancy',
+                'member_data.marketing_consent',
+                'members.last_login_at',
+            )
+            ->where('members.idx', $params['idx'])
+            ->first();
+        return $result;
+    }
+
     public function getMemberTotal($params) {
 
         $result = $this->statDB->table('members')
-            ->select(DB::raw("COUNT(idx) AS cnt"))
-            ->where('isuse', 'Y')
+            ->leftJoin('member_data', 'members.idx', '=', 'member_data.mem_id')
+            ->select(DB::raw("COUNT(members.idx) AS cnt"))
+            ->where('members.isuse', 'Y')
+            ->where('member_data.mem_regdate','>=', $params['sDate'])
+            ->where('member_data.mem_regdate','<=', $params['eDate'])
+            ->when($params['class']!="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.class',$params['class']);
+                });
+            })
+            ->when($params['gubun']!="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.gubun',$params['gubun']);
+                });
+            })
+            ->when($params['channel']!="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.channel',$params['channel']);
+                });
+            })
+            ->when($params['nationality']!="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.nationality',$params['nationality']);
+                });
+            })
+            ->when($params['mem_status']!="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.mem_status',$params['mem_status']);
+                });
+            })
+            ->when($params['sWord']!="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->orWhere('member_data.mem_id', 'like', '%' . $params['sWord'] . '%');
+                    $query->orWhere('member_data.mem_nickname', 'like', '%' . $params['sWord'] . '%');
+                });
+            })
             ->first();
         return $result;
 
@@ -32,9 +106,19 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
                 'member_data.phone_number',
                 'member_data.email',
                 'member_data.class',
-                DB::raw("CASE WHEN member_data.class = '0' THEN '휴면회원' WHEN member_data.class = '1' THEN '임시회원' WHEN member_data.class = '2' THEN '비트썸원회원' WHEN member_data.class = '3' THEN '통합회원' ELSE '미지정' END AS classValue"),
+                DB::raw("CASE
+                WHEN member_data.class = '0' THEN '휴면회원'
+                WHEN member_data.class = '2' THEN '임시회원'
+                WHEN member_data.class = '1' THEN '비트썸원회원'
+                WHEN member_data.class = '3' THEN '통합회원'
+                ELSE '미지정' END AS classValue"),
                 'member_data.gubun',
-                DB::raw("CASE WHEN member_data.gubun = '1' THEN '일반' WHEN member_data.gubun = '2' THEN '작곡가' WHEN member_data.gubun = '3' THEN '음원구매자' WHEN member_data.gubun = '4' THEN '멘토뮤지션' ELSE '미지정' END AS gubunValue"),
+                DB::raw("CASE
+                    WHEN member_data.gubun = '1' THEN '일반'
+                    WHEN member_data.gubun = '2' THEN '작곡가'
+                    WHEN member_data.gubun = '3' THEN '음원구매자'
+                    WHEN member_data.gubun = '4' THEN '멘토뮤지션'
+                    ELSE '미지정' END AS gubunValue"),
                 'member_data.channel',
                 DB::raw("CASE
                     WHEN member_data.channel = 'facebook' THEN '페이스북'
@@ -57,9 +141,41 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
                     WHEN member_data.mem_status = '2' THEN '제재'
                 ELSE ' - ' END AS statusValue"),
                 'member_data.mem_regdate',
-                DB::raw("CASE WHEN member_data.class = '0' THEN '휴면회원' WHEN member_data.class = '1' THEN '임시회원' WHEN member_data.class = '2' THEN '비트썸원회원' WHEN member_data.class = '3' THEN '통합회원' ELSE '미지정' END AS classValue")
             )
             ->where('members.isuse', 'Y')
+            ->where('member_data.mem_regdate','>=', $params['sDate'])
+            ->where('member_data.mem_regdate','<=', $params['eDate'])
+            ->when($params['class']!="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.class',$params['class']);
+                });
+            })
+            ->when($params['gubun']!="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.gubun',$params['gubun']);
+                });
+            })
+            ->when($params['channel']!="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.channel',$params['channel']);
+                });
+            })
+            ->when($params['nationality']!="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.nationality',$params['nationality']);
+                });
+            })
+            ->when($params['mem_status']!="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.mem_status',$params['mem_status']);
+                });
+            })
+            ->when($params['sWord']!="", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->orWhere('member_data.mem_id', 'like', '%' . $params['sWord'] . '%');
+                    $query->orWhere('member_data.mem_nickname', 'like', '%' . $params['sWord'] . '%');
+                });
+            })
             ->orderby('mem_regdate','desc')
             ->skip(($params['page']-1)*$params['limit'])
             ->take($params['limit'])
@@ -110,8 +226,8 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
             ->select(
                 'members.idx',
                 'member_data.mem_id',
-                'member_data.class',
-                'member_data.email',
+                'member_data.channel',
+                'member_data.u_id',
                 'member_data.mem_nickname',
             )
             ->where('members.isuse', 'Y')
@@ -120,9 +236,9 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
                     $query->whereNotIn('members.idx',  $params['send_member_data']);
                 });
             })
-            ->when(isset($params['class']), function($query) use ($params){
+            ->when(isset($params['channel']), function($query) use ($params){
                 return $query->where(function($query) use ($params) {
-                    $query->where('member_data.class',  $params['class']);
+                    $query->where('member_data.channel',  $params['channel']);
                 });
             })
             ->when(isset($params['nationality']), function($query) use ($params){
@@ -132,7 +248,7 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
             })
             ->when(isset($params['search_text']), function($query) use ($params){
                 return $query->where(function($query) use ($params) {
-                    $query->where('member_data.email', 'like' , '%'.$params['search_text'].'%')
+                    $query->where('member_data.u_id', 'like' , '%'.$params['search_text'].'%')
                     ->orWhere('member_data.mem_nickname', 'like' , '%'.$params['search_text'].'%');
                 });
             })
@@ -227,8 +343,8 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
                 });
             })
             ->orderby('crdate','desc')
-            ->skip(($params['page']-1)*$params['limit'])
-            ->take($params['limit'])
+            //->skip(($params['page']-1)*$params['limit'])
+            //->take($params['limit'])
             ->get();
         return $result;
     }
@@ -268,6 +384,15 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
 
     }
 
+    public function setMemberUpdate($params){
+        $result = $this->statDB->table('member_data')
+            ->where('mem_id',$params['mem_id'])
+            ->update([
+                'mem_status' => $params['mem_status']
+            ]);
+        return $result;
+    }
+
     public function bannerSample(){
         $result = $this->statDB->select(
             "SELECT
@@ -290,8 +415,50 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
                         GROUP BY banner_code
                     ) tb2 ON tb1.banner_code = tb2.banner_code
                     "
-            );
+        );
         return $result;
     }
 
+    public function getMemoList($params){
+        $result = $this->statDB->table('adm_memo')
+            ->select(
+                'idx',
+                'mem_id',
+                'adminindex',
+                'crdate',
+                'memo',
+            )
+            ->where('mem_id', $params['mem_id'])
+            ->orderby('idx','desc')
+            ->skip(($params['page']-1)*$params['limit'])
+            ->take($params['limit'])
+            ->get();
+        return $result;
+    }
+
+    public function getMemoTotal($params){
+        $result = $this->statDB->table('adm_memo')
+            ->select(DB::raw("COUNT(idx) AS cnt"))
+            ->where('mem_id', $params['mem_id'])
+            ->first();
+        return $result;
+    }
+
+    public function setMemoInsert($params){
+        $result = $this->statDB->table('adm_memo')
+            ->insert([
+                'mem_id' => $params['mem_id']
+                ,'adminindex' => $params['adminindex']
+                ,'memo' => $params['memo']
+            ]);
+
+        return $result;
+    }
+
+    public function setMemoDelete($params){
+        $result = $this->statDB->table('adm_memo')
+            ->where('idx',$params['idx'])
+            ->delete();
+        return $result;
+    }
 }

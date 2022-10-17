@@ -94,7 +94,7 @@
                                 </div>
                                 <div>
                                     <button class="btn btn-primary w-24 ml-2 btn_create" type="submit">등록</button>
-                                    <button class="btn btn-primary w-24 ml-2" type="button" onClick="alert();">취소</button>
+                                    <button class="btn btn-primary w-24 ml-2" type="button" onClick="javascript:location.href = '/admin/list';">취소</button>
                                 </div>
                             </div>
                         </div>

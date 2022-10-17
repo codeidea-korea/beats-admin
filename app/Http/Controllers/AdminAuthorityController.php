@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Response;
 use App\Service\AdminAuthorityServiceImpl;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Session;
 
 class AdminAuthorityController extends Controller

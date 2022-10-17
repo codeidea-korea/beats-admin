@@ -11,6 +11,18 @@
         <div class="grid grid-cols-12 gap-6 mt-5">
 
             <div class="intro-y col-span-12 lg:col-span-12">
+                <div class="flex w-full box pt-5">
+                    <div class="ml-auto">
+                        <button class="btn btn-primary w-24 ml-2" onClick="excelDownload()">Excel Download</button>
+
+                    </div>
+                    <form id="boardWriteForm" name="boardWriteForm" method="post" action="/multilingual/menuUploadExcel"  enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="excelCodeUp" id="excelCodeUp" >
+                        <input type="button" class="btn btn-primary w-24 ml-2" value="Excel Upload" onClick="validateForm();">
+                        <input type="file" name="excelFile" id="excelFile" onChange="checkFile(this)" >
+                    </form>
+                </div>
                 <div class="intro-y box">
                     <!-- BEGIN: Boxed Tab -->
                     <div id="boxed-tab" class="p-5">
@@ -102,20 +114,54 @@
                 </div>
             </div>
         </div>
+        <input type="hidden" id="excelCode" value="01">
         <script>
+            function checkFile(f){
+                var file = f.files;
+                if(!/\.(xlsx)$/i.test(file[0].name)) alert('xlsx 파일만 선택해 주세요.\n\n현재 파일 : ' + file[0].name);
+                else return;
+                if(/\.(xls)$/i.test(file[0].name)) alert('xls 파일은 xlsx로 변경하여 올려주세요.\n\n현재 파일 : ' + file[0].name);
+                else return;
+                f.outerHTML = f.outerHTML;
+            }
+            function validateForm(){
+
+                var scode = document.getElementById('excelCode').value;
+
+                document.getElementById('excelCodeUp').value = scode;
+                var excelFileValue = document.getElementById('excelFile').value;
+
+                if(excelFileValue==""){
+                    alert('첨부파일이 없습니다.');
+                    return false;
+                }
+                document.forms["boardWriteForm"].submit();
+            }
+
             function chTab(no){
                 if(no==1){
                     $(".tabform2").hide();
                     $(".tabform1").show();
-
+                    document.getElementById('excelCode').value = '01';
                 }else if(no==2){
                     $(".tabform1").hide();
                     $(".tabform2").show();
-
+                    document.getElementById('excelCode').value = '02';
                 }else{
                     alert("스크립트 오류입니다.");
                 }
             }
+
+            function excelDownload(){
+                var scode = document.getElementById('excelCode').value;
+                location.href = '/multilingual/menuDownloadExcel?siteCode='+scode;
+            }
+            $(document).ready(function (e) {
+                @if(session('message'))
+                alert('엑셀 업로드 및 적용이 완료되었습니다.');
+                @endif
+            });
+
         </script>
 @endsection
 

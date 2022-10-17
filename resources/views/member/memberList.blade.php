@@ -7,95 +7,98 @@
     @include('include.topBarINC')
     <!-- END: Top Bar -->
         <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
-            <h2 class="text-lg font-medium mr-auto">관리자 현황</h2>
+            <h2 class="text-lg font-medium mr-auto">회원 현황</h2>
         </div>
 
         <div class="grid grid-cols-12 gap-6 mt-5">
 
             <div class="intro-y col-span-12 lg:col-span-12">
-                <form name="searchForm" id="searchForm" class="form-horizontal" role="form"   method="get" action="{{-- url('/member/memberList') --}}">
 
-                    <input type="hidden" name="page" value="{{$searchData['page']}}">
+
+
                     <div class="intro-y box">
                         <div class="p-5">
                             <div class="overflow-x-auto">
-                                <table class="table table-bordered">
-                                    <tr>
-                                        <th class="bg-primary/10 whitespace-nowrap w-13 text-center">분류</th>
-                                        <td class="whitespace-nowrap">
-                                            <select class="form-select w-13" aria-label=".form-select-lg" name="class">
-                                                <option value="">전체</option>
-                                                <option value="3">통합회원</option>
-                                                <option value="1">임시회원</option>
-                                                <option value="2">비트썸원</option>
-                                                <option value="0">휴면회원</option>
-                                            </select>
-                                            <!--<button class="btn btn-primary w-24">대상 설정</button>-->
-                                        </td>
-                                        <th class="bg-primary/10 whitespace-nowrap w-13 text-center">회원 구분</th>
-                                        <td class="whitespace-nowrap">
-                                            <select class="form-select w-13" aria-label=".form-select-lg" name="gubun">
-                                                <option value="">전체</option>
-                                                <option value="1">일반</option>
-                                                <option value="2">작곡가</option>
-                                                <option value="3">음원 구매자</option>
-                                                <option value="4">멘토 뮤지션</option>
-                                            </select>
-                                            <!--<button class="btn btn-primary w-24">대상 설정</button>-->
-                                        </td>
-                                        <th class="bg-primary/10 whitespace-nowrap w-13 text-center">가입 채널</th>
-                                        <td class="whitespace-nowrap">
-                                            <select class="form-select w-13" aria-label=".form-select-lg" name="channel">
-                                                <option value="">전체</option>
-                                                <option value="facebook">페이스북</option>
-                                                <option value="twitter">트위터</option>
-                                                <option value="google">구글</option>
-                                                <option value="apple">애플</option>
-                                                <option value="naver">네이버</option>
-                                                <option value="kakao">카카오</option>
-                                                <option value="soundcloud">사운드클라우드</option>
-                                                <option value="email">직접가입</option>
-                                            </select>
-                                            <!--<button class="btn btn-primary w-24">대상 설정</button>-->
-                                        </td>
-                                        <th class="bg-primary/10 whitespace-nowrap w-13 text-center">국적</th>
-                                        <td class="whitespace-nowrap">
-                                            <select class="form-select w-13" aria-label=".form-select-lg" name="nationality" style="width:120px;">
-                                                <option value="">전체</option>
-                                                @foreach($nationality as $rs)
-                                                    <option value="{{$rs->codeName}}">{{$rs->codeValue}}</option>
-                                                @endforeach
-                                            </select>
-                                            <!--<button class="btn btn-primary w-24">대상 설정</button>-->
-                                        </td>
-                                        <th class="bg-primary/10 whitespace-nowrap w-13 text-center">상태</th>
-                                        <td class="whitespace-nowrap">
-                                            <select class="form-select w-13" aria-label=".form-select-lg" name="mem_status">
-                                                <option value="">전체</option>
-                                                <option value="0">임시</option>
-                                                <option value="1">정상</option>
-                                                <option value="2">제재</option>
-                                            </select>
-                                            <!--<button class="btn btn-primary w-24">대상 설정</button>-->
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="bg-primary/10 whitespace-nowrap w-13 text-center">검색</th>
-                                        <td class="whitespace-nowrap" colspan="3">
-                                            <input id="regular-form-1" type="text">
-                                        </td>
-                                        <th class="bg-primary/10 whitespace-nowrap w-13 text-center">가입일</th>
-                                        <td class="whitespace-nowrap" colspan="5">
-                                            <div class="sm:ml-auto mt-3 sm:mt-0 relative text-slate-500">
-                                                <i data-lucide="calendar" class="w-4 h-4 z-10 absolute my-auto inset-y-0 ml-3 left-0"></i>
-                                                <input type="text" class="datepicker form-control sm:w-56 box pl-10">
-                                            </div>
-                                        </td>
+                                <form name="searchForm" id="searchForm" class="form-horizontal" role="form"   method="get" action="">
+                                    <input type="hidden" name="page" value="{{$searchData['page']}}">
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <th class="bg-primary/10 whitespace-nowrap w-13 text-center">분류</th>
+                                            <td class="whitespace-nowrap">
+                                                <select class="form-select w-13" aria-label=".form-select-lg" name="class">
+                                                    <option value=""  @if($params['class'] == "")  selected @endif  >전체</option>
+                                                    <option value="3" @if($params['class'] == "3") selected @endif >통합회원</option>
+                                                    <option value="2" @if($params['class'] == "2") selected @endif >임시회원</option>
+                                                    <option value="1" @if($params['class'] == "1") selected @endif >비트썸원</option>
+                                                    <option value="0" @if($params['class'] == "0") selected @endif >휴면회원</option>
+                                                </select>
+                                                <!--<button class="btn btn-primary w-24">대상 설정</button>-->
+                                            </td>
+                                            <th class="bg-primary/10 whitespace-nowrap w-13 text-center">회원 구분</th>
+                                            <td class="whitespace-nowrap">
+                                                <select class="form-select w-13" aria-label=".form-select-lg" name="gubun">
+                                                    <option value=""  @if($params['gubun'] == "")  selected @endif >전체</option>
+                                                    <option value="1" @if($params['gubun'] == "1") selected @endif >일반</option>
+                                                    <option value="2" @if($params['gubun'] == "2") selected @endif >작곡가</option>
+                                                    <option value="3" @if($params['gubun'] == "3") selected @endif >음원 구매자</option>
+                                                    <option value="4" @if($params['gubun'] == "4") selected @endif >멘토 뮤지션</option>
+                                                </select>
+                                                <!--<button class="btn btn-primary w-24">대상 설정</button>-->
+                                            </td>
+                                            <th class="bg-primary/10 whitespace-nowrap w-13 text-center">가입 채널</th>
+                                            <td class="whitespace-nowrap">
+                                                <select class="form-select w-13" aria-label=".form-select-lg" name="channel">
+                                                    <option value=""           @if($params['channel'] == "")  selected @endif >전체</option>
+                                                    <option value="facebook"   @if($params['channel'] == "facebook") selected @endif >페이스북</option>
+                                                    <option value="twitter"    @if($params['channel'] == "twitter") selected @endif >트위터</option>
+                                                    <option value="google"     @if($params['channel'] == "google") selected @endif >구글</option>
+                                                    <option value="apple"      @if($params['channel'] == "apple") selected @endif >애플</option>
+                                                    <option value="naver"      @if($params['channel'] == "naver")  selected @endif >네이버</option>
+                                                    <option value="kakao"      @if($params['channel'] == "kakao") selected @endif >카카오</option>
+                                                    <option value="soundcloud" @if($params['channel'] == "soundcloud") selected @endif >사운드클라우드</option>
+                                                    <option value="email"      @if($params['channel'] == "email") selected @endif >직접가입</option>
+                                                </select>
+                                                <!--<button class="btn btn-primary w-24">대상 설정</button>-->
+                                            </td>
+                                            <th class="bg-primary/10 whitespace-nowrap w-13 text-center">국적</th>
+                                            <td class="whitespace-nowrap">
+                                                <select class="form-select w-13" aria-label=".form-select-lg" name="nationality" style="width:120px;">
+                                                    <option value="" @if($params['nationality'] == "")  selected @endif >전체</option>
+                                                    @foreach($nationality as $rs)
+                                                        <option value="{{$rs->codeName}}" @if($rs->codeName == $params['nationality']) selected @endif >{{$rs->codeValue}}</option>
+                                                    @endforeach
+                                                </select>
+                                                <!--<button class="btn btn-primary w-24">대상 설정</button>-->
+                                            </td>
+                                            <th class="bg-primary/10 whitespace-nowrap w-13 text-center">상태</th>
+                                            <td class="whitespace-nowrap">
+                                                <select class="form-select w-13" aria-label=".form-select-lg" name="mem_status">
+                                                    <option value=""  @if($params['mem_status'] == "")  selected @endif>전체</option>
+                                                    <option value="0" @if($params['mem_status'] == "0") selected @endif>임시</option>
+                                                    <option value="1" @if($params['mem_status'] == "1") selected @endif>정상</option>
+                                                    <option value="2" @if($params['mem_status'] == "2") selected @endif>제재</option>
+                                                </select>
+                                                <!--<button class="btn btn-primary w-24">대상 설정</button>-->
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-primary/10 whitespace-nowrap w-13 text-center">검색</th>
+                                            <td class="whitespace-nowrap" colspan="3">
+                                                <input id="regular-form-1" id="sWord" name="sWord" value="{{$params['sWord']}}" type="text">
+                                            </td>
+                                            <th class="bg-primary/10 whitespace-nowrap w-13 text-center">가입일</th>
+                                            <td class="whitespace-nowrap" colspan="5">
+                                                <div class="sm:ml-auto mt-3 sm:mt-0 relative text-slate-500">
+                                                    <i data-lucide="calendar" class="w-4 h-4 z-10 absolute my-auto inset-y-0 ml-3 left-0"></i>
+                                                    <input type="text" class="datepicker form-control sm:w-56 box pl-10" name="searchDate" id="searchDate" value="{{$params['searchDate']}}">
+                                                </div>
+                                            </td>
 
-                                    </tr>
-                                </table>
+                                        </tr>
+                                    </table>
+                                </form>
                                 <div style="float:right;">
-                                    <button class="btn box flex items-center text-slate-600 border border-slate-400" onClick="javascript:location.href = '/admin/write';">
+                                    <button class="btn box flex items-center text-slate-600 border border-slate-400" onClick="javascript:location.href = '/member/memberList';">
                                         초기화
                                     </button>
                                 </div>
@@ -103,17 +106,17 @@
                                     &nbsp;
                                 </div>
                                 <div style="float:right;">
-                                    <button class="btn box flex items-center text-slate-600 border border-slate-400" onClick="javascript:location.href = '/admin/write';">
+                                    <button class="btn box flex items-center text-slate-600 border border-slate-400 formSearchBtn" >
                                         검색
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </form>
+
                 <div class="intro-y box mt-5">
                     <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60">
-                        <h2 class="font-medium text-base mr-auto text-primary">총 {{number_format($totalCount)}}명의 관리자가 있습니다.</h2>
+                        <h2 class="font-medium text-base mr-auto text-primary">총 {{number_format($totalCount)}}명의 회원이 있습니다.</h2>
                         <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#superlarge-modal-size-preview2" class="btn btn-primary mr-1 mb-2" id="pointOpen">포인트 지급</a>
                     </div>
                     <div class="p-5">
@@ -140,14 +143,41 @@
                                 @php $i=0; @endphp
                                 @foreach($memberList as $rs)
                                     <tr>
-                                        <td class="whitespace-nowrap text-center">{{$totalCount-($i+(($params['page']-1)*10))}}</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->classValue}}</td>
-                                        <td class="whitespace-nowrap text-center"><a href="javascript:alert({{$rs->mem_id}});">{{$rs->gubunValue}}</a></td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->channelValue}}</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->nati}}</td>
-
-                                        <td class="whitespace-nowrap text-center">{{$rs->mem_id}}</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->mem_nickname}}</td>
+                                        <td class="whitespace-nowrap text-center">
+                                            <a href="/member/memberView/{{$rs->mem_id}}">
+                                                {{$totalCount-($i+(($params['page']-1)*10))}}
+                                            </a>
+                                        </td>
+                                        <td class="whitespace-nowrap text-center">
+                                            <a href="/member/memberView/{{$rs->mem_id}}">
+                                                {{$rs->classValue}}
+                                            </a>
+                                        </td>
+                                        <td class="whitespace-nowrap text-center">
+                                            <a href="/member/memberView/{{$rs->mem_id}}">
+                                                {{$rs->gubunValue}}
+                                            </a>
+                                        </td>
+                                        <td class="whitespace-nowrap text-center">
+                                            <a href="/member/memberView/{{$rs->mem_id}}">
+                                                {{$rs->channelValue}}
+                                            </a>
+                                        </td>
+                                        <td class="whitespace-nowrap text-center">
+                                            <a href="/member/memberView/{{$rs->mem_id}}">
+                                                {{$rs->nati}}
+                                            </a>
+                                        </td>
+                                        <td class="whitespace-nowrap text-center">
+                                            <a href="/member/memberView/{{$rs->mem_id}}">
+                                                {{$rs->mem_id}}
+                                            </a>
+                                        </td>
+                                        <td class="whitespace-nowrap text-center">
+                                            <a href="/member/memberView/{{$rs->mem_id}}">
+                                                {{$rs->mem_nickname}}
+                                            </a>
+                                        </td>
                                         <td class="whitespace-nowrap text-center">{{$rs->mem_sanctions}}</td>
                                         <td class="whitespace-nowrap text-center">{{$rs->statusValue}}</td>
                                         <td class="whitespace-nowrap text-center">{{$rs->mem_regdate}}</td>
@@ -222,10 +252,16 @@
                             <div class="flex items-center w-full">
                                 <div class="flex items-center mr-5">
                                     <span class="mr-2">가입 채널</span>
-                                    <select name="point_mem_class" class="form-select w-32" aria-label=".form-select-lg example">
-                                        <option value="0">비트썸원</option>
-                                        <option value="1">바이비트</option>
-                                        <option value="2">통합회원</option>
+                                    <select name="point_channel" class="form-select w-32" aria-label=".form-select-lg example">
+                                        <option value=""           @if($params['channel'] == "")  selected @endif >전체</option>
+                                        <option value="facebook"   @if($params['channel'] == "facebook") selected @endif >페이스북</option>
+                                        <option value="twitter"    @if($params['channel'] == "twitter") selected @endif >트위터</option>
+                                        <option value="google"     @if($params['channel'] == "google") selected @endif >구글</option>
+                                        <option value="apple"      @if($params['channel'] == "apple") selected @endif >애플</option>
+                                        <option value="naver"      @if($params['channel'] == "naver")  selected @endif >네이버</option>
+                                        <option value="kakao"      @if($params['channel'] == "kakao") selected @endif >카카오</option>
+                                        <option value="soundcloud" @if($params['channel'] == "soundcloud") selected @endif >사운드클라우드</option>
+                                        <option value="email"      @if($params['channel'] == "email") selected @endif >직접가입</option>
                                     </select>
                                 </div>
 
@@ -249,7 +285,7 @@
                                     <span class="mr-2">가입일</span>
                                     <div class="sm:ml-auto mt-3 sm:mt-0 relative text-slate-500">
                                         <i data-lucide="calendar" class="w-4 h-4 z-10 absolute my-auto inset-y-0 ml-3 left-0"></i>
-                                        <input name="point_mem_regdate" type="text" class="datepicker form-control sm:w-56 box pl-10" value="">
+                                        <input name="point_mem_regdate" type="text" class="datepicker form-control sm:w-56 box pl-10" value="{{$params['mem_regdate']}}">
                                     </div>
                                 </div>
                             </div>
@@ -283,9 +319,9 @@
                                                         <input id="checkbox-switch-1" class="form-check-input all_check" type="checkbox" value="">
                                                     </div>
                                                 </th>
-                                                <th class="whitespace-nowrap text-cente bg-primary/10">서비스</th>
-                                                <th class="whitespace-nowrap text-center bg-primary/10">회원 구분</th>
-                                                <th class="whitespace-nowrap text-center bg-primary/10">가입 채널</th>
+                                                <th class="whitespace-nowrap text-cente bg-primary/10">가입 채널</th>
+                                                <th class="whitespace-nowrap text-center bg-primary/10">고유 ID</th>
+                                                <th class="whitespace-nowrap text-center bg-primary/10">닉네임</th>
                                             </tr>
                                             </thead>
                                             <tbody id="pointMemList">
@@ -331,9 +367,9 @@
                                                         <input id="checkbox-switch-1" class="form-check-input all_back_check" type="checkbox" value="">
                                                     </div>
                                                 </th>
-                                                <th class="whitespace-nowrap text-cente bg-primary/10">서비스</th>
-                                                <th class="whitespace-nowrap text-center bg-primary/10">회원 구분</th>
-                                                <th class="whitespace-nowrap text-center bg-primary/10">가입 채널</th>
+                                                <th class="whitespace-nowrap text-cente bg-primary/10">가입 채널</th>
+                                                <th class="whitespace-nowrap text-center bg-primary/10">고유 ID</th>
+                                                <th class="whitespace-nowrap text-center bg-primary/10">닉네임</th>
                                             </tr>
                                             </thead>
                                             <tbody id="sendPointMemList">
@@ -361,6 +397,9 @@
     </div>
 
     <script>
+        $(".formSearchBtn").on('click', function(){
+            document.forms["searchForm"].submit();
+        });
         function change(page) {
             $("input[name=page]").val(page);
             //$("form[name=searchForm]").submit();
@@ -368,7 +407,7 @@
         }
         $(function (){
             //$('#superlarge-modal-size-preview2').modal({ keyboard: false, backdrop: 'static' })
-        })
+        });
 
         var ajax_checked = true;
 
@@ -379,7 +418,7 @@
 
         var send_member_data = {};
 
-        var search_mem_class = "";
+        var point_channel = "";
         var search_nationality = "";
         var search_text = "";
         var search_mem_regdate = "";
@@ -403,7 +442,7 @@
         $(document).on('click','#pointOpen',function(){
             if(ajax_checked){
                 ajax_checked = false;
-                $("#pointMemList").html('');
+                $("#pointMemList")[0].innerHTML = '';
                 getPointMemList(g_page);
             }
         });
@@ -416,13 +455,13 @@
 
                 $('input[name="send_check"]:checked').each(function(){
                     var idx = $(this).val();
-                    var mem_class = $(this).data("mem_class");
-                    var email = $(this).data("email");
+                    var channel = $(this).data("channel");
+                    var u_id = $(this).data("u_id");
                     var mem_nickname = $(this).data("mem_nickname");
 
                     send_member_data[idx] = {
-                            mem_class : mem_class,
-                            email : email,
+                            channel : channel,
+                            u_id : u_id,
                             mem_nickname : mem_nickname,
                     };
 
@@ -431,7 +470,7 @@
 
                 getSendPointMemList(g_send_page);
 
-                $("#pointMemList").html('');
+                $("#pointMemList")[0].innerHTML = '';
                 getPointMemList(g_page);
             }
         });
@@ -512,7 +551,7 @@
 
         $(document).on('click',"#searchPointBtn",function(){
 
-            search_mem_class = $('select[name="point_mem_class"]').val();
+            point_channel = $('select[name="point_channel"]').val();
             search_nationality = $('select[name="point_nationality"]').val();
             search_text = $('input[name="point_search_text"]').val();
             search_mem_regdate = $('input[name="point_mem_regdate"]').val();
@@ -521,7 +560,7 @@
         });
 
         function getPointMemList(page){
-            $("#pointMemList").html('');
+            $("#pointMemList")[0].innerHTML = '';
 
             jQuery.ajax({
                 type:"get",
@@ -530,7 +569,7 @@
                     page : page,
                     limit : 10,
                     send_member_data : send_member,
-                    class : search_mem_class,
+                    channel : point_channel,
                     nationality : search_nationality,
                     search_text : search_text,
                     mem_regdate : search_mem_regdate,
@@ -546,21 +585,13 @@
                             var mem_class = "";
                             var gubun = "";
 
-                            if(item.class == 1){
-                                mem_class = "비트썸원";
-                            }else if(item.class == 2){
-                                mem_class = "바이비트";
-                            }else{
-                                mem_class = "통합회원";
-                            }
-
                             ihtml =  '<tr>'
                             ihtml +=    '<td class="whitespace-nowrap text-center">';
                             ihtml +=    '<div class="form-check">';
-                            ihtml +=    '<input name="send_check" id="checkbox-switch-1" class="form-check-input send_check" type="checkbox" value="'+item.idx+'" data-mem_class="'+mem_class+'" data-email="'+item.email+'" data-mem_nickname="'+item.mem_nickname+'">';
+                            ihtml +=    '<input name="send_check" id="checkbox-switch-1" class="form-check-input send_check" type="checkbox" value="'+item.idx+'" data-channel="'+item.channel+'" data-u_id="'+item.u_id+'" data-mem_nickname="'+item.mem_nickname+'">';
                             ihtml +=    '</div>';
-                            ihtml +=    '<td class="whitespace-nowrap text-center">'+mem_class+'</td>';
-                            ihtml +=    '<td class="whitespace-nowrap text-center">'+item.email+'</td>';
+                            ihtml +=    '<td class="whitespace-nowrap text-center">'+item.channel+'</td>';
+                            ihtml +=    '<td class="whitespace-nowrap text-center">'+item.u_id+'</td>';
                             ihtml +=    '<td class="whitespace-nowrap text-center">'+item.mem_nickname+'</td>';
                             ihtml +=    '</tr>';
                             dom.innerHTML = ihtml;
@@ -568,9 +599,9 @@
                             $("#pointMemList").append(dom);
                         });
 
-                        $('#pointMemCnt').html(data.totalCount);
+                        $("#pointMemCnt")[0].innerHTML = data.totalCount;
 
-                        $("#MemAllPaging").html('');
+                        $("#MemAllPaging")[0].innerHTML = '';
 
                         jQuery.ajax({
                             cache: false,
@@ -612,7 +643,7 @@
         }
 
         function getSendPointMemList(page){
-            $('#sendPointMemList').html('');
+            $("#sendPointMemList")[0].innerHTML = '';
             var Listobj = sliceObj(send_member_data, page);
             Object.keys(Listobj).forEach(function(key){
 
@@ -620,8 +651,8 @@
 
                 var ihtml = "";
 
-                var mem_class = Listobj[key].mem_class;
-                var email = Listobj[key].email;
+                var channel = Listobj[key].channel;
+                var u_id = Listobj[key].u_id;
                 var mem_nickname = Listobj[key].mem_nickname;
 
                 ihtml =  '<tr>'
@@ -629,8 +660,8 @@
                 ihtml +=    '<div class="form-check">';
                 ihtml +=    '<input name="send_back_check" id="checkbox-switch-1" class="form-check-input send_back_check" type="checkbox" value="'+key+'">';
                 ihtml +=    '</div>';
-                ihtml +=    '<td class="whitespace-nowrap text-center">'+mem_class+'</td>';
-                ihtml +=    '<td class="whitespace-nowrap text-center">'+email+'</td>';
+                ihtml +=    '<td class="whitespace-nowrap text-center">'+channel+'</td>';
+                ihtml +=    '<td class="whitespace-nowrap text-center">'+u_id+'</td>';
                 ihtml +=    '<td class="whitespace-nowrap text-center">'+mem_nickname+'</td>';
                 ihtml +=    '</tr>';
 
@@ -639,9 +670,9 @@
                 $('#sendPointMemList').append(dom);
             });
 
-            $("#sendPointMemPaging").html('');
+            $("#sendPointMemPaging")[0].innerHTML = '';
 
-            $('#sendPointMemCnt').html(Object.keys(send_member_data).length);
+            $("#sendPointMemCnt")[0].innerHTML = Object.keys(send_member_data).length;
 
             jQuery.ajax({
                 cache: false,
