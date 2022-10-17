@@ -326,4 +326,20 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
             );
         return $result;
     }
+
+    public function getContract(){
+        $result = $this->statDB->table('contract')
+            ->select(
+                'contract.idx',
+                'contract.contents',
+                'contract.version',
+                'contract.adminidx',
+                'contract.crdate',
+                'contract.start_date'
+            )
+            ->where('contract.start_date','<=',\Carbon\Carbon::now())
+            ->orderBy('version','desc')
+            ->first();
+        return $result;
+    }
 }

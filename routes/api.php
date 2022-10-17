@@ -70,6 +70,8 @@ Route::prefix('/v1/')->group(function () {
         Route::put('soundSourceDelAll', [ApiSoundSourceController::class, 'soundSourceDelAll']);
         Route::put('soundFileDelAll', [ApiSoundSourceController::class, 'soundFileDelAll']);
 
+        Route::get('contract', [ApiSoundSourceController::class, 'contract']);
+
 
     });
 
@@ -104,7 +106,6 @@ Route::prefix('/v1/')->group(function () {
 
     Route::get('getTerms', [ApiMemberController::class, 'getTerms']);
 
-    Route::get('test123', [ApiSoundSourceController::class, 'test123']);
 
 
 });
