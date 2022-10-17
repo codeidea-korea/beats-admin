@@ -432,8 +432,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
         if ($adm_popup->popup_file != "" && $file != ""){
             $dir = storage_path('app/public/popup');
             $path = "$dir/$adm_popup->popup_source";
-            if(!File::exists($path)) { return 1; }
-            File::delete($path);
+            if(File::exists($path)) { File::delete($path); }
         }else{
             $params['popup_file'] = $adm_popup->popup_file;
             $params['popup_source'] = $adm_popup->popup_source;
