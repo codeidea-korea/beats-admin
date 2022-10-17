@@ -327,7 +327,7 @@ class ApiMemberController extends Controller
 
                 }else{
                     if(($params['snsKey'] == "" && $params['emailId'] == "") || $params['sign_site'] == "" || $params['name'] == "" || $params['mem_nickname'] == "" || $params['nationality'] == ""
-                    || $params['phone_number'] == "" || $params['marketing_consent'] == ""){
+                    || $params['marketing_consent'] == ""){
 
                         $returnData['code'] = 2;
                         $returnData['message'] = "입력하지 않은 필수 값이 있습니다. 필수 값을 입력해 주세요";
