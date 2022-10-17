@@ -388,7 +388,7 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
     }
 
     public function getGubun($params) {
-        
+
         $result = $this->statDB->table('adm_code')
             ->select(
                 'adm_code.codename',
@@ -405,7 +405,7 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
     }
 
     public function getTermsType($params) {
-        
+
         $result = $this->statDB->table('adm_code')
             ->select(
                 'adm_code.codename',
@@ -536,6 +536,93 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
         }
 
         return response()->json(['fileName' => $file_name, 'uploaded'=> 1, 'url' => $urls]);
+    }
+
+
+    public function getContractList($params) {
+
+
+        $result = $this->statDB->table('contract')
+            ->leftJoin('users', 'contract.adminidx', '=', 'users.idx')
+            ->select(
+                'contract.idx',
+                'users.name',
+                'contract.contents',
+                'contract.version',
+                'contract.adminidx',
+                'contract.crdate',
+                'contract.start_date'
+            )
+            ->where('contract.crdate','>=', $params['sDate'])
+            ->where('contract.crdate','<=', $params['eDate'])
+            ->when(isset($params['search_text']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->orWhere('contract.contents', 'like', '%'.$params['search_text'].'%');
+                    $query->orWhere('contract.version', '=', $params['search_text']);
+                });
+            })
+            ->orderby('contract.crdate','desc')
+            ->skip(($params['page']-1)*$params['limit'])
+            ->take($params['limit'])
+            ->get();
+        return $result;
+
+    }
+
+    public function getContractTotal($params) {
+
+        $result = $this->statDB->table('contract')
+            ->select(DB::raw("COUNT(idx) AS cnt"))
+            ->where('crdate','>=', $params['sDate'])
+            ->where('crdate','<=', $params['eDate'])
+            ->when(isset($params['search_text']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->orWhere('contents', 'like', '%'.$params['search_text'].'%');
+                    $query->orWhere('version', '=', $params['search_text']);
+                });
+            })
+            ->first();
+        return $result;
+
+    }
+
+    public function setContractAdd($params) {
+
+        $result = $this->statDB->table('contract')
+            ->insert([
+                'contents' => $params['editor1']
+                ,'version' => $params['version']
+                ,'adminidx' => $params['adminidx']
+                ,'start_date' => $params['start_date']
+            ]);
+        return $result;
+
+    }
+
+
+    public function getContractView($idx) {
+
+        $result = $this->statDB->table('contract')
+            ->leftJoin('users', 'contract.adminidx', '=', 'users.idx')
+            ->select(
+                'contract.idx',
+                'users.name',
+                'contract.contents',
+                'contract.version',
+                'contract.adminidx',
+                'contract.crdate',
+                'contract.start_date'
+            )
+            ->where('contract.idx',$idx)
+            ->first();
+        return $result;
+
+    }
+
+    public function setContractDelete($params){
+        $result = $this->statDB->table('contract')->where('idx', $params['idx'])->delete();
+
+        return $result;
     }
 
 }

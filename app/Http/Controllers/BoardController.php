@@ -62,7 +62,7 @@ class BoardController extends Controller
             ,'totalCount' => $totalCount
         ]);
     }
-    
+
     public function getBoardView($bidx)
     {
         $params = $this->request->input();
@@ -158,7 +158,7 @@ class BoardController extends Controller
             ,'totalCount' => $totalCount
         ]);
     }
-    
+
     public function getEventView($bidx)
     {
         $params = $this->request->input();
@@ -351,4 +351,114 @@ class BoardController extends Controller
 
         return $uploaddata;
     }
+
+
+    public function getContractList()
+    {
+        $params = $this->request->input();
+        $params['menuCode'] = "AD100700";
+        $params['gubun'] = $params['gubun'] ?? "02";
+        $params['page'] = $params['page'] ?? 1;
+        $params['limit'] = $params['limit'] ?? 10;
+        $params['search_gubun'] = $params['gubun'] ?? '';
+        $params['fr_search_text'] = $params['search_text'] ?? '';
+        $params['created_at'] = $params['created_at'] ?? "2022-01-01 - ".date("Y-m-d");
+        $tempData = trim(str_replace('-','',$params['created_at']));
+        $params['sDate']=substr($tempData,0,8);
+        $params['eDate']=substr($tempData,8,16);
+        $params['eDate'] = date("Ymd",strtotime($params['eDate'].' +1 days'));
+
+
+        $boardData = $this->adminBoardService->getContractList($params);
+        $boardTotal = $this->adminBoardService->getContractTotal($params);
+        $totalCount = $boardTotal->cnt;
+        $params['totalCnt'] = $totalCount;
+
+        return view('service.contractList',[
+            'boardData' => $boardData
+            ,'params' => $params
+            ,'searchData' => $params
+            ,'totalCount' => $totalCount
+        ]);
+    }
+
+    public function getContractWrite()
+    {
+        $params = $this->request->input();
+        $params['menuCode'] = "AD100700";
+        $params['gubun'] = $params['gubun'] ?? "02";
+        $params['page'] = $params['page'] ?? 1;
+        $params['limit'] = $params['limit'] ?? 10;
+        $params['search_gubun'] = $params['gubun'] ?? '';
+        $params['fr_search_text'] = $params['search_text'] ?? '';
+        $params['created_at'] = $params['created_at'] ?? "2022-01-01 - ".date("Y-m-d");
+        $tempData = trim(str_replace('-','',$params['created_at']));
+        $params['sDate']=substr($tempData,0,8);
+        $params['eDate']=substr($tempData,8,16);
+        $params['eDate'] = date("Ymd",strtotime($params['eDate'].' +1 days'));
+
+
+        $boardData = $this->adminBoardService->getContractList($params);
+        $boardTotal = $this->adminBoardService->getContractTotal($params);
+        $totalCount = $boardTotal->cnt;
+        $params['totalCnt'] = $totalCount;
+
+        return view('service.contractWrite',[
+            'params' => $params
+        ]);
+    }
+
+    public function setContractAdd(){
+
+        $params = $this->request->input();
+
+        $params['adminidx'] = $params['adminidx'] ?? '';
+        $params['version'] = $params['version'] ?? '';
+        $params['editor1'] = $params['editor1'] ?? '';
+
+        if($params['adminidx'] ==""||$params['version']==""||$params['editor1']==""){
+            return redirect()->back()->with('alert', '누락된 정보가 있습니다. \n관리자에게 문의 바랍니다.');
+        }
+
+        $result = $this->adminBoardService->setContractAdd($params);
+
+
+        if($result){
+            return redirect('/service/contract/list')->with('alert', '등록되었습니다.');
+        }else{
+            return redirect()->back()->with('alert', '등록/수정에 실패하였습니다. \n관리자에게 문의 바랍니다.');
+        }
+    }
+
+    public function getContractView($idx){
+
+        $params = $this->request->input();
+        $params['menuCode'] = "AD100700";
+        $data = $this->adminBoardService->getContractView($idx);
+
+        return view('service.contractView',[
+            'data' => $data
+            ,'params' => $params
+        ]);
+    }
+
+    public function setContractDelete(){
+        $params = $this->request->input();
+
+        $boardData = $this->adminBoardService->setContractDelete($params);
+
+        $returnData = array(
+            'result' => 'SUCCESS'
+        );
+        if(!$boardData){
+            $returnData['result'] = "약식계약서 삭제에 실패하였습니다. 다시 시도해주세요";
+        }
+
+        return json_encode($returnData);
+    }
+
+
+
+
+
 }

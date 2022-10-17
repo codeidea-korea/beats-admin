@@ -99,6 +99,18 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/terms/update', [BoardController::class, 'TermsUpdate']);
         Route::get('/terms/delete', [BoardController::class, 'TermsDelete']);
         Route::get('/terms/termstype', [BoardController::class, 'getTermsType']);
+
+
+
+
+        //contract 계약서
+        Route::get('/contract/list', [BoardController::class, 'getContractList']);
+        Route::get('/contract/write', [BoardController::class, 'getContractWrite']);
+        Route::post('/contract/add', [BoardController::class, 'setContractAdd']);
+        Route::get('/contract/view/{idx}', [BoardController::class, 'getContractView']);
+        Route::post('/contract/delete', [BoardController::class, 'setContractDelete']);
+
+
     });
 
     //다국어설정
@@ -130,9 +142,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('ajax/memberUpdate', [MemberController::class, 'memberUpdate']);
         Route::post('ajax/memoInsert', [MemberController::class, 'setMemoInsert']);
         Route::post('ajax/memoDel', [MemberController::class, 'setMemoDel']);
-
         Route::get('ajax/memoList', [MemberController::class, 'getMemoList']);
-
 
         // 초대 내역
         Route::get('inviteList', [MemberController::class, 'getInviteList']);
