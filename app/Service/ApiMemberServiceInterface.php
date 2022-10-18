@@ -14,6 +14,12 @@ interface ApiMemberServiceInterface
     // 로그인 토큰 등록
     public function putLogin($params);
 
+    //회원가입 확인
+    public function joinCheck($params);
+
+    //회원가입 이메일 확인
+    public function joinEmailCheck($params);
+
     //로그인 유지 확인
     public function loginCheck($params);
 

@@ -234,6 +234,37 @@ class ApiMemberController extends Controller
         return json_encode($returnData);
     }
 
+    public function joinEmailCheck()
+    {
+        $params = $this->request->input();
+        $params['emailId'] = $params['emailId'] ?? "";
+
+        if($params['emailId'] != ''){
+            $result = $this->apiMemberService->joinEmailCheck($params);
+
+            if(empty($result)){
+                $response = 0;
+            }else{
+                if($result->isuse == 'Y'){
+                    $response = $result->class;
+                }else{
+                    $response = 4;
+                }
+            }
+
+            $returnData['code']=0;
+            $returnData['message']="회원가입 확인";
+            $returnData['response']=$response;
+
+        }else{
+
+            $returnData['code']=1;
+            $returnData['message']="회원가입 확인 실패";
+        }
+
+        return json_encode($returnData);
+    }
+
     public function nicknameCheck()
     {
         $params = $this->request->input();
