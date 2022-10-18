@@ -37,6 +37,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                     $result = $this->statDB->table('music_file')
                         ->insert([
                             'music_head_idx' => $sqlData['idx']
+                            , 'mem_id' => $sqlData['mem_id']
                             , 'file_name' => $sqlData['file_name']
                             , 'hash_name' => $sqlData['hash_name']
                             , 'file_url' => $sqlData['file_url']
@@ -47,6 +48,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                     $result = $this->statDB->table('music_file')
                         ->insert([
                             'music_head_idx' => $sqlData['idx']
+                            , 'mem_id' => $sqlData['mem_id']
                             , 'file_name' => $sqlData['file_name']
                             , 'hash_name' => $sqlData['hash_name']
                             , 'file_url' => $sqlData['file_url']
@@ -159,6 +161,8 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                         ,H.common_composition
                         ,H.crdate
                         ,H.copyright
+                        ,F.mem_id AS fMemId
+                        ,M.mem_nickname AS fNickName
                         ,F.representative_music
                         ,F.file_name
                         ,F.file_no
@@ -170,6 +174,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                         ,H.del_date as HeadDelDate
                     FROM
                     music_head H LEFT JOIN music_file F ON H.idx = F.music_head_idx
+                    LEFT JOIN member_data M ON F.mem_id=M.mem_id
                     WHERE
                     H.mem_id = ".$params['mem_id']."
                     AND F.representative_music = 'Y'
@@ -268,71 +273,51 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
     }
 
     //음원 상세정보 (data)
-    public function setSoundSourceData($params)
-    {
-        $result = $this->statDB->table('music_head')
-            ->select(
-                'idx'
-                ,'mem_id'
-                ,'file_cnt'
-                ,'music_title'
-                ,'play_time'
-                ,'open_status'
-                ,'sales_status'
-                ,'contract'
-                ,'tag'
-                ,'progress_rate'
-                ,'common_composition'
-                ,'crdate'
-                ,'copyright'
-                ,'moddate'
-                ,'file_version'
-            )
-            ->where('idx',$params['music_head_idx'])
-            ->first();
-        return $result;
-    }
 
-    //음원 파일 (data)
     public function getSoundSourceData($params)
     {
         $result = $this->statDB->table('music_head')
+            ->leftJoin('member_data', 'music_head.mem_id', '=', 'member_data.mem_id')
             ->select(
-                'idx'
-                ,'mem_id as  memId'
-                ,'file_cnt as fileCnt'
-                ,'music_title as musicTitle'
-                ,'play_time as playTime'
-                ,'open_status as openStatus'
-                ,'sales_status as salesStatus'
-                ,'contract as contract'
-                ,'tag'
-                ,'progress_rate as progressRate'
-                ,'common_composition as commonComposition'
-                ,'crdate'
-                ,'copyright'
-                ,'moddate'
-                ,'file_version'
+                'music_head.idx'
+                ,'music_head.mem_id as  memId'
+                ,'member_data.name as  memName'
+                ,'music_head.file_cnt as fileCnt'
+                ,'music_head.music_title as musicTitle'
+                ,'music_head.play_time as playTime'
+                ,'music_head.open_status as openStatus'
+                ,'music_head.sales_status as salesStatus'
+                ,'music_head.contract as contract'
+                ,'music_head.tag'
+                ,'music_head.progress_rate as progressRate'
+                ,'music_head.common_composition as commonComposition'
+                ,'music_head.crdate'
+                ,'music_head.copyright'
+                ,'music_head.moddate'
+                ,'music_head.file_version'
             )
-            ->where('idx',$params['music_head_idx'])
+            ->where('music_head.idx',$params['music_head_idx'])
             ->first();
         return $result;
     }
 
+    //음원 파일 정보 (data)
     public function getMusicFileList($params)
     {
         $result = $this->statDB->table('music_file')
+            ->leftJoin('member_data', 'music_file.mem_id', '=', 'member_data.mem_id')
             ->select(
-                'idx',
-                'file_no as fileNo',
-                'file_name as fileName',
-                'hash_name as hashName',
-                'file_url as fileUrl',
-                'crdate as crDate',
-                'version',
-                'representative_music',
-                'del_status',
-                'del_date',
+                'music_file.idx',
+                'music_file.file_no as fileNo',
+                'member_data.mem_nickname as fNickName',
+                'music_file.file_name as fileName',
+                'music_file.hash_name as hashName',
+                'music_file.file_url as fileUrl',
+                'music_file.crdate as crDate',
+                'music_file.version',
+                'music_file.representative_music',
+                'music_file.del_status',
+                'music_file.del_date',
 
             )
             ->where('music_head_idx',$params['music_head_idx'])
@@ -342,6 +327,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
         return $result;
     }
 
+    //공동 작곡가 (data)
     public function getCommonCompositionList($params)
     {
         $result = $this->statDB->table('music_common_composition')
@@ -359,6 +345,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
         return $result;
     }
 
+    //음원데이터 삭제
     public function setSoundSourceDel($params){
         $result = $this->statDB->table('music_head')
             ->whereIn('idx',$params['music_head_idx'])
@@ -370,7 +357,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
             );
         return $result;
     }
-
+    //음원파일 삭제
     public function setMusicFileDel($params){
 
         $result = $this->statDB->table('music_file')
@@ -384,7 +371,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
         return $result;
     }
 
-
+    //음원데이터 전체삭제
     public function setSoundSourceDelAll($params){
         $result = $this->statDB->table('music_head')
             ->where('mem_id',$params['mem_id'])
@@ -397,6 +384,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
         return $result;
     }
 
+    //음원파일 전체삭제
     public function setMusicFileDelAll($params){
 
         $result = $this->statDB->table('music_file')
@@ -410,6 +398,34 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
         return $result;
     }
 
+    //음원데이터 삭제 취소
+    public function setSoundSourceDelCancle($params){
+        $result = $this->statDB->table('music_head')
+            ->whereIn('idx',$params['music_head_idx'])
+            ->update(
+                [
+                    'del_status' => 'N'
+                    ,'del_date' => null
+                ]
+            );
+        return $result;
+    }
+
+    //음원파일 삭제 취소
+    public function setMusicFileDelCancle($params){
+
+        $result = $this->statDB->table('music_file')
+            ->whereIn('idx',$params['music_file_idx'])
+            ->update(
+                [
+                    'del_status' => 'N'
+                    ,'del_date' => null
+                ]
+            );
+        return $result;
+    }
+
+    //간이계약서
     public function getContract(){
         $result = $this->statDB->table('contract')
             ->select(
@@ -425,4 +441,73 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
             ->first();
         return $result;
     }
+
+    // 음원 다음버전의 파일 업로드
+    public function setDataUpLoad($params,$files)
+    {
+        $this->statDB->table('music_head')
+            ->where('idx',$params['music_head_idx'])
+            ->update(
+                [
+                    'file_version' => $params['file_version_next']
+                    ,'del_date' => $params['del_date']
+                    ,'moddate' => \Carbon\Carbon::now()
+                ]
+            );
+        $this->statDB->table('music_file')
+            ->where('music_head_idx',$params['music_head_idx'])
+            ->where('file_version',$params['file_version'])
+            ->update(
+                [
+                    'representative_music' => 'N'
+                ]
+            );
+
+        $sqlData['file_cnt'] = count($files);
+        $sqlData['music_head_idx'] = $params['music_head_idx'];
+        $sqlData['mem_id'] = $params['mem_id'];
+
+        $folderName = '/soundSource/'.date("Y/m/d").'/';
+        if($files != "" && $files !=null){
+            $cnt = count($files);
+            $i=1;
+            foreach($files as $fa){
+
+                $sqlData['file_name'] = $fa->getClientOriginalName();
+                $sqlData['hash_name'] = $fa->hashName();
+                $sqlData['file_url'] =  $folderName;
+                $fa->storeAs($folderName, $fa->hashName(), 'public');
+                if($cnt==$i){
+                    $result = $this->statDB->table('music_file')
+                        ->insert([
+                            'music_head_idx' => $sqlData['idx']
+                            , 'mem_id' => $sqlData['mem_id']
+                            , 'file_name' => $sqlData['file_name']
+                            , 'hash_name' => $sqlData['hash_name']
+                            , 'file_url' => $sqlData['file_url']
+                            , 'version' => $sqlData['file_version_next']
+                            , 'file_no' => $i
+                            , 'representative_music' => 'Y'
+                        ]);
+                }else{
+                    $result = $this->statDB->table('music_file')
+                        ->insert([
+                            'music_head_idx' => $sqlData['idx']
+                            , 'mem_id' => $sqlData['mem_id']
+                            , 'file_name' => $sqlData['file_name']
+                            , 'hash_name' => $sqlData['hash_name']
+                            , 'file_url' => $sqlData['file_url']
+                            , 'version' => $sqlData['file_version_next']
+                            , 'representative_music' => 'N'
+                        ]);
+                }
+
+                $i++;
+            }
+        }
+
+        return $result;
+
+    }
+
 }

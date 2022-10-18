@@ -67,10 +67,15 @@ Route::prefix('/v1/')->group(function () {
         Route::put('soundSourceDel', [ApiSoundSourceController::class, 'soundSourceDel']);
         Route::put('soundFileDel', [ApiSoundSourceController::class, 'soundFileDel']);
 
+        Route::put('soundSourceDelCancel', [ApiSoundSourceController::class, 'soundSourceDelCancel']);
+        Route::put('soundFileDelCancel', [ApiSoundSourceController::class, 'soundFileDelCancel']);
+
         Route::put('soundSourceDelAll', [ApiSoundSourceController::class, 'soundSourceDelAll']);
         Route::put('soundFileDelAll', [ApiSoundSourceController::class, 'soundFileDelAll']);
 
         Route::get('contract', [ApiSoundSourceController::class, 'contract']);
+        // 음원 다음버전의 파일 업로드
+        Route::post('soundFileUpLoad', [ApiSoundSourceController::class, 'soundFileUpLoad']);
 
 
     });

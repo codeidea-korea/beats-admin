@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 interface ApiSoundSourceServiceInterface
 {
 
-    //음원등록 1step
+    //음원파일 업로드
     public function setSoundFileUpdate($params,$files);
 
     //음원데이터 업로드
@@ -34,4 +34,22 @@ interface ApiSoundSourceServiceInterface
 
     //음원파일 삭제
     public function setMusicFileDel($params);
+
+    //음원데이터 전체삭제
+    public function setSoundSourceDelAll($params);
+
+    //음원파일 전체삭제
+    public function setMusicFileDelAll($params);
+
+    //음원데이터 삭제 취소
+    public function setSoundSourceDelCancle($params);
+
+    //음원파일 삭제 취소
+    public function setMusicFileDelCancle($params);
+
+    //간이계약서
+    public function getContract();
+
+    //음원 다음버전의 파일 업로드
+    public function setDataUpLoad($params,$files);
 }

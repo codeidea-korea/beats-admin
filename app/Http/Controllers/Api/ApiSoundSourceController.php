@@ -48,6 +48,33 @@ class ApiSoundSourceController extends Controller
         return json_encode($returnData);
     }
 
+    public function soundFileUpLoad()
+    {
+        $returnData['code'] = -1;
+        $returnData['message'] = "시스템 장애";
+        try{
+            $params = $this->request->input();
+            $params['mem_id'] = $params['mem_id'] ?? 0;
+            $params['music_head_idx'] = $params['music_head_idx'] ?? 0;
+            $params['file_version'] = $params['file_version'] ?? 0;
+            $params['file_version_next'] =  $params['file_version']+1;
+
+            $files = $this->request->file('music_file');
+
+            // 음원파일 헤드 등록
+            $resultData1 = $this->apiSoundSorceService->setDataUpLoad($params,$files);
+
+            $returnData['code']=0;
+            $returnData['message']="음원파일 등록 완료";
+            $returnData['response']['music_head_idx']=$resultData1;
+            $returnData['response']['params']=$params;
+
+        } catch(\Exception $exception){
+            throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+        }
+        return json_encode($returnData);
+    }
+
     public function soundDataUpdate()
     {
 
@@ -294,6 +321,78 @@ class ApiSoundSourceController extends Controller
             throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
         }
         return json_encode($returnData);
+    }
+
+    public function soundSourceDelCancel()
+    {
+        $returnData['code'] = -1;
+        $returnData['message'] = "시스템 장애";
+
+        $params = $this->request->input();
+
+        $params['music_head_idx'] = $params['music_head_idx'] ?? array();
+
+
+        try{
+            if(count($params['music_head_idx']) == 0){
+                $returnData['code'] = -1;
+                $returnData['message'] = "파라메터값 오류";
+            }else{
+
+                $qData['music_head_idx'] = $params['music_head_idx'];
+                $qData['del_date'] = date("Y-m-d H:m:s",strtotime(now().' +10 days'));
+                $resultData = $this->apiSoundSorceService->setSoundSourceDelCancle($qData);
+                if($resultData){
+                    $returnData['code']=0;
+                    $returnData['message']="complete";
+                }else{
+                    $returnData['code']=300;
+                    $returnData['message']="처리된 내용이 없습니다.";
+                }
+
+            }
+
+        } catch(\Exception $exception){
+            throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+        }
+        return json_encode($returnData);
+
+    }
+
+    public function soundFileDelCancle()
+    {
+        $returnData['code'] = -1;
+        $returnData['message'] = "시스템 장애";
+
+        $params = $this->request->input();
+
+        $params['music_file_idx'] = $params['music_file_idx'] ?? array();
+
+
+        try{
+            if($params['music_file_idx'] ==""||$params['music_file_idx'] == null){
+                $returnData['code'] = -1;
+                $returnData['message'] = "파라메터값 오류";
+            }else{
+                $qData['music_file_idx'] = $params['music_file_idx'];
+                $qData['del_date'] = date("Y-m-d H:m:s",strtotime(now().' +10 days'));
+                $resultData = $this->apiSoundSorceService->setMusicFileDelCancle($qData);
+                if($resultData){
+                    $returnData['code']=0;
+                    $returnData['message']="complete";
+                }else{
+                    $returnData['code']=300;
+                    $returnData['message']="처리된 내용이 없습니다.";
+                }
+
+            }
+
+
+        } catch(\Exception $exception){
+            throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+        }
+        return json_encode($returnData);
+
     }
 
 
