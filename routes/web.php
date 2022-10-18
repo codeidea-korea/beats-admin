@@ -138,6 +138,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('ajax/memberList', [MemberController::class, 'getPointMemberList']);
         Route::get('ajax/memberPaging', [MemberController::class, 'getPaging']);
         Route::get('ajax/sendPoint', [MemberController::class, 'sendPoint']);
+        Route::post('ajax/excelupload', [MemberController::class, 'excelUpload']);
         Route::get('memberView/{idx}', [MemberController::class, 'getMemberView']);
         Route::post('ajax/memberUpdate', [MemberController::class, 'memberUpdate']);
         Route::post('ajax/memoInsert', [MemberController::class, 'setMemoInsert']);

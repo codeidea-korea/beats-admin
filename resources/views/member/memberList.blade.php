@@ -291,7 +291,7 @@
                             </div>
 
                             <div class="intro-y col-span-12 flex items-center justify-center sm:justify-end mt-5">
-                                <button class="btn box flex items-center text-slate-600 border border-slate-400">
+                                <button class="btn box flex items-center text-slate-600 border border-slate-400 mr-5" onclick="validateForm()">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="file-text" data-lucide="file-text" class="lucide lucide-file-text hidden sm:block w-4 h-4 mr-2">
                                         <path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"></path>
                                         <polyline points="14 2 14 8 20 8"></polyline>
@@ -300,8 +300,12 @@
                                         <line x1="10" y1="9" x2="8" y2="9"></line>
                                     </svg> Excel Upload
                                 </button>
+                                <form id="excelUpload">
+                                    @csrf
+                                    <input type="file" name="excelFile" id="excelFile" onChange="checkFile(this)" >
+                                </form>
                                 <button class="btn btn-primary w-24 ml-2" id="searchPointBtn">검색</button>
-                                <button class="btn btn-secondary w-24">초기화</button>
+                                <button class="btn btn-secondary w-24 ml-2">초기화</button>
                             </div>
 
                             <div class="flex justify-between items-center mt-5">
@@ -703,8 +707,6 @@
             getSendPointMemList(pointpage)
         }
 
-
-
         function sliceObj(obj, sliceCount){
             let newObj = {};
             for(let i=0 ; i < Object.keys(obj).length ; i++){
@@ -714,5 +716,77 @@
             }
             return newObj
         }
+
+        function checkFile(f){
+            var file = f.files;
+            if(!/\.(xlsx)$/i.test(file[0].name)) alert('xlsx 파일만 선택해 주세요.\n\n현재 파일 : ' + file[0].name);
+            else return;
+            if(/\.(xls)$/i.test(file[0].name)) alert('xls 파일은 xlsx로 변경하여 올려주세요.\n\n현재 파일 : ' + file[0].name);
+            else return;
+            f.outerHTML = f.outerHTML;
+        }
+
+        function validateForm(){
+
+            var excelFileValue = document.getElementById('excelFile').value;
+
+            if(excelFileValue==""){
+                alert('첨부파일이 없습니다.');
+                return false;
+            }
+            
+            var formData = new FormData($("#excelUpload")[0]);
+
+            jQuery.ajax({
+                cache: false,
+                contentType: false,
+                processData: false,
+                type : 'post',
+                dataType:'json',
+                data: formData,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '/member/ajax/excelupload',
+                success: function (data) {
+                    console.log(data);
+                    // if(pagingdata.resultCode=="SUCCESS"){
+                    //     $("#sendPointMemPaging").append(pagingdata.paging);
+                    // }else{
+                    //     console.log(pagingdata.resultMessage);
+                    // }
+                },
+                error: function (e) {
+                    console.log('start');
+                    console.log(e);
+                    //alert('로딩 중 오류가 발생 하였습니다.');
+                }
+            });
+        }
+
+        function chTab(no){
+            if(no==1){
+                $(".tabform2").hide();
+                $(".tabform1").show();
+                document.getElementById('excelCode').value = '01';
+            }else if(no==2){
+                $(".tabform1").hide();
+                $(".tabform2").show();
+                document.getElementById('excelCode').value = '02';
+            }else{
+                alert("스크립트 오류입니다.");
+            }
+        }
+
+        function excelDownload(){
+            var scode = document.getElementById('excelCode').value;
+            location.href = '/multilingual/menuDownloadExcel?siteCode='+scode;
+        }
+
+        $(document).ready(function (e) {
+            @if(session('message'))
+            alert('엑셀 업로드 및 적용이 완료되었습니다.');
+            @endif
+        });
     </script>
 @endsection

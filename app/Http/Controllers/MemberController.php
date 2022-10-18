@@ -6,6 +6,8 @@ use App\Service\MemberServiceImpl;
 use App\Service\ApiHomeServiceImpl;
 use App\Service\ApiSoundSourceServiceImpl;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Concerns\CgsUserPointImport;
 
 use Response;
 use Illuminate\Http\Request;
@@ -373,10 +375,27 @@ class MemberController extends Controller
         return json_encode($rData);
     }
 
+    public function excelUpload(){
 
+        $params = $this->request->input();
+        $folderName = '/excel/'.date("Y/m/d").'/';
+        $files = $this->request->file('excelFile');
 
+        $sqlData['file_name'] = $files->getClientOriginalName();
+        $sqlData['ext'] = $files->getClientOriginalExtension();
+        $sqlData['hash_name'] = $files->hashName();
+        $sqlData['file_url'] =  $folderName;
+        $files->storeAs($folderName, $files->getClientOriginalName(), 'public');
+        $path =  storage_path('app/public'.$sqlData['file_url'].$sqlData['file_name']);
+        $params['excel'] = Excel::toArray(new CgsUserPointImport, $path)[0];
+        //$result = $this->memberService->setMemoDelete($data);
 
+        // if($result){
+        //     $rData['result']="SUCCESS";
+        // }else{
+        //     $rData['result']="FAIL";
+        // }
 
-
-
+        return json_encode($path);
+    }
 }
