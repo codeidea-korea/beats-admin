@@ -90,6 +90,8 @@ class ApiSoundSourceController extends Controller
         $params['sales_status'] = $params['sales_status'] ?? '';
         $params['open_status'] = $params['open_status'] ?? '';
         $params['search_text'] = $params['search_text'] ?? '';
+        $params['page'] = $params['page'] ?? '1';
+        $params['limit'] = $params['limit'] ?? '10';
 
         if($params['mem_id']==0){
             $returnData['code'] = 302;
@@ -97,7 +99,7 @@ class ApiSoundSourceController extends Controller
         }else{
             try{
 
-                $resultData = $this->apiSoundSorceService->setSoundSourceList($params);
+                $resultData = $this->apiSoundSorceService->setSoundSourceListPaging($params);
                 $returnData['code']=0;
                 $returnData['message']="complete";
                 $returnData['response']=$resultData;

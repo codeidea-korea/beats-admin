@@ -14,6 +14,8 @@ interface ApiSoundSourceServiceInterface
 
     //음원 정보 업로드 (상세정보)
     public function setSoundDataUpdate($params);
+    //음원 정보 리스트 (list) 페이징
+    public function setSoundSourceListPaging($params);
 
     //음원 정보 리스트 (list)
     public function setSoundSourceList($params);
