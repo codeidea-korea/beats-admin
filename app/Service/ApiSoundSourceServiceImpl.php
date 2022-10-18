@@ -173,7 +173,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                         ,H.common_composition
                         ,H.crdate
                         ,H.copyright
-                        ,F.mem_id AS fMemId
+                        ,H.mem_id AS fMemId
                         ,M.mem_nickname AS fNickName
                         ,F.representative_music
                         ,F.file_name
@@ -186,7 +186,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                         ,H.del_date as HeadDelDate
                     FROM
                     music_head H LEFT JOIN music_file F ON H.idx = F.music_head_idx
-                    LEFT JOIN member_data M ON F.mem_id=M.mem_id
+                    LEFT JOIN member_data M ON H.mem_id=M.mem_id
                     WHERE
                     H.mem_id = ".$params['mem_id']."
                     AND F.representative_music = 'Y'
