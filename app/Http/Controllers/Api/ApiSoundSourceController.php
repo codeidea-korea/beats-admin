@@ -52,6 +52,7 @@ class ApiSoundSourceController extends Controller
     {
         $returnData['code'] = -1;
         $returnData['message'] = "시스템 장애";
+
         try{
             $params = $this->request->input();
             $params['mem_id'] = $params['mem_id'] ?? 0;
@@ -66,7 +67,31 @@ class ApiSoundSourceController extends Controller
 
             $returnData['code']=0;
             $returnData['message']="음원파일 등록 완료";
-            $returnData['response']['music_head_idx']=$resultData1;
+            $returnData['response']['music_head_idx']=$params['music_head_idx'];
+            $returnData['response']['params']=$params;
+
+        } catch(\Exception $exception){
+            throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+        }
+        return json_encode($returnData);
+    }
+
+    public function representativeMusic(){
+        $returnData['code'] = -1;
+        $returnData['message'] = "시스템 장애";
+
+        try{
+            $params = $this->request->input();
+            $params['music_file_idx'] = $params['music_file_idx'] ?? 0;
+            $params['music_head_idx'] = $params['music_head_idx'] ?? 0;
+
+
+            // 음원파일 헤드 등록
+            $this->apiSoundSorceService->setRepresentativeMusic($params);
+
+            $returnData['code']=0;
+            $returnData['message']="음원파일 등록 완료";
+            $returnData['response']['music_head_idx']=$params['music_head_idx'];
             $returnData['response']['params']=$params;
 
         } catch(\Exception $exception){
@@ -119,6 +144,8 @@ class ApiSoundSourceController extends Controller
         $params['search_text'] = $params['search_text'] ?? '';
         $params['page'] = $params['page'] ?? '1';
         $params['limit'] = $params['limit'] ?? '10';
+
+        $params['searchDate'] = $params['searchDate'] ?? "2022-01-01 - ".date("Y-m-d");
 
         if($params['mem_id']==0){
             $returnData['code'] = 302;

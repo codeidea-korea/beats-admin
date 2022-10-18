@@ -71,14 +71,14 @@ class ApiHomeServiceImpl extends DBConnection  implements ApiHomeServiceInterfac
     }
 
     public function getCodeList($params){
-        $result = $this->statDB->table('adm_code')
+        $result = $this->statDB->table('international_code')
             ->select(
-                'codeindex as codeIndex',
-                'codename as codeName',
-                'codevalue as codeValue',
+                'idx as codeIndex',
+                'name_kr as codeName',
+                'international_code2 as codeValue',
+                'international_number as telNo',
             )
-            ->where('parentindex',$params['codeIndex'])
-            ->orderby('codevalue','asc')
+            ->orderby('idx','asc')
             ->get();
         return $result;
 
@@ -103,7 +103,7 @@ class ApiHomeServiceImpl extends DBConnection  implements ApiHomeServiceInterfac
             ->orderby('notice_board.created_at','desc')
             ->orderby('notice_board.idx','desc')
             ->get();
-            
+
             // ->skip(($params['page']-1)*$params['limit'])
             // ->take($params['limit'])
 
@@ -226,7 +226,7 @@ class ApiHomeServiceImpl extends DBConnection  implements ApiHomeServiceInterfac
                 'not_beat' => 1,
             ]);
         }
-        
+
         return $result;
     }
 
@@ -237,7 +237,7 @@ class ApiHomeServiceImpl extends DBConnection  implements ApiHomeServiceInterfac
             ->where('service_idx',$params['service_idx'])
             ->where('service_name',$params['service_name'])
             ->delete();
-        
+
         return $result;
     }
 

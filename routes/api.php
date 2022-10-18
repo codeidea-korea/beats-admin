@@ -77,6 +77,9 @@ Route::prefix('/v1/')->group(function () {
         // 음원 다음버전의 파일 업로드
         Route::post('soundFileUpLoad', [ApiSoundSourceController::class, 'soundFileUpLoad']);
 
+        // 대표음원 지정
+        Route::put('representativeMusic', [ApiSoundSourceController::class, 'representativeMusic']);
+
 
     });
 

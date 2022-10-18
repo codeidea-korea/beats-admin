@@ -106,6 +106,9 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
     //음원 정보 리스트 (list) 페이징
     public function setSoundSourceListPaging($params)
     {
+        //->where('member_data.mem_regdate','>=', $params['sDate'])
+        //->where('member_data.mem_regdate','<=', $params['eDate'])
+
         $_where="";
         //음원상태 및 진행율   (10단위 증가임 이에 select박스 주성 유무 문의)
         if(trim($params['progress_rate'])==""){
@@ -321,7 +324,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
 
             )
             ->where('music_head_idx',$params['music_head_idx'])
-            ->where('version',$params['file_version'])
+            //->where('version',$params['file_version'])
             ->orderby('file_no','asc')
             ->get();
         return $result;
@@ -445,18 +448,19 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
     // 음원 다음버전의 파일 업로드
     public function setDataUpLoad($params,$files)
     {
-        $this->statDB->table('music_head')
+
+        $result = $this->statDB->table('music_head')
             ->where('idx',$params['music_head_idx'])
             ->update(
                 [
                     'file_version' => $params['file_version_next']
-                    ,'del_date' => $params['del_date']
                     ,'moddate' => \Carbon\Carbon::now()
                 ]
             );
-        $this->statDB->table('music_file')
+
+        $result = $this->statDB->table('music_file')
             ->where('music_head_idx',$params['music_head_idx'])
-            ->where('file_version',$params['file_version'])
+            ->where('version',$params['file_version'])
             ->update(
                 [
                     'representative_music' => 'N'
@@ -473,31 +477,35 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
             $i=1;
             foreach($files as $fa){
 
+
                 $sqlData['file_name'] = $fa->getClientOriginalName();
                 $sqlData['hash_name'] = $fa->hashName();
                 $sqlData['file_url'] =  $folderName;
+
                 $fa->storeAs($folderName, $fa->hashName(), 'public');
+
                 if($cnt==$i){
                     $result = $this->statDB->table('music_file')
                         ->insert([
-                            'music_head_idx' => $sqlData['idx']
+                            'music_head_idx' => $sqlData['music_head_idx']
                             , 'mem_id' => $sqlData['mem_id']
                             , 'file_name' => $sqlData['file_name']
                             , 'hash_name' => $sqlData['hash_name']
                             , 'file_url' => $sqlData['file_url']
-                            , 'version' => $sqlData['file_version_next']
+                            , 'version' => $params['file_version_next']
                             , 'file_no' => $i
                             , 'representative_music' => 'Y'
                         ]);
                 }else{
                     $result = $this->statDB->table('music_file')
                         ->insert([
-                            'music_head_idx' => $sqlData['idx']
+                            'music_head_idx' => $sqlData['music_head_idx']
                             , 'mem_id' => $sqlData['mem_id']
                             , 'file_name' => $sqlData['file_name']
                             , 'hash_name' => $sqlData['hash_name']
                             , 'file_url' => $sqlData['file_url']
-                            , 'version' => $sqlData['file_version_next']
+                            , 'version' => $params['file_version_next']
+                            , 'file_no' => $i
                             , 'representative_music' => 'N'
                         ]);
                 }
@@ -508,6 +516,44 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
 
         return $result;
 
+    }
+
+    // 음원 다음버전의 파일 업로드
+    public function setRepresentativeMusic($params)
+    {
+        $this->statDB->table('music_file')
+            ->where('music_head_idx',$params['music_head_idx'])
+            ->update(
+                [
+                    'representative_music' => 'N'
+                ]
+            );
+
+        $this->statDB->table('music_file')
+            ->where('idx',$params['music_file_idx'])
+            ->update(
+                [
+                    'representative_music' => 'Y'
+                ]
+            );
+
+        $resultData = $this->statDB->table('music_file')
+            ->select(
+                'version',
+            )
+            ->where('idx',$params['music_file_idx'])
+            ->first();
+
+
+        $result = $this->statDB->table('music_head')
+            ->where('idx',$params['music_head_idx'])
+            ->update(
+                [
+                    'file_version' => $resultData->version
+                ]
+            );
+
+        return $result;
     }
 
 }
