@@ -244,18 +244,21 @@ class ApiMemberController extends Controller
 
             if(empty($result)){
                 $response = 0;
+                $channel = null;
             }else{
                 if($result->isuse == 'Y'){
                     $response = $result->class;
+                    $channel = $result->channel;
                 }else{
                     $response = 4;
+                    $channel = null;
                 }
             }
 
             $returnData['code']=0;
             $returnData['message']="회원가입 확인";
             $returnData['response']=$response;
-            $returnData['channel']=$result->channel;
+            $returnData['channel']=$channel;
 
         }else{
 
