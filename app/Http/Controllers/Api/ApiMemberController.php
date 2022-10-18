@@ -255,6 +255,7 @@ class ApiMemberController extends Controller
             $returnData['code']=0;
             $returnData['message']="회원가입 확인";
             $returnData['response']=$response;
+            $returnData['channel']=$result->channel;
 
         }else{
 
