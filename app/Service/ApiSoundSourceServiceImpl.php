@@ -106,9 +106,6 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
     //음원 정보 리스트 (list) 페이징
     public function setSoundSourceListPaging($params)
     {
-        //->where('member_data.mem_regdate','>=', $params['sDate'])
-        //->where('member_data.mem_regdate','<=', $params['eDate'])
-
         $_where="";
         //음원상태 및 진행율   (10단위 증가임 이에 select박스 주성 유무 문의)
         if(trim($params['progress_rate'])==""){
@@ -145,6 +142,18 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
             $_where .= "";
         }else{
             $_where .= " AND ( H.tag like '%".$params['search_text']."%' or H.music_title like '%".$params['search_text']."%')";
+        }
+
+        //생성일
+        if(trim($params['sDate'])!=""&&trim($params['eDate'])!=""){
+            $_where .= " AND H.crdate >= ".$params['sDate'];
+            $_where .= " AND H.crdate <= ".$params['eDate'];
+        }
+
+        //진행율
+        if(trim($params['sProgressRate'])!=""&&trim($params['eProgressRate'])!=""){
+            $_where .= " AND H.progress_rate >= ".$params['sProgressRate'];
+            $_where .= " AND H.progress_rate <= ".$params['eProgressRate'];
         }
 
 

@@ -144,8 +144,14 @@ class ApiSoundSourceController extends Controller
         $params['search_text'] = $params['search_text'] ?? '';
         $params['page'] = $params['page'] ?? '1';
         $params['limit'] = $params['limit'] ?? '10';
+        $params['sDate'] = $params['sDate'] ?? '';
+        $params['eDate'] = $params['eDate'] ?? '';
+        if($params['eDate'] !=""){
+            $params['eDate'] = date("Ymd",strtotime($params['eDate'].' +1 days'));
+        }
 
-        $params['searchDate'] = $params['searchDate'] ?? "2022-01-01 - ".date("Y-m-d");
+        $params['sProgressRate'] = $params['sProgressRate'] ?? '';
+        $params['eProgressRate'] = $params['eProgressRate'] ?? '';
 
         if($params['mem_id']==0){
             $returnData['code'] = 302;
