@@ -7,7 +7,7 @@ use App\Service\ApiHomeServiceImpl;
 use App\Service\ApiSoundSourceServiceImpl;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Maatwebsite\Excel\Facades\Excel;
-use Maatwebsite\Excel\Concerns\CgsUserPointImport;
+use App\Imports\UserPoint;
 
 use Response;
 use Illuminate\Http\Request;
@@ -387,7 +387,7 @@ class MemberController extends Controller
         $sqlData['file_url'] =  $folderName;
         $files->storeAs($folderName, $files->getClientOriginalName(), 'public');
         $path =  storage_path('app/public'.$sqlData['file_url'].$sqlData['file_name']);
-        $params['excel'] = Excel::toArray(new CgsUserPointImport, $path)[0];
+        $params['excel'] = Excel::toArray(new UserPoint, $path)[0];
         //$result = $this->memberService->setMemoDelete($data);
 
         // if($result){
@@ -396,6 +396,6 @@ class MemberController extends Controller
         //     $rData['result']="FAIL";
         // }
 
-        return json_encode($path);
+        return json_encode($params['excel']);
     }
 }

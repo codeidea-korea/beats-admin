@@ -782,11 +782,5 @@
             var scode = document.getElementById('excelCode').value;
             location.href = '/multilingual/menuDownloadExcel?siteCode='+scode;
         }
-
-        $(document).ready(function (e) {
-            @if(session('message'))
-            alert('엑셀 업로드 및 적용이 완료되었습니다.');
-            @endif
-        });
     </script>
 @endsection
