@@ -194,12 +194,15 @@ class ApiSoundSourceController extends Controller
 
                 $params['file_version'] = $resultData->file_version;
                 $fileData = $this->apiSoundSorceService->getMusicFileList($params);
-                $tempData=array();
-                foreach($fileData as $rs){
-                    $tempData['version_'.$rs->version][]=$rs;
-                }
-                $returnData['response']['fileData']=$tempData;
 
+                //$tempData=array();
+                //foreach($fileData as $rs){
+                //    $tempData['fileData']['version_'.$rs->version][]=(array)$rs;
+                //}
+                //$returnData['response']=$tempData;
+
+
+                $returnData['response']['fileData']=$fileData;
 
                 if($resultData->commonComposition=="Y"){
                     $ccList = $this->apiSoundSorceService->getCommonCompositionList($params);
@@ -215,6 +218,7 @@ class ApiSoundSourceController extends Controller
                 throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
             }
         }
+
 
         return json_encode($returnData);
     }
