@@ -196,14 +196,10 @@ class ApiSoundSourceController extends Controller
                 $fileData = $this->apiSoundSorceService->getMusicFileList($params);
                 $tempData=array();
                 foreach($fileData as $rs){
-                    $tempData[$rs->version][]=$rs;
+                    $tempData['version_'.$rs->version][]=$rs;
                 }
                 $returnData['response']['fileData']=$tempData;
-                // $tempData=array();
-                // foreach($fileData as $rs){
-                //     $tempData[$rs->version][]=$rs;
-                // }
-                // $returnData['response']['fileData']=$tempData;
+
 
                 if($resultData->commonComposition=="Y"){
                     $ccList = $this->apiSoundSorceService->getCommonCompositionList($params);
