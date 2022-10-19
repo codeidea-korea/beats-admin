@@ -194,7 +194,11 @@ class ApiSoundSourceController extends Controller
 
                 $params['file_version'] = $resultData->file_version;
                 $fileData = $this->apiSoundSorceService->getMusicFileList($params);
-                $returnData['response']['fileData']=$fileData;
+                $tempData=array();
+                foreach($fileData as $rs){
+                    $tempData[$rs->version][]=$rs;
+                }
+                $returnData['response']['fileData']=$tempData;
                 // $tempData=array();
                 // foreach($fileData as $rs){
                 //     $tempData[$rs->version][]=$rs;

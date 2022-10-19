@@ -336,10 +336,10 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                 'music_file.del_date',
 
             )
-            ->where('music_head_idx',$params['music_head_idx'])
+            ->where('music_file.music_head_idx',$params['music_head_idx'])
             //->where('version',$params['file_version'])
             ->orderby('version','desc')
-            ->orderby('file_no','asc')
+            ->orderby('music_file.version','desc')
             ->get();
 
         return $result;
