@@ -198,8 +198,8 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                     AND ((H.del_date IS  NULL AND H.del_status = 'N') OR (H.del_date > NOW() AND H.del_status = 'Y'))
                     AND F.version = H.file_version
                     ".$_where."
-                    ORDER BY idx desc
-                    limit ".(($params['page']-1)*$params['limit']).",".$params['limit']
+                    ORDER BY idx desc"
+                    //limit ".(($params['page']-1)*$params['limit']).",".$params['limit']
         );
 
         return $result;
