@@ -261,7 +261,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
             ->update([
                 'br_title' => $params['up_br_title'], 'contents' => $params['up_contents'], 'contents_url' => $params['up_contents_url'],
                 'banner_file' => $params['banner_file'], 'banner_source' => $params['banner_source'], 'isuse' => $params['up_isuse'],
-                'updated_at' => \Carbon\Carbon::now()
+                'updated_at' => DB::raw('now()')
             ]);
 
         if($result > 0){
