@@ -70,7 +70,7 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
             ->orderby('comment.cm_depth','asc')
             ->orderby('comment.cm_seq','desc')
             ->get();
-            
+
         return $resultData;
 
     }
@@ -90,6 +90,7 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
                 DB::raw("(select count(idx) from beat_data where service_name = 'comment' and service_idx = comment.idx and is_beat = 1) as cm_bit"),
                 'comment.created_at',
                 'comment.del_status',
+                'member_data.mem_id as mem_idx',
                 'member_data.mem_nickname',
             )
             ->where('wr_idx', $params['wr_idx'])
@@ -99,7 +100,7 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
             ->skip(($params['page']-1)*$params['limit'])
             ->take($params['limit'])
             ->get();
-            
+
         return $result;
 
     }
@@ -125,7 +126,7 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
             ->where('dir_cm_idx', $params['cm_idx'])
             ->orderBy('comment.created_at','desc')
             ->get();
-            
+
         return $result;
 
     }
