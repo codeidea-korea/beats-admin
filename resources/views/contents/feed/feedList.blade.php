@@ -24,7 +24,7 @@
                                         <th class="bg-primary/10 whitespace-nowrap w-13 text-center">노출 상태</th>
                                         <td class="whitespace-nowrap">
                                             <select name="wr_open" class="form-select w-13" aria-label=".form-select-lg">
-                                                <option>전체</option>
+                                                <option value="">전체</option>
                                                 <option value="open" @if($params['search_wr_open'] == 'open') selected @endif>노출</option>
                                                 <option value="secret" @if($params['search_wr_open'] == 'secret') selected @endif>비 노출</option>
                                             </select>
@@ -33,7 +33,7 @@
                                         <th class="bg-primary/10 whitespace-nowrap w-13 text-center">구분</th>
                                         <td class="whitespace-nowrap">
                                             <select name="wr_type" class="form-select w-13" aria-label=".form-select-lg">
-                                                <option>전체</option>
+                                                <option value="">전체</option>
                                                 <option value="daliy" @if($params['search_wr_type'] == 'daliy') selected @endif>일상</option>
                                                 <option value="cover" @if($params['search_wr_type'] == 'cover') selected @endif>커버곡</option>
                                                 <option value="self" @if($params['search_wr_type'] == 'self') selected @endif>자작곡</option>
@@ -43,8 +43,11 @@
                                         <th class="bg-primary/10 whitespace-nowrap w-13 text-center">언어</th>
                                         <td class="whitespace-nowrap">
                                             <select name="wr_lng" class="form-select w-13" aria-label=".form-select-lg">
-                                                <option>전체</option>
-                                                <option value="kr" @if($params['search_wr_lng'] == 'kr') selected @endif>한국어</option>
+                                                <option value="">전체</option>
+                                                <option value="한국어" @if($params['search_wr_lng'] == 'kr') selected @endif>한국어</option>
+                                                <option value="English" @if($params['search_wr_lng'] == 'kr') selected @endif>English</option>
+                                                <option value="日本" @if($params['search_wr_lng'] == 'kr') selected @endif>日本</option>
+                                                <option value="中文" @if($params['search_wr_lng'] == 'kr') selected @endif>中文</option>
                                             </select>
                                             <!--<button class="btn btn-primary w-24">대상 설정</button>-->
                                         </td>
@@ -115,7 +118,7 @@
                                             <td class="whitespace-nowrap text-center">@if($rs->wr_open == 'open') 노출 @else 비 노출 @endif</td>
                                             <td class="whitespace-nowrap text-center">@if($rs->wr_type == 'daily') 일상 @elseif($rs->wr_type == 'cover') 커버곡 @else 자작곡 @endif</td>
                                             <td class="whitespace-nowrap text-center">{{$rs->wr_title}}</td>
-                                            <td class="whitespace-nowrap text-center"><a href="/contents/feedView/{{$rs->idx}}">{{$rs->email_id}}</a></td>
+                                            <td class="whitespace-nowrap text-center"><a href="/contents/feedView/{{$rs->idx}}">{{$rs->u_id}}</a></td>
                                             <td class="whitespace-nowrap text-center">{{$rs->wr_lng}}</td>
                                             <td class="whitespace-nowrap text-center">{{$rs->wr_file}}</td>
                                             <td class="whitespace-nowrap text-center">{{$rs->wr_bit}}</td>
@@ -136,7 +139,7 @@
                 <!-- 페이징처리 시작 -->
                 <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center mt-5">
                     <nav class="w-full">
-                        {{-- @include('vendor.pagination.default') --}}
+                        @include('vendor.pagination.default')
                     </nav>
                 </div>
                 <!-- 페이징처리 종료 -->

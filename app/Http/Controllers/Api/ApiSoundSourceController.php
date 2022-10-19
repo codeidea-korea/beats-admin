@@ -41,6 +41,7 @@ class ApiSoundSourceController extends Controller
             $returnData['code']=0;
             $returnData['message']="음원파일 등록 완료";
             $returnData['response']['music_head_idx']=$resultData1['idx'];
+            $returnData['response']['last_file']=$resultData2;
 
         } catch(\Exception $exception){
             throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
@@ -194,6 +195,11 @@ class ApiSoundSourceController extends Controller
                 $params['file_version'] = $resultData->file_version;
                 $fileData = $this->apiSoundSorceService->getMusicFileList($params);
                 $returnData['response']['fileData']=$fileData;
+                // $tempData=array();
+                // foreach($fileData as $rs){
+                //     $tempData[$rs->version][]=$rs;
+                // }
+                // $returnData['response']['fileData']=$tempData;
 
                 if($resultData->commonComposition=="Y"){
                     $ccList = $this->apiSoundSorceService->getCommonCompositionList($params);

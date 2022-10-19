@@ -27,7 +27,7 @@
                                     <button class="nav-link w-full py-2 active" type="button" role="tab" onClick="javascript:location.href = '/contents/feedCommentView/{{$idx}}';">댓글 내역</button>
                                 </li>
                                 <li class="nav-item flex-1" role="presentation">
-                                    <button class="nav-link w-full py-2" type="button" role="tab">신고 내역</button>
+                                    <button class="nav-link w-full py-2" type="button" onClick="alert('서비스 준비중입니다.');">신고 내역</button>
                                 </li>
                             </ul>
                         </div>
@@ -103,11 +103,11 @@
                                     <tbody>
                                     @php $i=0; @endphp
                                     @foreach($feedCommentData as $rs)
-                                        <tr>
+                                        <tr class="@if($rs->cm_main != 1 ) bg-primary/10 @endif">
                                             <td class="whitespace-nowrap text-center">{{$totalCount-($i+(($params['page']-1)*10))}}</td>
                                             <td class="whitespace-nowrap text-center">@if($rs->cm_open == 'open') 노출 @else 비 노출 @endif</td>
                                             <td class="whitespace-nowrap text-center">{{$rs->u_id}}</td>
-                                            <td class="whitespace-nowrap text-center detailOpen" data-idx="{{$rs->idx}}" data-tw-toggle="modal" data-tw-target="#superlarge-modal-size-preview2">{{$rs->cm_content}}</td>
+                                            <td class="whitespace-nowrap text-center detailOpen" data-idx="{{$rs->idx}}" data-tw-toggle="modal" data-tw-target="#superlarge-modal-size-preview2">@if($rs->cm_main != 1 ) 답글 : @endif {{$rs->cm_content}}</td>
                                             <td class="whitespace-nowrap text-center">{{$rs->cm_bit}}</td>
                                             <td class="whitespace-nowrap text-center">{{$rs->created_at}}</td>
                                         </tr>

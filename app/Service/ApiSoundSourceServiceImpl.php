@@ -44,6 +44,10 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                             , 'file_no' => $i
                             , 'representative_music' => 'Y'
                         ]);
+
+                    $last_file['file_name'] = $sqlData['file_name'];
+                    $last_file['hash_name'] = $sqlData['hash_name'];
+                    $last_file['file_url'] = $sqlData['file_url'];
                 }else{
                     $result = $this->statDB->table('music_file')
                         ->insert([
@@ -60,7 +64,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
             }
         }
 
-        return $result;
+        return $last_file;
 
     }
 
@@ -334,8 +338,10 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
             )
             ->where('music_head_idx',$params['music_head_idx'])
             //->where('version',$params['file_version'])
+            ->orderby('version','desc')
             ->orderby('file_no','asc')
             ->get();
+
         return $result;
     }
 

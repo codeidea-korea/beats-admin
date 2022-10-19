@@ -17,7 +17,7 @@ class FeedServiceImpl extends DBConnection  implements FeedServiceInterface
     public function getFeedList($params) {
 
         $result = $this->statDB->table('feed_board')
-            ->leftJoin('members','feed_board.mem_id','=','members.idx')
+            ->leftJoin('member_data','feed_board.mem_id','=','member_data.mem_id')
             ->select(
                 'feed_board.idx',
                 'feed_board.wr_title',
@@ -30,7 +30,7 @@ class FeedServiceImpl extends DBConnection  implements FeedServiceInterface
                 'feed_board.wr_report',
                 'feed_board.created_at',
                 'feed_board.updated_at',
-                'members.email_id'
+                'member_data.u_id'
             )
             ->where('feed_board.del_status','N')
             ->when(isset($params['wr_open']), function($query) use ($params){
@@ -47,7 +47,7 @@ class FeedServiceImpl extends DBConnection  implements FeedServiceInterface
                 return $query->where(function($query) use ($params) {
                     $query->where('feed_board.wr_title', 'like', '%'.$params['search_text'].'%')
                     ->orwhere('feed_board.wr_content', 'like', '%'.$params['search_text'].'%')
-                    ->orwhere('members.email_id', 'like', '%'.$params['search_text'].'%');
+                    ->orwhere('member_data.u_id', 'like', '%'.$params['search_text'].'%');
                 });
             })
             ->when(isset($params['wr_lng']), function($query) use ($params){
@@ -61,6 +61,8 @@ class FeedServiceImpl extends DBConnection  implements FeedServiceInterface
                 });
             })
             ->orderby('feed_board.created_at','desc')
+            ->skip(($params['page']-1)*$params['limit'])
+            ->take($params['limit'])
             ->get();
 
         return $result;
@@ -70,7 +72,8 @@ class FeedServiceImpl extends DBConnection  implements FeedServiceInterface
     public function getFeedTotal($params) {
 
         $result = $this->statDB->table('feed_board')
-            ->select(DB::raw("COUNT(idx) AS cnt"))
+            ->leftJoin('member_data','feed_board.mem_id','=','member_data.mem_id')
+            ->select(DB::raw("COUNT(feed_board.idx) AS cnt"))
             ->where('feed_board.del_status','N')
             ->when(isset($params['wr_open']), function($query) use ($params){
                 return $query->where(function($query) use ($params) {
@@ -86,7 +89,7 @@ class FeedServiceImpl extends DBConnection  implements FeedServiceInterface
                 return $query->where(function($query) use ($params) {
                     $query->where('feed_board.wr_title', 'like', '%'.$params['search_text'].'%')
                     ->orwhere('feed_board.wr_content', 'like', '%'.$params['search_text'].'%')
-                    ->orwhere('members.email_id', 'like', '%'.$params['search_text'].'%');
+                    ->orwhere('member_data.u_id', 'like', '%'.$params['search_text'].'%');
                 });
             })
             ->when(isset($params['wr_lng']), function($query) use ($params){
@@ -209,6 +212,7 @@ class FeedServiceImpl extends DBConnection  implements FeedServiceInterface
                 'comment.cm_open',
                 'member_data.u_id',
                 'comment.cm_content',
+                'comment.cm_main',
                 DB::raw("(select count(idx) from beat_data where service_name = 'comment' and service_idx = comment.idx and is_beat = 1) as cm_bit"),
                 'comment.created_at',
             )

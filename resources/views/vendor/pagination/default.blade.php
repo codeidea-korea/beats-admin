@@ -12,6 +12,8 @@
             $next_block = $now_block * $block_page + 1; // 다음 블록 첫 페이지
             if ($end_page > $total_page) $end_page = $total_page;
             $pagingFunc = $pagingFunc ?? 'change';
+            if($prev_block <= 0) $prev_block = 1;
+            if($next_block > $total_page) $next_block = $total_page;
 
         @endphp
         {{--@if ($now_block > 1 && $current_page <= $total_page )--}}

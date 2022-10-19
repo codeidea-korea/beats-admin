@@ -30,7 +30,7 @@
                                 <button class="nav-link w-full py-2" type="button" role="tab" onClick="javascript:location.href = '/contents/feedCommentView/{{$feedData[0]->idx}}';">댓글 내역</button>
                             </li>
                             <li class="nav-item flex-1" role="presentation">
-                                <button class="nav-link w-full py-2" type="button" role="tab">신고 내역</button>
+                                <button class="nav-link w-full py-2" type="button" onClick="alert('서비스 준비중입니다.');">신고 내역</button>
                             </li>
                         </ul>
                     </div>
@@ -60,7 +60,7 @@
                                 </tr>
                                 <tr>
                                     <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">내용</th>
-                                    <td colspan="3" class="whitespace-nowrap">
+                                    <td colspan="3">
                                         <div class="flex items-center">
                                             @if($feedData[0]->feed_source != null && $feedData[0]->feed_source != '')
                                                 @php 
@@ -77,7 +77,7 @@
                                                 @endif
                                             @endif
                                         </div>
-                                        <div class="mt-3">
+                                        <div class="mt-3" style="word-break:break-all">
                                             {{$feedData[0]->wr_content}}
                                         </div>
                                         @php $i=0; @endphp
@@ -98,7 +98,7 @@
                                                     @endif
                                                 @endif
                                             </div>
-                                            <div class="mt-3">
+                                            <div class="mt-3" style="word-break:break-all">
                                                 {{$rs->feed_content}}
                                             </div>
                                             @php $i++; @endphp

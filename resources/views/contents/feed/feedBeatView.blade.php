@@ -27,7 +27,7 @@
                                     <button class="nav-link w-full py-2" type="button" role="tab" onClick="javascript:location.href = '/contents/feedCommentView/{{$idx}}';">댓글 내역</button>
                                 </li>
                                 <li class="nav-item flex-1" role="presentation">
-                                    <button class="nav-link w-full py-2" type="button" role="tab">신고 내역</button>
+                                    <button class="nav-link w-full py-2" type="button" onClick="alert('서비스 준비중입니다.');">신고 내역</button>
                                 </li>
                             </ul>
                         </div>

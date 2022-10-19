@@ -121,7 +121,7 @@
     <script>
         function change(page) {
             $("input[name=page]").val(page);
-            $("form[name=searchData]").submit();
+            $("form[name=searchData]")[0].submit();
         }
     </script>
 @endsection
