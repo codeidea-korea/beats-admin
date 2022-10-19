@@ -127,7 +127,7 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
             ->where('idx',$params['idx'])
             ->update([
                 'del_status' => 'Y'
-                , 'updated_at' => \Carbon\Carbon::now()
+                , 'updated_at' => DB::raw('now()')
             ]);
 
         return $result;
@@ -172,7 +172,7 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
                 , 'feed_source' => $params['feed_source']
                 , 'feed_file' => $params['feed_file']
                 , 'file_url' => $folderName
-                , 'created_at' => \Carbon\Carbon::now()
+                , 'created_at' => DB::raw('now()')
             ]);
 
         return $result;
@@ -244,7 +244,7 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
                 , 'feed_source' => $params['feed_source']
                 , 'feed_file' => $params['feed_file']
                 , 'file_url' => $params['file_url']
-                , 'updated_at' => \Carbon\Carbon::now()
+                , 'updated_at' => DB::raw('now()')
             ]);
 
         return $result;

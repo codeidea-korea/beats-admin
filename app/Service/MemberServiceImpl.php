@@ -291,7 +291,7 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
             // $point_log = $this->statDB->table('point_log')
             // ->insert([
             //     'increase' => $params['increase'], 'amount' => $params['amount'], 'reason' => $params['reason'],
-            //     'send_mem_id' => $value,'mem_id' => auth()->user()->idx, 'created_at' => \Carbon\Carbon::now(),
+            //     'send_mem_id' => $value,'mem_id' => auth()->user()->idx, 'created_at' => DB::raw('now()'),
             // ]);
         }
 

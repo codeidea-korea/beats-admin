@@ -292,7 +292,7 @@ class FeedServiceImpl extends DBConnection  implements FeedServiceInterface
         $result = $this->statDB->table('feed_board')
             ->where('idx',$params['idx'])
             ->update([
-                'wr_open' => $params['wr_open'], 'updated_at' => \Carbon\Carbon::now(),
+                'wr_open' => $params['wr_open'], 'updated_at' => DB::raw('now()'),
             ]);
 
         if($result > 0){
@@ -330,7 +330,7 @@ class FeedServiceImpl extends DBConnection  implements FeedServiceInterface
         $result = $this->statDB->table('comment')
             ->where('idx',$params['idx'])
             ->update([
-                'cm_open' => $params['cm_open'], 'updated_at' => \Carbon\Carbon::now(),
+                'cm_open' => $params['cm_open'], 'updated_at' => DB::raw('now()'),
             ]);
 
         return $result;

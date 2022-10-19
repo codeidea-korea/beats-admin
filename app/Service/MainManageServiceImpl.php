@@ -219,7 +219,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
             ->insert([
                 'br_title' => $params['br_title'], 'contents' => $params['contents'], 'contents_url' => $params['contents_url'],
                 'banner_file' => $params['banner_file'], 'banner_source' => $params['banner_source'], 'isuse' => $params['isuse'],
-                'banner_code' => $params['banner_code'],'mem_id' => auth()->user()->idx, 'created_at' => \Carbon\Carbon::now(),
+                'banner_code' => $params['banner_code'],'mem_id' => auth()->user()->idx, 'created_at' => DB::raw('now()'),
                 'br_seq' => $seq->br_seq + 100,
             ]);
 
@@ -413,7 +413,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
                 'pp_title' => $params['pp_title'], 'connect_url' => $params['connect_url'], 'connect_type' => $params['connect_type'],
                 'fr_show_date' => $params['fr_show_date'], 'connect_contents' => $params['connect_contents'], 'type' => $params['type'],
                 'bk_show_date' => $params['bk_show_date'],'popup_file' => $params['popup_file'], 'popup_source' => $params['popup_source'],
-                'isuse' => $params['isuse'], 'mem_id' => auth()->user()->idx, 'created_at' => \Carbon\Carbon::now(),
+                'isuse' => $params['isuse'], 'mem_id' => auth()->user()->idx, 'created_at' => DB::raw('now()'),
             ]);
 
         if($result > 0){
@@ -465,7 +465,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
                 'pp_title' => $params['pp_title'], 'connect_url' => $params['connect_url'], 'connect_type' => $params['connect_type'],
                 'fr_show_date' => $params['fr_show_date'], 'connect_contents' => $params['connect_contents'], 'type' => $params['type'],
                 'bk_show_date' => $params['bk_show_date'],'popup_file' => $params['popup_file'], 'popup_source' => $params['popup_source'],
-                'isuse' => $params['isuse'], 'updated_at' => \Carbon\Carbon::now(),
+                'isuse' => $params['isuse'], 'updated_at' => DB::raw('now()'),
             ]);
 
         if($result > 0){

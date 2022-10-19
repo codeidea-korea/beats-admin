@@ -175,7 +175,7 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
                 , 'cm_seq' => $cm_seq
                 , 'cm_content' => $params['cm_content']
                 , 'wr_type' => $params['wr_type']
-                , 'created_at' => \Carbon\Carbon::now()
+                , 'created_at' => DB::raw('now()')
             ]);
 
         return $result;
@@ -189,7 +189,7 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
             ->where('idx', $params['cm_idx'])
             ->update([
                 'cm_content' => $params['cm_content']
-                , 'updated_at' => \Carbon\Carbon::now()
+                , 'updated_at' => DB::raw('now()')
             ]);
 
         return $result;
@@ -202,7 +202,7 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
             ->where('idx', $params['cm_idx'])
             ->update([
                 'del_status' => 'Y'
-                , 'updated_at' => \Carbon\Carbon::now()
+                , 'updated_at' => DB::raw('now()')
             ]);
 
         return $result;

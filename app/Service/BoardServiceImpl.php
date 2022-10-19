@@ -130,7 +130,7 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
         $result = $this->statDB->table('notice_board')
             ->insertGetId([
                 'wr_title' => $params['wr_title'], 'wr_content' => $params['wr_content'], 'wr_open' => $params['wr_open'],
-                'gubun' => $params['gubun'], 'mem_id' => auth()->user()->idx, 'created_at' => \Carbon\Carbon::now(),
+                'gubun' => $params['gubun'], 'mem_id' => auth()->user()->idx, 'created_at' => DB::raw('now()'),
             ]);
 
         return $result;
@@ -143,7 +143,7 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
             ->where('idx',$params['idx'])
             ->update([
                 'wr_title' => $params['wr_title'], 'wr_content' => $params['wr_content'], 'wr_open' => $params['wr_open'],
-                'gubun' => $params['gubun'],'updated_at' => \Carbon\Carbon::now()
+                'gubun' => $params['gubun'],'updated_at' => DB::raw('now()')
             ]);
 
         return $result;
@@ -283,7 +283,7 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
             ->insertGetId([
                 'title' => $params['title'], 'content' => $params['content'], 'open_status' => $params['open_status'],
                 'event_file' => $params['event_file'], 'event_source' => $params['event_source'], 'fr_event_date' => $params['fr_event_date'],
-                'bk_event_date' => $params['bk_event_date'],'mem_id' => auth()->user()->idx, 'created_at' => \Carbon\Carbon::now(),
+                'bk_event_date' => $params['bk_event_date'],'mem_id' => auth()->user()->idx, 'created_at' => DB::raw('now()'),
             ]);
 
         return $result;
@@ -324,7 +324,7 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
             ->update([
                 'title' => $params['title'], 'content' => $params['content'], 'open_status' => $params['open_status'],
                 'event_file' => $params['event_file'], 'event_source' => $params['event_source'], 'fr_event_date' => $params['fr_event_date'],
-                'bk_event_date' => $params['bk_event_date'],'updated_at' => \Carbon\Carbon::now(),
+                'bk_event_date' => $params['bk_event_date'],'updated_at' => DB::raw('now()'),
             ]);
 
         return $result;
@@ -481,7 +481,7 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
         $result = $this->statDB->table('adm_terms')
             ->insertGetId([
                 'gubun' => $params['gubun'], 'terms_type' => $params['terms_type'], 'content' => $params['content'],
-                'version' => $params['version'], 'apply_date' => $params['apply_date_time'], 'mem_id' => auth()->user()->idx, 'created_at' => \Carbon\Carbon::now(),
+                'version' => $params['version'], 'apply_date' => $params['apply_date_time'], 'mem_id' => auth()->user()->idx, 'created_at' => DB::raw('now()'),
             ]);
 
         return $result;
@@ -494,7 +494,7 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
             ->where('idx',$params['idx'])
             ->update([
                 'gubun' => $params['gubun'], 'terms_type' => $params['terms_type'], 'content' => $params['content'],
-                'version' => $params['version'], 'apply_date' => $params['apply_date_time'], 'updated_at' => \Carbon\Carbon::now()
+                'version' => $params['version'], 'apply_date' => $params['apply_date_time'], 'updated_at' => DB::raw('now()')
             ]);
 
         return $result;

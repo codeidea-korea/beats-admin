@@ -101,7 +101,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                     ,'tag' => $params['tag']
                     ,'common_composition' => $params['common_composition']
                     ,'contract' => $params['contract']
-                    ,'moddate' => \Carbon\Carbon::now()
+                    ,'moddate' => DB::raw('now()')
                 ]
             );
         return $result;
@@ -454,7 +454,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                 'contract.crdate',
                 'contract.start_date'
             )
-            ->where('contract.start_date','<=',\Carbon\Carbon::now())
+            ->where('contract.start_date','<=',DB::raw('now()'))
             ->orderBy('version','desc')
             ->first();
         return $result;
@@ -469,7 +469,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
             ->update(
                 [
                     'file_version' => $params['file_version_next']
-                    ,'moddate' => \Carbon\Carbon::now()
+                    ,'moddate' => DB::raw('now()')
                 ]
             );
 
