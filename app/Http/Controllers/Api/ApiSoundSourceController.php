@@ -58,8 +58,8 @@ class ApiSoundSourceController extends Controller
             $params = $this->request->input();
             $params['mem_id'] = $params['mem_id'] ?? 0;
             $params['music_head_idx'] = $params['music_head_idx'] ?? 0;
-            $params['file_version'] = $params['file_version'] ?? 0;
-            $params['file_version_next'] =  $params['file_version']+1;
+            //$params['file_version'] = $params['file_version'] ?? 0;
+            //$params['file_version_next'] =  $params['file_version']+1;
 
             $files = $this->request->file('music_file');
 

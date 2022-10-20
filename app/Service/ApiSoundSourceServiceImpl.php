@@ -464,18 +464,20 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
     public function setDataUpLoad($params,$files)
     {
 
-        $result = $this->statDB->table('music_head')
-            ->where('idx',$params['music_head_idx'])
-            ->update(
-                [
-                    'file_version' => $params['file_version_next']
-                    ,'moddate' => DB::raw('now()')
-                ]
-            );
+        $result = $this->statDB->table('music_file')
+            ->select(
+                DB::raw('max(version) as version_now')
+            )
+            ->where('music_head_idx',$params['music_head_idx'])
+            ->first();
+
+        $version_now = $result->version_now;
+        $version_next = $version_now+1;
+
 
         $result = $this->statDB->table('music_file')
             ->where('music_head_idx',$params['music_head_idx'])
-            ->where('version',$params['file_version'])
+            ->where('version',$version_now)
             ->update(
                 [
                     'representative_music' => 'N'
@@ -507,7 +509,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                             , 'file_name' => $sqlData['file_name']
                             , 'hash_name' => $sqlData['hash_name']
                             , 'file_url' => $sqlData['file_url']
-                            , 'version' => $params['file_version_next']
+                            , 'version' => $version_next
                             , 'file_no' => $i
                             , 'representative_music' => 'Y'
                         ]);
@@ -519,7 +521,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                             , 'file_name' => $sqlData['file_name']
                             , 'hash_name' => $sqlData['hash_name']
                             , 'file_url' => $sqlData['file_url']
-                            , 'version' => $params['file_version_next']
+                            , 'version' => $version_next
                             , 'file_no' => $i
                             , 'representative_music' => 'N'
                         ]);
@@ -527,6 +529,15 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
 
                 $i++;
             }
+
+            $result = $this->statDB->table('music_head')
+                ->where('idx',$params['music_head_idx'])
+                ->update(
+                    [
+                        'file_version' => $version_next
+                        ,'moddate' => DB::raw('now()')
+                    ]
+                );
         }
 
         return $result;
