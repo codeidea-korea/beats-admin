@@ -36,9 +36,9 @@ class ApiCommentController extends Controller
 
             $returnData['code'] = 2;
             $returnData['message'] = "입력하지 않은 필수 값이 있습니다. 필수 값을 입력해 주세요";
-        
+
         }else{
-            
+
             $resultData = $this->apiCommentService->getCommentList($params);
             $total = $this->apiCommentService->getCommentTotal($params);
 
@@ -93,9 +93,9 @@ class ApiCommentController extends Controller
 
             $returnData['code'] = 2;
             $returnData['message'] = "입력하지 않은 필수 값이 있습니다. 필수 값을 입력해 주세요";
-        
+
         }else{
-            
+
             $resultData = $this->apiCommentService->getCommentDataList($params);
             $total = $this->apiCommentService->getCommentTotal($params);
 
@@ -149,9 +149,9 @@ class ApiCommentController extends Controller
 
             $returnData['code'] = 2;
             $returnData['message'] = "입력하지 않은 필수 값이 있습니다. 필수 값을 입력해 주세요";
-        
+
         }else{
-            
+
             $resultData = $this->apiCommentService->getCommentChildList($params);
 
             $i = 0;
@@ -211,7 +211,7 @@ class ApiCommentController extends Controller
 
                 $returnData['code'] = 2;
                 $returnData['message'] = "입력하지 않은 필수 값이 있습니다. 필수 값을 입력해 주세요";
-            
+
             }else{
                 $result = $this->apiCommentService->commentAdd($params);
 
@@ -225,6 +225,53 @@ class ApiCommentController extends Controller
 
         return json_encode($returnData);
     }
+
+    public function commentSoundSourceAdd()
+    {
+
+        $returnData['code'] = -1;
+        $returnData['message'] = "시스템 장애";
+
+        try{
+            $params = $this->request->input();
+            $params['mem_id'] = $params['mem_id'] ?? 0;
+            $params['wr_idx'] = $params['wr_idx'] ?? 0;
+            $params['cm_idx'] = $params['cm_idx'] ?? 0;
+            $params['dir_cm_idx'] = $params['dir_cm_idx'] ?? 0;
+            $params['cm_main'] = $params['cm_main'] ?? 0;
+            $params['cm_depth'] = $params['cm_depth'] ?? 1;
+            $params['cm_content'] = $params['cm_content'] ?? '';
+            $params['wr_type'] = $params['wr_type'] ?? '';
+            $params['version'] = $params['version'] ?? '0';
+
+            $files = $this->request->file('record');
+
+
+            if($params['mem_id'] == 0 || $params['wr_idx'] == 0 || $params['cm_main'] == 0 || $params['cm_content'] == '' || $params['wr_type'] == ''){
+
+                $returnData['code'] = 2;
+                $returnData['message'] = "입력하지 않은 필수 값이 있습니다. 필수 값을 입력해 주세요";
+
+            }else{
+                $resultData1 = $this->apiCommentService->commentAdd($params);
+
+                if(count($files) > 0){
+                    $resultData2 = $this->apiCommentService->setRecordFileUpdate($resultData1,$files);
+                }
+
+                $returnData['code'] = 0;
+                $returnData['message'] = "댓글 등록 완료";
+            }
+
+        } catch(\Exception $exception){
+            throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+        }
+
+        return json_encode($returnData);
+    }
+
+
+
 
     public function commentUpdate()
     {
@@ -241,7 +288,7 @@ class ApiCommentController extends Controller
 
                 $returnData['code'] = 2;
                 $returnData['message'] = "입력하지 않은 필수 값이 있습니다. 필수 값을 입력해 주세요";
-            
+
             }else{
                 $result = $this->apiCommentService->commentUpdate($params);
 
@@ -270,7 +317,7 @@ class ApiCommentController extends Controller
 
                 $returnData['code'] = 2;
                 $returnData['message'] = "입력하지 않은 필수 값이 있습니다. 필수 값을 입력해 주세요";
-            
+
             }else{
                 $result = $this->apiCommentService->commentDelete($params);
 

@@ -14,7 +14,7 @@ interface ApiCommentServiceInterface
 
     //댓글 리스트
     public function getCommentChildList($params);
-    
+
     //댓글등록
     public function commentAdd($params);
 
@@ -23,4 +23,7 @@ interface ApiCommentServiceInterface
 
     //댓글 삭제
     public function commentDelete($params);
+
+
+    public function setRecordFileUpdate($params,$files);
 }

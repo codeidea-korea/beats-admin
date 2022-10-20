@@ -48,6 +48,7 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
 
         $resultData = $this->statDB->table('comment')
             ->leftJoin('member_data', 'comment.mem_id', '=', 'member_data.mem_id')
+            ->leftJoin('record_file', 'comment.idx', '=', 'record_file.comment_idx')
             ->select(
                 'comment.idx',
                 DB::raw('CASE WHEN comment.cm_idx = 0 THEN comment.idx ELSE comment.cm_idx END as sort_idx'),
@@ -64,6 +65,10 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
                 'comment.created_at',
                 'comment.del_status',
                 'member_data.mem_nickname',
+                'record_file.file_name as recordFileName',
+                'record_file.hash_name as recordHashName',
+                'record_file.file_url as recordFileUrl',
+
             )
             ->whereIn('comment.idx', $result3)
             ->orderby('sort_idx','desc')
@@ -172,7 +177,7 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
         }
 
         $result = $this->statDB->table('comment')
-            ->insert([
+            ->insertGetId([
                 'mem_id' => $params['mem_id']
                 , 'wr_idx' => $params['wr_idx']
                 , 'cm_idx' => $params['cm_idx']
@@ -182,10 +187,11 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
                 , 'cm_seq' => $cm_seq
                 , 'cm_content' => $params['cm_content']
                 , 'wr_type' => $params['wr_type']
+                , 'version' => $params['version']
                 , 'created_at' => DB::raw('now()')
             ]);
-
-        return $result;
+        $sqlData['idx']=$result;
+        return $sqlData;
 
     }
 
@@ -213,6 +219,44 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
             ]);
 
         return $result;
+
+    }
+
+    //음원파일 업로드
+    public function setRecordFileUpdate($params,$files)
+    {
+
+        $sqlData['file_cnt'] = count($files);
+        $sqlData['idx'] = $params['idx'];
+
+        $folderName = '/comment/record/'.date("Y/m/d").'/';
+        if($files != "" && $files !=null){
+            $cnt = count($files);
+            $i=1;
+            foreach($files as $fa){
+
+                $sqlData['file_name'] = $fa->getClientOriginalName();
+                $sqlData['hash_name'] = $fa->hashName();
+                $sqlData['file_url'] =  $folderName;
+                $fa->storeAs($folderName, $fa->hashName(), 'public');
+
+                    $result = $this->statDB->table('music_file')
+                        ->insert([
+                            'comment_idx' => $sqlData['idx']
+                            , 'file_name' => $sqlData['file_name']
+                            , 'hash_name' => $sqlData['hash_name']
+                            , 'file_url' => $sqlData['file_url']
+                        ]);
+
+                    $last_file['file_name'] = $sqlData['file_name'];
+                    $last_file['hash_name'] = $sqlData['hash_name'];
+                    $last_file['file_url'] = $sqlData['file_url'];
+
+
+            }
+        }
+
+        return $last_file;
 
     }
 }

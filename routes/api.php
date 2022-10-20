@@ -97,6 +97,7 @@ Route::prefix('/v1/')->group(function () {
         Route::get('getCommentDataList', [ApiCommentController::class, 'getCommentDataList']);
         Route::get('getCommentChildList', [ApiCommentController::class, 'getCommentChildList']);
         Route::post('commentAdd', [ApiCommentController::class, 'commentAdd']);
+        Route::post('commentSoundSourceAdd', [ApiCommentController::class, 'commentSoundSourceAdd']);
         Route::put('commentUpdate', [ApiCommentController::class, 'commentUpdate']);
         Route::put('commentDelete', [ApiCommentController::class, 'commentDelete']);
     });
