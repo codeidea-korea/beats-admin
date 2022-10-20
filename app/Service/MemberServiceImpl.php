@@ -264,6 +264,21 @@ class MemberServiceImpl extends DBConnection  implements MemberServiceInterface
         return $result;
     }
 
+    public function sendPointMember($params){
+        $result = $this->statDB->table('members')
+            ->leftJoin('member_data', 'members.idx', '=', 'member_data.mem_id')
+            ->select(
+                'members.idx',
+                'member_data.channel',
+                'member_data.u_id',
+                'member_data.mem_nickname',
+            )
+            ->where('members.isuse', 'Y')
+            ->whereIn('member_data.u_id',  $params['excel'])
+            ->get();
+        return $result;
+    }
+
     public function sendPoint($params) {
 
         // if($params['increase'] == 0){

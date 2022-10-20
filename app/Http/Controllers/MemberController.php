@@ -387,15 +387,14 @@ class MemberController extends Controller
         $sqlData['file_url'] =  $folderName;
         $files->storeAs($folderName, $files->getClientOriginalName(), 'public');
         $path =  storage_path('app/public'.$sqlData['file_url'].$sqlData['file_name']);
-        $params['excel'] = Excel::toArray(new UserPoint, $path)[0];
-        //$result = $this->memberService->setMemoDelete($data);
+        $excel = Excel::toArray(new UserPoint, $path)[0];
+        $params['excel'] = array();
+        foreach($excel as $rs){
+            array_push($params['excel'],$rs[0]);
+        }
 
-        // if($result){
-        //     $rData['result']="SUCCESS";
-        // }else{
-        //     $rData['result']="FAIL";
-        // }
+        $result = $this->memberService->sendPointMember($params);
 
-        return json_encode($params['excel']);
+        return json_encode($result);
     }
 }

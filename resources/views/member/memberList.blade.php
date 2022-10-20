@@ -749,12 +749,23 @@
                 },
                 url: '/member/ajax/excelupload',
                 success: function (data) {
-                    console.log(data);
-                    // if(pagingdata.resultCode=="SUCCESS"){
-                    //     $("#sendPointMemPaging").append(pagingdata.paging);
-                    // }else{
-                    //     console.log(pagingdata.resultMessage);
-                    // }
+
+                    send_member = [];
+                    send_member_data = {};
+
+                    data.forEach(rs => {
+                        send_member.push(rs.idx);
+                        send_member_data[rs.idx] = {
+                                channel : rs.channel,
+                                u_id : rs.u_id,
+                                mem_nickname : rs.mem_nickname,
+                        };
+                    });
+
+                    getSendPointMemList(1);
+
+                    $("#pointMemList")[0].innerHTML = '';
+                    getPointMemList(1);
                 },
                 error: function (e) {
                     console.log('start');
