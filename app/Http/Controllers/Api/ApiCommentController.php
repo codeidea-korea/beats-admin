@@ -242,7 +242,7 @@ class ApiCommentController extends Controller
             $params['cm_depth'] = $params['cm_depth'] ?? 1;
             $params['cm_content'] = $params['cm_content'] ?? '';
             $params['wr_type'] = $params['wr_type'] ?? '';
-            $params['version'] = $params['version'] ?? '0';
+            $params['music_idx'] = $params['music_idx'] ?? '0';
 
             $files = $this->request->file('record');
 
