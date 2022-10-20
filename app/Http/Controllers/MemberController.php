@@ -393,7 +393,11 @@ class MemberController extends Controller
             array_push($params['excel'],$rs[0]);
         }
 
-        $result = $this->memberService->sendPointMember($params);
+        if($params['excel']){
+            $result = $this->memberService->sendPointMember($params);
+        }else{
+            $result = 'empty';
+        }
 
         return json_encode($result);
     }

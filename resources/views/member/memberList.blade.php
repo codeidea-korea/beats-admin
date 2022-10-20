@@ -291,6 +291,11 @@
                             </div>
 
                             <div class="intro-y col-span-12 flex items-center justify-center sm:justify-end mt-5">
+                                <div class="mr-5">
+                                    <a href="/dist/excel/excel_sample.xlsx" download>
+                                        <button class="btn btn-primary ml-2" onClick="excelDownload()">sample Download</button>
+                                    </a>
+                                </div>
                                 <button class="btn box flex items-center text-slate-600 border border-slate-400 mr-5" onclick="validateForm()">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="file-text" data-lucide="file-text" class="lucide lucide-file-text hidden sm:block w-4 h-4 mr-2">
                                         <path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"></path>
@@ -750,22 +755,28 @@
                 url: '/member/ajax/excelupload',
                 success: function (data) {
 
-                    send_member = [];
-                    send_member_data = {};
+                    if(empty == "empty"){
+                        alert('엑셀이 비어있습니다.');
+                    }else{
+                        send_member = [];
+                        send_member_data = {};
+                        g_send_page = 1;
+                        g_page = 1;
 
-                    data.forEach(rs => {
-                        send_member.push(rs.idx);
-                        send_member_data[rs.idx] = {
-                                channel : rs.channel,
-                                u_id : rs.u_id,
-                                mem_nickname : rs.mem_nickname,
-                        };
-                    });
+                        data.forEach(rs => {
+                            send_member.push(rs.idx);
+                            send_member_data[rs.idx] = {
+                                    channel : rs.channel,
+                                    u_id : rs.u_id,
+                                    mem_nickname : rs.mem_nickname,
+                            };
+                        });
 
-                    getSendPointMemList(1);
+                        getSendPointMemList(g_send_page);
 
-                    $("#pointMemList")[0].innerHTML = '';
-                    getPointMemList(1);
+                        $("#pointMemList")[0].innerHTML = '';
+                        getPointMemList(g_page);
+                    }
                 },
                 error: function (e) {
                     console.log('start');
