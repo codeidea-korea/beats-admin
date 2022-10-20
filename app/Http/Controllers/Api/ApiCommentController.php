@@ -81,6 +81,7 @@ class ApiCommentController extends Controller
 
     public function getCommentDataList()
     {
+        date_default_timezone_set('Asia/Seoul');
         $params = $this->request->input();
 
         $params['type'] = $params['type'] ?? 0;
@@ -95,6 +96,7 @@ class ApiCommentController extends Controller
             $returnData['message'] = "입력하지 않은 필수 값이 있습니다. 필수 값을 입력해 주세요";
 
         }else{
+
 
             $resultData = $this->apiCommentService->getCommentDataList($params);
             $total = $this->apiCommentService->getCommentTotal($params);
@@ -123,7 +125,7 @@ class ApiCommentController extends Controller
                     $result = round($diff/$a) . '년전';
                 }
 
-                $resultData[$i]->created_at = $result;
+                $resultData[$i]->created_at_re = $result;
                 $i++;
             }
 
