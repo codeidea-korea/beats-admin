@@ -79,7 +79,11 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
                 'R.file_url as  recordFileUrl',
 
             )
-            ->where('comment.del_status','N')
+            ->when($params['wr_type']=="soundSource", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('comment.del_status','N');
+                });
+            })
             ->whereIn('comment.idx', $result3)
             ->orderby('sort_idx','desc')
             ->orderby('comment.cm_depth','asc')
@@ -123,7 +127,11 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
                 'R.hash_name as recordHashName',
                 'R.file_url as  recordFileUrl',
             )
-            ->where('comment.del_status','N')
+            ->when($params['wr_type']=="soundSource", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('comment.del_status','N');
+                });
+            })
             ->where('wr_idx', $params['wr_idx'])
             ->where('wr_type', $params['wr_type'])
             ->where('cm_main', 1)
@@ -169,7 +177,11 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
                 'R.hash_name as recordHashName',
                 'R.file_url as  recordFileUrl',
             )
-            ->where('comment.del_status','N')
+            ->when($params['wr_type']=="soundSource", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('comment.del_status','N');
+                });
+            })
             ->where('dir_cm_idx', $params['cm_idx'])
             ->orderBy('comment.created_at','desc')
             ->get();
