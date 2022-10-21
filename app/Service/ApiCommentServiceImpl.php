@@ -207,7 +207,6 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
                 , 'wr_type' => $params['wr_type']
                 , 'music_idx' => $params['music_idx']
                 , 'created_at' => DB::raw('now()')
-                , 'record' => $params['record']
             ]);
         $sqlData['idx']=$result;
         return $sqlData;

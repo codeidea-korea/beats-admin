@@ -208,6 +208,7 @@ class ApiCommentController extends Controller
             $params['cm_depth'] = $params['cm_depth'] ?? 1;
             $params['cm_content'] = $params['cm_content'] ?? '';
             $params['wr_type'] = $params['wr_type'] ?? '';
+            $params['music_idx'] = $params['music_idx'] ?? '0';
 
             if($params['mem_id'] == 0 || $params['wr_idx'] == 0 || $params['cm_main'] == 0 || $params['cm_content'] == '' || $params['wr_type'] == ''){
 
