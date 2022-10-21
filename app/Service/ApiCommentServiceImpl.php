@@ -28,8 +28,12 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
             ->where('wr_type', $params['wr_type'])
             ->where('cm_main', 1)
             ->orderby('cm_seq','desc')
-            ->skip(($params['page']-1)*$params['limit'])
-            ->take($params['limit'])
+            ->when($params['wr_type']!="soundSource", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->skip(($params['page']-1)*$params['limit']);
+                    $query->take($params['limit']);
+                });
+            })
             ->get();
 
             $cm_idx = $result->pluck('idx');
@@ -136,8 +140,13 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
             ->where('wr_type', $params['wr_type'])
             ->where('cm_main', 1)
             ->orderby('cm_seq','desc')
-            ->skip(($params['page']-1)*$params['limit'])
-            ->take($params['limit'])
+            ->when($params['wr_type']!="soundSource", function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->skip(($params['page']-1)*$params['limit']);
+                    $query->take($params['limit']);
+                });
+            })
+
             ->get();
 
         return $result;
