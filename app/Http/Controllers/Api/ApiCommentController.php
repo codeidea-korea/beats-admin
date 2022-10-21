@@ -30,7 +30,7 @@ class ApiCommentController extends Controller
         $params['limit'] = $params['limit'] ?? 10;
         $params['wr_idx'] = $params['wr_idx'] ?? 0;
         $params['wr_type'] = $params['wr_type'] ?? '';
-        $params['mem_id'] = $params['mem_id'] ?? '';
+        $params['mem_id'] = $params['mem_id'] ?? 0;
 
         if($params['wr_idx'] == 0 || $params['wr_type'] == ''){
 
@@ -44,7 +44,7 @@ class ApiCommentController extends Controller
 
             $i = 0;
             foreach($resultData as $data){
-                $diff = time() - strtotime($data->created_at);
+                $diff = strtotime($data->now_date) - strtotime($data->created_at);
 
                 $s = 60; //1분 = 60초
                 $h = $s * 60; //1시간 = 60분
@@ -103,7 +103,7 @@ class ApiCommentController extends Controller
 
             $i = 0;
             foreach($resultData as $data){
-                $diff = time() - strtotime($data->created_at);
+                $diff = strtotime($data->now_date) - strtotime($data->created_at);
 
                 $s = 60; //1분 = 60초
                 $h = $s * 60; //1시간 = 60분
@@ -158,7 +158,7 @@ class ApiCommentController extends Controller
 
             $i = 0;
             foreach($resultData as $data){
-                $diff = time() - strtotime($data->created_at);
+                $diff = strtotime($data->now_date) - strtotime($data->created_at);
 
                 $s = 60; //1분 = 60초
                 $h = $s * 60; //1시간 = 60분

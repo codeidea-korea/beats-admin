@@ -84,6 +84,7 @@ class ApiFeedServiceImpl extends DBConnection  implements ApiFeedServiceInterfac
                 DB::raw("CONCAT_WS('', '/storage', feed_board.file_url) AS file_url"),
                 DB::raw("CASE WHEN feed_board.wr_type = 'daily' THEN '일상' WHEN feed_board.wr_type = 'cover' THEN '커버곡' ELSE '자작곡' END AS wr_type"),
                 'member_data.mem_nickname',
+                DB::raw('now() as now_date'),
             )
             ->where('feed_board.idx',$params['idx'])
             ->where('feed_board.wr_open','open')

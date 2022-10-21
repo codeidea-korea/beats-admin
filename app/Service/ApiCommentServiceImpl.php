@@ -83,6 +83,7 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
                 'R.hash_name as recordHashName',
                 'R.file_url as  recordFileUrl',
 
+                DB::raw('now() as now_date'),
             )
             ->when($params['wr_type']=="soundSource", function($query) use ($params){
                 return $query->where(function($query) use ($params) {
@@ -132,6 +133,8 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
                 'R.file_name as recordFileName',
                 'R.hash_name as recordHashName',
                 'R.file_url as  recordFileUrl',
+
+                DB::raw('now() as now_date'),
             )
             ->when($params['wr_type']=="soundSource", function($query) use ($params){
                 return $query->where(function($query) use ($params) {
@@ -188,6 +191,8 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
                 'R.file_name as recordFileName',
                 'R.hash_name as recordHashName',
                 'R.file_url as  recordFileUrl',
+
+                DB::raw('now() as now_date'),
             )
             ->when($params['wr_type']=="soundSource", function($query) use ($params){
                 return $query->where(function($query) use ($params) {

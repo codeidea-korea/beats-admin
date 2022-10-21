@@ -55,7 +55,7 @@ class ApiFeedController extends Controller
         $resultData1 = $this->apiFeedService->getFeedView($params);
         $resultData2 = $this->apiFeedService->getFeedFile($params);
 
-        $diff = time() - strtotime($resultData1[0]->created_at);
+        $diff = strtotime($resultData1[0]->now_date) - strtotime($resultData1[0]->created_at);
 
         $s = 60; //1분 = 60초
         $h = $s * 60; //1시간 = 60분
