@@ -401,4 +401,29 @@ class MemberController extends Controller
 
         return json_encode($result);
     }
+
+    public function memberDownloadExcel(){
+        $params = $this->request->input();
+               $params['class'] = $params['class'] ?? '';
+        $params['gubun'] = $params['gubun'] ?? '';
+        $params['channel'] = $params['channel'] ?? '';
+        $params['nationality'] = $params['nationality'] ?? '';
+        $params['mem_status'] = $params['mem_status'] ?? '';
+        $params['sWord'] = $params['sWord'] ?? '';
+        $params['searchDate'] = $params['searchDate'] ?? "2022-01-01 - ".date("Y-m-d");
+        $params['mem_regdate'] = $params['mem_regdate'] ?? "2022-01-01 - ".date("Y-m-d");
+        $tempData = trim(str_replace('-','',$params['searchDate']));
+        $params['sDate']=substr($tempData,0,8);
+        $params['eDate']=substr($tempData,8,16);
+        $params['eDate'] = date("Ymd",strtotime($params['eDate'].' +1 days'));
+        $params['fileName'] = 'member)'.date("YmdHms").'.xls';
+
+        $memberList = $this->memberService->getMemberExcelList($params);
+
+
+        return view('member.memberExcel',[
+            'memberList' => $memberList
+            ,'params' => $params
+        ]);
+    }
 }

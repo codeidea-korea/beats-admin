@@ -11,6 +11,10 @@ interface MemberServiceInterface
     public function getMemberTotal($params);
     // 회원 리스트
     public function getMemberList($params);
+
+    // 회원 리스트 엑셀용
+    public function getMemberExcelList($params);
+
     //포인트 회원 총수
     public function getPointMemberTotal($params);
     //포인트 지급 시 회원 리스트

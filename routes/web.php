@@ -144,6 +144,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('ajax/memoInsert', [MemberController::class, 'setMemoInsert']);
         Route::post('ajax/memoDel', [MemberController::class, 'setMemoDel']);
         Route::get('ajax/memoList', [MemberController::class, 'getMemoList']);
+        Route::get('memberDownloadExcel', [MemberController::class, 'memberDownloadExcel']);
 
         // 초대 내역
         Route::get('inviteList', [MemberController::class, 'getInviteList']);

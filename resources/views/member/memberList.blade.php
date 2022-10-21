@@ -117,6 +117,7 @@
                 <div class="intro-y box mt-5">
                     <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60">
                         <h2 class="font-medium text-base mr-auto text-primary">총 {{number_format($totalCount)}}명의 회원이 있습니다.</h2>
+                        <a href="javascript:;" class="btn btn-primary mr-1 mb-2" id="excelDownload">엑셀 다운로드</a>
                         <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#superlarge-modal-size-preview2" class="btn btn-primary mr-1 mb-2" id="pointOpen">포인트 지급</a>
                     </div>
                     <div class="p-5">
@@ -182,7 +183,7 @@
                                         <td class="whitespace-nowrap text-center">{{$rs->statusValue}}</td>
                                         <td class="whitespace-nowrap text-center">{{$rs->mem_regdate}}</td>
 
-                                        <td class="whitespace-nowrap text-center">최근접속일</td>
+                                        <td class="whitespace-nowrap text-center">{{$rs->last_login_at}}</td>
                                     </tr>
                                     @php $i++; @endphp
                                 @endforeach
@@ -406,12 +407,23 @@
     </div>
 
     <script>
+
+
         $(".formSearchBtn").on('click', function(){
+            $("#searchForm").attr("action", "/member/memberList");
+            //document.forms["searchForm"].attr("action", "/member/memberList");
             document.forms["searchForm"].submit();
+
+        });
+        $("#excelDownload").on('click', function(){
+            $("#searchForm").attr("action", "/member/memberDownloadExcel");
+            //document.forms["searchForm"].attr("action", "/member/memberList");
+            document.forms["searchForm"].submit();
+
         });
         function change(page) {
             $("input[name=page]").val(page);
-            //$("form[name=searchForm]").submit();
+            $("#searchForm").attr("action", "/member/memberList");
             document.forms["searchForm"].submit();
         }
         $(function (){
@@ -739,7 +751,7 @@
                 alert('첨부파일이 없습니다.');
                 return false;
             }
-            
+
             var formData = new FormData($("#excelUpload")[0]);
 
             jQuery.ajax({
