@@ -260,7 +260,7 @@ class ApiCommentController extends Controller
 
                 $resultData1 = $this->apiCommentService->commentAdd($params);
 
-                if(count($files) > 0){
+                if(!empty($files)){
                     $resultData2 = $this->apiCommentService->setRecordFileUpdate($resultData1,$files);
                 }
 
