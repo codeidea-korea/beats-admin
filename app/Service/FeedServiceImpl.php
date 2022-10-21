@@ -30,7 +30,7 @@ class FeedServiceImpl extends DBConnection  implements FeedServiceInterface
                 'feed_board.wr_report',
                 'feed_board.created_at',
                 'feed_board.updated_at',
-                'member_data.u_id'
+                'member_data.mem_nickname'
             )
             ->where('feed_board.del_status','N')
             ->when(isset($params['wr_open']), function($query) use ($params){

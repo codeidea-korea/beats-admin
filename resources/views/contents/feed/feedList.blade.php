@@ -99,8 +99,7 @@
                                         <th class="whitespace-nowrap text-center">No.</th>
                                         <th class="whitespace-nowrap text-center">노출 상태</th>
                                         <th class="whitespace-nowrap text-center">구분</th>
-                                        <th class="whitespace-nowrap text-center">제목</th>
-                                        <th class="whitespace-nowrap text-center">고유 ID</th>
+                                        <th class="whitespace-nowrap text-center">닉네임</th>
                                         <th class="whitespace-nowrap text-center">언어</th>
                                         <th class="whitespace-nowrap text-center">음원 수</th>
                                         <th class="whitespace-nowrap text-center">비트 수</th>
@@ -117,15 +116,14 @@
                                             <td class="whitespace-nowrap text-center">{{$totalCount-($i+(($params['page']-1)*10))}}</td>
                                             <td class="whitespace-nowrap text-center">@if($rs->wr_open == 'open') 노출 @else 비 노출 @endif</td>
                                             <td class="whitespace-nowrap text-center">@if($rs->wr_type == 'daily') 일상 @elseif($rs->wr_type == 'cover') 커버곡 @else 자작곡 @endif</td>
-                                            <td class="whitespace-nowrap text-center">{{$rs->wr_title}}</td>
-                                            <td class="whitespace-nowrap text-center"><a href="/contents/feedView/{{$rs->idx}}">{{$rs->u_id}}</a></td>
+                                            <td class="whitespace-nowrap text-center"><a href="/contents/feedView/{{$rs->idx}}">{{$rs->mem_nickname}}</a></td>
                                             <td class="whitespace-nowrap text-center">{{$rs->wr_lng}}</td>
-                                            <td class="whitespace-nowrap text-center">{{$rs->wr_file}}</td>
+                                            <td class="whitespace-nowrap text-center">@if($rs->wr_type == 'daily') 0 @else {{$rs->wr_file}} @endif</td>
                                             <td class="whitespace-nowrap text-center">{{$rs->wr_bit}}</td>
                                             <td class="whitespace-nowrap text-center">{{$rs->wr_comment}}</td>
                                             <td class="whitespace-nowrap text-center">{{$rs->wr_report}}</td>
                                             <td class="whitespace-nowrap text-center">{{$rs->created_at}}</td>
-                                            <td class="whitespace-nowrap text-center">{{$rs->updated_at}}</td>
+                                            <td class="whitespace-nowrap text-center">@if($rs->updated_at == '') - @else {{$rs->updated_at}} @endif</td>
                                         </tr>
                                         @php $i++; @endphp
                                     @endforeach
