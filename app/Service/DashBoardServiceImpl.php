@@ -13,17 +13,14 @@ class DashBoardServiceImpl extends DBConnection  implements DashBoardServiceInte
         parent::__construct();
     }
 
-    public function getTestData($params) {
+    public function getNewMemeberCnt() {
 
-
-        $result = $this->statDB->table('users')
+        $result = $this->statDB->table('member_data')
             ->select(
-                'name',
-                $this->statDB->raw('SUM(name) AS CNT')
+                DB::raw('count(idx) as cnt')
             )
-            ->where('type', $params['type'])
-            ->groupBy('name')
-            ->get();
+            ->where(DB::raw("DATE_FORMAT(mem_regdate,'%Y%m%d') = DATE_FORMAT(NOW(),'%Y%m%d')"))
+            ->first();
         return $result;
 
     }

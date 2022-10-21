@@ -42,8 +42,15 @@ class HomeController extends Controller
         $params = $this->request->input();
         $params['menuCode'] = "AD010000";
 
+        $data=array();
+
+        $newMemberCntData = $this->dashBoardService->getNewMemeberCnt();
+
+        $data['newMemberCnt'] = $newMemberCntData->cnt;
+
         return view('home',[
             'params' =>$params
+             ,'data' =>$data
         ]);
 
     }

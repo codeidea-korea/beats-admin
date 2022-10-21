@@ -6,7 +6,7 @@
         @include('include.topBarINC')
         <!-- END: Top Bar -->
         <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
-            <h2 class="text-lg font-medium mr-auto">대시보드</h2>
+            <h2 class="text-lg font-medium mr-auto">대시보드{{$params['menuCode']}}</h2>
         </div>
 
         <div class="grid grid-cols-12 gap-6 mt-5">

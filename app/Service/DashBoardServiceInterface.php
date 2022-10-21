@@ -5,5 +5,5 @@ use Illuminate\Support\Facades\DB;
 
 interface DashBoardServiceInterface
 {
-    public function getTestData($params);
+    public function getNewMemeberCnt();
 }
