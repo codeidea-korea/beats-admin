@@ -477,7 +477,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
 
         $result = $this->statDB->table('music_file')
             ->where('music_head_idx',$params['music_head_idx'])
-            ->where('version',$version_now)
+            //->where('version',$version_now)
             ->update(
                 [
                     'representative_music' => 'N'
