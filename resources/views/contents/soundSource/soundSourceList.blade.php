@@ -66,7 +66,7 @@
                                 </table>
                             </form>
                             <div style="float:right;">
-                                <button class="btn box flex items-center text-slate-600 border border-slate-400" onClick="javascript:location.href = '/member/notiflyList';">
+                                <button class="btn box flex items-center text-slate-600 border border-slate-400" onClick="javascript:location.href = '/contents/soundSourceList';">
                                     초기화
                                 </button>
                             </div>
