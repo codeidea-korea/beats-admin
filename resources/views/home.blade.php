@@ -56,19 +56,19 @@
                         <div class="flex flex-wrap gap-3">
                             <div class="flex w-full ">
                                 <div class="flex items-center text-lg">신규 가입 회원</div>
-                                <div class="ml-auto text-lg">000 <span class="text-sm">(명)</span></div>
+                                <div class="ml-auto text-lg">{{number_format($data['newMemberCnt'])}} <span class="text-sm">(명)</span></div>
                             </div>
                             <div class="flex w-full">
                                 <div class="flex items-center text-lg">멘토 전환 신청</div>
-                                <div class="ml-auto text-lg">000 <span class="text-sm">(명)</span></div>
+                                <div class="ml-auto text-lg"> -  <span class="text-sm">(명)</span></div>
                             </div>
                             <div class="flex w-full">
                                 <div class="flex items-center text-lg">일반 회원</div>
-                                <div class="ml-auto text-lg">000 <span class="text-sm">(명)</span></div>
+                                <div class="ml-auto text-lg">{{number_format($data['normalCnt'])}} <span class="text-sm">(명)</span></div>
                             </div>
                             <div class="flex w-full">
                                 <div class="flex items-center text-lg">멘토 회원</div>
-                                <div class="ml-auto text-lg">000 <span class="text-sm">(명)</span></div>
+                                <div class="ml-auto text-lg">{{number_format($data['mentoCnt'])}} <span class="text-sm">(명)</span></div>
                             </div>
                         </div>
                     </div>

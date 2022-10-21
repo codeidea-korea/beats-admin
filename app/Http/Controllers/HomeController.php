@@ -45,8 +45,9 @@ class HomeController extends Controller
         $data=array();
 
         $newMemberCntData = $this->dashBoardService->getNewMemeberCnt();
-
-        $data['newMemberCnt'] = $newMemberCntData->cnt;
+        $data['newMemberCnt'] = $newMemberCntData[0]->newMemberCnt;
+        $data['normalCnt'] = $newMemberCntData[0]->normalCnt;
+        $data['mentoCnt'] = $newMemberCntData[0]->mentoCnt;
 
         return view('home',[
             'params' =>$params

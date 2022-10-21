@@ -262,7 +262,7 @@
                                         <tr>
                                             <th class="whitespace-nowrap text-center bg-primary/10">보유 포인트</th>
                                             <td>
-                                                -
+                                                {{$memberData->mem_point}} Point
                                             </td>
                                             <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">휴면 전환일</th>
                                             <td rowspan="2">
@@ -273,7 +273,7 @@
                                         <tr>
                                             <th class="whitespace-nowrap text-center bg-primary/10">보유 쿠폰</th>
                                             <td>
-                                                -
+                                               -
                                             </td>
                                         </tr>
 
