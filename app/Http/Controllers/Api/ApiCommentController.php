@@ -246,9 +246,9 @@ class ApiCommentController extends Controller
             $params['cm_content'] = $params['cm_content'] ?? '';
             $params['wr_type'] = $params['wr_type'] ?? '';
             $params['music_idx'] = $params['music_idx'] ?? '0';
-            $params['record'] = $params['record'] ?? '';
 
-            //$files = $this->request->file('record');
+
+            $files = $this->request->file('record');
 
 
             if($params['mem_id'] == 0 || $params['wr_idx'] == 0 || $params['cm_main'] == 0 || $params['cm_content'] == '' || $params['wr_type'] == ''){
@@ -257,11 +257,12 @@ class ApiCommentController extends Controller
                 $returnData['message'] = "입력하지 않은 필수 값이 있습니다. 필수 값을 입력해 주세요";
 
             }else{
+
                 $resultData1 = $this->apiCommentService->commentAdd($params);
 
-                //if(count($files) > 0){
-                //    $resultData2 = $this->apiCommentService->setRecordFileUpdate($resultData1,$files);
-                //}
+                if(count($files) > 0){
+                    $resultData2 = $this->apiCommentService->setRecordFileUpdate($resultData1,$files);
+                }
 
                 $returnData['code'] = 0;
                 $returnData['message'] = "댓글 등록 완료";

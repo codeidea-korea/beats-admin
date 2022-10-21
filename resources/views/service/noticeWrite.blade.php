@@ -94,6 +94,7 @@
 
         ClassicEditor
         .create( document.querySelector( '#editor1' ), {
+
             ckfinder: {
                 uploadUrl: "{{route('ckeditor.upload').'?_token='.csrf_token()}}"
             }
@@ -104,12 +105,11 @@
         .catch( error => {
             console.error( error );
         } );
-        
-        // 값 가져오기
 
+        // 값 가져오기
         $(document).on('click','.boardAddbtn', function(){
 
-            
+
             if($("select[name='gubun']").val() == ""){
                 alert("구분을 선택해주세요.");
                 return false;

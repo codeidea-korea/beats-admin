@@ -50,6 +50,7 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
             ->leftJoin('member_data', 'comment.mem_id', '=', 'member_data.mem_id')
             ->leftJoin('music_file', 'comment.music_idx', '=', 'music_file.idx')
             ->leftJoin('member_data AS M', 'music_file.mem_id', '=', 'M.mem_id')
+            ->leftJoin('record_file AS R', 'comment.idx', '=', 'R.comment_idx')
             ->select(
                 'comment.idx',
                 DB::raw('CASE WHEN comment.cm_idx = 0 THEN comment.idx ELSE comment.cm_idx END as sort_idx'),
@@ -72,6 +73,11 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
                 'music_file.file_url as  musicFileUrl',
                 'music_file.version as  musicFileVersion',
                 'M.mem_nickname as  fmNickName',
+
+                'R.file_name as recordFileName',
+                'R.hash_name as recordHashName',
+                'R.file_url as  recordFileUrl',
+
             )
             ->whereIn('comment.idx', $result3)
             ->orderby('sort_idx','desc')
@@ -90,6 +96,7 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
             ->leftJoin('member_data', 'comment.mem_id', '=', 'member_data.mem_id')
             ->leftJoin('music_file', 'comment.music_idx', '=', 'music_file.idx')
             ->leftJoin('member_data AS M', 'music_file.mem_id', '=', 'M.mem_id')
+            ->leftJoin('record_file AS R', 'comment.idx', '=', 'R.comment_idx')
             ->select(
                 'comment.idx',
                 'comment.cm_idx',
@@ -111,6 +118,9 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
                 'music_file.file_url as  musicFileUrl',
                 'music_file.version as  musicFileVersion',
                 'M.mem_nickname as  fmNickName',
+                'R.file_name as recordFileName',
+                'R.hash_name as recordHashName',
+                'R.file_url as  recordFileUrl',
             )
             ->where('wr_idx', $params['wr_idx'])
             ->where('wr_type', $params['wr_type'])
@@ -131,6 +141,7 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
             ->leftJoin('member_data', 'comment.mem_id', '=', 'member_data.mem_id')
             ->leftJoin('music_file', 'comment.music_idx', '=', 'music_file.idx')
             ->leftJoin('member_data AS M', 'music_file.mem_id', '=', 'M.mem_id')
+            ->leftJoin('record_file AS R', 'comment.idx', '=', 'R.comment_idx')
             ->select(
                 'comment.idx',
                 'comment.cm_idx',
@@ -151,6 +162,10 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
                 'music_file.file_url as  musicFileUrl',
                 'music_file.version as  musicFileVersion',
                 'M.mem_nickname as  fmNickName',
+
+                'R.file_name as recordFileName',
+                'R.hash_name as recordHashName',
+                'R.file_url as  recordFileUrl',
             )
             ->where('dir_cm_idx', $params['cm_idx'])
             ->orderBy('comment.created_at','desc')
