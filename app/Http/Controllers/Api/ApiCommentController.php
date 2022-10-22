@@ -23,6 +23,7 @@ class ApiCommentController extends Controller
 
     public function getCommentList()
     {
+        date_default_timezone_set('Asia/Seoul');
         $params = $this->request->input();
 
         $params['type'] = $params['type'] ?? 0;
@@ -67,6 +68,7 @@ class ApiCommentController extends Controller
                 }
 
                 $resultData[$i]->created_at = $result;
+                $resultData[$i]->created_at_re = $result; //db 갖어오는 값에서 중복 문제로 아래와 같이 수정
                 $i++;
             }
 
