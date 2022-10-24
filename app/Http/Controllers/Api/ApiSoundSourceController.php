@@ -487,7 +487,31 @@ class ApiSoundSourceController extends Controller
             throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
         }
         return json_encode($returnData);
+    }
 
+    public function searchTag(){
+        $returnData['code'] = -1;
+        $returnData['message'] = "시스템 장애";
+        $params = $this->request->input();
 
+        $params['mem_id'] = $params['mem_id'] ?? 0;
+
+        try{
+            $resultData = $this->apiSoundSorceService->getTag($params);
+            $tempString ="";
+            foreach ($resultData as $rs){
+                $tempString .= $rs->tag.',';
+            }
+            $tagArray = explode(',', $tempString);
+            $tagArray = array_filter($tagArray);
+
+            $returnData['code']=0;
+            $returnData['message']="complete";
+            $returnData['response']=$tagArray;
+
+        } catch(\Exception $exception){
+            throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+        }
+        return json_encode($returnData);
     }
 }

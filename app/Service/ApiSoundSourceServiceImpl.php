@@ -135,11 +135,14 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
         }
 
         //공개상태
-        if(trim($params['open_status'])==""){
+        if(trim($params['open_status'])=="") {
             $_where .= "";
+        }elseif(trim($params['open_status'])=="D"){
+            $_where .= " AND H.del_date > NOW() AND H.del_status = 'Y' ";
         }else{
             $_where .= " AND H.open_status = '".$params['open_status']."' ";
         }
+
 
         //검색
         if(trim($params['search_text'])==""){
@@ -159,6 +162,8 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
             $_where .= " AND H.progress_rate >= ".$params['sProgressRate'];
             $_where .= " AND H.progress_rate <= ".$params['eProgressRate'];
         }
+
+
 
 
         $result = $this->statDB->select(
@@ -331,6 +336,11 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                 ,'music_head.copyright'
                 ,'music_head.moddate'
                 ,'music_head.file_version'
+                ,DB::raw('DATEDIFF(now(),moddate) AS modDay')
+                ,DB::raw('TIMESTAMPDIFF(HOUR,moddate,NOW()) AS modHour')
+                ,DB::raw('TIMESTAMPDIFF(MINUTE,moddate,NOW()) AS modMinute')
+                ,DB::raw('TIMESTAMPDIFF(SECOND,moddate,NOW()) AS modSecond')
+
             )
             ->where('music_head.idx',$params['music_head_idx'])
             ->first();
@@ -600,6 +610,20 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
             );
 
         return $result;
+    }
+
+    //간이계약서
+    public function getTag($params){
+        $result = $this->statDB->table('music_head')
+            ->select(
+                'tag'
+            )
+            ->where('tag','!=',null)
+            ->where('mem_id','=',$params['mem_id'])
+            ->groupBy('tag')
+            ->get();
+        return $result;
+
     }
 
 }

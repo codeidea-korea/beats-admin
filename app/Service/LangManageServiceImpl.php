@@ -13,6 +13,19 @@ class LangManageServiceImpl extends DBConnection  implements LangManageServiceIn
         parent::__construct();
     }
 
+    public function getCodeList(){
+        $result = $this->statDB->table('international_code')
+            ->select(
+                'idx as codeIndex',
+                'name_kr as codeName',
+                'international_code4 as codeValue'
+            )
+            ->orderby('idx','asc')
+            ->get();
+        return $result;
+
+    }
+
     public function getLangList($params) {
 
         $result = $this->statDB->table('lang_data')

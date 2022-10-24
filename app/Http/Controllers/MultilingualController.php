@@ -45,11 +45,15 @@ class MultilingualController extends Controller
         $params['limit'] = $params['limit'] ?? 10;
         $langList = $this->langManageService->getLangList($params);
         $langTotal = $this->langManageService->getLangTotal($params);
+
+        $codeList = $this->langManageService->getCodeList();
+
         //$totalCount = $adminTotal->cnt;
         $params['totalCnt'] = $langTotal->cnt;
         return view('multilingual.langManage',[
             'params' => $params
             ,'langList' => $langList
+            ,'codeList' => $codeList
         ]);
     }
 

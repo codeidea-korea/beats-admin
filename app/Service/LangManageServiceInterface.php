@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\DB;
 
 interface LangManageServiceInterface
 {
+    //나라코드 리스트
+    public function getCodeList();
+
     // 언어관리 리스트
     public function getLangList($params);
 

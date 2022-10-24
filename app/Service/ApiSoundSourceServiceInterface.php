@@ -58,4 +58,8 @@ interface ApiSoundSourceServiceInterface
 
     //대표음원 변경
     public function setRepresentativeMusic($params);
+
+    //검색용 테그
+    public function getTag($params);
+
 }

@@ -81,6 +81,10 @@ Route::prefix('/v1/')->group(function () {
         // 대표음원 지정
         Route::put('representativeMusic', [ApiSoundSourceController::class, 'representativeMusic']);
 
+        // 테그 상세 검색용 list
+        Route::get('searchTag', [ApiSoundSourceController::class, 'searchTag']);
+
+
 
     });
 
