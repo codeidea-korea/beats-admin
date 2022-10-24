@@ -212,10 +212,11 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
         $result = $this->statDB->select("
             SELECT
                 b.mem_nickname as commentNickName
+            ,CONCAT_WS('', '/storage', b.profile_photo_url, b.profile_photo_hash_name) AS profile_photo_file_url
             FROM
             comment a LEFT JOIN member_data b ON a.mem_id=b.mem_id
             where a.wr_type = 'soundSource' and a.wr_idx = ".$params['idx']."
-            GROUP BY b.mem_nickname
+            GROUP BY b.mem_nickname ,b.profile_photo_url,b.profile_photo_hash_name
         ");
          return $result;
 
