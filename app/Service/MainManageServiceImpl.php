@@ -16,6 +16,12 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
 
     public function getBannerList($params) {
 
+        $where = " where 1=1 ";
+
+        if($params['banner_type'] != ''){
+            $where .= " and type = '".$params['banner_type']."'";
+        }
+
         $result = $this->statDB
             ->select('
             SELECT
@@ -29,8 +35,9 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
             IFNULL(adm_banner_data.downcontents,0) AS downcontents
             FROM adm_banner
             LEFT JOIN (SELECT banner_code,COUNT(idx) as downcontents FROM adm_banner_data GROUP BY banner_code) as adm_banner_data
-            ON adm_banner.banner_code = adm_banner_data.banner_code
-            ORDER BY created_at desc LIMIT '.$params['limit'].' OFFSET '.($params['page']-1)*$params['limit']
+            ON adm_banner.banner_code = adm_banner_data.banner_code'
+            .$where.
+            'ORDER BY created_at desc LIMIT '.$params['limit'].' OFFSET '.($params['page']-1)*$params['limit']
             );
            // ->groupBy('name')
 

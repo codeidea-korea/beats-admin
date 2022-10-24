@@ -6,6 +6,13 @@
         <!-- BEGIN: Top Bar -->
     @include('include.topBarINC')
     <!-- END: Top Bar -->
+        <div class="mt-5">
+            <form id="searchData" name="searchData" action="/mainmanage/banner/list" method="get">
+                <input name="banner_type" type="radio" value="" onChange="change(1)" @if($params['banner_type'] == '') checked @endif> 전체
+                <input name="banner_type" class="ml-5" type="radio" value="beatsomeone" onChange="change(1)" @if($params['banner_type'] == 'beatsomeone') checked @endif> 비트썸원
+                <input name="banner_type" class="ml-5" type="radio" value="bybeats" onChange="change(1)" @if($params['banner_type'] == 'bybeats') checked @endif> 바이비츠
+            </form>
+        </div>
         <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
             <h2 class="text-lg font-medium mr-auto">배너관리</h2>
         </div>
@@ -70,7 +77,7 @@
     <script>
         function change(page) {
             $("input[name=page]").val(page);
-            $("form[name=searchData]").submit();
+            $("form[name=searchData]")[0].submit();
         }
     </script>
 @endsection

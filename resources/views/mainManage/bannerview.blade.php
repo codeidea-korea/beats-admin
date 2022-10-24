@@ -220,7 +220,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input type="file" name="banner_img" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
+                                        <input type="file" id="banner_img" name="banner_img" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
                                     </td>
                                 </tr>
                                 <tr>
@@ -238,6 +238,7 @@
                         </div>
 
                         <div class="flex items-center justify-center mt-5">
+                            <button type="button" class="btn btn-secondary w-32 preview">미리보기</button>
                             <button class="btn btn-primary w-32 ml-2 mr-2 bannerAddbtn">등록</button>
                             <button type="button" class="btn btn-secondary w-32" data-tw-dismiss="modal">닫기</button>
                         </div>
@@ -297,7 +298,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input type="file" name="up_banner_img" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
+                                        <input type="file" id="up_banner_img" name="up_banner_img" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
                                         <img class="up_banner_img" src="" alt="배너 이미지">
                                     </td>
                                 </tr>
@@ -316,6 +317,7 @@
                         </div>
 
                         <div class="flex items-center justify-center mt-5">
+                            <button type="button" class="btn btn-secondary w-32 preview">미리보기</button>
                             <button class="btn btn-primary w-32 ml-2 mr-2 bannerUpdatebtn">수정</button>
                             <button type="button" class="btn btn-secondary w-32" data-tw-dismiss="modal">닫기</button>
                         </div>
@@ -329,6 +331,7 @@
     <script>
 
         var ajax_checked = false;
+        let imageData = "";
 
         $(document).on('click','.bannerAddbtn', function(){
 
@@ -594,6 +597,20 @@
                     }
                 });
             }
+        });
+
+        $(document).on( 'change' , '#banner_img , #up_banner_img', function (e) {
+            var file = e.target.files[0];
+
+            imageData = URL.createObjectURL(file);
+        })
+
+        $(document).on('click','.preview' ,function(){
+            var imgTmp = new Image();
+            imgTmp.src = imageData;
+            var imgWin = window.open("",'large',"status=no,toolbar=no,scrollbars=no,resizable=no");
+            imgWin.document.write("<html><title>미리보기</title>"+"<body topmargin=0 leftmargin=0 marginheight=0 marginwidth=0>"
+            +"<a href='javascript:self.close()'><img src='"+imageData+"' style='margin : 50'></a>"+"</body></html>");
         });
     </script>
 

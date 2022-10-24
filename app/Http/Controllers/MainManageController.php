@@ -33,6 +33,7 @@ class MainManageController extends Controller
         $params['type'] = $params['type'] ?? 0;
         $params['page'] = $params['page'] ?? 1;
         $params['limit'] = $params['limit'] ?? 10;
+        $params['banner_type'] = $params['banner_type'] ?? '';
         $bannerList = $this->adminMainmanageService->getBannerList($params);
         $bannerTotal = $this->adminMainmanageService->getBannerTotal();
         $totalCount = $bannerTotal->cnt;
