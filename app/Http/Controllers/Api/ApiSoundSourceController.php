@@ -161,9 +161,43 @@ class ApiSoundSourceController extends Controller
             try{
 
                 $resultData = $this->apiSoundSorceService->setSoundSourceListPaging($params);
+                $dataList=array();
+                $i=0;
+                foreach($resultData as $rs){
+                    $dataList[$i]['idx']  =$rs->idx;
+                    $dataList[$i]['mem_id']  =$rs->mem_id;
+                    $dataList[$i]['file_cnt']  =$rs->file_cnt;
+                    $dataList[$i]['music_title']  =$rs->music_title;
+                    $dataList[$i]['play_time']  =$rs->play_time;
+                    $dataList[$i]['open_status']  =$rs->open_status;
+                    $dataList[$i]['sales_status']  =$rs->sales_status;
+                    $dataList[$i]['contract']  =$rs->contract;
+                    $dataList[$i]['tag']  =$rs->tag;
+                    $dataList[$i]['progress_rate']  =$rs->progress_rate;
+                    $dataList[$i]['common_composition']  =$rs->common_composition;
+                    $dataList[$i]['crdate']  =$rs->crdate;
+                    $dataList[$i]['copyright']  =$rs->copyright;
+                    $dataList[$i]['fMemId']  =$rs->fMemId;
+                    $dataList[$i]['fNickName']  =$rs->fNickName;
+                    $dataList[$i]['representative_music']  =$rs->representative_music;
+                    $dataList[$i]['file_name']  =$rs->file_name;
+                    $dataList[$i]['file_no']  =$rs->file_no;
+                    $dataList[$i]['hash_name']  =$rs->hash_name;
+                    $dataList[$i]['file_url']  =$rs->file_url;
+                    $dataList[$i]['moddate']  =$rs->moddate;
+                    $dataList[$i]['file_version']  =$rs->file_version;
+                    $dataList[$i]['HeadDelStatus']  =$rs->HeadDelStatus;
+                    $dataList[$i]['HeadDelDate']  =$rs->HeadDelDate;
+                    $dataList[$i]['wr_comment']  =$rs->wr_comment;
+                    $resultData2 = $this->apiSoundSorceService->setProfilePhotoList($dataList[$i]);
+                    $dataList[$i]['profilePhotoListCount']=count($resultData2);
+                    $dataList[$i]['profilePhotoList']=$resultData2;
+                    $i++;
+                }
+
                 $returnData['code']=0;
                 $returnData['message']="complete";
-                $returnData['response']=$resultData;
+                $returnData['response']=$dataList;
 
             } catch(\Exception $exception){
                 throw new HttpException(400,"Invalid data -{$exception->getMessage()}");

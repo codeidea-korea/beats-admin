@@ -17,6 +17,9 @@ interface ApiSoundSourceServiceInterface
     //음원 정보 리스트 (list) 페이징
     public function setSoundSourceListPaging($params);
 
+    // 음원정보 리스트의 프로파일 이미지 및 닉네님 리스트
+    public function setProfilePhotoList($params);
+
     //음원 정보 리스트 (list)
     public function setSoundSourceList($params);
 

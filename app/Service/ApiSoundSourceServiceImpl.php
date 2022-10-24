@@ -207,6 +207,23 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
 
     }
 
+    public function setProfilePhotoList($params){
+
+        $result = $this->statDB->select("
+            SELECT
+                b.mem_nickname as commentNickName
+            FROM
+            comment a LEFT JOIN member_data b ON a.mem_id=b.mem_id
+            where a.wr_type = 'soundSource' and a.wr_idx = ".$params['idx']."
+            GROUP BY b.mem_nickname
+        ");
+         return $result;
+
+
+
+
+    }
+
     //음원 정보 리스트 (list)
     public function setSoundSourceList($params)
     {
