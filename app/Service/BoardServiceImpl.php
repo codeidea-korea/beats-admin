@@ -466,7 +466,7 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
                 'adm_terms.created_at',
                 'adm_terms.updated_at',
                 'users.name',
-               // $this->statDB->raw('SUM(name) AS CNT')
+                DB::raw('case WHEN adm_terms.apply_date < date_format(now(), \'%Y-%m-%d  %h:%i:%s\') THEN 0 ELSE 1 end AS crVal'),
             )
             ->where('adm_terms.idx',$tidx)
            // ->groupBy('name')

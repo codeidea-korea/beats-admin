@@ -222,20 +222,54 @@ class ApiSoundSourceController extends Controller
         }else{
             try{
 
-
                 $resultData = $this->apiSoundSorceService->getSoundSourceData($params);
-                $returnData['response']['data']=$resultData;
 
+                $returnData['response']['data']['idx']  =$resultData->idx;
+                $returnData['response']['data']['memId']  =$resultData->memId;
+                $returnData['response']['data']['memName']  =$resultData->memName;
+                $returnData['response']['data']['fileCnt']  =$resultData->fileCnt;
+                $returnData['response']['data']['musicTitle']  =$resultData->musicTitle;
+                $returnData['response']['data']['playTime']  =$resultData->playTime;
+                $returnData['response']['data']['openStatus']  =$resultData->openStatus;
+                $returnData['response']['data']['salesStatus']  =$resultData->salesStatus;
+                $returnData['response']['data']['contract']  =$resultData->contract;
+                $returnData['response']['data']['tag']  =$resultData->tag;
+                $returnData['response']['data']['progressRate']  =$resultData->progressRate;
+                $returnData['response']['data']['commonComposition']  =$resultData->commonComposition;
+                $returnData['response']['data']['crdate']  =$resultData->crdate;
+                $returnData['response']['data']['copyright']  =$resultData->copyright;
+                $returnData['response']['data']['moddate']  =$resultData->moddate;
+                $returnData['response']['data']['file_version']  =$resultData->file_version;
+                $returnData['response']['data']['modDay']  =$resultData->modDay;
+                $returnData['response']['data']['modHour']  =$resultData->modHour;
+                $returnData['response']['data']['modMinute']  =$resultData->modMinute;
+                $returnData['response']['data']['modSecond']  =$resultData->modSecond;
+
+                $diff = strtotime($resultData->now_date) - strtotime($resultData->moddate);
+                $s = 60; //1분 = 60초
+                $h = $s * 60; //1시간 = 60분
+                $d = $h * 24; //1일 = 24시간
+                $y = $d * 30; //1달 = 30일 기준
+                $a = $y * 12; //1년
+
+                if ($diff < $s) {
+                    $resultTime = $diff . '초전';
+                } elseif ($h > $diff && $diff >= $s) {
+                    $resultTime = round($diff/$s) . '분전';
+                } elseif ($d > $diff && $diff >= $h) {
+                    $resultTime = round($diff/$h) . '시간전';
+                } elseif ($y > $diff && $diff >= $d) {
+                    $resultTime = round($diff/$d) . '일전';
+                } elseif ($a > $diff && $diff >= $y) {
+                    $resultTime = round($diff/$y) . '달전';
+                } else {
+                    $resultTime = round($diff/$a) . '년전';
+                }
+
+                $returnData['response']['data']['created_at_re']  =$resultTime;
                 $params['file_version'] = $resultData->file_version;
+
                 $fileData = $this->apiSoundSorceService->getMusicFileList($params);
-
-                //$tempData=array();
-                //foreach($fileData as $rs){
-                //    $tempData['fileData']['version_'.$rs->version][]=(array)$rs;
-                //}
-                //$returnData['response']=$tempData;
-
-
                 $returnData['response']['fileData']=$fileData;
 
                 if($resultData->commonComposition=="Y"){

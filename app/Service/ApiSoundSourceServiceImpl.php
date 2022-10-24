@@ -340,6 +340,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                 ,DB::raw('TIMESTAMPDIFF(HOUR,moddate,NOW()) AS modHour')
                 ,DB::raw('TIMESTAMPDIFF(MINUTE,moddate,NOW()) AS modMinute')
                 ,DB::raw('TIMESTAMPDIFF(SECOND,moddate,NOW()) AS modSecond')
+                ,DB::raw('now() as now_date')
 
             )
             ->where('music_head.idx',$params['music_head_idx'])
@@ -367,6 +368,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
 
             )
             ->where('music_file.music_head_idx',$params['music_head_idx'])
+            ->where('music_file.del_status','N')
             //->where('version',$params['file_version'])
             ->orderby('version','desc')
             ->orderby('music_file.version','desc')

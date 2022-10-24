@@ -131,7 +131,7 @@
                             </table>
 
                             <div class="flex items-center justify-center mt-5">
-                                @if($maxVersion == $termsData[0]->version)
+                                @if($termsData[0]->crVal)
                                 <button type="button" class="btn btn-secondary w-32 termsDeletebtn">삭제</button>
                                 <div class="btn btn-primary w-32 ml-2 mr-2 termsUpdatebtn">수정</div>
                                 @endif
