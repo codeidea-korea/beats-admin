@@ -188,6 +188,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                         ,H.file_version
                         ,H.del_status as HeadDelStatus
                         ,H.del_date as HeadDelDate
+                        ,(select count(idx) from comment where wr_type = 'soundSource' and wr_idx = H.idx) as wr_comment
                     FROM
                     music_head H LEFT JOIN music_file F ON H.idx = F.music_head_idx
                     LEFT JOIN member_data M ON F.mem_id=M.mem_id
@@ -203,6 +204,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
         );
 
         return $result;
+
     }
 
     //음원 정보 리스트 (list)
