@@ -90,8 +90,8 @@
                                             </div>
                                             <input id="apply_date" name="apply_date" type="text" class="datepicker form-control pl-12" data-single-mode="true" value="{{$termsData[0]->apply_date}}">
                                         </div>
-                                        
-                                        @php 
+
+                                        @php
                                             $apply_date_hour = date("H", strtotime($termsData[0]->apply_date));
                                             $apply_date_min = date("i", strtotime($termsData[0]->apply_date));
                                         @endphp
@@ -131,8 +131,10 @@
                             </table>
 
                             <div class="flex items-center justify-center mt-5">
+                                @if($maxVersion == $termsData[0]->version)
                                 <button type="button" class="btn btn-secondary w-32 termsDeletebtn">삭제</button>
                                 <div class="btn btn-primary w-32 ml-2 mr-2 termsUpdatebtn">수정</div>
+                                @endif
                                 <button type="button" class="btn btn-secondary w-32" onclick="location.href='/service/terms/list'">취소</button>
                             </div>
                         </form>
@@ -195,7 +197,7 @@
                 }
             });
         });
-           
+
         $(document).on('click','.termsUpdatebtn', function(){
 
             if($("select[name='gubun']").val() == ""){

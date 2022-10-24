@@ -275,11 +275,20 @@ class BoardController extends Controller
         $terms_params['gubun'] = $termsData[0]->gubun;
         $terms_type = $this->adminBoardService->getTermsType($terms_params);
 
+        $params2['gubun'] = $termsData[0]->gubun;
+        $params2['terms_type'] = $termsData[0]->terms_type;
+
+        $data = $this->adminBoardService->getMaxVersion($params2);
+        $maxVersion =  $data->maxVersion;
+
+
+
         return view('service.termsView',[
             'termsData' => $termsData
             ,'gubun' => $gubun
             ,'terms_type' => $terms_type
             ,'params' => $params
+            ,'maxVersion' =>$maxVersion
         ]);
     }
 

@@ -476,6 +476,19 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
 
     }
 
+    public function getMaxVersion($params){
+
+        $result = $this->statDB->table('adm_terms')
+            ->select(
+                DB::raw('MAX(version) AS maxVersion')
+            )
+            ->where('gubun',$params['gubun'])
+            ->where('terms_type',$params['terms_type'])
+            ->first();
+
+        return $result;
+    }
+
     public function TermsAdd($params) {
 
         $result = $this->statDB->table('adm_terms')
