@@ -86,12 +86,16 @@
                 <div class="intro-y col-span-12 lg:col-span-12">
                     <div class="intro-y box">
                         <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60">
-                            <h2 class="font-medium text-base mr-auto text-primary">총 {{count($musicList)}}개의 음원이 있습니다.</h2>
+                            <h2 class="font-medium text-base mr-auto text-primary">총 {{$totalCount}}개의 음원이 있습니다.</h2>
                         </div>
                         <div class="p-2 bg-slate-200 flex flex-wrap gap-3">
+                            @php $i=0; @endphp
                             @foreach($musicList as $rs)
                                 <div class="intro-x box p-5 w-full">
                                     <div class="w-full items-center flex gap-5">
+                                        <div class="border-l flex gap-3 px-5 ml-auto">
+                                            {{$totalCount-($i+(($params['page']-1)*10))}}
+                                        </div>
                                         <script src="https://unpkg.com/wavesurfer.js"></script>
                                         <div class="border-l flex gap-3 px-5 ml-auto">
                                             <audio id="player" controls  src="{{url('/storage'.$rs->file_url.'/'.$rs->hash_name)}}">
@@ -121,13 +125,13 @@
                                                 <div class="font-bold">재생 시간</div>
                                                 <div class="btn-warning p-1 rounded-md">{{$rs->play_time}}</div>
                                             </div>
-                                            <div class="border border-slate-300 rounded-md border-dashed p-3 text-center">
+                                            <div class="border border-slate-300 rounded-md border-dashed p-3 text-center" style="width:90px;">
                                                 <div class="font-bold">판매 상태</div>
-                                                <div class="btn-secondary p-1 rounded-md">@if($rs->sales_status=="Y") 판매중 @else 미판매중 @endif</div>
+                                                <div class="btn-secondary p-1 rounded-md" style>@if($rs->sales_status=="Y") 판매중 @else 미판매중 @endif</div>
                                             </div>
                                             <div class="border border-slate-300 rounded-md border-dashed p-3 text-center">
                                                 <div class="font-bold">공개 상태</div>
-                                                <div class="btn-secondary p-1 rounded-md">@if($rs->open_status=="Y") 공개 @else 비공개 @endif</div>
+                                                <div class="btn-secondary p-1 rounded-md" >@if($rs->open_status=="Y") 공개 @else 비공개 @endif</div>
                                             </div>
                                         </div>
                                     </div>
@@ -145,6 +149,7 @@
                                         </div>
                                     @endif
                                 </div>
+                            @php $i++; @endphp
                             @endforeach
                             <!--
                             <div class="flex box justify-between w-full p-5">
@@ -164,7 +169,7 @@
                 <!-- 페이징처리 시작 -->
                 <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center mt-5">
                     <nav class="w-full">
-                        {{-- @include('vendor.pagination.default') --}}
+                        @include('vendor.pagination.default')
                     </nav>
                 </div>
                 <!-- 페이징처리 종료 -->

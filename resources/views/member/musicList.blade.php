@@ -150,7 +150,7 @@
                                             <div class="font-bold">재생 시간</div>
                                             <div class="btn-warning p-1 rounded-md">{{$rs->play_time}}</div>
                                         </div>
-                                        <div class="border border-slate-300 rounded-md border-dashed p-3 text-center">
+                                        <div class="border border-slate-300 rounded-md border-dashed p-3 text-center" style="width:90px;">
                                             <div class="font-bold">판매 상태</div>
                                             <div class="btn-secondary p-1 rounded-md">@if($rs->sales_status=="Y") 판매중 @else 미판매중 @endif</div>
                                         </div>
