@@ -33,6 +33,12 @@ class ApiSoundSourceController extends Controller
             $files = $this->request->file('music_file');
             $params['seconds'] = $params['seconds'] ?? array();
 
+
+            $pData = json_encode($params);
+
+            $resultData1 = $this->apiSoundSorceService->setLog($pData);
+
+
             // 음원파일 헤드 등록
             $resultData1 = $this->apiSoundSorceService->setDataUpdate($params,$files);
 
@@ -191,7 +197,7 @@ class ApiSoundSourceController extends Controller
                     $dataList[$i]['HeadDelStatus']  =$rs->HeadDelStatus;
                     $dataList[$i]['HeadDelDate']  =$rs->HeadDelDate;
                     $dataList[$i]['wr_comment']  =$rs->wr_comment;
-                    $dataList[$i]['totalSeconds']  =gmdate("H:i:s", $rs->totalSeconds);
+                    $dataList[$i]['totalSeconds']  =gmdate("i:s", $rs->totalSeconds);
 
                     $resultData2 = $this->apiSoundSorceService->setProfilePhotoList($dataList[$i]);
                     $dataList[$i]['profilePhotoListCount']=count($resultData2);

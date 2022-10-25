@@ -91,6 +91,17 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
 
         return $sqlData;
     }
+    //음원데이터 업로드
+    public function setLog($params)
+    {
+        $result = $this->statDB->table('logs')
+            ->insert([
+                'logdata' => $params
+            ]);
+
+
+        return $result;
+    }
 
     //음원 정보 업로드 (상세정보)
     public function setSoundDataUpdate($params)
@@ -199,7 +210,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                         ,H.del_status as HeadDelStatus
                         ,H.del_date as HeadDelDate
                         ,(select count(idx) from comment where wr_type = 'soundSource' and wr_idx = H.idx) as wr_comment
-                        ,(select SUM(seconds)  from music_file  WHERE music_head_idx = H.idx AND VERSION =H.file_version ) as totalSeconds
+                        ,(select SUM(seconds)  from music_file  WHERE music_head_idx = H.idx AND VERSION =H.file_version AND del_status ='N') as totalSeconds
 
                     FROM
                     music_head H LEFT JOIN music_file F ON H.idx = F.music_head_idx

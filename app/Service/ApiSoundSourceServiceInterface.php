@@ -56,6 +56,9 @@ interface ApiSoundSourceServiceInterface
     //음원 다음버전의 파일 업로드
     public function setDataUpLoad($params,$files);
 
+    //로그생성
+    public function setLog($params);
+
     //대표음원 변경
     public function setRepresentativeMusic($params);
 
