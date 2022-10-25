@@ -155,6 +155,7 @@ class ApiSoundSourceController extends Controller
         $params['limit'] = $params['limit'] ?? '10';
         $params['sDate'] = $params['sDate'] ?? '';
         $params['eDate'] = $params['eDate'] ?? '';
+        $params['tag'] = $params['tag'] ?? '';
         if($params['eDate'] !=""){
             $params['eDate'] = date("Ymd",strtotime($params['eDate'].' +1 days'));
         }

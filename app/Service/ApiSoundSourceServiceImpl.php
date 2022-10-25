@@ -178,9 +178,24 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
             $_where .= " AND H.progress_rate >= ".$params['sProgressRate'];
             $_where .= " AND H.progress_rate <= ".$params['eProgressRate'];
         }
-
-
-
+        if(trim($params['tag'])!=""){
+            $tagArray = explode(',', $params['tag']);
+            $tagArray = array_filter($tagArray);
+            $j=0;
+            $_where_temp="";
+            foreach($tagArray as $rs){
+                if($rs!=null) {
+                    if ($j == 0) {
+                        $_where_temp .= "( tag LIKE '%" . $rs . "%' ";
+                    } else {
+                        $_where_temp .= " or tag LIKE '%" . $rs . "%' ";
+                    }
+                    $j++;
+                }
+            }
+            $_where_temp .= " )";
+            $_where .= " AND ".$_where_temp;
+        }
 
         $result = $this->statDB->select(
             "
