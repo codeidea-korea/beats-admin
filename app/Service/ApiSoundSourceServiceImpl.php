@@ -16,9 +16,9 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
     }
 
     //음원파일 업로드
-    public function setSoundFileUpdate($params,$files)
+    public function setSoundFileUpdate($params,$files,$params2)
     {
-
+//$params2['seconds']
         $sqlData['file_cnt'] = count($files);
         $sqlData['mem_id'] = $params['mem_id'];
         $sqlData['idx'] = $params['idx'];
@@ -27,11 +27,13 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
         if($files != "" && $files !=null){
             $cnt = count($files);
             $i=1;
+            $j=0;
             foreach($files as $fa){
 
                 $sqlData['file_name'] = $fa->getClientOriginalName();
                 $sqlData['hash_name'] = $fa->hashName();
                 $sqlData['file_url'] =  $folderName;
+                $sqlData['seconds'] = $params2['seconds'][$j];
                 $fa->storeAs($folderName, $fa->hashName(), 'public');
                 if($cnt==$i){
                     $result = $this->statDB->table('music_file')
@@ -43,6 +45,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                             , 'file_url' => $sqlData['file_url']
                             , 'file_no' => $i
                             , 'representative_music' => 'Y'
+                            , 'seconds' => $sqlData['seconds']
                         ]);
 
                     $last_file['file_name'] = $sqlData['file_name'];
@@ -57,10 +60,12 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                             , 'hash_name' => $sqlData['hash_name']
                             , 'file_url' => $sqlData['file_url']
                             , 'representative_music' => 'N'
+                            , 'seconds' => $sqlData['seconds']
                         ]);
                 }
 
                 $i++;
+                $j++;
             }
         }
 
@@ -194,6 +199,8 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                         ,H.del_status as HeadDelStatus
                         ,H.del_date as HeadDelDate
                         ,(select count(idx) from comment where wr_type = 'soundSource' and wr_idx = H.idx) as wr_comment
+                        ,(select SUM(seconds)  from music_file  WHERE music_head_idx = H.idx AND VERSION =H.file_version ) as totalSeconds
+
                     FROM
                     music_head H LEFT JOIN music_file F ON H.idx = F.music_head_idx
                     LEFT JOIN member_data M ON F.mem_id=M.mem_id
@@ -524,12 +531,15 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
         if($files != "" && $files !=null){
             $cnt = count($files);
             $i=1;
+            $j=0;
             foreach($files as $fa){
 
 
                 $sqlData['file_name'] = $fa->getClientOriginalName();
                 $sqlData['hash_name'] = $fa->hashName();
                 $sqlData['file_url'] =  $folderName;
+                $sqlData['seconds'] =  $params['seconds'][$j];
+
 
                 $fa->storeAs($folderName, $fa->hashName(), 'public');
 
@@ -544,6 +554,8 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                             , 'version' => $version_next
                             , 'file_no' => $i
                             , 'representative_music' => 'Y'
+                            , 'seconds' => $sqlData['seconds']
+
                         ]);
                 }else{
                     $result = $this->statDB->table('music_file')
@@ -556,10 +568,12 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                             , 'version' => $version_next
                             , 'file_no' => $i
                             , 'representative_music' => 'N'
+                            , 'seconds' => $sqlData['seconds']
                         ]);
                 }
 
                 $i++;
+                $j++;
             }
 
             $result = $this->statDB->table('music_head')

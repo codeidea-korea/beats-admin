@@ -7,7 +7,7 @@ interface ApiSoundSourceServiceInterface
 {
 
     //음원파일 업로드
-    public function setSoundFileUpdate($params,$files);
+    public function setSoundFileUpdate($params,$files,$params2);
 
     //음원데이터 업로드
     public function setDataUpdate($params,$files);

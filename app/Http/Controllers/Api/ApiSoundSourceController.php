@@ -31,12 +31,13 @@ class ApiSoundSourceController extends Controller
             $params['mem_id'] = $params['mem_id'] ?? 0;
 
             $files = $this->request->file('music_file');
+            $params['seconds'] = $params['seconds'] ?? array();
 
             // 음원파일 헤드 등록
             $resultData1 = $this->apiSoundSorceService->setDataUpdate($params,$files);
 
             // 첨부파일 db 등록 및 서버 저장
-            $resultData2 = $this->apiSoundSorceService->setSoundFileUpdate($resultData1,$files);
+            $resultData2 = $this->apiSoundSorceService->setSoundFileUpdate($resultData1,$files,$params);
 
             $returnData['code']=0;
             $returnData['message']="음원파일 등록 완료";
@@ -58,6 +59,7 @@ class ApiSoundSourceController extends Controller
             $params = $this->request->input();
             $params['mem_id'] = $params['mem_id'] ?? 0;
             $params['music_head_idx'] = $params['music_head_idx'] ?? 0;
+            $params['seconds'] = $params['seconds'] ?? array();
             //$params['file_version'] = $params['file_version'] ?? 0;
             //$params['file_version_next'] =  $params['file_version']+1;
 
@@ -189,6 +191,8 @@ class ApiSoundSourceController extends Controller
                     $dataList[$i]['HeadDelStatus']  =$rs->HeadDelStatus;
                     $dataList[$i]['HeadDelDate']  =$rs->HeadDelDate;
                     $dataList[$i]['wr_comment']  =$rs->wr_comment;
+                    $dataList[$i]['totalSeconds']  =gmdate("H:i:s", $rs->totalSeconds);
+
                     $resultData2 = $this->apiSoundSorceService->setProfilePhotoList($dataList[$i]);
                     $dataList[$i]['profilePhotoListCount']=count($resultData2);
                     $dataList[$i]['profilePhotoList']=$resultData2;

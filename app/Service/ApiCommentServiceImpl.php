@@ -55,6 +55,8 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
             ->leftJoin('music_file', 'comment.music_idx', '=', 'music_file.idx')
             ->leftJoin('member_data AS M', 'music_file.mem_id', '=', 'M.mem_id')
             ->leftJoin('record_file AS R', 'comment.idx', '=', 'R.comment_idx')
+            ->leftJoin('comment AS RC', 'comment.cm_idx', '=', 'RC.idx')
+            ->leftJoin('member_data AS MC', 'MC.mem_id', '=', 'RC.mem_id')
             ->select(
                 'comment.idx',
                 DB::raw('CASE WHEN comment.cm_idx = 0 THEN comment.idx ELSE comment.cm_idx END as sort_idx'),
@@ -86,6 +88,7 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
                 'R.file_name as recordFileName',
                 'R.hash_name as recordHashName',
                 'R.file_url as  recordFileUrl',
+                'MC.mem_nickname AS cmIdxNickname',
 
                 DB::raw('now() as now_date'),
             )
