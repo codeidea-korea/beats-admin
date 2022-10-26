@@ -100,16 +100,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/terms/delete', [BoardController::class, 'TermsDelete']);
         Route::get('/terms/termstype', [BoardController::class, 'getTermsType']);
 
-
-
-
         //contract 계약서
         Route::get('/contract/list', [BoardController::class, 'getContractList']);
         Route::get('/contract/write', [BoardController::class, 'getContractWrite']);
         Route::post('/contract/add', [BoardController::class, 'setContractAdd']);
         Route::get('/contract/view/{idx}', [BoardController::class, 'getContractView']);
         Route::post('/contract/delete', [BoardController::class, 'setContractDelete']);
-
 
     });
 
@@ -123,8 +119,6 @@ Route::middleware(['auth'])->group(function () {
         Route::post('updateMenuManage', [MultilingualController::class, 'setMenuManage']);
         Route::get('menuDownloadExcel', [MultilingualController::class, 'menuDownloadExcel']);
         Route::post('menuUploadExcel', [MultilingualController::class, 'menuUploadExcel']);
-
-
 
     });
 
@@ -171,12 +165,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('feedBeatView/{idx}', [FeedController::class, 'getFeedBeatView']);
         Route::get('feedCommentView/{idx}', [FeedController::class, 'getFeedCommentView']);
         Route::post('feedUpdate', [FeedController::class, 'feedUpdate']);
-
         Route::get('/comment/commentDetail', [FeedController::class, 'getCommentDetail']);
         Route::get('/comment/commentUpdate', [FeedController::class, 'commentUpdate']);
     });
-
-
 
     Route::post('ckeditor/upload', [BoardController::class, 'upload'])->name('ckeditor.upload');
 });
