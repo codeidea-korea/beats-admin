@@ -122,7 +122,7 @@
                 return false;
             }
 
-            $("#wr_content").val(editor.getData());
+            //$("#wr_content").val(editor.getData());
 
             $('#boardWriteForm').submit();
 

@@ -90,6 +90,7 @@ class BoardController extends Controller
     public function BoardAdd()
     {
         $params = $this->request->input();
+        var_dump($params);exit();
         $result = $this->adminBoardService->BoardAdd($params);
 
         if($result){
