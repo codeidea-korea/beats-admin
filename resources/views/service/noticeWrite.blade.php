@@ -112,10 +112,6 @@
                 return false;
             }
 
-            if(editor.getData() == ""){
-                alert("내용을 입력해주세요.");
-                return false;
-            }
 
             if($("select[name='wr_open']").val() == ""){
                 alert("노출 여부를 선택해주세요.");
