@@ -48,11 +48,10 @@
                                     <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">내용</th>
                                     <td colspan="3" class="whitespace-nowrap">
                                         <script type="text/javascript" src="/smarteditor2-2.8.2.3/js/HuskyEZCreator.js" charset="utf-8"></script>
-                                        <textarea class="form-control" name="editor1" id="editor1"
+                                        <textarea class="form-control" name="wr_content" id="wr_content"
                                                   rows="20" cols="10"
                                                   placeholder="내용을 입력해주세요"
                                         >{{$boardData[0]->wr_content}}</textarea>
-                                        <textarea name="wr_content" id="wr_content" class="hidden"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
@@ -84,7 +83,7 @@
 
                             <div class="flex items-center justify-center mt-5">
                                 <button type="button" class="btn btn-secondary w-32 boardDeletebtn">삭제</button>
-                                <button class="btn btn-primary w-32 ml-2 mr-2 boardUpdatebtn">수정</button>
+                                <div class="btn btn-primary w-32 ml-2 mr-2 boardUpdatebtn">수정</div>
                                 <button type="button" class="btn btn-secondary w-32" onclick="location.href='/service/board/list'">취소</button>
                             </div>
                         </form>
@@ -103,18 +102,22 @@
 
         let oEditors = []
 
-        smartEditor = function() {
-            console.log("Naver SmartEditor")
+        $(document).ready(function() {
             nhn.husky.EZCreator.createInIFrame({
                 oAppRef: oEditors,
-                elPlaceHolder: "editor1",
+                elPlaceHolder: "wr_content",
                 sSkinURI: "/smarteditor2-2.8.2.3/SmartEditor2Skin.html",
-                fCreator: "createSEditor2"
+                fCreator: "createSEditor2",
+                htParams : {
+                    bUseToolbar : true,				// 툴바 사용 여부 (true:사용/ false:사용하지 않음)
+                    bUseVerticalResizer : true,		// 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
+                    bUseModeChanger : true,			// 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
+                    fOnBeforeUnload : function(){
+                    }
+                },
+                fOnAppLoad : function(){
+                },
             })
-        }
-
-        $(document).ready(function() {
-            smartEditor()
         })
 
         $(document).on('click','.boardUpdatebtn', function(){
@@ -129,19 +132,14 @@
                 return false;
             }
 
-            if(editor.getData() == ""){
-                alert("내용을 입력해주세요.");
-                return false;
-            }
-
             if($("select[name='wr_open']").val() == ""){
                 alert("노출 여부를 선택해주세요.");
                 return false;
             }
 
-            $("#wr_content").val(editor.getData());
+            oEditors.getById["wr_content"].exec("UPDATE_CONTENTS_FIELD", []);
 
-            $('#boardUpdateForm').submit();
+            $('#boardUpdateForm')[0].submit();
 
             /*var BannerWriteForm = $("#BannerWriteForm")[0];
             var formData = new FormData(BannerWriteForm);
