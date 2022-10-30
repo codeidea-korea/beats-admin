@@ -170,6 +170,18 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::post('ckeditor/upload', [BoardController::class, 'upload'])->name('ckeditor.upload');
+
+
+    //콘텐츠 관리
+    Route::group(['prefix' => 'products'], function()
+    {
+        Route::get('/', [ProductController::class, 'getProductList']);
+
+        // 상품리스트
+        Route::get('productList', [ProductController::class, 'getProductList']);
+
+    });
+
 });
 
 //Route::get('/file-import',[UserController::class,'importView'])->name('import-view');
