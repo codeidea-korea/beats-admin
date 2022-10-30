@@ -119,7 +119,7 @@
         $(document).ready(function() {
             nhn.husky.EZCreator.createInIFrame({
                 oAppRef: oEditors,
-                elPlaceHolder: "wr_content",
+                elPlaceHolder: "content",
                 sSkinURI: "/smarteditor2-2.8.2.3/SmartEditor2Skin.html",
                 fCreator: "createSEditor2",
                 htParams : {
