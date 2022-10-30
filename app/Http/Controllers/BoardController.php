@@ -201,6 +201,7 @@ class BoardController extends Controller
     {
         $params = $this->request->input();
         $file = $this->request->file('event_img');
+        //var_dump($params);exit();
         $result = $this->adminBoardService->EventUpdate($params,$file);
 
         if($result){
