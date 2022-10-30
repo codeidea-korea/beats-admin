@@ -425,7 +425,7 @@ class BoardController extends Controller
 
         $params['adminidx'] = $params['adminidx'] ?? '';
         $params['version'] = $params['version'] ?? '';
-        $params['editor1'] = $params['editor1'] ?? '';
+        $params['contents'] = $params['contents'] ?? '';
 
         if($params['adminidx'] ==""||$params['version']==""||$params['editor1']==""){
             return redirect()->back()->with('alert', '누락된 정보가 있습니다. \n관리자에게 문의 바랍니다.');

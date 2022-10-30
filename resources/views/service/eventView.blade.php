@@ -135,10 +135,7 @@
                 return false;
             }
 
-            if(editor.getData() == ""){
-                alert("내용을 입력해주세요.");
-                return false;
-            }
+
 
             if($("input[name='event_date']").val() == ""){
                 alert("이벤트 기간을 입력해주세요.");
@@ -151,6 +148,10 @@
             }
 
             oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+            if($("textarea[name='content']").val() == ""){
+                alert("내용을 입력해주세요.");
+                return false;
+            }
 
             $('#boardUpdateForm')[0].submit();
 

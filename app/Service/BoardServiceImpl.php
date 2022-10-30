@@ -603,7 +603,7 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
 
         $result = $this->statDB->table('contract')
             ->insert([
-                'contents' => $params['editor1']
+                'contents' => $params['contents']
                 ,'version' => $params['version']
                 ,'adminidx' => $params['adminidx']
                 ,'start_date' => $params['start_date']

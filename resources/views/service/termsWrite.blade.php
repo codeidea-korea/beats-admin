@@ -52,19 +52,12 @@
                                     <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">내용</th>
                                     <td colspan="3" class="whitespace-nowrap">
                                         <div class="p-5" id="classic-editor">
-                                            <!-- <div class="preview">
-                                                <div class="editor">
-                                                </div>
-                                            </div>
-                                            <div class="source-code hidden">
-                                                <button data-target="#copy-classic-editor" class="copy-code btn py-1 px-2 btn-outline-secondary"> <i data-lucide="file" class="w-4 h-4 mr-2"></i> Copy example code </button>
-                                                <div class="overflow-y-auto mt-3 rounded-md">
-                                                    <pre class="source-preview" id="copy-classic-editor"> <code class="javascript"> import ClassicEditor from &quot;@ckeditor/ckeditor5-build-classic&quot;; $(&quot;.editor&quot;).each(function () { const el = this;  ClassicEditor.create(el).then( newEditor => {editor = newEditor;} ).catch((error) =HTMLCloseTag { console.error(error); }); }); </code> </pre>
-                                                </div>
-                                            </div> -->
-                                            <textarea class="form-control" id="editor1" name="editor1"></textarea>
+                                            <script type="text/javascript" src="/smarteditor2-2.8.2.3/js/HuskyEZCreator.js" charset="utf-8"></script>
+                                            <textarea class="form-control" name="content" id="content"
+                                                      rows="20" cols="10"
+                                                      placeholder="내용을 입력해주세요"
+                                            ></textarea>
                                         </div>
-                                        <textarea name="content" id="content" class="hidden"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
@@ -119,27 +112,28 @@
 
     </div>
 
-    <script src="/dist/js/ckeditor.js"></script>
-    <script src="/dist/js/ck.upload.adapter.js"></script>
-
     <script>
 
-        var ajax_checked = false;
-        let editor;
+        let oEditors = []
 
-        ClassicEditor
-        .create( document.querySelector( '#editor1' ), {
-            ckfinder: {
-                uploadUrl: "{{route('ckeditor.upload').'?_token='.csrf_token()}}"
-            }
+        $(document).ready(function() {
+            nhn.husky.EZCreator.createInIFrame({
+                oAppRef: oEditors,
+                elPlaceHolder: "wr_content",
+                sSkinURI: "/smarteditor2-2.8.2.3/SmartEditor2Skin.html",
+                fCreator: "createSEditor2",
+                htParams : {
+                    bUseToolbar : true,				// 툴바 사용 여부 (true:사용/ false:사용하지 않음)
+                    bUseVerticalResizer : true,		// 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
+                    bUseModeChanger : true,			// 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
+                    fOnBeforeUnload : function(){
+                    }
+                },
+                fOnAppLoad : function(){
+                },
+            })
         })
-        .then(newEditor => {
-            editor = newEditor;
-        })
-        .catch( error => {
-            console.error( error );
-        } );
-        
+
         // 값 가져오기
         $(document).on('change','#gubun',function(){
 
@@ -172,7 +166,7 @@
 
         $(document).on('click','.termsAddbtn', function(){
 
-            
+
             if($("select[name='gubun']").val() == ""){
                 alert("구분을 선택해주세요.");
                 return false;
@@ -188,17 +182,16 @@
                 return false;
             }
 
-            if(editor.getData() == ""){
-                alert("내용을 입력해주세요.");
-                return false;
-            }
-
             if($("#apply_date").val() == ""){
                 alert("적용 날짜를 선택해주세요.");
                 return false;
             }
 
-            $("#content").val(editor.getData());
+            oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+            if($("textarea[name='content']").val() == ""){
+                alert("내용을 입력해주세요.");
+                return false;
+            }
 
             $('#termsUpdateForm')[0].submit();
 
