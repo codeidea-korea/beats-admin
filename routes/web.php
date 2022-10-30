@@ -11,6 +11,7 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\SoundSourceController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProductController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -176,9 +177,11 @@ Route::middleware(['auth'])->group(function () {
     Route::group(['prefix' => 'products'], function()
     {
         Route::get('/', [ProductController::class, 'getProductList']);
-
         // 상품리스트
         Route::get('productList', [ProductController::class, 'getProductList']);
+
+        // 상품등록화면
+        Route::get('productWrite', [ProductController::class, 'getProductWrite']);
 
     });
 

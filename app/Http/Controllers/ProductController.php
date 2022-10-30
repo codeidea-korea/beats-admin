@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
-
 use App\Service\ProductServiceImpl;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Maatwebsite\Excel\Facades\Excel;
+
 use Response;
 use Illuminate\Http\Request;
 use Session;
@@ -30,6 +30,7 @@ class ProductController extends Controller
     {
         $params = $this->request->input();
         $params['menuCode'] = "AD070000";
+
         $params['type'] = $params['type'] ?? 0;
         $params['page'] = $params['page'] ?? 1;
         $params['limit'] = $params['limit'] ?? 10;
@@ -54,6 +55,15 @@ class ProductController extends Controller
             ,'params' => $params
             ,'searchData' => $params
             //,'totalCount' => $totalCount
+        ]);
+    }
+
+    public function getProductWrite(){
+        $params = $this->request->input();
+        $params['menuCode'] = "AD070000";
+
+        return view('products.productWrite',[
+                'params' => $params
         ]);
     }
 }
