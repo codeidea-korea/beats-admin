@@ -78,7 +78,7 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
                 'comment.del_status',
                 'member_data.mem_nickname',
                 'comment.record',
-                'music_file.music_head_idx as musicHeadIdx',
+                'music_file.idx as musicFileHeadIdx',
                 'music_file.file_name as musicFileName',
                 'music_file.hash_name as musicHashName',
                 'music_file.file_url as  musicFileUrl',

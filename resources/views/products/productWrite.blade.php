@@ -74,20 +74,22 @@
                                 <tr>
                                     <th class="whitespace-nowrap text-center bg-primary/10">제품영</th>
                                     <td colspan="3">
-                                        <input  name="prName" type="text" class="form-control" placeholder="제품명 표기 영역">
+                                        <input  name="name" type="text" class="form-control" placeholder="제품명 표기 영역">
                                     </td>
                                 </tr>
 
                                 <tr>
                                     <th class="whitespace-nowrap text-center bg-primary/10">(영어)제품영</th>
                                     <td colspan="3">
-                                        <input name="prNameEng" type="text" class="form-control" placeholder="(영어) 제품명 표기 영역">
+                                        <input name="name_eng" type="text" class="form-control" placeholder="(영어) 제품명 표기 영역">
                                     </td>
                                 </tr>
 
                                 <tr>
                                     <th class="whitespace-nowrap text-center bg-primary/10">대표이미지</th>
                                     <td colspan="3">
+                                        <input type="file" name="productImg" id="productImg"  />
+                                        <!--
                                         <form data-single="true" action="/file-upload" class="dropzone">
                                             <div class="fallback">
                                                 <input name="file" type="file" />
@@ -99,6 +101,7 @@
                                                 </div>
                                             </div>
                                         </form>
+                                        -->
                                     </td>
                                 </tr>
 
@@ -116,61 +119,58 @@
                                     <td colspan="3">
                                         <div class="grid grid-cols-6 gap-6">
                                             <table class="table table-bordered">
+                                                <thead>
                                                 <tr>
                                                     <th class="whitespace-nowrap text-center w-32">옵션 구분</th>
-                                                    <td>
-                                                        <input id="regular-form-1" type="text" class="form-control" placeholder="형태">
-                                                    </td>
-                                                    <th class="whitespace-nowrap text-center w-32">옵션 구분</th>
-                                                    <td>
-                                                        <input id="regular-form-1" type="text" class="form-control" placeholder="색상">
-                                                    </td>
+                                                    <th class="whitespace-nowrap text-center w-32">형태-색상</th>
                                                     <th class="whitespace-nowrap text-center w-32">추가 금액</th>
-                                                    <th class="whitespace-nowrap text-center w-32">재고 수량</th>
-                                                    <th class="whitespace-nowrap text-center w-32">-</th>
+                                                    <th class="whitespace-nowrap text-center w-32">재고수량</th>
+                                                    <th class="whitespace-nowrap text-center w-32"> - </th>
                                                 </tr>
-
+                                                </thead>
+                                                <tbody id="optionTable">
                                                 <tr>
                                                     <th class="whitespace-nowrap text-center">옵션#1</th>
                                                     <td>
-                                                        <input id="regular-form-1" type="text" class="form-control" placeholder="기본형">
+                                                        <input id="" type="text" class="form-control" placeholder="기본형">
                                                     </td>
-                                                    <th class="whitespace-nowrap text-center">옵션#2</th>
                                                     <td>
-                                                        <input id="regular-form-1" type="text" class="form-control" placeholder="Black">
+                                                        <input id="" type="text" class="form-control" placeholder="0">
                                                     </td>
-                                                    <td class="whitespace-nowrap">
-                                                        <input id="regular-form-1" type="text" class="form-control" placeholder="0">
-                                                    </td>
-                                                    <td class="whitespace-nowrap">
-                                                        <input id="regular-form-1" type="text" class="form-control" placeholder="10,000">
+                                                    <td>
+                                                        <input id="" type="text" class="form-control" placeholder="1000">
                                                     </td>
                                                     <td class="whitespace-nowrap text-center">
-                                                        <button class="btn btn-primary w-24">추가</button>
+                                                        <button class="btn btn-primary w-24" onClick="addOptionFrom();">추가</button>
                                                     </td>
                                                 </tr>
-
                                                 <tr>
-                                                    <th class="whitespace-nowrap text-center">옵션#1</th>
-                                                    <td>
-                                                        <input id="regular-form-1" type="text" class="form-control" placeholder="기본형">
-                                                    </td>
                                                     <th class="whitespace-nowrap text-center">옵션#2</th>
-                                                    <td>
-                                                        <input id="regular-form-1" type="text" class="form-control" placeholder="Red">
-                                                    </td>
-                                                    <td class="whitespace-nowrap">
-                                                        <input id="regular-form-1" type="text" class="form-control" placeholder="0">
-                                                    </td>
-                                                    <td class="whitespace-nowrap">
-                                                        <input id="regular-form-1" type="text" class="form-control" placeholder="10,000">
-                                                    </td>
-                                                    <td class="whitespace-nowrap text-center">
-                                                        <button class="btn btn-danger w-24">삭제</button>
-                                                    </td>
+                                                    <td><input id="" type="text" class="form-control" placeholder="기본형"></td>
+                                                    <td><input id="" type="text" class="form-control" placeholder="0"></td>
+                                                    <td><input id="" type="text" class="form-control" placeholder="1000"></td>
+                                                    <td class="whitespace-nowrap text-center"><button class="btn btn-danger w-24">삭제</button></td>
                                                 </tr>
-
+                                                </tbody>
                                             </table>
+                                            <script>
+                                                function addOptionFrom(){
+                                                    alert();
+                                                    var dom = document.createElement('tr');
+                                                    var ihtml = "";
+                                                    ihtml =  "<tr>"
+                                                    ihtml += "<th class='whitespace-nowrap text-center'>옵션#2</th>"
+                                                    ihtml += "<td><input id=''  type='text' class='form-control' placeholder='기본형'></td>"
+                                                    ihtml += "<td><input id=''  type='text' class='form-control' placeholder='0'></td>"
+                                                    ihtml += "<td><input id=''  type='text' class='form-control' placeholder='1000 '></td>"
+                                                    ihtml += "<td class='whitespace-nowrap text-center'><button class='btn btn-danger w-24'>삭제</button></td>"
+                                                    ihtml += "</tr>";
+                                                    dom.innerHTML = ihtml;
+
+                                                    $("#optionTable").append(dom);
+                                                }
+
+                                            </script>
                                         </div>
                                     </td>
                                 </tr>
@@ -198,7 +198,7 @@
                                             <div class="preview">
                                                 <div class="editor">
                                                     <script type="text/javascript" src="/smarteditor2-2.8.2.3/js/HuskyEZCreator.js" charset="utf-8"></script>
-                                                    <textarea class="form-control" name="informationEng" id="informationEng"
+                                                    <textarea class="form-control" name="information_eng" id="information_eng"
                                                               rows="10" cols="10"
                                                               placeholder="내용을 입력해주세요"
                                                     ></textarea>
@@ -215,27 +215,27 @@
                                             <tr>
                                                 <th class="whitespace-nowrap text-center">기본 배송비</th>
                                                 <td colspan="3" class="whitespace-nowrap">
-                                                    <input name="deliveryCharge" id="deliveryCharge" type="text" class="form-control" placeholder="0">
+                                                    <input name="delivery_charge" id="delivery_charge" type="text" class="form-control" placeholder="0">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="whitespace-nowrap text-center">반품 배송비</th>
                                                 <td>
-                                                    <input name="deliveryChargeRe" id="deliveryChargeRe" type="text" class="form-control" placeholder="0">
+                                                    <input name="delivery_charge_re" id="delivery_charge_re" type="text" class="form-control" placeholder="0">
                                                 </td>
                                                 <th class="whitespace-nowrap text-center">교환 배송비 왕복</th>
                                                 <td>
-                                                    <input name="deliveryChargeCh" id="deliveryChargeCh" type="text" class="form-control" placeholder="0">
+                                                    <input name="delivery_charge_ch" id="delivery_charge_ch" type="text" class="form-control" placeholder="0">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="whitespace-nowrap text-center">제주도 배송비</th>
                                                 <td>
-                                                    <input name="deliveryChargeJj" id="deliveryChargeJj" type="text" class="form-control" placeholder="0">
+                                                    <input name="delivery_charge_jj" id="delivery_charge_jj" type="text" class="form-control" placeholder="0">
                                                 </td>
                                                 <th class="whitespace-nowrap text-center">도서산간 베송비</th>
                                                 <td>
-                                                    <input name="deliveryChargeEx" id="deliveryChargeEx" type="text" class="form-control" placeholder="0">
+                                                    <input name="delivery_charge_ex" id="delivery_charge_ex" type="text" class="form-control" placeholder="0">
                                                 </td>
                                             </tr>
                                         </table>
@@ -265,7 +265,7 @@
                                             <div class="preview">
                                                 <div class="editor">
                                                     <script type="text/javascript" src="/smarteditor2-2.8.2.3/js/HuskyEZCreator.js" charset="utf-8"></script>
-                                                    <textarea class="form-control" name="policyEng" id="policyEng"
+                                                    <textarea class="form-control" name="policy_eng" id="policy_eng"
                                                               rows="10" cols="10"
                                                               placeholder="내용을 입력해주세요"
                                                     ></textarea>
@@ -303,7 +303,7 @@
                                 <tr>
                                     <th class="whitespace-nowrap text-center bg-primary/10">노출 상태</th>
                                     <td colspan="3">
-                                        <select class="form-select w-56" aria-label=".form-select-lg example">
+                                        <select name="is_display" class="form-select w-56" aria-label=".form-select-lg example">
                                             <option>공개</option>
                                             <option>비공개</option>
                                         </select>
