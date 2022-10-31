@@ -767,7 +767,7 @@
                 url: '/member/ajax/excelupload',
                 success: function (data) {
 
-                    if(empty == "empty"){
+                    if(data == "empty"){
                         alert('엑셀이 비어있습니다.');
                     }else{
                         send_member = [];
