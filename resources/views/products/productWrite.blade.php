@@ -130,15 +130,15 @@
                                                 </thead>
                                                 <tbody id="optionTable">
                                                 <tr>
-                                                    <th class="whitespace-nowrap text-center">옵션#1</th>
+                                                    <th class="whitespace-nowrap text-center"><input type="hidden" name="option_no[]" value="1">옵션#1</th>
                                                     <td>
-                                                        <input id="" type="text" class="form-control" placeholder="기본형">
+                                                        <input name="option_title[]" type="text" class="form-control" placeholder="기본형">
                                                     </td>
                                                     <td>
-                                                        <input id="" type="text" class="form-control" placeholder="0">
+                                                        <input name="option_price[]" type="text" class="form-control" placeholder="0">
                                                     </td>
                                                     <td>
-                                                        <input id="" type="text" class="form-control" placeholder="0">
+                                                        <input name="option_stock[]" type="text" class="form-control" placeholder="0">
                                                     </td>
                                                     <td class="whitespace-nowrap text-center">
                                                         <button class="btn btn-primary w-24" onClick="addOptionFrom();">추가</button>
@@ -152,23 +152,30 @@
                                                     var totalCnt = $("#totalCnt").val();
                                                     var nowCount = totalCnt*1+1;
                                                     $("#totalCnt").val(nowCount);
-                                                    alert(nowCount);
                                                     var dom = document.createElement('tr');
                                                     var ihtml = "";
                                                     ihtml =  "<tr>"
-                                                    ihtml += "<th class='whitespace-nowrap text-center'>옵션#"+nowCount+"</th>"
-                                                    ihtml += "<td><input id=''  type='text' class='form-control' placeholder='기본형'></td>"
-                                                    ihtml += "<td><input id=''  type='text' class='form-control' placeholder='0'></td>"
-                                                    ihtml += "<td><input id=''  type='text' class='form-control' placeholder='0 '></td>"
-                                                    ihtml += "<td class='whitespace-nowrap text-center'><button class='btn btn-danger w-24'>삭제</button></td>"
+                                                    ihtml += "<th class='whitespace-nowrap text-center'><input type='hidden' name='option_no[]' value='"+nowCount+"'>옵션#"+nowCount+"</th>"
+                                                    ihtml += "<td><input name='option_title[]'  type='text' class='form-control' placeholder='기본형'></td>"
+                                                    ihtml += "<td><input name='option_price[]'  type='text' class='form-control' placeholder='0'></td>"
+                                                    ihtml += "<td><input name='option_stock[]'  type='text' class='form-control' placeholder='0 '></td>"
+                                                    ihtml += "<td class='whitespace-nowrap text-center'><button class='btn btn-danger w-24 btnCancle'>삭제</button></td>"
                                                     ihtml += "</tr>";
                                                     dom.innerHTML = ihtml;
 
                                                     $("#optionTable").append(dom);
                                                 }
-                                                function cancleLangFrom() {
-                                                    $(".newLangSelect_"+no).remove();
-                                                }
+                                                $(function (){
+                                                    // 폼삭제
+                                                    $("#optionTable").on("click", ".btnCancle", function() {
+                                                        $(this).closest("tr").remove();
+                                                    });
+
+                                                    $(".proIn").on('click', function(){
+                                                        alert();
+                                                    });
+
+                                                })
 
                                             </script>
                                         </div>
@@ -321,7 +328,7 @@
                                 </div>
                                 <div>
                                     <button class="btn btn-secondary w-24">삭제</button>
-                                    <button class="btn btn-primary w-24 ml-2">수정</button>
+                                    <button class="btn btn-primary w-24 ml-2 proIn">저장</button>
                                 </div>
                             </div>
                         </div>
