@@ -122,25 +122,25 @@
                 var nowCount = totalCnt*1+1;
                 $("#totalCnt").val(nowCount);
 
-                 var dom = document.createElement('tr');
-                 var ihtml = "";
-                 ihtml =  "<tr class='newLangTr_"+nowCount+"' >"+"<td class='text-center'>"+nowCount+"</td>"
-                 ihtml += "<td>"
-                 ihtml += "<div class='mt-2'>"
-                 ihtml += "<select data-placeholder='Select your favorite actors' class='tom-select w-full' name='newLangSelect_"+nowCount+"' >"
-                 ihtml += "<option value=''>언어선택</option>"
-                 ihtml += "<option value='kr'>한국어</option>"
-                 ihtml += "<option value='en'>영어</option>"
-                 ihtml += "<option value='jp'>일본어</option>"
-                 ihtml += "<option value='ch'>중국어</option>"
-                 ihtml += "</select>"
-                 ihtml += "</div>"
-                 ihtml += "</td>"
-                 ihtml += "<td><button class='btn btn-outline-pending w-24 inline-block newLangbtnCancle'>취소</button></td>"
-                 ihtml += "</tr>";
-                 dom.innerHTML = ihtml;
+                var dom = document.createElement('tr');
+                var ihtml = "";
+                ihtml =  "<tr class='newLangTr_"+nowCount+"' >"+"<td class='text-center'>"+nowCount+"</td>"
+                ihtml += "<td>"
+                ihtml += "<div class='mt-2'>"
+                ihtml += "<select data-placeholder='Select your favorite actors' class='tom-select w-full' name='newLangSelect_"+nowCount+"' >"
+                ihtml += "<option value=''>언어선택</option>"
+                ihtml += "<option value='kr'>한국어</option>"
+                ihtml += "<option value='en'>영어</option>"
+                ihtml += "<option value='jp'>일본어</option>"
+                ihtml += "<option value='ch'>중국어</option>"
+                ihtml += "</select>"
+                ihtml += "</div>"
+                ihtml += "</td>"
+                ihtml += "<td><button class='btn btn-outline-pending w-24 inline-block newLangbtnCancle'>취소</button></td>"
+                ihtml += "</tr>";
+                dom.innerHTML = ihtml;
 
-                 $("#langTable").append(dom);
+                $("#langTable").append(dom);
             }
 
 

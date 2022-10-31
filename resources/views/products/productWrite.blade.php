@@ -138,36 +138,36 @@
                                                         <input id="" type="text" class="form-control" placeholder="0">
                                                     </td>
                                                     <td>
-                                                        <input id="" type="text" class="form-control" placeholder="1000">
+                                                        <input id="" type="text" class="form-control" placeholder="0">
                                                     </td>
                                                     <td class="whitespace-nowrap text-center">
                                                         <button class="btn btn-primary w-24" onClick="addOptionFrom();">추가</button>
                                                     </td>
                                                 </tr>
-                                                <tr>
-                                                    <th class="whitespace-nowrap text-center">옵션#2</th>
-                                                    <td><input id="" type="text" class="form-control" placeholder="기본형"></td>
-                                                    <td><input id="" type="text" class="form-control" placeholder="0"></td>
-                                                    <td><input id="" type="text" class="form-control" placeholder="1000"></td>
-                                                    <td class="whitespace-nowrap text-center"><button class="btn btn-danger w-24">삭제</button></td>
-                                                </tr>
                                                 </tbody>
                                             </table>
+                                            <input type="hidden" id="totalCnt" value="1">
                                             <script>
                                                 function addOptionFrom(){
-                                                    alert();
+                                                    var totalCnt = $("#totalCnt").val();
+                                                    var nowCount = totalCnt*1+1;
+                                                    $("#totalCnt").val(nowCount);
+                                                    alert(nowCount);
                                                     var dom = document.createElement('tr');
                                                     var ihtml = "";
                                                     ihtml =  "<tr>"
-                                                    ihtml += "<th class='whitespace-nowrap text-center'>옵션#2</th>"
+                                                    ihtml += "<th class='whitespace-nowrap text-center'>옵션#"+nowCount+"</th>"
                                                     ihtml += "<td><input id=''  type='text' class='form-control' placeholder='기본형'></td>"
                                                     ihtml += "<td><input id=''  type='text' class='form-control' placeholder='0'></td>"
-                                                    ihtml += "<td><input id=''  type='text' class='form-control' placeholder='1000 '></td>"
+                                                    ihtml += "<td><input id=''  type='text' class='form-control' placeholder='0 '></td>"
                                                     ihtml += "<td class='whitespace-nowrap text-center'><button class='btn btn-danger w-24'>삭제</button></td>"
                                                     ihtml += "</tr>";
                                                     dom.innerHTML = ihtml;
 
                                                     $("#optionTable").append(dom);
+                                                }
+                                                function cancleLangFrom() {
+                                                    $(".newLangSelect_"+no).remove();
                                                 }
 
                                             </script>
