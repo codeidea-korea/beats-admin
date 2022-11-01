@@ -169,6 +169,7 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
             ->update(
                 [
                     'login_token' => $params['_token']
+                    ,'last_login_ip' => $params['last_login_ip']
                     ,'last_login_at' => DB::raw('DATE_ADD(NOW(), INTERVAL 1 HOUR)')
                 ]
             );
@@ -306,6 +307,8 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
             ->update(
                 [
                     'last_login_at' => DB::raw('DATE_ADD(NOW(), INTERVAL 1 HOUR)'),
+                    'last_login_ip' => $params['last_login_ip'],
+
                 ]
             );
         return $result;
@@ -383,8 +386,8 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
                 'kakao_key' => $params['kakao_key'], 'google_key' => $params['google_key'], 'facebook_key' => $params['facebook_key'],
                 'twitter_key' => $params['twitter_key'], 'soundcloud_key' => $params['soundcloud_key'], 'isuse' => 'Y',
                 'password' => Hash::make($params['password']), 'sign_site' => $params['sign_site'], 'created_at' => DB::raw('now()'),
+                'created_ip' => $params['created_ip'],
             ]);
-
         $result = $this->statDB->table('member_data')
             ->insert([
                 'name' => $params['name'], 'phone_number' => $params['phone_number'], 'email' => $params['email'], 'gubun' => $params['gubun'],

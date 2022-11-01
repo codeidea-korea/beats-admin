@@ -40,6 +40,7 @@ class ApiMemberController extends Controller
             $params['snsKey'] = $params['snsKey'] ?? "";
             $params['emailId'] = $params['emailId'] ?? "";
             $params['password'] = $params['password'] ?? "";
+            $params['last_login_ip'] =$params['last_login_ip'] ?? "";
 
 
             if($params['sns']=="email"){
@@ -177,6 +178,7 @@ class ApiMemberController extends Controller
             $params['snsKey'] = $params['snsKey'] ?? "";
             $params['emailId'] = $params['emailId'] ?? "";
             $params['_token'] = $params['_token'] ?? "";
+            $params['last_login_ip'] =$params['last_login_ip'] ?? "";
 
             $result = $this->apiMemberService->loginCheck($params);
 
@@ -336,6 +338,8 @@ class ApiMemberController extends Controller
             $params['existingEmailId'] = $params['existingEmailId'] ?? "";
 
             $params['channel'] = $params['sns'];
+
+            $params['created_ip'] =$params['created_ip'] ?? "";
 
             // 고유id값 [u_id]추출 start
             do {
