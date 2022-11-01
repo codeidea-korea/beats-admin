@@ -161,12 +161,7 @@
                                                     ihtml += "<td><input name='option_stock[]'  type='text' class='form-control' placeholder='0 '></td>"
                                                     ihtml += "<td class='whitespace-nowrap text-center'><button class='btn btn-danger w-24 btnCancle'>삭제</button></td>"
                                                     ihtml += "</tr>";
-                                                    dom.innerHT
-
-
-
-
-                                                    ML = ihtml;
+                                                    dom.innerHTML = ihtml;
 
                                                     $("#optionTable").append(dom);
                                                 }
