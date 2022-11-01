@@ -178,7 +178,8 @@ class ApiMemberController extends Controller
             $params['snsKey'] = $params['snsKey'] ?? "";
             $params['emailId'] = $params['emailId'] ?? "";
             $params['_token'] = $params['_token'] ?? "";
-            $params['last_login_ip'] =$params['last_login_ip'] ?? "";
+            $params['last_login_ip'] = $params['last_login_ip'] ?? "";
+
 
             $result = $this->apiMemberService->loginCheck($params);
 
