@@ -107,16 +107,16 @@ Route::prefix('/v1/')->group(function () {
     });
 
     // get
-    Route::get('testList', [ApiMemberController::class, 'testList']);
+    //Route::get('testList', [ApiMemberController::class, 'testList']);
 
-    // post
-    Route::post('testList', [ApiMemberController::class, 'testList']);
+    //// post
+    //Route::post('testList', [ApiMemberController::class, 'testList']);
 
-    // put  구형브라우저 X
-    Route::put('testList', [ApiMemberController::class, 'testList']);
+    //// put  구형브라우저 X
+    //Route::put('testList', [ApiMemberController::class, 'testList']);
 
-    // delete 구형브라우저 X
-    Route::delete('testList', [ApiMemberController::class, 'testList']);
+    //// delete 구형브라우저 X
+    //Route::delete('testList', [ApiMemberController::class, 'testList']);
 
     Route::get('getTerms', [ApiMemberController::class, 'getTerms']);
 

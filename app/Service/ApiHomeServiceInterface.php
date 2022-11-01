@@ -43,4 +43,6 @@ interface ApiHomeServiceInterface
 
     //약관 내용
     public function getTermsContent($params);
+
+
 }

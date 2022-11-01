@@ -77,6 +77,8 @@ class ApiHomeServiceImpl extends DBConnection  implements ApiHomeServiceInterfac
                 'name_kr as codeName',
                 'international_code2 as codeValue',
                 'international_number as telNo',
+                'country_img as countryImg',
+                'country_img as country_img',
             )
             ->orderby('idx','asc')
             ->get();
@@ -279,4 +281,5 @@ class ApiHomeServiceImpl extends DBConnection  implements ApiHomeServiceInterfac
         return $result;
 
     }
+
 }
