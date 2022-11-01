@@ -17,7 +17,7 @@
                         <div class="overflow-x-auto">
                             <table class="table table-bordered">
                                 <tr>
-                                    <th class="whitespace-nowrap text-center bg-primary/10 w-24">음원상태</th>
+                                    <th class="whitespace-nowrap text-center bg-primary/10 w-24">일별 통계</th>
                                     <td>
                                         <div class="flex items-center gap-3">
                                             <div class="relative w-56">
@@ -93,6 +93,8 @@
                     </div>
                 </div>
             </div>
+
+
 
             <div class="intro-y col-span-4">
                 <div class="box border border-slate-200 zoom-in h-full">

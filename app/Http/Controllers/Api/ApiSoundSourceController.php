@@ -255,8 +255,12 @@ class ApiSoundSourceController extends Controller
                 $returnData['response']['data']['modHour']  =$resultData->modHour;
                 $returnData['response']['data']['modMinute']  =$resultData->modMinute;
                 $returnData['response']['data']['modSecond']  =$resultData->modSecond;
+                if($resultData->moddate==null||$resultData->moddate==""){
+                    $diff = strtotime($resultData->now_date) - strtotime($resultData->crdate);
+                }else{
+                    $diff = strtotime($resultData->now_date) - strtotime($resultData->moddate);
+                }
 
-                $diff = strtotime($resultData->now_date) - strtotime($resultData->moddate);
                 $s = 60; //1분 = 60초
                 $h = $s * 60; //1시간 = 60분
                 $d = $h * 24; //1일 = 24시간

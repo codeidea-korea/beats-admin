@@ -127,7 +127,7 @@
                                 <tr>
                                     <th class="whitespace-nowrap text-center">No.</th>
                                     <th class="whitespace-nowrap text-center">분류</th>
-                                    <th class="whitespace-nowrap text-center">회원 구분</th>
+                                  <th class="whitespace-nowrap text-center">회원 구분</th>
                                     <th class="whitespace-nowrap text-center">가입 채널</th>
                                     <th class="whitespace-nowrap text-center">국적</th>
 
@@ -149,16 +149,19 @@
                                                 {{$totalCount-($i+(($params['page']-1)*10))}}
                                             </a>
                                         </td>
+
                                         <td class="whitespace-nowrap text-center">
                                             <a href="/member/memberView/{{$rs->mem_id}}">
                                                 {{$rs->classValue}}
                                             </a>
                                         </td>
+
                                         <td class="whitespace-nowrap text-center">
                                             <a href="/member/memberView/{{$rs->mem_id}}">
                                                 {{$rs->gubunValue}}
                                             </a>
                                         </td>
+
                                         <td class="whitespace-nowrap text-center">
                                             <a href="/member/memberView/{{$rs->mem_id}}">
                                                 {{$rs->channelValue}}
