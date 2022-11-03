@@ -308,7 +308,7 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
                 [
                     'last_login_at' => DB::raw('DATE_ADD(NOW(), INTERVAL 1 HOUR)'),
                     'last_login_ip' => $params['last_login_ip'],
-
+                    'login_cnt' => DB::raw('login_cnt + 1'),
                 ]
             );
         return $result;
