@@ -13,13 +13,13 @@
             <div class="intro-y col-span-12 lg:col-span-12">
                 <div class="flex w-full box pt-5">
                     <div class="ml-auto">
-                        <button class="btn btn-primary w-24 ml-2" onClick="excelDownload()">Excel Download</button>
+                        <button class="btn btn-primary ml-2" onClick="excelDownload()">Excel Download</button>
 
                     </div>
                     <form id="boardWriteForm" name="boardWriteForm" method="post" action="/multilingual/menuUploadExcel"  enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="excelCodeUp" id="excelCodeUp" >
-                        <input type="button" class="btn btn-primary w-24 ml-2" value="Excel Upload" onClick="validateForm();">
+                        <input type="button" class="btn btn-primary  ml-2" value="Excel Upload" onClick="validateForm();">
                         <input type="file" name="excelFile" id="excelFile" onChange="checkFile(this)" >
                     </form>
                 </div>
