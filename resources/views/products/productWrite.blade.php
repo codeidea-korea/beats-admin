@@ -42,15 +42,15 @@
                                     <th class="whitespace-nowrap text-center bg-primary/10">구분</th>
                                     <td colspan="3">
                                         <div class="form-check inline-block ml-5">
-                                            <input name="gubun" id="" class="form-check-input" type="checkbox" value="">
+                                            <input name="gubun" id="" class="form-check-input" type="checkbox" value="1">
                                             <label class="form-check-label" for="checkbox-switch-1">최저가</label>
                                         </div>
                                         <div class="form-check inline-block ml-5">
-                                            <input name="gubun" id="" class="form-check-input" type="checkbox" value="">
+                                            <input name="gubun" id="" class="form-check-input" type="checkbox" value="2">
                                             <label class="form-check-label" for="checkbox-switch-2">추천</label>
                                         </div>
                                         <div class="form-check inline-block ml-5">
-                                            <input name="gubun" id="" class="form-check-input" type="checkbox" value="">
+                                            <input name="gubun" id="" class="form-check-input" type="checkbox" value="3">
                                             <label class="form-check-label" for="checkbox-switch-3">구분 값 표기</label>
                                         </div>
                                         <!--
@@ -172,7 +172,75 @@
                                                     });
 
                                                     $(".proIn").on('click', function(){
+
+                                                        var formData = new FormData;
+
+                                                        var option_no_arr = [];
+                                                        $("input[name='option_no[]']").each(function(i) {
+                                                            //option_no_arr.push($(this).val());
+                                                            formData.append('option_no[]',$(this).val());
+                                                        });
+
+                                                        var option_title_arr = [];
+                                                        $("input[name='option_title[]']").each(function(i) {
+                                                            //option_title_arr.push($(this).val());
+                                                            formData.append('option_title[]',$(this).val());
+                                                        });
+
+                                                        var option_price_arr = [];
+                                                        $("input[name='option_price[]']").each(function(i) {
+                                                            //option_price_arr.push($(this).val());
+                                                            formData.append('option_price[]',$(this).val());
+                                                        });
+
+                                                        var option_stock_arr = [];
+                                                        $("input[name='option_stock[]']").each(function(i) {
+                                                            //option_stock_arr.push($(this).val());
+                                                            formData.append('option_stock[]',$(this).val());
+                                                        });
+                                                        var name = $('input[name=name]').val();
+                                                        var name_eng = $('input[name=name_eng]').val();
+                                                        var price = $('input[name=price]').val();
+                                                        var information = $('#information').val();
+                                                        var information = $('#information_eng').val();
+
+
+                                                        //var isuse = $('select[name=isuse]').val();
+                                                        //var group_code = $('select[name=group_code]').val();
+                                                        //var name = $('input[name=name]').val();
+                                                        //var id = $('input[name=id]').val();
+                                                        //var password = $('input[name=password]').val();
+                                                        //var password2 = $('input[name=password2]').val();
+                                                        //var phoneno = $('input[name=phoneno]').val();
+                                                        //var email = $('input[name=email]').val();
+
+
+                                                        //console.log(option_no_arr);
+                                                        //console.log(option_title_arr);
+                                                        //console.log(option_price_arr);
+                                                        //console.log(option_stock_arr);
+                                                        //console.log(formData);
+                                                        formData.append( "productImg", $("#productImg")[0].files[0] );
+
                                                         alert();
+                                                        jQuery.ajax({
+                                                            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                                                            type:"post",
+                                                            cache: false,
+                                                            processData: false,
+                                                            contentType: false,
+                                                            data: formData,
+                                                            url: '{{ url('/products/productInsert') }}',
+                                                            success: function searchSuccess(data) {
+                                                                console.log(data);
+                                                            },
+                                                            error: function (e) {
+                                                                console.log('start');
+                                                                console.log(e);
+                                                                alert('로딩 중 오류가 발생 하였습니다.');
+                                                            }
+                                                        });
+
                                                     });
 
                                                 })

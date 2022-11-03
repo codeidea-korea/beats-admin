@@ -183,6 +183,11 @@ Route::middleware(['auth'])->group(function () {
         // 상품등록화면
         Route::get('productWrite', [ProductController::class, 'getProductWrite']);
 
+
+        Route::post('productInsert', [ProductController::class, 'getProductInsert']);
+
+
+
     });
 
 });

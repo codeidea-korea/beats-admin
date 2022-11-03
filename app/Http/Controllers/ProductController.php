@@ -66,4 +66,24 @@ class ProductController extends Controller
                 'params' => $params
         ]);
     }
+
+    public function getProductInsert(){
+        $params = $this->request->input();
+        var_dump($params);exit();
+        $file = $this->request->file('productImg');
+        $folderName = '/product/'.date("Y/m/d").'/';
+        $sqlData['file_name'] = $file->getClientOriginalName();
+        $sqlData['hash_name'] = $file->hashName();
+        $file->storeAs($folderName, $file->hashName(), 'public');
+
+
+
+
+        //echo count($params['productImg']);
+        //foreach($params['option_title'] as $rs){
+        //    echo $rs."<br>";
+        //}
+        exit();
+        //var_dump($params);exit();
+    }
 }
