@@ -23,10 +23,10 @@ class FeedServiceImpl extends DBConnection  implements FeedServiceInterface
                 'feed_board.wr_title',
                 'feed_board.wr_type',
                 'feed_board.wr_lng',
-                DB::raw("(select count(idx)+1 from feed_file where feed_idx = feed_board.idx) as wr_file"),
+                DB::raw("(select count(idx) from feed_file where feed_idx = feed_board.idx and feed_file_type = 'music') as wr_file"),
                 'feed_board.wr_open',
                 DB::raw("(select count(idx) from beat_data where service_name = 'feed' and service_idx = feed_board.idx and is_beat = 1) as wr_bit"),
-                DB::raw("(select count(idx) from comment where wr_type = 'feed' and wr_idx = feed_board.idx) as wr_comment"),
+                DB::raw("(select count(idx) from comment where wr_type = 'feed' and wr_idx = feed_board.idx and del_status = 'N') as wr_comment"),
                 'feed_board.wr_report',
                 'feed_board.created_at',
                 'feed_board.updated_at',
@@ -118,11 +118,12 @@ class FeedServiceImpl extends DBConnection  implements FeedServiceInterface
                 'feed_board.wr_open',
                 'feed_board.wr_type',
                 DB::raw("(select count(idx) from beat_data where service_name = 'feed' and service_idx = feed_board.idx and is_beat = 1) as wr_bit"),
-                DB::raw("(select count(idx) from comment where wr_type = 'feed' and wr_idx = feed_board.idx) as wr_comment"),
+                DB::raw("(select count(idx) from comment where wr_type = 'feed' and wr_idx = feed_board.idx and del_status = 'N') as wr_comment"),
                 'feed_board.wr_report',
                 'feed_board.wr_lng',
                 'feed_board.feed_file',
                 'feed_board.feed_source',
+                DB::raw("CONCAT('".env('AWS_CLOUD_FRONT_URL')."',feed_board.file_url,feed_board.feed_source) AS feedfullUrl"),
                 'feed_board.file_url',
                 'feed_board.created_at',
                 'feed_board.updated_at',
@@ -217,6 +218,7 @@ class FeedServiceImpl extends DBConnection  implements FeedServiceInterface
                 'comment.created_at',
             )
             ->where('comment.wr_idx',$idx)
+            ->where('comment.wr_type','feed')
             ->when(isset($params['cm_open']), function($query) use ($params){
                 return $query->where(function($query) use ($params) {
                     $query->where('comment.cm_open',  $params['cm_open']);
@@ -248,6 +250,7 @@ class FeedServiceImpl extends DBConnection  implements FeedServiceInterface
         ->leftJoin('member_data','comment.mem_id','=','member_data.mem_id')
             ->select(DB::raw("COUNT(comment.idx) AS cnt"))
             ->where('comment.wr_idx',$idx)
+            ->where('comment.wr_type','feed')
             ->when(isset($params['cm_open']), function($query) use ($params){
                 return $query->where(function($query) use ($params) {
                     $query->where('comment.cm_open',  $params['cm_open']);
@@ -269,16 +272,19 @@ class FeedServiceImpl extends DBConnection  implements FeedServiceInterface
 
     }
 
-    public function getFeedFile($idx) {
+    public function getFeedFile($idx,$feed_file_type) {
 
         $result = $this->statDB->table('feed_file')
             ->select(
                 'feed_file.idx',
+                'feed_file.file_name',
                 'feed_file.hash_name',
                 'feed_file.file_url',
                 'feed_file.file_type',
                 'feed_file.feed_content',
+                DB::raw("CONCAT('".env('AWS_CLOUD_FRONT_URL')."',feed_file.file_url,feed_file.hash_name) AS feedfullUrl"),
             )
+            ->where('feed_file.feed_file_type',$feed_file_type)
             ->where('feed_file.feed_idx',$idx)
             ->orderby('feed_file.file_no','asc')
             ->get();

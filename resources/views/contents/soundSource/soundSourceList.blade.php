@@ -98,7 +98,7 @@
                                         </div>
                                         <script src="https://unpkg.com/wavesurfer.js"></script>
                                         <div class="border-l flex gap-3 px-5 ml-auto">
-                                            <audio id="player" controls  src="{{url('/storage'.$rs->file_url.'/'.$rs->hash_name)}}">
+                                            <audio id="player" controls  src="{{env('AWS_CLOUD_FRONT_URL')}}{{$rs->file_url}}{{$rs->hash_name}}">
                                             </audio>
                                         </div>
                                         <div class="grow px-5">

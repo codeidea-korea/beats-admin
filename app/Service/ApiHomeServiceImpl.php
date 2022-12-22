@@ -58,6 +58,7 @@ class ApiHomeServiceImpl extends DBConnection  implements ApiHomeServiceInterfac
                      'adm_banner.banner_code as bannerCode',
                      'adm_banner.type as bannerType',
                      'adm_banner_data.br_title as brTitle',
+                     'adm_banner_data.banner_text as bannerText',
                      'adm_banner_data.contents as contents',
                      'adm_banner_data.contents_url as contnetsUrl',
                      'adm_banner_data.banner_file as banenrFile',
@@ -280,6 +281,102 @@ class ApiHomeServiceImpl extends DBConnection  implements ApiHomeServiceInterfac
             ->first();
         return $result;
 
+    }
+
+    public function getTrendList($params) {
+
+        $result = $this->statDB->table('adm_trend')
+            ->select(
+                'adm_trend.idx',
+                'adm_trend.title',
+                'adm_trend.gubun',
+                'adm_trend.trand_source',
+                DB::raw("(select count(idx) from beat_data where service_name = 'trend' and service_idx = adm_trend.idx and is_beat = 1) as wr_bit"),
+                DB::raw("(select count(idx) from comment where wr_type = 'trend' and wr_idx = adm_trend.idx and del_status = 'N') as wr_comment"),
+                DB::raw("(select count(idx) from beat_data where service_name = 'trend' and service_idx = adm_trend.idx and mem_id = {$params['mem_id']} and is_beat = 1) as like_status"),
+                DB::raw("((select count(idx) from beat_data where service_name = 'trend' and service_idx = adm_trend.idx and is_beat = 1)
+                + (select count(idx) from comment where wr_type = 'trend' and wr_idx = adm_trend.idx)) as wr_popular"),
+            )
+            ->where('adm_trend.open_status','Y')
+            ->when(isset($params['gubun']), function($query) use ($params){
+                return $query->where('gubun',$params['gubun']);
+            })
+            ->when($params['sorting'] == 2, function($query) use ($params){
+                return $query->orderby('wr_bit','desc');
+            })
+            ->when($params['sorting'] == 3, function($query) use ($params){
+                return $query->orderby('wr_hit','desc');
+            })
+            ->orderby('adm_trend.idx','desc')
+            ->skip(($params['page']-1)*$params['limit'])
+            ->take($params['limit'])
+            ->get();
+
+        return $result;
+
+    }
+
+    public function getTrendView($params) {
+
+        $result = $this->statDB->table('adm_trend')
+            ->leftJoin('users','adm_trend.mem_id','=','users.idx')
+            ->select(
+                'adm_trend.idx',
+                'adm_trend.title',
+                'adm_trend.gubun',
+                'adm_trend.content',
+                DB::raw("(select count(idx) from beat_data where service_name = 'trend' and service_idx = adm_trend.idx and is_beat = 1) as wr_bit"),
+                DB::raw("(select count(idx) from comment where wr_type = 'trend' and wr_idx = adm_trend.idx and del_status = 'N') as wr_comment"),
+                DB::raw("(select count(idx) from beat_data where service_name = 'trend' and service_idx = adm_trend.idx and mem_id = {$params['mem_id']} and is_beat = 1) as like_status"),
+                'adm_trend.created_at',
+                DB::raw('now() as now_date'),
+                'users.name',
+                DB::raw("CONCAT('".env('AWS_CLOUD_FRONT_URL')."',users.profile_photo_url,users.profile_photo_hash_name) AS fullUrl"),
+            )
+            ->where('adm_trend.idx',$params['idx'])
+            ->get();
+
+        return $result;
+
+    }
+
+    public function getTrendTotal($params){
+
+        $result = $this->statDB->table('adm_trend')
+            ->select(DB::raw("COUNT(idx) AS cnt"))
+            ->where('adm_trend.open_status','Y')
+            ->when(isset($params['gubun']), function($query) use ($params){
+                return $query->where('gubun',$params['gubun']);
+            })
+            ->first();
+        return $result;
+
+    }
+
+    public function setTrendHitAdd($params){
+
+        $result = $this->statDB->table('adm_trend')
+            ->where('adm_trend.idx',$params['idx'])
+            ->update([
+                'wr_hit' => DB::raw('wr_hit + 1')
+            ]);
+        return $result;
+
+    }
+
+    public function setProfilePhotoList($params){
+
+        $result = $this->statDB->select("
+            SELECT
+                b.mem_nickname as commentNickName
+            ,CONCAT('".env('AWS_CLOUD_FRONT_URL')."',b.profile_photo_url,b.profile_photo_hash_name) AS urlLink
+            FROM
+            comment a LEFT JOIN member_data b ON a.mem_id=b.mem_id
+            where a.wr_type = 'trend' and a.wr_idx = ".$params->idx." and a.del_status = 'N'
+            GROUP BY b.mem_nickname ,b.profile_photo_url,b.profile_photo_hash_name
+            ORDER BY b.mem_nickname asc Limit 5
+        ");
+         return $result;
     }
 
 }

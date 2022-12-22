@@ -7,6 +7,8 @@ use App\Service\AdminAuthorityServiceImpl;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Session;
+use Illuminate\Support\Facades\Storage;
+use Image;
 
 class AdminAuthorityController extends Controller
 {
@@ -87,6 +89,12 @@ class AdminAuthorityController extends Controller
     public function setAdminAdd(){
         $params = $this->request->input();
         $data = array();
+        //$file = $this->request->file('photo_file');
+        //$folderName = '/adminPhoto/'.date("Y/m/d").'/';
+        //$data['file_name'] = $file->getClientOriginalName();
+        //$data['hash_name'] = $file->hashName();
+        //$data['photo_url'] = $folderName;
+
         $data['id'] = $params['id'];
         $data['name'] = $params['name'];
         $data['phoneno'] = $params['phoneno'];
@@ -95,6 +103,8 @@ class AdminAuthorityController extends Controller
         $data['password'] = $params['password'];
         $data['group_code'] = $params['group_code'];
 
+        //$path = Storage::disk('s3')->put($folderName. $data['hash_name'], file_get_contents($file));
+        //$path = Storage::disk('s3')->url($path);
         $result = $this->adminAuthorityService->getAdminAdd($data);
 
         if($result){
@@ -102,7 +112,7 @@ class AdminAuthorityController extends Controller
         }else{
             $rData['result']="FAIL";
         }
-        return json_encode($rData);
+        return $rData;
     }
 
     public function getAdminIdCheck(){
@@ -132,6 +142,21 @@ class AdminAuthorityController extends Controller
     public function setAdminUpdate(){
         $params = $this->request->input();
         $data = array();
+        $file = $this->request->file('photo_file');
+        $folderName = '/adminPhoto/'.date("Y/m/d").'/';
+        $data['file_name'] = $file->getClientOriginalName();
+        $data['hash_name'] = $file->hashName();
+        $data['photo_url'] = $folderName;
+
+        // 파일 클릭시 원본 이미지 표시를 위해 리사이즈 세팅
+        $width=740;
+        $extension = $file->getClientOriginalExtension();
+        $image = Image::make($file);
+        $image->width() > $width ? $width : $width=$image->width();
+        $image->resize($width, null, function($constraint){
+            $constraint->aspectRatio();
+        })->encode($extension);
+
         $data['isuse'] = $params['isuse'];
         $data['group_code'] = $params['group_code'];
         $data['name'] = $params['name'];
@@ -139,14 +164,16 @@ class AdminAuthorityController extends Controller
         $data['phoneno'] = $params['phoneno'];
         $data['email'] = $params['email'];
 
+        //$path = Storage::disk('s3')->put($folderName. $data['hash_name'], file_get_contents($file));
+        $path = Storage::disk('s3')->put($folderName. $data['hash_name'], $image);
+        $path = Storage::disk('s3')->url($path);
         $result = $this->adminAuthorityService->setAdminUpdate($data);
-
         if($result){
             $rData['result']="SUCCESS";
         }else{
             $rData['result']="FAIL";
         }
-        return json_encode($rData);
+        return $rData;
     }
 
     public function setAdminDel(){

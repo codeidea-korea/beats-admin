@@ -91,18 +91,35 @@ class BoardController extends Controller
     {
         $params = $this->request->input();
 
+        $params['wr_title_en'] = $params['wr_title_en'] ?? '';
+        $params['wr_title_jp'] = $params['wr_title_jp'] ?? '';
+        $params['wr_title_ch'] = $params['wr_title_ch'] ?? '';
+        $params['wr_content_en'] = $params['wr_content_en'] ?? '';
+        $params['wr_content_jp'] = $params['wr_content_jp'] ?? '';
+        $params['wr_content_ch'] = $params['wr_content_ch'] ?? '';
+
         $result = $this->adminBoardService->BoardAdd($params);
 
         if($result){
-            return redirect('/service/board/view/'.$result)->with('alert', '등록되었습니다.');
+            $rData['result']="SUCCESS";
+            $rData['idx']=$result;
         }else{
-            return redirect()->back()->with('alert', '등록/수정에 실패하였습니다. \n관리자에게 문의 바랍니다.');
+            $rData['result']="FAIL";
         }
+        return json_encode($rData);
     }
 
     public function BoardUpdate()
     {
         $params = $this->request->input();
+
+        $params['wr_title_en'] = $params['wr_title_en'] ?? '';
+        $params['wr_title_jp'] = $params['wr_title_jp'] ?? '';
+        $params['wr_title_ch'] = $params['wr_title_ch'] ?? '';
+        $params['wr_content_en'] = $params['wr_content_en'] ?? '';
+        $params['wr_content_jp'] = $params['wr_content_jp'] ?? '';
+        $params['wr_content_ch'] = $params['wr_content_ch'] ?? '';
+
         $result = $this->adminBoardService->BoardUpdate($params);
 
         if($result){
@@ -187,6 +204,14 @@ class BoardController extends Controller
     public function EventAdd()
     {
         $params = $this->request->input();
+
+        $params['title_en'] = $params['title_en'] ?? '';
+        $params['title_jp'] = $params['title_jp'] ?? '';
+        $params['title_ch'] = $params['title_ch'] ?? '';
+        $params['content_en'] = $params['content_en'] ?? '';
+        $params['content_jp'] = $params['content_jp'] ?? '';
+        $params['content_ch'] = $params['content_ch'] ?? '';
+
         $file = $this->request->file('event_img');
         $result = $this->adminBoardService->EventAdd($params,$file);
 
@@ -200,6 +225,14 @@ class BoardController extends Controller
     public function EventUpdate()
     {
         $params = $this->request->input();
+
+        $params['title_en'] = $params['title_en'] ?? '';
+        $params['title_jp'] = $params['title_jp'] ?? '';
+        $params['title_ch'] = $params['title_ch'] ?? '';
+        $params['content_en'] = $params['content_en'] ?? '';
+        $params['content_jp'] = $params['content_jp'] ?? '';
+        $params['content_ch'] = $params['content_ch'] ?? '';
+
         $file = $this->request->file('event_img');
         //var_dump($params);exit();
         $result = $this->adminBoardService->EventUpdate($params,$file);
@@ -468,8 +501,180 @@ class BoardController extends Controller
         return json_encode($returnData);
     }
 
+    public function getTrendList()
+    {
+        $params = $this->request->input();
+        $params['menuCode'] = "AD100100";
+        $params['type'] = $params['type'] ?? 0;
+        $params['page'] = $params['page'] ?? 1;
+        $params['limit'] = $params['limit'] ?? 10;
+        $params['fr_search_text'] = $params['search_text'] ?? '';
+        $params['created_at'] = $params['created_at'] ?? "2022-01-01 - ".date("Y-m-d");
+        $params['search_open_status'] = $params['open_status'] ?? '';
+        $params['search_gubun'] = $params['gubun'] ?? '';
+
+        if($params['created_at'] != ''){
+            $atexplode = explode(' - ',$params['created_at']);
+            $params['fr_search_at'] = $atexplode[0];
+            $params['bk_search_at'] = date("Y-m-d",strtotime($atexplode[1].' +1 days'));
+        }
+
+        $trendData = $this->adminBoardService->getTrendList($params);
+        $trendTotal = $this->adminBoardService->getTrendTotal($params);
+        $totalCount = $trendTotal->cnt;
+        $params['totalCnt'] = $totalCount;
+
+        return view('service.trendList',[
+            'trendData' => $trendData
+            ,'params' => $params
+            ,'searchData' => $params
+            ,'totalCount' => $totalCount
+        ]);
+    }
+
+    public function getTrendView($bidx)
+    {
+        $params = $this->request->input();
+        $params['menuCode'] = "AD100100";
+        $params['type'] = $params['type'] ?? 0;
+        $params['page'] = $params['page'] ?? 1;
+        $params['limit'] = $params['limit'] ?? 10;
+        $trendData = $this->adminBoardService->getTrendView($params, $bidx);
+
+        return view('service.trendView',[
+            'trendData' => $trendData
+            ,'params' => $params
+        ]);
+    }
+
+    public function getTrendWrite()
+    {
+        $params = $this->request->input();
+        $params['menuCode'] = "AD100100";
+        return view('service.trendWrite',[
+            'params'=> $params
+        ]);
+    }
+
+    public function setTrendAdd()
+    {
+        $params = $this->request->input();
+        $params['title_en'] = $params['title_en'] ?? '';
+        $params['title_jp'] = $params['title_jp'] ?? '';
+        $params['title_ch'] = $params['title_ch'] ?? '';
+        $params['content_en'] = $params['content_en'] ?? '';
+        $params['content_jp'] = $params['content_jp'] ?? '';
+        $params['content_ch'] = $params['content_ch'] ?? '';
+
+        $file = $this->request->file('trend_img');
+        $result = $this->adminBoardService->TrendAdd($params,$file);
+
+        if($result){
+            return redirect('/service/trend/view/'.$result)->with('alert', '등록되었습니다.');
+        }else{
+            return redirect()->back()->with('alert', '등록/수정에 실패하였습니다. \n관리자에게 문의 바랍니다.');
+        }
+    }
+
+    public function TrendUpdate()
+    {
+        $params = $this->request->input();
+        $params['title_en'] = $params['title_en'] ?? '';
+        $params['title_jp'] = $params['title_jp'] ?? '';
+        $params['title_ch'] = $params['title_ch'] ?? '';
+        $params['content_en'] = $params['content_en'] ?? '';
+        $params['content_jp'] = $params['content_jp'] ?? '';
+        $params['content_ch'] = $params['content_ch'] ?? '';
+        $file = $this->request->file('trend_img');
+        //var_dump($params);exit();
+        $result = $this->adminBoardService->TrendUpdate($params,$file);
+
+        if($result){
+            return redirect('/service/trend/list')->with('alert', '수정되었습니다.');
+        }else{
+            return redirect()->back()->with('alert', '등록/수정에 실패하였습니다. \n관리자에게 문의 바랍니다.');
+        }
+    }
+
+    public function TrendDelete()
+    {
+        $params = $this->request->input();
+        $trendData = $this->adminBoardService->TrendDelete($params);
+
+        $result = array(
+            'result' => 'SUCCESS'
+        );
 
 
+        if(!$trendData){
+            $result['result'] = "컨텐츠 삭제에 실패하였습니다. 다시 시도해주세요";
+        }
 
+        return json_encode($result);
+    }
 
+    public function getTrendBeatView($idx)
+    {
+        $params = $this->request->input();
+        $params['menuCode'] = "AD100100";
+
+        $params['type'] = $params['type'] ?? 0;
+        $params['page'] = $params['page'] ?? 1;
+        $params['limit'] = $params['limit'] ?? 10;
+
+        $params['search_nationality'] = $params['nationality'] ?? '';
+        $params['fr_search_text'] = $params['search_text'] ?? '';
+        $params['created_at'] = $params['created_at'] ?? "2022-01-01 - ".date("Y-m-d");
+
+        if($params['created_at'] != ''){
+            $atexplode = explode(' - ',$params['created_at']);
+            $params['fr_search_at'] = $atexplode[0];
+            $params['bk_search_at'] = date("Y-m-d",strtotime($atexplode[1].' +1 days'));
+        }
+
+        $trendBeatData = $this->adminBoardService->getTrendBeatView($params,$idx);
+        $trendBeatTotal = $this->adminBoardService->getTrendBeatTotal($params,$idx);
+        $totalCount = $trendBeatTotal->cnt;
+        $params['totalCnt'] = $totalCount;
+
+        return view('service.trendBeatView',[
+            'trendBeatData' => $trendBeatData
+            ,'idx' => $idx
+            ,'searchData' => $params
+            ,'params' => $params
+            ,'totalCount' => $totalCount
+        ]);
+    }
+
+    public function getTrendCommentView($idx)
+    {
+        $params = $this->request->input();
+        $params['menuCode'] = "AD100100";
+
+        $params['type'] = $params['type'] ?? 0;
+        $params['page'] = $params['page'] ?? 1;
+        $params['limit'] = $params['limit'] ?? 10;
+
+        $params['search_cm_open'] = $params['cm_open'] ?? '';
+        $params['fr_search_text'] = $params['search_text'] ?? '';
+        $params['created_at'] = $params['created_at'] ?? "2022-01-01 - ".date("Y-m-d");
+        if($params['created_at'] != ''){
+            $atexplode = explode(' - ',$params['created_at']);
+            $params['fr_search_at'] = $atexplode[0];
+            $params['bk_search_at'] = date("Y-m-d",strtotime($atexplode[1].' +1 days'));
+        }
+
+        $trendCommentData = $this->adminBoardService->getTrendCommentView($params,$idx);
+        $trendBeatTotal = $this->adminBoardService->getTrendCommentTotal($params,$idx);
+        $totalCount = $trendBeatTotal->cnt;
+        $params['totalCnt'] = $totalCount;
+
+        return view('service.trendCommentView',[
+            'trendCommentData' => $trendCommentData
+            ,'idx' => $idx
+            ,'searchData' => $params
+            ,'params' => $params
+            ,'totalCount' => $totalCount
+        ]);
+    }
 }

@@ -87,11 +87,11 @@
                                 @php $i=0; @endphp
                                 @foreach($termsData as $rs)
                                     <tr>
-                                        <td class="whitespace-nowrap text-center">{{$totalCount-($i+(($params['page']-1)*10))}}</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->gubun}}</td>
+                                        <td class="whitespace-nowrap text-center"><a href="/service/terms/view/{{$rs->idx}}">{{$totalCount-($i+(($params['page']-1)*10))}}</a></td>
+                                        <td class="whitespace-nowrap text-center"><a href="/service/terms/view/{{$rs->idx}}">{{$rs->gubun}}</a></td>
                                         <td class="whitespace-nowrap text-center"><a href="/service/terms/view/{{$rs->idx}}">{{$rs->terms_type}}</a></td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->version}}</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->name}}</td>
+                                        <td class="whitespace-nowrap text-center"><a href="/service/terms/view/{{$rs->idx}}">{{$rs->version}}</a></td>
+                                        <td class="whitespace-nowrap text-center"><a href="/service/terms/view/{{$rs->idx}}">{{$rs->name}}</a></td>
                                         <td class="whitespace-nowrap text-center">{{$rs->apply_date}}</td>
                                     </tr>
                                     @php $i++; @endphp

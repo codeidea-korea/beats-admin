@@ -69,7 +69,7 @@
 
                 <div class="intro-y box mt-5">
                     <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60">
-                        <h2 class="font-medium text-base mr-auto text-primary">총 {{--number_format($totalCount)--}}개의 제품이 있습니다.</h2>
+                        <h2 class="font-medium text-base mr-auto text-primary">총 {{number_format($totalCount)}}개의 제품이 있습니다.</h2>
                         <button class="btn box flex items-center text-slate-600 border border-slate-400" onClick="javascript:location.href = '{{ url('/products/productWrite') }}';">
                             Excel Download
                         </button>
@@ -96,19 +96,22 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-
+                                @php $i=0; @endphp
+                                @foreach($productList as $rs)
                                     <tr>
-                                        <td class="whitespace-nowrap text-center">No.</td>
-                                        <td class="whitespace-nowrap text-center">노출 상태</td>
-                                        <td class="whitespace-nowrap text-center">구분</td>
-                                        <td class="whitespace-nowrap text-center">제품명</td>
-                                        <td class="whitespace-nowrap text-center">옵션</td>
-                                        <td class="whitespace-nowrap text-center">가격</td>
-                                        <td class="whitespace-nowrap text-center">배송비</td>
-                                        <td class="whitespace-nowrap text-center">판매수</td>
-                                        <td class="whitespace-nowrap text-center">관리자</td>
-                                        <td class="whitespace-nowrap text-center">등록일</td>
+                                        <td class="whitespace-nowrap text-center">{{$totalCount-($i+(($params['page']-1)*10))}}</td>
+                                        <td class="whitespace-nowrap text-center"><a href="/products/productView/{{$rs->idx}}">{{$rs->isDisplayView}}</a></td>
+                                        <td class="whitespace-nowrap text-center"> - </td>
+                                        <td class="whitespace-nowrap text-center"><a href="/products/productView/{{$rs->idx}}">{{$rs->name}}</a></td>
+                                        <td class="whitespace-nowrap text-center">{{$rs->optionCnt}}</td>
+                                        <td class="whitespace-nowrap text-center">{{number_format($rs->price)}}원</td>
+                                        <td class="whitespace-nowrap text-center">{{number_format($rs->delivery_charge)}}원</td>
+                                        <td class="whitespace-nowrap text-center"> - </td>
+                                        <td class="whitespace-nowrap text-center">{{$rs->admin_name}}</td>
+                                        <td class="whitespace-nowrap text-center">{{$rs->create_date}}</td>
                                     </tr>
+                                    @php $i++; @endphp
+                                @endforeach
 
                                 </tbody>
                             </table>
@@ -119,7 +122,7 @@
                 <!-- 페이징처리 시작 -->
                 <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center mt-5">
                     <nav class="w-full">
-
+                        @include('vendor.pagination.default')
                     </nav>
                 </div>
                 <!-- 페이징처리 종료 -->

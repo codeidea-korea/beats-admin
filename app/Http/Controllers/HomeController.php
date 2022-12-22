@@ -76,12 +76,4 @@ class HomeController extends Controller
         return view('managerHome');
     }
 
-    public function test()
-    {
-        $params = $this->request->input();
-        $params['menuCode'] = "AD030100";
-        return view('test',[
-            'params' => $params
-        ]);
-    }
 }

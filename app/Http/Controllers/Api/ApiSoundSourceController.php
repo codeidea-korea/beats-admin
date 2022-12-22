@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Service\ApiSoundSourceServiceImpl;
+use App\Service\MemberNoticeServiceImpl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -14,12 +15,14 @@ class ApiSoundSourceController extends Controller
 {
     private $request;
     private $apiSoundSorceService;
+    private $memberNoticeService;
 
 
     public function __construct(Request $request)
     {
         $this->request = $request;
         $this->apiSoundSorceService = new ApiSoundSourceServiceImpl();
+        $this->memberNoticeService = new MemberNoticeServiceImpl();
     }
 
     public function soundFileUpdate()
@@ -36,7 +39,7 @@ class ApiSoundSourceController extends Controller
 
             $pData = json_encode($params);
 
-            $resultData1 = $this->apiSoundSorceService->setLog($pData);
+            //$resultData1 = $this->apiSoundSorceService->setLog($pData);
 
 
             // 음원파일 헤드 등록
@@ -120,8 +123,8 @@ class ApiSoundSourceController extends Controller
             $params['music_head_idx'] = $params['music_head_idx'] ?? 1;
             $params['music_title'] = $params['music_title'] ?? "";
             $params['progress_rate'] = $params['progress_rate'] ?? "10"; // 작업 진행율 10단위
-            $params['sales_status'] = $params['sales_status'] ?? "Y"; // 판매상태
-            $params['open_status'] = $params['open_status'] ?? "Y"; // 음원공개여부
+            $params['sales_status'] = $params['sales_status'] ?? "N"; // 판매상태
+            $params['open_status'] = $params['open_status'] ?? "N"; // 음원공개여부
             $params['tag'] = $params['tag'] ?? "";
             $params['common_composition'] = $params['common_composition'] ?? "N"; // 공동 작곡가 유무
             $params['contract'] = $params['contract'] ?? "N"; // 공동 계약서 서명여부
@@ -193,6 +196,7 @@ class ApiSoundSourceController extends Controller
                     $dataList[$i]['file_no']  =$rs->file_no;
                     $dataList[$i]['hash_name']  =$rs->hash_name;
                     $dataList[$i]['file_url']  =$rs->file_url;
+                    $dataList[$i]['urlLink']  =$rs->urlLink;
                     $dataList[$i]['moddate']  =$rs->moddate;
                     $dataList[$i]['file_version']  =$rs->file_version;
                     $dataList[$i]['HeadDelStatus']  =$rs->HeadDelStatus;
@@ -238,6 +242,7 @@ class ApiSoundSourceController extends Controller
                 $returnData['response']['data']['idx']  =$resultData->idx;
                 $returnData['response']['data']['memId']  =$resultData->memId;
                 $returnData['response']['data']['memName']  =$resultData->memName;
+                $returnData['response']['data']['memNickName']  =$resultData->memNickName;
                 $returnData['response']['data']['fileCnt']  =$resultData->fileCnt;
                 $returnData['response']['data']['musicTitle']  =$resultData->musicTitle;
                 $returnData['response']['data']['playTime']  =$resultData->playTime;
@@ -323,9 +328,20 @@ class ApiSoundSourceController extends Controller
             }else{
 
                 $qData['music_head_idx'] = $params['music_head_idx'];
-                $qData['del_date'] = date("Y-m-d H:m:s",strtotime(now().' +10 days'));
+                $qData['del_date'] = date("Y-m-d H:i:s",strtotime(now().' +10 days'));
                 $resultData = $this->apiSoundSorceService->setSoundSourceDel($qData);
                 if($resultData){
+                    $delNotice = $this->memberNoticeService->getMusicTitle($params);
+
+                    foreach($delNotice as $rs){
+                        $sqlData['mem_id'] = $rs->mem_id;
+                        $sqlData['gubun'] = '03';
+                        $sqlData['message'] = $rs->music_title.'(음원)이 삭제되었습니다. 비공개로 전환됩니다.';
+                        $sqlData['url'] = '';
+
+                        $noticeResult = $this->memberNoticeService->setMemberNotice($sqlData);
+                    }
+
                     $returnData['code']=0;
                     $returnData['message']="complete";
                 }else{
@@ -358,7 +374,7 @@ class ApiSoundSourceController extends Controller
                 $returnData['message'] = "파라메터값 오류";
             }else{
                 $qData['music_file_idx'] = $params['music_file_idx'];
-                $qData['del_date'] = date("Y-m-d H:m:s",strtotime(now().' +10 days'));
+                $qData['del_date'] = date("Y-m-d H:i:s",strtotime(now().' +10 days'));
                 $resultData = $this->apiSoundSorceService->setMusicFileDel($qData);
                 if($resultData){
                     $returnData['code']=0;
@@ -395,9 +411,20 @@ class ApiSoundSourceController extends Controller
             }else{
 
                 $qData['mem_id'] = $params['mem_id'];
-                $qData['del_date'] = date("Y-m-d H:m:s",strtotime(now().' +10 days'));
+                $qData['del_date'] = date("Y-m-d H:i:s",strtotime(now().' +10 days'));
                 $resultData = $this->apiSoundSorceService->setSoundSourceDelAll($qData);
                 if($resultData){
+                    $delNotice = $this->memberNoticeService->getSoundSoruce($params);
+
+                    foreach($delNotice as $rs){
+                        $sqlData['mem_id'] = $rs->mem_id;
+                        $sqlData['gubun'] = '03';
+                        $sqlData['message'] = $rs->music_title.'(음원)이 삭제되었습니다. 비공개로 전환됩니다.';
+                        $sqlData['url'] = '';
+
+                        $noticeResult = $this->memberNoticeService->setMemberNotice($sqlData);
+                    }
+
                     $returnData['code']=0;
                     $returnData['message']="complete";
                 }else{
@@ -430,7 +457,7 @@ class ApiSoundSourceController extends Controller
                 $returnData['message'] = "파라메터값 오류";
             }else{
                 $qData['music_head_idx'] = $params['music_head_idx'];
-                $qData['del_date'] = date("Y-m-d H:m:s",strtotime(now().' +10 days'));
+                $qData['del_date'] = date("Y-m-d H:i:s",strtotime(now().' +10 days'));
                 $resultData = $this->apiSoundSorceService->setMusicFileDelAll($qData);
                 if($resultData){
                     $returnData['code']=0;
@@ -466,7 +493,7 @@ class ApiSoundSourceController extends Controller
             }else{
 
                 $qData['music_head_idx'] = $params['music_head_idx'];
-                $qData['del_date'] = date("Y-m-d H:m:s",strtotime(now().' +10 days'));
+                $qData['del_date'] = date("Y-m-d H:i:s",strtotime(now().' +10 days'));
                 $resultData = $this->apiSoundSorceService->setSoundSourceDelCancle($qData);
                 if($resultData){
                     $returnData['code']=0;
@@ -501,7 +528,7 @@ class ApiSoundSourceController extends Controller
                 $returnData['message'] = "파라메터값 오류";
             }else{
                 $qData['music_file_idx'] = $params['music_file_idx'];
-                $qData['del_date'] = date("Y-m-d H:m:s",strtotime(now().' +10 days'));
+                $qData['del_date'] = date("Y-m-d H:i:s",strtotime(now().' +10 days'));
                 $resultData = $this->apiSoundSorceService->setMusicFileDelCancle($qData);
                 if($resultData){
                     $returnData['code']=0;

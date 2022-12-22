@@ -15,6 +15,7 @@
                     <!-- table 시작 -->
                     <div class="p-5">
                         <div class="overflow-x-auto">
+                            <form name="searchForm"  id="searchForm" action="" method="get">
                             <table class="table table-bordered">
                                 <tr>
                                     <th class="whitespace-nowrap text-center bg-primary/10 w-24">일별 통계</th>
@@ -36,13 +37,18 @@
                                     </td>
                                 </tr>
                             </table>
-                            <!-- 테이블 끝 -->
-                            <div class="flex w-full box pt-5">
-                                <div class="ml-auto">
-                                    <button class="btn btn-secondary w-24">초기화</button>
-                                    <button class="btn btn-primary w-24 ml-2">검색</button>
+                                <div style="float:right;">
+                                    <button class="btn box flex items-center text-slate-600 border border-slate-400 formSearchBtn" >
+                                        검색
+                                    </button>
                                 </div>
-                            </div>
+                                <div style="float:right;">
+                                    &nbsp;
+                                </div>
+                                <div style="float:right;">
+                                    <a href="javascript:location.href = '/';" class="btn box flex items-center text-slate-600 border border-slate-400" > 초기화</a>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>

@@ -23,7 +23,7 @@
                         <div class="overflow-x-auto">
                             <table class="table table-bordered">
                                 <tr>
-                                    <th class="whitespace-nowrap text-center bg-primary/10" style="width:220px;">상태</th>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" style="width:220px;">* 상태</th>
                                     <td>
                                         <select class="form-select w-60" aria-label=".form-select-lg" name="isuse">
                                             <option value="Y" >활성화</option>
@@ -32,7 +32,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="whitespace-nowrap text-center bg-primary/10" style="width:220px;">그룹</th>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" style="width:220px;">* 그룹</th>
                                     <td>
                                         <select class="form-select w-60" aria-label=".form-select-lg" name="group_code">
                                             @foreach($groupList as $rs)
@@ -43,14 +43,14 @@
                                 </tr>
 
                                 <tr>
-                                    <th class="whitespace-nowrap text-center bg-primary/10" style="width:220px;">이름</th>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" style="width:220px;">* 이름</th>
                                     <td>
                                         <input type="text" class="form-control" name="name" value="" style="width:420px;" placeholder="이름 표기 영역">
                                     </td>
                                 </tr>
 
                                 <tr>
-                                    <th class="whitespace-nowrap text-center bg-primary/10" style="width:220px;">아이디</th>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" style="width:220px;">* 아이디</th>
                                     <td>
                                         <input type="text" class="form-control" name="id" value="" style="width:420px;" placeholder="아이디 표기 영역">
                                         <button class="btn btn-purple idck" type="button">중복 확인</button>
@@ -59,13 +59,13 @@
                                 </tr>
 
                                 <tr>
-                                    <th class="whitespace-nowrap text-center bg-primary/10" style="width:220px;">비밀번호</th>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" style="width:220px;">* 비밀번호</th>
                                     <td>
                                         <input type="password" class="form-control" name="password" value="" style="width:420px;" placeholder="비밀번호 표기 영역">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="whitespace-nowrap text-center bg-primary/10" style="width:220px;">비밀번호 확인</th>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" style="width:220px;">* 비밀번호 확인</th>
                                     <td>
                                         <input type="password" class="form-control" name="password2" value="" style="width:420px;" placeholder="비밀번호와 동일한 비밀번호 입력">
                                     </td>
@@ -74,16 +74,24 @@
 
 
                                 <tr>
-                                    <th class="whitespace-nowrap text-center bg-primary/10" style="width:220px;">연락처</th>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" style="width:220px;">* 연락처</th>
                                     <td>
-                                        <input id="regular-form-1" type="text" class="form-control" style="width:420px;" name="phoneno" value="">
+                                        <input type="text" class="form-control" style="width:420px;" name="phoneno" value="">
                                     </td>
                                 </tr>
+                                <!--
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10">* 프로필이미지</th>
+                                    <td>
+                                        <input type="file"  id="photo_file" name="photo_file">
+                                    </td>
+                                </tr>
+                                -->
 
                                 <tr>
-                                    <th class="whitespace-nowrap text-center bg-primary/10">이메일</th>
+                                    <th class="whitespace-nowrap text-center bg-primary/10">* 이메일</th>
                                     <td>
-                                        <input id="regular-form-1" type="email"class="form-control" style="width:420px;" name="email">
+                                        <input type="email"class="form-control" style="width:420px;" name="email">
                                     </td>
                                 </tr>
                             </table>
@@ -150,6 +158,8 @@
 
             $(".btn_create").on('click', function(){
 
+                var formData = new FormData;
+
                 var isuse = $('select[name=isuse]').val();
                 var group_code = $('select[name=group_code]').val();
                 var name = $('input[name=name]').val();
@@ -159,22 +169,24 @@
                 var phoneno = $('input[name=phoneno]').val();
                 var email = $('input[name=email]').val();
 
-                var data = {
-                    isuse:isuse
-                    ,group_code:group_code
-                    ,name:name
-                    ,id:id
-                    ,password:password
-                    ,password2:password2
-                    ,phoneno:phoneno
-                    ,email:email
-                };
+                formData.append('isuse',isuse);
+                formData.append('group_code',group_code);
+                formData.append('name',name);
+                formData.append('id',id);
+                formData.append('password',password);
+                formData.append('password2',password2);
+                formData.append('phoneno',phoneno);
+                formData.append('email',email);
+                //formData.append( "photo_file", $("#photo_file")[0].files[0] );
+
 
                 jQuery.ajax({
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                     type:"post",
-                    dataType:'json',
-                    data: data,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    data: formData,
                     url: '{{ url('/admin/ajax/adminAdd') }}',
                     success: function searchSuccess(data) {
                         if(data.result=="SUCCESS"){

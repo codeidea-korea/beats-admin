@@ -85,11 +85,11 @@
                                 @php $i=0; @endphp
                                 @foreach($boardData as $rs)
                                     <tr>
-                                        <td class="whitespace-nowrap text-center">{{$totalCount-($i+(($params['page']-1)*10))}}</td>
-                                        <td class="whitespace-nowrap text-center">@if($rs->gubun === 0) 일반 @else 우선 노출 @endif</td>
+                                        <td class="whitespace-nowrap text-center"><a href="/service/board/view/{{$rs->idx}}">{{$totalCount-($i+(($params['page']-1)*10))}}</a></td>
+                                        <td class="whitespace-nowrap text-center"><a href="/service/board/view/{{$rs->idx}}">@if($rs->gubun === 0) 일반 @else 우선 노출 @endif</a></td>
                                         <td class="whitespace-nowrap text-center"><a href="/service/board/view/{{$rs->idx}}">{{$rs->wr_title}}</a></td>
-                                        <td class="whitespace-nowrap text-center">@if($rs->wr_open === 'open') 노출 @else 미 노출 @endif</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->name}}</td>
+                                        <td class="whitespace-nowrap text-center"><a href="/service/board/view/{{$rs->idx}}">@if($rs->wr_open === 'open') 노출 @else 미 노출 @endif</a></td>
+                                        <td class="whitespace-nowrap text-center"><a href="/service/board/view/{{$rs->idx}}">{{$rs->name}}</a></td>
                                         <td class="whitespace-nowrap text-center">{{$rs->created_at}}</td>
                                     </tr>
                                     @php $i++; @endphp

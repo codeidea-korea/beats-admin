@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Service\MemberServiceImpl;
 use App\Service\ApiHomeServiceImpl;
 use App\Service\ApiSoundSourceServiceImpl;
+use App\Service\MentoServiceImpl;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\UserPoint;
@@ -23,6 +24,7 @@ class MemberController extends Controller
     private $request;
     private $memberService;
     private $apiHomeService;
+    private $mentoService;
 
     public function __construct(Request $request)
     {
@@ -30,6 +32,7 @@ class MemberController extends Controller
         $this->memberService = new MemberServiceImpl();
         $this->apiHomeService = new ApiHomeServiceImpl();
         $this->apiSoundSorceService = new ApiSoundSourceServiceImpl();
+        $this->mentoService = new MentoServiceImpl();
 
         $this->middleware('auth');
     }
@@ -47,6 +50,8 @@ class MemberController extends Controller
         $params['nationality'] = $params['nationality'] ?? '';
         $params['mem_status'] = $params['mem_status'] ?? '';
         $params['sWord'] = $params['sWord'] ?? '';
+        $params['phone_number'] = $params['phone_number'] ?? '';
+        $params['name'] = $params['name'] ?? '';
         $params['searchDate'] = $params['searchDate'] ?? "2022-01-01 - ".date("Y-m-d");
         $params['mem_regdate'] = $params['mem_regdate'] ?? "2022-01-01 - ".date("Y-m-d");
         $tempData = trim(str_replace('-','',$params['searchDate']));
@@ -179,11 +184,15 @@ class MemberController extends Controller
         $params = $this->request->input();
         $params['menuCode'] = "AD030100";
         $params['idx'] =$idx;
+        $mentoParam['mem_id'] = $params['idx'];
         $memberData = $this->memberService->getMemberData($params);
+        $mentoFile = $this->mentoService->getMentoChFile($mentoParam);
+
 
         return view('member.memberView',[
             'params' => $params
             ,'memberData' => $memberData
+            ,'mentoFile' => $mentoFile
 
         ]);
     }
@@ -261,20 +270,18 @@ class MemberController extends Controller
         $params['sDate']=substr($tempData,0,8);
         $params['eDate']=substr($tempData,8,16);
         $params['eDate'] = date("Ymd",strtotime($params['eDate'].' +1 days'));
-
         $params['codeIndex'] = $params['codeIndex'] ?? 'CT000000';
         $nationality = $this->apiHomeService->getCodeList($params);
 
-        //$memberList = $this->memberService->getMemberList($params);
-        //$memberTotal = $this->memberService->getMemberTotal($params);
-        //$totalCount = $memberTotal->cnt;
-        //$params['totalCnt'] = $totalCount;
-        $params['totalCnt'] = 0;
+        $memberList = $this->memberService->getCancelList($params);
+        $memberTotal = $this->memberService->getCancelTotal($params);
+        $totalCount = $memberTotal->cnt;
+        $params['totalCnt'] = $totalCount;
 
         return view('member.withdrawalList',[
             'params' => $params
             ,'searchData' => $params
-            //,'memberList' => $memberList
+            ,'memberList' => $memberList
             ,'totalCount' => $params['totalCnt']
             ,'nationality' => $nationality
         ]);

@@ -10,3 +10,8 @@
 <link rel="stylesheet" href="/dist/css/app.css" />
 <!-- END: CSS Assets-->
 <meta name="csrf-token" content="{{ csrf_token() }}">
+<script>
+    @if(session('alert'))
+        alert('{{ session('alert') }}');
+    @endif
+</script>

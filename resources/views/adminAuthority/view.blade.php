@@ -59,13 +59,20 @@
                                 <tr>
                                     <th class="whitespace-nowrap text-center bg-primary/10" style="width:220px;">연락처</th>
                                     <td>
-                                        <input id="regular-form-1" type="text" class="form-control" style="width:420px;" name="phoneno" value="{{$adminData->phoneno}}">
+                                        <input type="text" class="form-control" style="width:420px;" name="phoneno" value="{{$adminData->phoneno}}">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10">프로필이미지</th>
+                                    <td>
+                                        {{$adminData->profile_photo_name}}
+                                        <input type="file"  id="photo_file" name="photo_file">
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="whitespace-nowrap text-center bg-primary/10">이메일</th>
                                     <td>
-                                        <input id="regular-form-1" type="email"class="form-control" style="width:420px;" name="email" value="{{$adminData->email}}">
+                                        <input type="email"class="form-control" style="width:420px;" name="email" value="{{$adminData->email}}">
                                     </td>
                                 </tr>
                                 <tr>
@@ -139,28 +146,32 @@
 
 
             $(".btn_update").on('click', function(){
-                 var isuse = $('select[name=isuse]').val();
-                 var group_code = $('select[name=group_code]').val();
-                 var name = $('input[name=name]').val();
-                 var idx = $('input[name=idx]').val();
-                 var phoneno = $('input[name=phoneno]').val();
-                 var email = $('input[name=email]').val();
 
+                var formData = new FormData;
 
-                 var data = {
-                     isuse:isuse
-                     ,group_code:group_code
-                     ,name:name
-                     ,idx:idx
-                     ,phoneno:phoneno
-                     ,email:email
-                 };
+                var isuse = $('select[name=isuse]').val();
+                var group_code = $('select[name=group_code]').val();
+                var name = $('input[name=name]').val();
+                var idx = $('input[name=idx]').val();
+                var phoneno = $('input[name=phoneno]').val();
+                var email = $('input[name=email]').val();
+
+                formData.append('isuse',isuse);
+                formData.append('group_code',group_code);
+                formData.append('name',name);
+                formData.append('idx',idx);
+                formData.append('phoneno',phoneno);
+                formData.append('email',email);
+                formData.append( "photo_file", $("#photo_file")[0].files[0] );
+
 
                  jQuery.ajax({
                      headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                      type:"post",
-                     dataType:'json',
-                     data: data,
+                     cache: false,
+                     processData: false,
+                     contentType: false,
+                     data: formData,
                      url: '{{ url('/admin/ajax/adminUpdate') }}',
                      success: function searchSuccess(data) {
                          if(data.result=="SUCCESS"){

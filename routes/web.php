@@ -12,6 +12,11 @@ use App\Http\Controllers\SoundSourceController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\MentoController;
+use App\Http\Controllers\PlanController;
+use App\Http\Controllers\ContentController;
+use App\Http\Controllers\DownloadController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -40,8 +45,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     // dbConnect 및 Service 별도 분리 테스트
-    Route::get('/test', [HomeController::class, 'test']);
-
     //관리자 관리
     Route::group(['prefix' => 'admin'], function()
     {
@@ -108,6 +111,16 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/contract/view/{idx}', [BoardController::class, 'getContractView']);
         Route::post('/contract/delete', [BoardController::class, 'setContractDelete']);
 
+        //trend
+        Route::get('/trend/list', [BoardController::class, 'getTrendList']);
+        Route::get('/trend/write', [BoardController::class, 'getTrendWrite']);
+        Route::post('/trend/add', [BoardController::class, 'setTrendAdd']);
+        Route::get('/trend/view/{idx}', [BoardController::class, 'getTrendView']);
+        Route::post('/trend/update', [BoardController::class, 'TrendUpdate']);
+        Route::get('/trend/delete', [BoardController::class, 'TrendDelete']);
+        Route::get('trendBeatView/{idx}', [BoardController::class, 'getTrendBeatView']);
+        Route::get('trendCommentView/{idx}', [BoardController::class, 'getTrendCommentView']);
+
     });
 
     //다국어설정
@@ -152,6 +165,45 @@ Route::middleware(['auth'])->group(function () {
 
     });
 
+    //멘토 뮤지션 관리
+    Route::group(['prefix' => 'mento'], function()
+    {
+        // 멘토 전환신청
+        Route::get('/', [MentoController::class, 'getFieldList']);
+        // 멘토 전환신청 리스트
+        Route::get('mentoList', [MentoController::class, 'getMentoList']);
+        // 멘토 전환신청
+        Route::post('ajax/mentoCh', [MentoController::class, 'setMentoCh']);
+        // 멘토 전환신청 엑셀 다운로드
+        Route::get('mentoChDownloadExcel', [MentoController::class, 'mentoChDownloadExcel']);
+        // 멘토 전환신청 상세보기
+        Route::get('mentoView/{idx}', [MentoController::class, 'getMentoView']);
+        // 멘토 전환신청 상태변경 ( 승인 또는 반려 변경)
+        Route::post('ajax/mentoChUpdate', [MentoController::class, 'setMentoChUpdate']);
+
+        // 추천 멘토
+        //Route::get('inviteList', [MentoController::class, 'getInviteList']);
+        // 분야 관리
+        Route::get('fieldList', [MentoController::class, 'getFieldList']);
+
+        // 분야 수정
+        Route::post('ajax/fieldUpdate', [MentoController::class, 'setFieldUpdate']);
+        // 분야 등록
+        Route::post('ajax/fieldInsert', [MentoController::class, 'setFieldInsert']);
+
+        // 파일 다운로드
+        Route::post('ajax/fileDownload', [MentoController::class, 'fileDownload']);
+        // 분야 사용유무 전환
+        Route::post('ajax/fieldStatus', [MentoController::class, 'fieldStatus']);
+
+
+        // 멘토 전환신청 리스트
+        Route::get('mentoChLog', [MentoController::class, 'getMentoChLog']);
+
+
+    });
+
+
     //콘텐츠 관리
     Route::group(['prefix' => 'contents'], function()
     {
@@ -168,46 +220,52 @@ Route::middleware(['auth'])->group(function () {
         Route::post('feedUpdate', [FeedController::class, 'feedUpdate']);
         Route::get('/comment/commentDetail', [FeedController::class, 'getCommentDetail']);
         Route::get('/comment/commentUpdate', [FeedController::class, 'commentUpdate']);
+
+        Route::get('reviewList', [ContentController::class, 'getReviewList']);
+        Route::get('reviewView/{idx}', [ContentController::class, 'getReviewView']);
+        Route::get('reviewCommentView/{idx}', [ContentController::class, 'getReviewCommentView']);
+        Route::post('reviewUpdate', [ContentController::class, 'reviewUpdate']);
+        Route::get('/comment/commentDetail', [ContentController::class, 'getCommentDetail']);
+        Route::get('/comment/commentUpdate', [ContentController::class, 'commentUpdate']);
     });
 
     Route::post('ckeditor/upload', [BoardController::class, 'upload'])->name('ckeditor.upload');
 
 
-    //콘텐츠 관리
+    //제품 관리
     Route::group(['prefix' => 'products'], function()
     {
         Route::get('/', [ProductController::class, 'getProductList']);
         // 상품리스트
         Route::get('productList', [ProductController::class, 'getProductList']);
-
         // 상품등록화면
         Route::get('productWrite', [ProductController::class, 'getProductWrite']);
+        // 상품등록
+        Route::post('productInsert', [ProductController::class, 'setProductInsert']);
+        // 상품상세
+        Route::get('productView/{idx}', [ProductController::class, 'getProductView']);
+        // 상품수정
+        Route::post('productUpdate', [ProductController::class, 'putProductUpdate']);
 
+    });
 
-        Route::post('productInsert', [ProductController::class, 'getProductInsert']);
-
-
+    //요금제 관리
+    Route::group(['prefix' => 'plan'], function()
+    {
+        Route::get('/', [PlanController::class, 'getPlanList']);
+        // 요금제 관리 리스트
+        Route::get('planList', [PlanController::class, 'getPlanList']);
+        // 요금제 관리 등록
+        Route::get('planWrite', [PlanController::class, 'getPlanWrite']);
+        // 요금제 등록
+        Route::post('planInsert', [PlanController::class, 'setPlanInsert']);
+        // 요금제 상세
+        Route::get('planView/{idx}', [PlanController::class, 'getPlanView']);
+        // 요금제 수정
+        Route::post('planUpdate', [PlanController::class, 'putPlanUpdate']);
 
     });
 
 });
+Route::get('downloadFile', [DownloadController::class, 'downloadFile']);
 
-//Route::get('/file-import',[UserController::class,'importView'])->name('import-view');
-//Route::post('/import',[UserController::class,'import'])->name('import');
-//Route::get('/export-users',[UserController::class,'exportUsers'])->name('export-users');
-
-
-/*------------------------------------------
---------------------------------------------
-All Admin Routes List
---------------------------------------------
---------------------------------------------*/
-//Route::middleware(['auth', 'user-access:admin'])->group(function () {
-
-//    Route::get('/admin/home', [HomeController::class, 'adminHome'])->name('admin.home');
-//});
-
-//Route::middleware(['auth', 'user-access:manager'])->group(function () {
-
-//    Route::get('/manager/home', [HomeController::class, 'managerHome'])->name('manager.home');
-//});

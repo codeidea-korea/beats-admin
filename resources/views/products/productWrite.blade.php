@@ -38,6 +38,7 @@
                     <div class="p-5">
                         <div class="overflow-x-auto">
                             <table class="table table-bordered">
+                                <!--
                                 <tr>
                                     <th class="whitespace-nowrap text-center bg-primary/10">구분</th>
                                     <td colspan="3">
@@ -53,21 +54,13 @@
                                             <input name="gubun" id="" class="form-check-input" type="checkbox" value="3">
                                             <label class="form-check-label" for="checkbox-switch-3">구분 값 표기</label>
                                         </div>
-                                        <!--
-
-                                        <div class="form-check inline-block ml-5">
-                                            <input id="radio-switch-1" class="form-check-input" type="radio" name="vertical_radio_button" value="vertical-radio-chris-evans">
-                                            <label class="form-check-label" for="radio-switch-1">최저가</label>
-                                        </div>
-                                        <div class="form-check inline-block ml-5">
-                                            <input id="radio-switch-2" class="form-check-input" type="radio" name="vertical_radio_button" value="vertical-radio-liam-neeson">
-                                            <label class="form-check-label" for="radio-switch-2">추천</label>
-                                        </div>
-                                        <div class="form-check inline-block ml-5">
-                                            <input id="radio-switch-3" class="form-check-input" type="radio" name="vertical_radio_button" value="vertical-radio-daniel-craig">
-                                            <label class="form-check-label" for="radio-switch-3">구분 값 표기</label>
-                                        </div>
-                                        -->
+                                    </td>
+                                </tr>
+                                -->
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10">상품 뱃지</th>
+                                    <td colspan="3">
+                                        <input  name="bj" type="text" class="form-control" maxlength="10" placeholder="10자 이내로 작성해주세요">
                                     </td>
                                 </tr>
 
@@ -81,7 +74,19 @@
                                 <tr>
                                     <th class="whitespace-nowrap text-center bg-primary/10">(영어)제품영</th>
                                     <td colspan="3">
-                                        <input name="name_eng" type="text" class="form-control" placeholder="(영어) 제품명 표기 영역">
+                                        <input name="name_en" type="text" class="form-control" placeholder="(영어) 제품명 표기 영역">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10">(일본)제품영</th>
+                                    <td colspan="3">
+                                        <input name="name_jp" type="text" class="form-control" placeholder="(일본) 제품명 표기 영역">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10">(중국)제품영</th>
+                                    <td colspan="3">
+                                        <input name="name_ch" type="text" class="form-control" placeholder="(중국) 제품명 표기 영역">
                                     </td>
                                 </tr>
 
@@ -89,19 +94,6 @@
                                     <th class="whitespace-nowrap text-center bg-primary/10">대표이미지</th>
                                     <td colspan="3">
                                         <input type="file" name="productImg" id="productImg"  />
-                                        <!--
-                                        <form data-single="true" action="/file-upload" class="dropzone">
-                                            <div class="fallback">
-                                                <input name="file" type="file" />
-                                            </div>
-                                            <div class="dz-message" data-dz-message>
-                                                <div class="text-lg font-medium">Drop files here or click to upload.</div>
-                                                <div class="text-slate-500">
-                                                    This is just a demo dropzone. Selected files are <span class="font-medium">not</span> actually uploaded.
-                                                </div>
-                                            </div>
-                                        </form>
-                                        -->
                                     </td>
                                 </tr>
 
@@ -175,54 +167,58 @@
 
                                                         var formData = new FormData;
 
-                                                        var option_no_arr = [];
                                                         $("input[name='option_no[]']").each(function(i) {
-                                                            //option_no_arr.push($(this).val());
                                                             formData.append('option_no[]',$(this).val());
                                                         });
-
-                                                        var option_title_arr = [];
                                                         $("input[name='option_title[]']").each(function(i) {
-                                                            //option_title_arr.push($(this).val());
                                                             formData.append('option_title[]',$(this).val());
                                                         });
-
-                                                        var option_price_arr = [];
                                                         $("input[name='option_price[]']").each(function(i) {
-                                                            //option_price_arr.push($(this).val());
                                                             formData.append('option_price[]',$(this).val());
                                                         });
-
-                                                        var option_stock_arr = [];
                                                         $("input[name='option_stock[]']").each(function(i) {
-                                                            //option_stock_arr.push($(this).val());
                                                             formData.append('option_stock[]',$(this).val());
                                                         });
-                                                        var name = $('input[name=name]').val();
-                                                        var name_eng = $('input[name=name_eng]').val();
-                                                        var price = $('input[name=price]').val();
-                                                        var information = $('#information').val();
-                                                        var information = $('#information_eng').val();
+
+                                                        //구분은 기획 변경으로 제거
+                                                        //$("input[name=gubun]:checked").each(function(){
+                                                        //    formData.append('gubun[]',$(this).val());
+                                                        //})
+
+                                                        oEditors.getById["information"].exec("UPDATE_CONTENTS_FIELD", []);
+                                                        oEditors.getById["information_en"].exec("UPDATE_CONTENTS_FIELD", []);
+                                                        oEditors.getById["information_jp"].exec("UPDATE_CONTENTS_FIELD", []);
+                                                        oEditors.getById["information_ch"].exec("UPDATE_CONTENTS_FIELD", []);
+                                                        oEditors.getById["policy"].exec("UPDATE_CONTENTS_FIELD", []);
+                                                        oEditors.getById["policy_en"].exec("UPDATE_CONTENTS_FIELD", []);
+                                                        oEditors.getById["policy_jp"].exec("UPDATE_CONTENTS_FIELD", []);
+                                                        oEditors.getById["policy_ch"].exec("UPDATE_CONTENTS_FIELD", []);
 
 
-                                                        //var isuse = $('select[name=isuse]').val();
-                                                        //var group_code = $('select[name=group_code]').val();
-                                                        //var name = $('input[name=name]').val();
-                                                        //var id = $('input[name=id]').val();
-                                                        //var password = $('input[name=password]').val();
-                                                        //var password2 = $('input[name=password2]').val();
-                                                        //var phoneno = $('input[name=phoneno]').val();
-                                                        //var email = $('input[name=email]').val();
-
-
-                                                        //console.log(option_no_arr);
-                                                        //console.log(option_title_arr);
-                                                        //console.log(option_price_arr);
-                                                        //console.log(option_stock_arr);
-                                                        //console.log(formData);
+                                                        formData.append( "bj", $('input[name=bj]').val());
+                                                        formData.append( "name", $('input[name=name]').val());
+                                                        formData.append( "name_en", $('input[name=name_en]').val());
+                                                        formData.append( "name_jp", $('input[name=name_jp]').val());
+                                                        formData.append( "name_ch", $('input[name=name_ch]').val());
                                                         formData.append( "productImg", $("#productImg")[0].files[0] );
+                                                        formData.append( "price", $('input[name=price]').val());
+                                                        formData.append( "information", $("textarea[name='information']").val());
+                                                        formData.append( "information_en", $("textarea[name='information_en']").val());
+                                                        formData.append( "information_jp", $("textarea[name='information_jp']").val());
+                                                        formData.append( "information_ch", $("textarea[name='information_ch']").val());
+                                                        formData.append( "delivery_charge",   $('input[name=delivery_charge]').val());
+                                                        formData.append( "delivery_charge_re",$('input[name=delivery_charge_re]').val());
+                                                        formData.append( "delivery_charge_ch",$('input[name=delivery_charge_ch]').val());
+                                                        formData.append( "delivery_charge_jj",$('input[name=delivery_charge_jj]').val());
+                                                        formData.append( "delivery_charge_ex",$('input[name=delivery_charge_ex]').val());
+                                                        formData.append( "policy",$("textarea[name='policy']").val());
+                                                        formData.append( "policy_en", $("textarea[name='policy_en']").val());
+                                                        formData.append( "policy_jp", $("textarea[name='policy_jp']").val());
+                                                        formData.append( "policy_ch", $("textarea[name='policy_ch']").val());
+                                                        formData.append( "is_display",$("select[name='is_display']").val());
 
-                                                        alert();
+
+
                                                         jQuery.ajax({
                                                             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                                                             type:"post",
@@ -232,10 +228,14 @@
                                                             data: formData,
                                                             url: '{{ url('/products/productInsert') }}',
                                                             success: function searchSuccess(data) {
-                                                                console.log(data);
+                                                                if(data.code==0){
+                                                                    alert('상품이 등록되었습니다.');
+                                                                    location.href="/products/productList";
+                                                                }else{
+                                                                    alert(data.message);
+                                                                }
                                                             },
                                                             error: function (e) {
-                                                                console.log('start');
                                                                 console.log(e);
                                                                 alert('로딩 중 오류가 발생 하였습니다.');
                                                             }
@@ -257,7 +257,7 @@
                                             <div class="preview">
                                                 <div class="editor">
                                                     <script type="text/javascript" src="/smarteditor2-2.8.2.3/js/HuskyEZCreator.js" charset="utf-8"></script>
-                                                    <textarea class="form-control" name="information" id="information"
+                                                    <textarea class="form-control" name="information" id="information" style="width:95%"
                                                               rows="10" cols="10"
                                                               placeholder="내용을 입력해주세요"
                                                     ></textarea>
@@ -273,7 +273,39 @@
                                             <div class="preview">
                                                 <div class="editor">
                                                     <script type="text/javascript" src="/smarteditor2-2.8.2.3/js/HuskyEZCreator.js" charset="utf-8"></script>
-                                                    <textarea class="form-control" name="information_eng" id="information_eng"
+                                                    <textarea class="form-control" name="information_en" id="information_en" style="width:95%"
+                                                              rows="10" cols="10"
+                                                              placeholder="내용을 입력해주세요"
+                                                    ></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10"><label style="color:#ff0000;">(일본)</label> 상세 정보</th>
+                                    <td colspan="3">
+                                        <div class="p-5" id="classic-editor">
+                                            <div class="preview">
+                                                <div class="editor">
+                                                    <script type="text/javascript" src="/smarteditor2-2.8.2.3/js/HuskyEZCreator.js" charset="utf-8"></script>
+                                                    <textarea class="form-control" name="information_jp" id="information_jp" style="width:95%"
+                                                              rows="10" cols="10"
+                                                              placeholder="내용을 입력해주세요"
+                                                    ></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10"><label style="color:#ff0000;">(중국)</label> 상세 정보</th>
+                                    <td colspan="3">
+                                        <div class="p-5" id="classic-editor">
+                                            <div class="preview">
+                                                <div class="editor">
+                                                    <script type="text/javascript" src="/smarteditor2-2.8.2.3/js/HuskyEZCreator.js" charset="utf-8"></script>
+                                                    <textarea class="form-control" name="information_ch" id="information_ch" style="width:95%"
                                                               rows="10" cols="10"
                                                               placeholder="내용을 입력해주세요"
                                                     ></textarea>
@@ -324,7 +356,7 @@
                                             <div class="preview">
                                                 <div class="editor">
                                                     <script type="text/javascript" src="/smarteditor2-2.8.2.3/js/HuskyEZCreator.js" charset="utf-8"></script>
-                                                    <textarea class="form-control" name="policy" id="policy"
+                                                    <textarea class="form-control" name="policy" id="policy" style="width:95%"
                                                               rows="10" cols="10"
                                                               placeholder="내용을 입력해주세요"
                                                     ></textarea>
@@ -340,7 +372,7 @@
                                             <div class="preview">
                                                 <div class="editor">
                                                     <script type="text/javascript" src="/smarteditor2-2.8.2.3/js/HuskyEZCreator.js" charset="utf-8"></script>
-                                                    <textarea class="form-control" name="policy_eng" id="policy_eng"
+                                                    <textarea class="form-control" name="policy_en" id="policy_en" style="width:95%"
                                                               rows="10" cols="10"
                                                               placeholder="내용을 입력해주세요"
                                                     ></textarea>
@@ -349,19 +381,37 @@
                                         </div>
                                     </td>
                                 </tr>
-
                                 <tr>
-                                    <th class="whitespace-nowrap text-center bg-primary/10">판매자</th>
-                                    <td class="whitespace-nowrap">
-                                        <select class="form-select w-56" aria-label=".form-select-lg example">
-                                            <option>판매자 닉네임</option>
-                                            <option>전체1</option>
-                                            <option>전체2</option>
-                                        </select>
-                                        <button class="btn btn-primary w-24">자세히 보기</button>
+                                    <th class="whitespace-nowrap text-center bg-primary/10"><label style="color:#ff0000;">(일본)</label>정책 <br> 배송/취소/교환/반품</th>
+                                    <td colspan="3">
+                                        <div class="p-5" id="classic-editor">
+                                            <div class="preview">
+                                                <div class="editor">
+                                                    <script type="text/javascript" src="/smarteditor2-2.8.2.3/js/HuskyEZCreator.js" charset="utf-8"></script>
+                                                    <textarea class="form-control" name="policy_jp" id="policy_jp" style="width:95%"
+                                                              rows="10" cols="10"
+                                                              placeholder="내용을 입력해주세요"
+                                                    ></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
-                                    <th class="whitespace-nowrap text-center bg-primary/10">판매 수</th>
-                                    <td>{000}(건)</td>
+                                </tr>
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10"><label style="color:#ff0000;">(중국)</label>정책 <br> 배송/취소/교환/반품</th>
+                                    <td colspan="3">
+                                        <div class="p-5" id="classic-editor">
+                                            <div class="preview">
+                                                <div class="editor">
+                                                    <script type="text/javascript" src="/smarteditor2-2.8.2.3/js/HuskyEZCreator.js" charset="utf-8"></script>
+                                                    <textarea class="form-control" name="policy_ch" id="policy_ch" style="width:95%"
+                                                              rows="10" cols="10"
+                                                              placeholder="내용을 입력해주세요"
+                                                    ></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th class="whitespace-nowrap text-center bg-primary/10">실 사용자 리뷰</th>
@@ -377,13 +427,16 @@
                                 </tr>
                                 <tr>
                                     <th class="whitespace-nowrap text-center bg-primary/10">노출 상태</th>
-                                    <td colspan="3">
+                                    <td>
                                         <select name="is_display" class="form-select w-56" aria-label=".form-select-lg example">
-                                            <option>공개</option>
-                                            <option>비공개</option>
+                                            <option value="Y">공개</option>
+                                            <option selected value="N">비공개</option>
                                         </select>
                                     </td>
+                                    <th class="whitespace-nowrap text-center bg-primary/10">판매 수</th>
+                                    <td>{000}(건)</td>
                                 </tr>
+
                                 <tr>
                                     <th class="whitespace-nowrap text-center bg-primary/10">관리자</th>
                                     <td colspan="3">홍길동</td>
@@ -407,11 +460,8 @@
 
 
         <script>
-
+            //* edit bar 설정
             let oEditors = [];
-            let oEditors2 = [];
-            let oEditors3 = [];
-            let oEditors4 = [];
 
             $(document).ready(function() {
                 nhn.husky.EZCreator.createInIFrame({
@@ -430,11 +480,44 @@
                     },
                 })
             })
-
             $(document).ready(function() {
                 nhn.husky.EZCreator.createInIFrame({
-                    oAppRef: oEditors2,
-                    elPlaceHolder: "informationEng",
+                    oAppRef: oEditors,
+                    elPlaceHolder: "information_en",
+                    sSkinURI: "/smarteditor2-2.8.2.3/SmartEditor2Skin.html",
+                    fCreator: "createSEditor2",
+                    htParams : {
+                        bUseToolbar : true,				// 툴바 사용 여부 (true:사용/ false:사용하지 않음)
+                        bUseVerticalResizer : true,		// 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
+                        bUseModeChanger : true,			// 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
+                        fOnBeforeUnload : function(){
+                        }
+                    },
+                    fOnAppLoad : function(){
+                    },
+                })
+            })
+            $(document).ready(function() {
+                nhn.husky.EZCreator.createInIFrame({
+                    oAppRef: oEditors,
+                    elPlaceHolder: "information_jp",
+                    sSkinURI: "/smarteditor2-2.8.2.3/SmartEditor2Skin.html",
+                    fCreator: "createSEditor2",
+                    htParams : {
+                        bUseToolbar : true,				// 툴바 사용 여부 (true:사용/ false:사용하지 않음)
+                        bUseVerticalResizer : true,		// 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
+                        bUseModeChanger : true,			// 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
+                        fOnBeforeUnload : function(){
+                        }
+                    },
+                    fOnAppLoad : function(){
+                    },
+                })
+            })
+            $(document).ready(function() {
+                nhn.husky.EZCreator.createInIFrame({
+                    oAppRef: oEditors,
+                    elPlaceHolder: "information_ch",
                     sSkinURI: "/smarteditor2-2.8.2.3/SmartEditor2Skin.html",
                     fCreator: "createSEditor2",
                     htParams : {
@@ -451,7 +534,7 @@
 
             $(document).ready(function() {
                 nhn.husky.EZCreator.createInIFrame({
-                    oAppRef: oEditors3,
+                    oAppRef: oEditors,
                     elPlaceHolder: "policy",
                     sSkinURI: "/smarteditor2-2.8.2.3/SmartEditor2Skin.html",
                     fCreator: "createSEditor2",
@@ -466,11 +549,10 @@
                     },
                 })
             })
-
             $(document).ready(function() {
                 nhn.husky.EZCreator.createInIFrame({
-                    oAppRef: oEditors4,
-                    elPlaceHolder: "policyEng",
+                    oAppRef: oEditors,
+                    elPlaceHolder: "policy_en",
                     sSkinURI: "/smarteditor2-2.8.2.3/SmartEditor2Skin.html",
                     fCreator: "createSEditor2",
                     htParams : {
@@ -484,9 +566,40 @@
                     },
                 })
             })
-
-
-
+            $(document).ready(function() {
+                nhn.husky.EZCreator.createInIFrame({
+                    oAppRef: oEditors,
+                    elPlaceHolder: "policy_jp",
+                    sSkinURI: "/smarteditor2-2.8.2.3/SmartEditor2Skin.html",
+                    fCreator: "createSEditor2",
+                    htParams : {
+                        bUseToolbar : true,				// 툴바 사용 여부 (true:사용/ false:사용하지 않음)
+                        bUseVerticalResizer : true,		// 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
+                        bUseModeChanger : true,			// 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
+                        fOnBeforeUnload : function(){
+                        }
+                    },
+                    fOnAppLoad : function(){
+                    },
+                })
+            })
+            $(document).ready(function() {
+                nhn.husky.EZCreator.createInIFrame({
+                    oAppRef: oEditors,
+                    elPlaceHolder: "policy_ch",
+                    sSkinURI: "/smarteditor2-2.8.2.3/SmartEditor2Skin.html",
+                    fCreator: "createSEditor2",
+                    htParams : {
+                        bUseToolbar : true,				// 툴바 사용 여부 (true:사용/ false:사용하지 않음)
+                        bUseVerticalResizer : true,		// 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
+                        bUseModeChanger : true,			// 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
+                        fOnBeforeUnload : function(){
+                        }
+                    },
+                    fOnAppLoad : function(){
+                    },
+                })
+            })
 
         </script>
 

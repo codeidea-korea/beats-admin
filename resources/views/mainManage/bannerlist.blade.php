@@ -44,11 +44,11 @@
                                 @php $i=0; @endphp
                                 @foreach($bannerList as $rs)
                                     <tr>
-                                        <td class="whitespace-nowrap text-center">{{$totalCount-($i+(($params['page']-1)*10))}}</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->type}}</td>
+                                        <td class="whitespace-nowrap text-center"><a href="/mainmanage/banner/view/{{$rs->banner_code}}">{{$totalCount-($i+(($params['page']-1)*10))}}</a></td>
+                                        <td class="whitespace-nowrap text-center"><a href="/mainmanage/banner/view/{{$rs->banner_code}}">{{$rs->type}}</a></td>
                                         <td class="whitespace-nowrap text-center"><a href="/mainmanage/banner/view/{{$rs->banner_code}}">{{$rs->banner_name}}</a></td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->downcontents}}</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->created_at}}</td>
+                                        <td class="whitespace-nowrap text-center"><a href="/mainmanage/banner/view/{{$rs->banner_code}}">{{$rs->downcontents}}</a></td>
+                                        <td class="whitespace-nowrap text-center"><a href="/mainmanage/banner/view/{{$rs->banner_code}}">{{$rs->created_at}}</a></td>
                                     </tr>
                                     @php $i++; @endphp
                                 @endforeach

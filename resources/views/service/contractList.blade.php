@@ -73,11 +73,11 @@
                                 @php $i=0; @endphp
                                 @foreach($boardData as $rs)
                                     <tr>
-                                        <td class="whitespace-nowrap text-center">{{$totalCount-($i+(($params['page']-1)*10))}}</td>
+                                        <td class="whitespace-nowrap text-center"><a href="/service/contract/view/{{$rs->idx}}">{{$totalCount-($i+(($params['page']-1)*10))}}</a></td>
                                         <td class="whitespace-nowrap text-center"><a href="/service/contract/view/{{$rs->idx}}">{{$rs->contents}}</a></td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->version}}v</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->name}}</td>
-                                        <td class="whitespace-nowrap text-center">{{substr($rs->start_date,0,10)}}</td>
+                                        <td class="whitespace-nowrap text-center"><a href="/service/contract/view/{{$rs->idx}}">{{$rs->version}}v</a></td>
+                                        <td class="whitespace-nowrap text-center"><a href="/service/contract/view/{{$rs->idx}}">{{$rs->name}}</a></td>
+                                        <td class="whitespace-nowrap text-center"><a href="/service/contract/view/{{$rs->idx}}">{{substr($rs->start_date,0,10)}}</a></td>
                                     </tr>
                                     @php $i++; @endphp
                                 @endforeach

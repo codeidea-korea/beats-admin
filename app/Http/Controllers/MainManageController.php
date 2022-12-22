@@ -46,7 +46,7 @@ class MainManageController extends Controller
             ,'totalCount' => $totalCount
         ]);
     }
-    
+
     public function getBannerView($banner_code)
     {
         $params = $this->request->input();
@@ -83,12 +83,15 @@ class MainManageController extends Controller
     {
         $params = $this->request->input();
         $file = $this->request->file('banner_img');
-        $bannercode = $this->adminMainmanageService->BannerAdd($params,$file);
+        $file_en = $this->request->file('banner_img_en');
+        $file_jp = $this->request->file('banner_img_jp');
+        $file_ch = $this->request->file('banner_img_ch');
+        $bannercode = $this->adminMainmanageService->BannerAdd($params,$file,$file_en,$file_jp,$file_ch);
 
         if($bannercode == "fails"){
             return redirect()->back()->with('alert', '등록/수정에 실패하였습니다. \n관리자에게 문의 바랍니다.');
         }else{
-            return redirect('/mainmanage/banner/view/'.$bannercode);
+            return redirect('/mainmanage/banner/view/'.$bannercode)->with('alert', '정상적으로 등록되었습니다.');
         }
     }
 
@@ -96,7 +99,10 @@ class MainManageController extends Controller
     {
         $params = $this->request->input();
         $file = $this->request->file('up_banner_img');
-        $bannercode = $this->adminMainmanageService->BannerUpdate($params,$file);
+        $file_en = $this->request->file('up_banner_img_en');
+        $file_jp = $this->request->file('up_banner_img_jp');
+        $file_ch = $this->request->file('up_banner_img_ch');
+        $bannercode = $this->adminMainmanageService->BannerUpdate($params,$file,$file_en,$file_jp,$file_ch);
 
         if($bannercode == "fails"){
             return redirect()->back()->with('alert', '등록/수정에 실패하였습니다. \n관리자에게 문의 바랍니다.');
@@ -168,7 +174,7 @@ class MainManageController extends Controller
             ,'totalCount' => $totalCount
         ]);
     }
-    
+
     public function getPopupView($pidx)
     {
         $params = $this->request->input();
@@ -199,7 +205,10 @@ class MainManageController extends Controller
     {
         $params = $this->request->input();
         $file = $this->request->file('popup_img');
-        $result = $this->adminMainmanageService->PopupAdd($params,$file);
+        $file_en = $this->request->file('popup_img_en');
+        $file_jp = $this->request->file('popup_img_jp');
+        $file_ch = $this->request->file('popup_img_ch');
+        $result = $this->adminMainmanageService->PopupAdd($params,$file,$file_en,$file_jp,$file_ch);
 
         if($result == "fails"){
             return redirect()->back()->with('alert', '등록/수정에 실패하였습니다. \n관리자에게 문의 바랍니다.');
@@ -212,7 +221,10 @@ class MainManageController extends Controller
     {
         $params = $this->request->input();
         $file = $this->request->file('popup_img');
-        $result = $this->adminMainmanageService->PopupUpdate($params,$file);
+        $file_en = $this->request->file('popup_img_en');
+        $file_jp = $this->request->file('popup_img_jp');
+        $file_ch = $this->request->file('popup_img_ch');
+        $result = $this->adminMainmanageService->PopupUpdate($params,$file,$file_en,$file_jp,$file_ch);
 
         if($result == "fails"){
             return redirect()->back()->with('alert', '등록/수정에 실패하였습니다. \n관리자에게 문의 바랍니다.');

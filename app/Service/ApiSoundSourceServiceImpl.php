@@ -2,11 +2,14 @@
 
 namespace App\Service;
 
+use Response;
 use Agent;
 use Session;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\File;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Support\Facades\Storage;
 
 class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceServiceInterface
 {
@@ -18,7 +21,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
     //음원파일 업로드
     public function setSoundFileUpdate($params,$files,$params2)
     {
-//$params2['seconds']
+
         $sqlData['file_cnt'] = count($files);
         $sqlData['mem_id'] = $params['mem_id'];
         $sqlData['idx'] = $params['idx'];
@@ -34,7 +37,9 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                 $sqlData['hash_name'] = $fa->hashName();
                 $sqlData['file_url'] =  $folderName;
                 $sqlData['seconds'] = $params2['seconds'][$j];
-                $fa->storeAs($folderName, $fa->hashName(), 'public');
+                //$fa->storeAs($folderName, $fa->hashName(), 'public');
+                $path = Storage::disk('s3')->put($folderName. $sqlData['hash_name'], file_get_contents($fa));
+                $path = Storage::disk('s3')->url($path);
                 if($cnt==$i){
                     $result = $this->statDB->table('music_file')
                         ->insert([
@@ -220,11 +225,12 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                         ,F.file_no
                         ,F.hash_name
                         ,F.file_url
+                        ,CONCAT('".env('AWS_CLOUD_FRONT_URL')."',F.file_url,F.hash_name) AS urlLink
                         ,H.moddate
                         ,H.file_version
                         ,H.del_status as HeadDelStatus
                         ,H.del_date as HeadDelDate
-                        ,(select count(idx) from comment where wr_type = 'soundSource' and wr_idx = H.idx) as wr_comment
+                        ,(select count(idx) from comment where wr_type = 'soundSource' and wr_idx = H.idx and del_status ='N') as wr_comment
                         ,(select SUM(seconds)  from music_file  WHERE music_head_idx = H.idx AND VERSION =H.file_version AND del_status ='N') as totalSeconds
 
                     FROM
@@ -237,10 +243,9 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                     AND ((H.del_date IS  NULL AND H.del_status = 'N') OR (H.del_date > NOW() AND H.del_status = 'Y'))
                     AND F.version = H.file_version
                     ".$_where."
-                    ORDER BY idx desc"
-                    //limit ".(($params['page']-1)*$params['limit']).",".$params['limit']
+                    ORDER BY idx desc
+                    limit ".(($params['page']-1)*$params['limit']).",".$params['limit']
         );
-
         return $result;
 
     }
@@ -251,9 +256,10 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
             SELECT
                 b.mem_nickname as commentNickName
             ,CONCAT_WS('', '/storage', b.profile_photo_url, b.profile_photo_hash_name) AS profile_photo_file_url
+            ,CONCAT('".env('AWS_CLOUD_FRONT_URL')."',b.profile_photo_url,b.profile_photo_hash_name) AS urlLink
             FROM
             comment a LEFT JOIN member_data b ON a.mem_id=b.mem_id
-            where a.wr_type = 'soundSource' and a.wr_idx = ".$params['idx']."
+            where a.wr_type = 'soundSource' and a.wr_idx = ".$params['idx']." and a.del_status = 'N'
             GROUP BY b.mem_nickname ,b.profile_photo_url,b.profile_photo_hash_name
         ");
          return $result;
@@ -356,6 +362,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                 'music_head.idx'
                 ,'music_head.mem_id as  memId'
                 ,'member_data.name as  memName'
+                ,'member_data.mem_nickname as  memNickName'
                 ,'music_head.file_cnt as fileCnt'
                 ,'music_head.music_title as musicTitle'
                 ,'music_head.play_time as playTime'
@@ -398,6 +405,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                 'music_file.representative_music',
                 'music_file.del_status',
                 'music_file.del_date',
+                DB::raw("CONCAT('".env('AWS_CLOUD_FRONT_URL')."',music_file.file_url,music_file.hash_name) AS urlLink"),
 
             )
             ->where('music_file.music_head_idx',$params['music_head_idx'])
@@ -458,6 +466,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
     public function setSoundSourceDelAll($params){
         $result = $this->statDB->table('music_head')
             ->where('mem_id',$params['mem_id'])
+            ->where('del_status','N')
             ->update(
                 [
                     'del_status' => 'Y'
@@ -472,6 +481,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
 
         $result = $this->statDB->table('music_file')
             ->where('music_head_idx',$params['music_head_idx'])
+            ->where('del_status','N')
             ->update(
                 [
                     'del_status' => 'Y'
@@ -489,6 +499,7 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                 [
                     'del_status' => 'N'
                     ,'del_date' => null
+                    ,'alram_status' => 0
                 ]
             );
         return $result;
@@ -567,7 +578,9 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                 $sqlData['seconds'] =  $params['seconds'][$j];
 
 
-                $fa->storeAs($folderName, $fa->hashName(), 'public');
+                //$fa->storeAs($folderName, $fa->hashName(), 'public');
+                $path = Storage::disk('s3')->put($folderName. $sqlData['hash_name'], file_get_contents($fa));
+                $path = Storage::disk('s3')->url($path);
 
                 if($cnt==$i){
                     $result = $this->statDB->table('music_file')

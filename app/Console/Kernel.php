@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->exec('https://beats-admin.beatsomeone.com/api/v1/SoundDelNotice')->everyThreeMinutes();
     }
 
     /**

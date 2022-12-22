@@ -45,13 +45,61 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">제목(영어)</th>
+                                    <td colspan="3" class="whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <input name="wr_title_en" id="regular-form-2" type="text" class="form-control" placeholder="Input text" value="{{$boardData[0]->wr_title_en}}">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">제목(일어)</th>
+                                    <td colspan="3" class="whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <input name="wr_title_jp" id="regular-form-3" type="text" class="form-control" placeholder="Input text" value="{{$boardData[0]->wr_title_jp}}">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">제목(중국어)</th>
+                                    <td colspan="3" class="whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <input name="wr_title_ch" id="regular-form-4" type="text" class="form-control" placeholder="Input text" value="{{$boardData[0]->wr_title_ch}}">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">내용</th>
                                     <td colspan="3" class="whitespace-nowrap">
                                         <script type="text/javascript" src="/smarteditor2-2.8.2.3/js/HuskyEZCreator.js" charset="utf-8"></script>
-                                        <textarea class="form-control" name="wr_content" id="wr_content"
+                                        <textarea class="form-control" name="wr_content" id="wr_content" style="width:95%"
                                                   rows="20" cols="10"
                                                   placeholder="내용을 입력해주세요"
                                         >{{$boardData[0]->wr_content}}</textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">내용(영어)</th>
+                                    <td colspan="3" class="whitespace-nowrap">
+                                        <div class="p-5" id="classic-editor">
+                                            <textarea class="form-control" name="wr_content_en" id="wr_content_en" rows="20" cols="10" style="width:95%" placeholder="내용을 입력해주세요">{{$boardData[0]->wr_content_en}}</textarea>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">내용(일어)</th>
+                                    <td colspan="3" class="whitespace-nowrap">
+                                        <div class="p-5" id="classic-editor">
+                                            <textarea class="form-control" name="wr_content_jp" id="wr_content_jp" rows="20" cols="10" style="width:95%" placeholder="내용을 입력해주세요">{{$boardData[0]->wr_content_jp}}</textarea>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">내용(중국어)</th>
+                                    <td colspan="3" class="whitespace-nowrap">
+                                        <div class="p-5" id="classic-editor">
+                                            <textarea class="form-control" name="wr_content_ch" id="wr_content_ch" rows="20" cols="10" style="width:95%" placeholder="내용을 입력해주세요">{{$boardData[0]->wr_content_ch}}</textarea>
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -118,6 +166,54 @@
                 fOnAppLoad : function(){
                 },
             })
+
+            nhn.husky.EZCreator.createInIFrame({
+                oAppRef: oEditors,
+                elPlaceHolder: "wr_content_en",
+                sSkinURI: "/smarteditor2-2.8.2.3/SmartEditor2Skin.html",
+                fCreator: "createSEditor2",
+                htParams : {
+                    bUseToolbar : true,				// 툴바 사용 여부 (true:사용/ false:사용하지 않음)
+                    bUseVerticalResizer : true,		// 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
+                    bUseModeChanger : true,			// 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
+                    fOnBeforeUnload : function(){
+                    }
+                },
+                fOnAppLoad : function(){
+                },
+            })
+
+            nhn.husky.EZCreator.createInIFrame({
+                oAppRef: oEditors,
+                elPlaceHolder: "wr_content_jp",
+                sSkinURI: "/smarteditor2-2.8.2.3/SmartEditor2Skin.html",
+                fCreator: "createSEditor2",
+                htParams : {
+                    bUseToolbar : true,				// 툴바 사용 여부 (true:사용/ false:사용하지 않음)
+                    bUseVerticalResizer : true,		// 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
+                    bUseModeChanger : true,			// 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
+                    fOnBeforeUnload : function(){
+                    }
+                },
+                fOnAppLoad : function(){
+                },
+            })
+
+            nhn.husky.EZCreator.createInIFrame({
+                oAppRef: oEditors,
+                elPlaceHolder: "wr_content_ch",
+                sSkinURI: "/smarteditor2-2.8.2.3/SmartEditor2Skin.html",
+                fCreator: "createSEditor2",
+                htParams : {
+                    bUseToolbar : true,				// 툴바 사용 여부 (true:사용/ false:사용하지 않음)
+                    bUseVerticalResizer : true,		// 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
+                    bUseModeChanger : true,			// 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
+                    fOnBeforeUnload : function(){
+                    }
+                },
+                fOnAppLoad : function(){
+                },
+            })
         })
 
         $(document).on('click','.boardUpdatebtn', function(){
@@ -138,6 +234,16 @@
             }
 
             oEditors.getById["wr_content"].exec("UPDATE_CONTENTS_FIELD", []);
+            if($("textarea[name='wr_content']").val() == ""){
+                alert("내용을 입력해주세요.");
+                return false;
+            }
+
+            oEditors.getById["wr_content_en"].exec("UPDATE_CONTENTS_FIELD", []);
+
+            oEditors.getById["wr_content_jp"].exec("UPDATE_CONTENTS_FIELD", []);
+
+            oEditors.getById["wr_content_ch"].exec("UPDATE_CONTENTS_FIELD", []);
 
             $('#boardUpdateForm')[0].submit();
 

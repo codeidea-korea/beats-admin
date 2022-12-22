@@ -51,28 +51,32 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">제목</th>
-                                    <td colspan="3" class="whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            {{$feedData[0]->wr_title}}
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
                                     <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">내용</th>
                                     <td colspan="3">
+
+                                        @if($feedData[0]->wr_type != 'daily')
+                                            <script src="https://unpkg.com/wavesurfer.js"></script>
+
+                                            @foreach($feedMusicFileData as $rs)
+                                                <div class="flex gap-3 px-5 ml-auto mt-5">
+                                                    <audio id="player" controls  src="{{$rs->feedfullUrl}}">
+                                                    </audio>
+                                                </div>
+                                            @endforeach
+                                        @endif
+
                                         <div class="flex items-center">
                                             @if($feedData[0]->feed_source != null && $feedData[0]->feed_source != '')
-                                                @php 
+                                                @php
                                                     $feed_source = $feedData[0]->feed_source;
-                                                    $ext = explode('.', $feed_source); 
+                                                    $ext = explode('.', $feed_source);
                                                     $ext = end($ext);
                                                 @endphp
                                                 @if($ext == 'jpg' || $ext == 'png' || $ext == 'svg' || $ext == 'jpeg')
-                                                    <img src="/storage/{{$feedData[0]->file_url.$feedData[0]->feed_source}}" alt="메인 이미지">
+                                                    <img src="{{$feedData[0]->feedfullUrl}}" alt="메인 이미지">
                                                 @elseif($ext == 'mp4')
                                                     <video controls width="250">
-                                                        <source src="/storage/{{$feedData[0]->file_url.$feedData[0]->feed_source}}" type="video/mp4">
+                                                        <source src="{{$feedData[0]->feedfullUrl}}" type="video/mp4">
                                                     </video>
                                                 @endif
                                             @endif
@@ -84,16 +88,16 @@
                                         @foreach($feedFileData as $rs)
                                             <div class="flex items-center">
                                                 @if($rs->hash_name != null && $rs->hash_name != '')
-                                                    @php 
+                                                    @php
                                                         $feed_source = $rs->hash_name;
                                                         $ext = explode('.', $feed_source);
                                                         $ext = end($ext);
                                                     @endphp
                                                     @if($ext == 'jpg' || $ext == 'png' || $ext == 'svg' || $ext == 'jpeg')
-                                                        <img src="/storage/{{$rs->file_url.$rs->hash_name}}" alt="메인 이미지">
+                                                        <img src="{{$feedData[0]->feedfullUrl}}" alt="메인 이미지">
                                                     @elseif($ext == 'mp4')
                                                         <video controls width="250">
-                                                            <source src="/storage/{{$rs->file_url.$rs->hash_name}}" type="video/mp4">
+                                                            <source src="{{$feedData[0]->feedfullUrl}}" type="video/mp4">
                                                         </video>
                                                     @endif
                                                 @endif
@@ -105,6 +109,17 @@
                                         @endforeach
                                     </td>
                                 </tr>
+                                @if($feedData[0]->wr_type != 'daily')
+                                    <tr>
+                                        <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">음원</th>
+                                        <td colspan="3" class="whitespace-nowrap">
+                                            총 {{count($feedMusicFileData)}}개의 음원<br>
+                                            @foreach($feedMusicFileData as $rs)
+                                                <a style="text-decoration: underline;" download href="{{url('/storage/'.$rs->file_url.'/'.$rs->hash_name)}}">{{$rs->file_name}}</a><br>
+                                            @endforeach
+                                        </td>
+                                    </tr>
+                                @endif
                                 <tr>
                                     <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">비트</th>
                                     <td colspan="1" class="whitespace-nowrap">

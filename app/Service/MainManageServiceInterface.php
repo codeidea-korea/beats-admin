@@ -20,9 +20,9 @@ interface MainManageServiceInterface
     //순서 바꾸기
     public function SeqChange($params);
     //배너 등록
-    public function BannerAdd($params,$file);
+    public function BannerAdd($params,$file,$file_en,$file_jp,$file_ch);
     //배너 수정
-    public function BannerUpdate($params, $file);
+    public function BannerUpdate($params,$file,$file_en,$file_jp,$file_ch);
     //배너 선택 삭제
     public function SelectDelete($params);
     
@@ -33,9 +33,9 @@ interface MainManageServiceInterface
     //팝업 상세
     public function getPopupView($params, $pidx);
     //팝업 등록
-    public function PopupAdd($params,$file);
+    public function PopupAdd($params,$file,$file_en,$file_jp,$file_ch);
     //팝업 수정
-    public function PopupUpdate($params, $file);
+    public function PopupUpdate($params,$file,$file_en,$file_jp,$file_ch);
     //팝업 삭제
     public function PopupDelete($params);
 }

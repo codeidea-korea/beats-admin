@@ -41,9 +41,6 @@
                                     <button class="nav-link w-full py-2" type="button" role="tab">콘텐츠 현황</button>
                                 </li>
                                 <li class="nav-item flex-1" role="presentation">
-                                    <button class="nav-link w-full py-2" type="button" role="tab">콘텐츠 현황</button>
-                                </li>
-                                <li class="nav-item flex-1" role="presentation">
                                     <button class="nav-link w-full py-2" type="button" role="tab">결제 내역</button>
                                 </li>
                                 <li class="nav-item flex-1" role="presentation">
@@ -123,7 +120,7 @@
                                 <div class="w-full items-center flex gap-5">
                                     <script src="https://unpkg.com/wavesurfer.js"></script>
                                     <div class="border-l flex gap-3 px-5 ml-auto">
-                                        <audio id="player" controls  src="{{url('/storage'.$rs->file_url.'/'.$rs->hash_name)}}">
+                                        <audio id="player" controls  src="{{url(env('AWS_CLOUD_FRONT_URL').$rs->file_url.$rs->hash_name)}}">
                                         </audio>
                                     </div>
                                     <div class="grow px-5">

@@ -44,9 +44,51 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">제목(영어)</th>
+                                    <td colspan="3" class="whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <input name="pp_title_en" id="regular-form-2" type="text" class="form-control" placeholder="Input text">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">제목(일어)</th>
+                                    <td colspan="3" class="whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <input name="pp_title_jp" id="regular-form-3" type="text" class="form-control" placeholder="Input text">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">제목(중국어)</th>
+                                    <td colspan="3" class="whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <input name="pp_title_ch" id="regular-form-4" type="text" class="form-control" placeholder="Input text">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">이미지</th>
                                     <td colspan="3" class="whitespace-nowrap">
                                         <input name="popup_img" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" type="file" id="formFile">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">이미지(영어)</th>
+                                    <td colspan="3" class="whitespace-nowrap">
+                                        <input name="popup_img_en" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" type="file" id="formFile">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">이미지(일어)</th>
+                                    <td colspan="3" class="whitespace-nowrap">
+                                        <input name="popup_img_jp" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" type="file" id="formFile">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">이미지(중국어)</th>
+                                    <td colspan="3" class="whitespace-nowrap">
+                                        <input name="popup_img_ch" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" type="file" id="formFile">
                                     </td>
                                 </tr>
                                 <tr>
@@ -133,6 +175,21 @@
                 return false;
             }
 
+            if($("input[name='pp_title_en']").val() == ""){
+                alert("제목(영어)을 입력해주세요.");
+                return false;
+            }
+
+            if($("input[name='pp_title_jp']").val() == ""){
+                alert("제목(일어)을 입력해주세요.");
+                return false;
+            }
+
+            if($("input[name='pp_title_ch']").val() == ""){
+                alert("제목(중국어)을 입력해주세요.");
+                return false;
+            }
+
             if($("select[name='type']").val() == ""){
                 alert("서비스를 선택해주세요.");
                 return false;
@@ -162,6 +219,21 @@
 
             if($("input[name='popup_img']").val() == ""){
                 alert("팝업 이미지를 선택해주세요.");
+                return false;
+            }
+
+            if($("input[name='popup_img_en']").val() == ""){
+                alert("팝업 이미지(영어)를 선택해주세요.");
+                return false;
+            }
+
+            if($("input[name='popup_img_jp']").val() == ""){
+                alert("팝업 이미지(일어)를 선택해주세요.");
+                return false;
+            }
+
+            if($("input[name='popup_img_ch']").val() == ""){
+                alert("팝업 이미지(중국어)를 선택해주세요.");
                 return false;
             }
 

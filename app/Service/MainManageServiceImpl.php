@@ -6,6 +6,7 @@ use Agent;
 use Session;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Intervention\Image\Facades\Image;
 
 class MainManageServiceImpl extends DBConnection  implements MainManageServiceInterface
 {
@@ -96,11 +97,18 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
             ->select(
                 'adm_banner_data.idx',
                 'adm_banner_data.br_title',
+                'adm_banner_data.banner_text',
                 'adm_banner_data.isuse',
                 'adm_banner_data.contents',
                 'adm_banner_data.contents_url',
                 'adm_banner_data.banner_file',
                 'adm_banner_data.banner_source',
+                'adm_banner_data.banner_file_en',
+                'adm_banner_data.banner_source_en',
+                'adm_banner_data.banner_file_jp',
+                'adm_banner_data.banner_source_jp',
+                'adm_banner_data.banner_file_ch',
+                'adm_banner_data.banner_source_ch',
                 'adm_banner_data.br_seq',
                 'adm_banner_data.created_at',
                 DB::raw('IFNULL(LAG(adm_banner_data.idx) OVER (ORDER BY adm_banner_data.br_seq),"") as af_idx'),
@@ -173,6 +181,12 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
                 'adm_banner_data.contents_url',
                 'adm_banner_data.banner_file',
                 'adm_banner_data.banner_source',
+                'adm_banner_data.banner_file_en',
+                'adm_banner_data.banner_source_en',
+                'adm_banner_data.banner_file_jp',
+                'adm_banner_data.banner_source_jp',
+                'adm_banner_data.banner_file_ch',
+                'adm_banner_data.banner_source_ch',
                 'adm_banner_data.br_seq',
                 'adm_banner_data.created_at',
                 DB::raw('IFNULL(LAG(adm_banner_data.idx) OVER (ORDER BY adm_banner_data.br_seq),"") as af_idx'),
@@ -205,15 +219,50 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
         return $result;
     }
 
-    public function BannerAdd($params,$file) {
+    public function BannerAdd($params,$file,$file_en,$file_jp,$file_ch) {
+        $params['banner_file_en']  = "";
+        $params['banner_source_en'] = "";
+        $params['banner_file_jp'] = "";
+        $params['banner_source_jp'] = "";
+        $params['banner_file_ch'] = "";
+        $params['banner_source_ch'] = "";
 
         if($file != ""){
             $cfilename = $file->getClientOriginalName();
             $cfilesource = $file->hashName();
             $folderName = '/banner/';
             $file->storeAs($folderName, $file->hashName(), 'public');
+            //Image::make(storage_path('public'.$folderName.$file->hashName()))->resize(650)->save(storage_path('public'.$folderName.$file->hashName()));
+
             $params['banner_file'] = $cfilename;
             $params['banner_source'] = $cfilesource;
+        }
+
+        if($file_en != ""&&$file_en!=null){
+            $cfilename = $file_en->getClientOriginalName();
+            $cfilesource = $file_en->hashName();
+            $folderName = '/banner/';
+            $file_en->storeAs($folderName, $file_en->hashName(), 'public');
+            $params['banner_file_en'] = $cfilename;
+            $params['banner_source_en'] = $cfilesource;
+        }
+
+        if($file_jp != ""&&$file_jp!=null){
+            $cfilename = $file_jp->getClientOriginalName();
+            $cfilesource = $file_jp->hashName();
+            $folderName = '/banner/';
+            $file_jp->storeAs($folderName, $file_jp->hashName(), 'public');
+            $params['banner_file_jp'] = $cfilename;
+            $params['banner_source_jp'] = $cfilesource;
+        }
+
+        if($file_ch != ""&&$file_ch!=null){
+            $cfilename = $file_ch->getClientOriginalName();
+            $cfilesource = $file_ch->hashName();
+            $folderName = '/banner/';
+            $file_ch->storeAs($folderName, $file_ch->hashName(), 'public');
+            $params['banner_file_ch'] = $cfilename;
+            $params['banner_source_ch'] = $cfilesource;
         }
 
         $seq = $this->statDB->table('adm_banner_data')
@@ -224,10 +273,23 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
 
         $result = $this->statDB->table('adm_banner_data')
             ->insert([
-                'br_title' => $params['br_title'], 'contents' => $params['contents'], 'contents_url' => $params['contents_url'],
-                'banner_file' => $params['banner_file'], 'banner_source' => $params['banner_source'], 'isuse' => $params['isuse'],
-                'banner_code' => $params['banner_code'],'mem_id' => auth()->user()->idx, 'created_at' => DB::raw('now()'),
+                'br_title' => $params['br_title'],
+                'banner_text' => $params['banner_text'],
+                'contents' => $params['contents'],
+                'contents_url' => $params['contents_url'],
+                'banner_file' => $params['banner_file'],
+                'banner_source' => $params['banner_source'],
+                'isuse' => $params['isuse'],
+                'banner_code' => $params['banner_code'],
+                'mem_id' => auth()->user()->idx,
+                'created_at' => DB::raw('now()'),
                 'br_seq' => $seq->br_seq + 100,
+                'banner_file_en' => $params['banner_file_en'],
+                'banner_source_en' => $params['banner_source_en'],
+                'banner_file_jp' => $params['banner_file_jp'],
+                'banner_source_jp' => $params['banner_source_jp'],
+                'banner_file_ch' => $params['banner_file_ch'],
+                'banner_source_ch' => $params['banner_source_ch'],
             ]);
 
         if($result > 0){
@@ -240,35 +302,83 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
 
     }
 
-    public function BannerUpdate($params, $file) {
+    public function BannerUpdate($params, $file,$file_en,$file_jp,$file_ch) {
 
         $adm_banner_data = DB::table('adm_banner_data')->where('idx', $params['up_idx'])->first();
 
-        if ($adm_banner_data->banner_file != "" && $file != ""){
-            $dir = storage_path('app/public/banner');
-            $path = "$dir/$adm_banner_data->banner_source";
-            if(!File::exists($path)) { return 1; }
-            File::delete($path);
-        }else{
-            $params['banner_file'] = $adm_banner_data->banner_file;
-            $params['banner_source'] = $adm_banner_data->banner_source;
-        }
+        $params['banner_file_en']  = "";
+        $params['banner_source_en'] = "";
+        $params['banner_file_jp'] = "";
+        $params['banner_source_jp'] = "";
+        $params['banner_file_ch'] = "";
+        $params['banner_source_ch'] = "";
 
         if($file != ""){
             $cfilename = $file->getClientOriginalName();
             $cfilesource = $file->hashName();
             $folderName = '/banner/';
             $file->storeAs($folderName, $file->hashName(), 'public');
+            //Image::make(storage_path('public'.$folderName.$file->hashName()))->resize(650)->save(storage_path('public'.$folderName.$file->hashName()));
             $params['banner_file'] = $cfilename;
             $params['banner_source'] = $cfilesource;
+        }else{
+            $params['banner_file'] = $adm_banner_data->banner_file;
+            $params['banner_source'] = $adm_banner_data->banner_source;
+        }
+
+        if($file_en != ""&&$file_en!=null){
+            $cfilename = $file_en->getClientOriginalName();
+            $cfilesource = $file_en->hashName();
+            $folderName = '/banner/';
+            $file_en->storeAs($folderName, $file_en->hashName(), 'public');
+            $params['banner_file_en'] = $cfilename;
+            $params['banner_source_en'] = $cfilesource;
+        }else{
+            $params['banner_file_en'] = $adm_banner_data->banner_file_en;
+            $params['banner_source_en'] = $adm_banner_data->banner_source_en;
+        }
+
+        if($file_jp != ""&&$file_en!=null){
+            $cfilename = $file_jp->getClientOriginalName();
+            $cfilesource = $file_jp->hashName();
+            $folderName = '/banner/';
+            $file_jp->storeAs($folderName, $file_jp->hashName(), 'public');
+            $params['banner_file_jp'] = $cfilename;
+            $params['banner_source_jp'] = $cfilesource;
+        }else{
+            $params['banner_file_jp'] = $adm_banner_data->banner_file_jp;
+            $params['banner_source_jp'] = $adm_banner_data->banner_source_jp;
+        }
+
+        if($file_ch != ""&&$file_en!=null){
+            $cfilename = $file_ch->getClientOriginalName();
+            $cfilesource = $file_ch->hashName();
+            $folderName = '/banner/';
+            $file_ch->storeAs($folderName, $file_ch->hashName(), 'public');
+            $params['banner_file_ch'] = $cfilename;
+            $params['banner_source_ch'] = $cfilesource;
+        }else{
+            $params['banner_file_ch'] = $adm_banner_data->banner_file_ch;
+            $params['banner_source_ch'] = $adm_banner_data->banner_source_ch;
         }
 
         $result = $this->statDB->table('adm_banner_data')
             ->where('idx',$params['up_idx'])
             ->update([
-                'br_title' => $params['up_br_title'], 'contents' => $params['up_contents'], 'contents_url' => $params['up_contents_url'],
-                'banner_file' => $params['banner_file'], 'banner_source' => $params['banner_source'], 'isuse' => $params['up_isuse'],
-                'updated_at' => DB::raw('now()')
+                'br_title' => $params['up_br_title'],
+                'banner_text' => $params['up_banner_text'],
+                'contents' => $params['up_contents'],
+                'contents_url' => $params['up_contents_url'],
+                'banner_file' => $params['banner_file'],
+                'banner_source' => $params['banner_source'],
+                'isuse' => $params['up_isuse'],
+                'updated_at' => DB::raw('now()'),
+                'banner_file_en' => $params['banner_file_en'],
+                'banner_source_en' => $params['banner_source_en'],
+                'banner_file_jp' => $params['banner_file_jp'],
+                'banner_source_jp' => $params['banner_source_jp'],
+                'banner_file_ch' => $params['banner_file_ch'],
+                'banner_source_ch' => $params['banner_source_ch'],
             ]);
 
         if($result > 0){
@@ -370,6 +480,9 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
             ->select(
                 'adm_popup.idx',
                 'adm_popup.pp_title',
+                'adm_popup.pp_title_en',
+                'adm_popup.pp_title_jp',
+                'adm_popup.pp_title_ch',
                 'adm_popup.isuse',
                 'adm_popup.connect_type',
                 'adm_popup.connect_url',
@@ -378,6 +491,12 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
                 'adm_popup.bk_show_date',
                 'adm_popup.popup_file',
                 'adm_popup.popup_source',
+                'adm_popup.popup_file_en',
+                'adm_popup.popup_source_en',
+                'adm_popup.popup_file_jp',
+                'adm_popup.popup_source_jp',
+                'adm_popup.popup_file_ch',
+                'adm_popup.popup_source_ch',
                 'adm_popup.type',
                 'adm_popup.created_at',
                 'adm_popup.updated_at',
@@ -392,7 +511,7 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
 
     }
 
-    public function PopupAdd($params,$file) {
+    public function PopupAdd($params,$file,$file_en,$file_jp,$file_ch) {
 
         if($file != ""){
             $cfilename = $file->getClientOriginalName();
@@ -401,6 +520,33 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
             $file->storeAs($folderName, $file->hashName(), 'public');
             $params['popup_file'] = $cfilename;
             $params['popup_source'] = $cfilesource;
+        }
+
+        if($file_en != ""){
+            $cfilename = $file_en->getClientOriginalName();
+            $cfilesource = $file_en->hashName();
+            $folderName = '/popup/';
+            $file_en->storeAs($folderName, $file_en->hashName(), 'public');
+            $params['popup_file_en'] = $cfilename;
+            $params['popup_source_en'] = $cfilesource;
+        }
+
+        if($file_jp != ""){
+            $cfilename = $file_jp->getClientOriginalName();
+            $cfilesource = $file_jp->hashName();
+            $folderName = '/popup/';
+            $file_jp->storeAs($folderName, $file_jp->hashName(), 'public');
+            $params['popup_file_jp'] = $cfilename;
+            $params['popup_source_jp'] = $cfilesource;
+        }
+
+        if($file_ch != ""){
+            $cfilename = $file_ch->getClientOriginalName();
+            $cfilesource = $file_ch->hashName();
+            $folderName = '/popup/';
+            $file_ch->storeAs($folderName, $file_ch->hashName(), 'public');
+            $params['popup_file_ch'] = $cfilename;
+            $params['popup_source_ch'] = $cfilesource;
         }
 
         if($params['connect_type'] == "menu"){
@@ -417,9 +563,12 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
 
         $result = $this->statDB->table('adm_popup')
             ->insertGetId([
-                'pp_title' => $params['pp_title'], 'connect_url' => $params['connect_url'], 'connect_type' => $params['connect_type'],
+                'pp_title' => $params['pp_title'], 'pp_title_en' => $params['pp_title_en'], 'pp_title_jp' => $params['pp_title_jp'],
+                'pp_title_ch' => $params['pp_title_ch'], 'connect_url' => $params['connect_url'], 'connect_type' => $params['connect_type'],
                 'fr_show_date' => $params['fr_show_date'], 'connect_contents' => $params['connect_contents'], 'type' => $params['type'],
                 'bk_show_date' => $params['bk_show_date'],'popup_file' => $params['popup_file'], 'popup_source' => $params['popup_source'],
+                'popup_file_en' => $params['popup_file_en'], 'popup_source_en' => $params['popup_source_en'],'popup_file_jp' => $params['popup_file_jp'],
+                'popup_source_jp' => $params['popup_source_jp'],'popup_file_ch' => $params['popup_file_ch'], 'popup_source_ch' => $params['popup_source_ch'],
                 'isuse' => $params['isuse'], 'mem_id' => auth()->user()->idx, 'created_at' => DB::raw('now()'),
             ]);
 
@@ -432,18 +581,9 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
         return $pidx;
     }
 
-    public function PopupUpdate($params, $file) {
+    public function PopupUpdate($params, $file,$file_en,$file_jp,$file_ch) {
 
         $adm_popup = DB::table('adm_popup')->where('idx', $params['idx'])->first();
-
-        if ($adm_popup->popup_file != "" && $file != ""){
-            $dir = storage_path('app/public/popup');
-            $path = "$dir/$adm_popup->popup_source";
-            if(File::exists($path)) { File::delete($path); }
-        }else{
-            $params['popup_file'] = $adm_popup->popup_file;
-            $params['popup_source'] = $adm_popup->popup_source;
-        }
 
         if($file != ""){
             $cfilename = $file->getClientOriginalName();
@@ -452,6 +592,45 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
             $file->storeAs($folderName, $file->hashName(), 'public');
             $params['popup_file'] = $cfilename;
             $params['popup_source'] = $cfilesource;
+        }else{
+            $params['popup_file'] = $adm_popup->popup_file;
+            $params['popup_source'] = $adm_popup->popup_source;
+        }
+
+        if($file_en != ""){
+            $cfilename = $file_en->getClientOriginalName();
+            $cfilesource = $file_en->hashName();
+            $folderName = '/banner/';
+            $file_en->storeAs($folderName, $file_en->hashName(), 'public');
+            $params['popup_file_en'] = $cfilename;
+            $params['popup_source_en'] = $cfilesource;
+        }else{
+            $params['popup_file_en'] = $adm_popup->popup_file_en;
+            $params['popup_source_en'] = $adm_popup->popup_source_en;
+        }
+
+        if($file_jp != ""){
+            $cfilename = $file_jp->getClientOriginalName();
+            $cfilesource = $file_jp->hashName();
+            $folderName = '/banner/';
+            $file_jp->storeAs($folderName, $file_jp->hashName(), 'public');
+            $params['popup_file_jp'] = $cfilename;
+            $params['popup_source_jp'] = $cfilesource;
+        }else{
+            $params['popup_file_jp'] = $adm_popup->popup_file_jp;
+            $params['popup_source_jp'] = $adm_popup->popup_source_jp;
+        }
+
+        if($file_ch != ""){
+            $cfilename = $file_ch->getClientOriginalName();
+            $cfilesource = $file_ch->hashName();
+            $folderName = '/banner/';
+            $file_ch->storeAs($folderName, $file_ch->hashName(), 'public');
+            $params['popup_file_ch'] = $cfilename;
+            $params['popup_source_ch'] = $cfilesource;
+        }else{
+            $params['popup_file_ch'] = $adm_popup->popup_file_ch;
+            $params['popup_source_ch'] = $adm_popup->popup_source_ch;
         }
 
         if($params['connect_type'] == "menu"){
@@ -469,9 +648,12 @@ class MainManageServiceImpl extends DBConnection  implements MainManageServiceIn
         $result = $this->statDB->table('adm_popup')
             ->where('idx',$params['idx'])
             ->update([
-                'pp_title' => $params['pp_title'], 'connect_url' => $params['connect_url'], 'connect_type' => $params['connect_type'],
+                'pp_title' => $params['pp_title'], 'pp_title_en' => $params['pp_title_en'], 'pp_title_jp' => $params['pp_title_jp'],
+                'pp_title_ch' => $params['pp_title_ch'], 'connect_url' => $params['connect_url'], 'connect_type' => $params['connect_type'],
                 'fr_show_date' => $params['fr_show_date'], 'connect_contents' => $params['connect_contents'], 'type' => $params['type'],
                 'bk_show_date' => $params['bk_show_date'],'popup_file' => $params['popup_file'], 'popup_source' => $params['popup_source'],
+                'popup_file_en' => $params['popup_file_en'], 'popup_source_en' => $params['popup_source_en'],'popup_file_jp' => $params['popup_file_jp'],
+                'popup_source_jp' => $params['popup_source_jp'],'popup_file_ch' => $params['popup_file_ch'], 'popup_source_ch' => $params['popup_source_ch'],
                 'isuse' => $params['isuse'], 'updated_at' => DB::raw('now()'),
             ]);
 

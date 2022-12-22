@@ -39,4 +39,13 @@ interface MemberServiceInterface
 
     //메모 등록
     public function setMemoInsert($params);
+
+    //id로 이메일 확인
+    public function getMemberEmailFind($params);
+
+    //탈퇴 회원 list
+    public function getCancelList($params);
+
+    //탈퇴 회원 total
+    public function getCancelTotal($params);
 }

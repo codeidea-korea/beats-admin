@@ -53,7 +53,7 @@
                                     <td colspan="3" class="whitespace-nowrap">
                                         <div class="p-5" id="classic-editor">
                                             <script type="text/javascript" src="/smarteditor2-2.8.2.3/js/HuskyEZCreator.js" charset="utf-8"></script>
-                                            <textarea class="form-control" name="content" id="content"
+                                            <textarea class="form-control" name="content" id="content" style="width:95%"
                                                       rows="20" cols="10"
                                                       placeholder="내용을 입력해주세요"
                                             ></textarea>

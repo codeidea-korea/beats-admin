@@ -67,20 +67,19 @@
 
                                     </tr>
                                 </table>
+                                <div style="float:right;">
+                                    <button class="btn box flex items-center text-slate-600 border border-slate-400 formSearchBtn" >
+                                        검색
+                                    </button>
+                                </div>
+                                <div style="float:right;">
+                                    &nbsp;
+                                </div>
+                                <div style="float:right;">
+                                    <a href="javascript:location.href = '/contents/feedList';" class="btn box flex items-center text-slate-600 border border-slate-400" > 초기화</a>
+                                </div>
                             </form>
-                            <div style="float:right;">
-                                <button class="btn box flex items-center text-slate-600 border border-slate-400" onClick="javascript:location.href = '/contents/feedList';">
-                                    초기화
-                                </button>
-                            </div>
-                            <div style="float:right;">
-                                &nbsp;
-                            </div>
-                            <div style="float:right;">
-                                <button class="btn box flex items-center text-slate-600 border border-slate-400 formSearchBtn">
-                                    검색
-                                </button>
-                            </div>
+
                         </div>
                     </div>
                 </div>

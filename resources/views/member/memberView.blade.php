@@ -48,9 +48,6 @@
                                     <button class="nav-link w-full py-2" type="button" role="tab">결제 내역</button>
                                 </li>
                                 @endif
-                                <li class="nav-item flex-1" role="presentation">
-                                    <button class="nav-link w-full py-2" type="button" role="tab">문의 내역</button>
-                                </li>
                             </ul>
                         </div>
                     </div>
@@ -67,8 +64,12 @@
                                             </td>
                                         </tr>
                                         <tr>
+                                            <th class="whitespace-nowrap text-center bg-primary/10">이름</th>
+                                            <td class="whitespace-nowrap">
+                                                {{$memberData->name}}
+                                            </td>
                                             <th class="whitespace-nowrap text-center bg-primary/10">고유 ID</th>
-                                            <td colspan="3" class="whitespace-nowrap">
+                                            <td class="whitespace-nowrap">
                                                 {{$memberData->u_id}}
                                             </td>
                                         </tr>
@@ -77,7 +78,7 @@
                                             <td>
                                                 -
                                             </td>
-                                            <th class="whitespace-nowrap text-center bg-primary/10">가입체널</th>
+                                            <th class="whitespace-nowrap text-center bg-primary/10">가입채널</th>
                                             <td>
                                                 -
                                             </td>
@@ -127,8 +128,12 @@
                                             </td>
                                         </tr>
                                         <tr>
+                                            <th class="whitespace-nowrap text-center bg-primary/10">이름</th>
+                                            <td class="whitespace-nowrap">
+                                                {{$memberData->name}}
+                                            </td>
                                             <th class="whitespace-nowrap text-center bg-primary/10">고유 ID</th>
-                                            <td colspan="3" class="whitespace-nowrap">
+                                            <td class="whitespace-nowrap">
                                                 {{$memberData->u_id}}
                                             </td>
                                         </tr>
@@ -155,7 +160,7 @@
                                         <tr>
                                             <th class="whitespace-nowrap text-center bg-primary/10">비밀번호 초기화</th>
                                             <td colspan="3" class="whitespace-nowrap">
-                                                <input type="button" class="btn btn-primary w-36 ml-2" value="비밀번호 초기화">
+                                                <input type="button" class="btn btn-primary w-36 ml-2" onClick="chPasswd('{{$memberData->email_id}}')" value="비밀번호 초기화">
                                             </td>
                                         </tr>
                                         <tr>
@@ -305,8 +310,12 @@
                                             </td>
                                         </tr>
                                         <tr>
+                                            <th class="whitespace-nowrap text-center bg-primary/10">이름</th>
+                                            <td class="whitespace-nowrap">
+                                                {{$memberData->name}}
+                                            </td>
                                             <th class="whitespace-nowrap text-center bg-primary/10">고유 ID</th>
-                                            <td colspan="3" class="whitespace-nowrap">
+                                            <td class="whitespace-nowrap">
                                                 {{$memberData->u_id}}
                                             </td>
                                         </tr>
@@ -333,7 +342,7 @@
                                         <tr>
                                             <th class="whitespace-nowrap text-center bg-primary/10">비밀번호 초기화</th>
                                             <td colspan="3" class="whitespace-nowrap">
-                                                <input type="button" class="btn btn-primary w-36 ml-2" value="비밀번호 초기화">
+                                                <input type="button" class="btn btn-primary w-36 ml-2" onClick="chPasswd('{{$memberData->email_id}}')" value="비밀번호 초기화">
                                             </td>
                                         </tr>
                                         <tr>
@@ -451,7 +460,7 @@
                                         <tr>
                                             <th class="whitespace-nowrap text-center bg-primary/10">보유 쿠폰</th>
                                             <td>
-                                                {{$memberData->nationality}}
+
                                             </td>
                                         </tr>
 
@@ -483,8 +492,12 @@
                                             </td>
                                         </tr>
                                         <tr>
+                                            <th class="whitespace-nowrap text-center bg-primary/10">이름</th>
+                                            <td class="whitespace-nowrap">
+                                                {{$memberData->name}}
+                                            </td>
                                             <th class="whitespace-nowrap text-center bg-primary/10">고유 ID</th>
-                                            <td colspan="3" class="whitespace-nowrap">
+                                            <td class="whitespace-nowrap">
                                                 {{$memberData->u_id}}
                                             </td>
                                         </tr>
@@ -511,7 +524,7 @@
                                         <tr>
                                             <th class="whitespace-nowrap text-center bg-primary/10">비밀번호 초기화</th>
                                             <td colspan="3" class="whitespace-nowrap">
-                                                <input type="button" class="btn btn-primary w-36 ml-2" value="비밀번호 초기화">
+                                                <input type="button" class="btn btn-primary w-36 ml-2" onClick="chPasswd('{{$memberData->email_id}}')" value="비밀번호 초기화">
                                             </td>
                                         </tr>
                                         <tr>
@@ -627,7 +640,7 @@
                                                 전문 분야
                                             </td>
                                             <td colspan="2">
-                                               -
+                                                {{$memberData->field1Value}}
                                             </td>
                                         </tr>
                                         <tr>
@@ -635,7 +648,7 @@
                                                 추가 분야
                                             </td>
                                             <td colspan="2">
-                                                -
+                                                {{$memberData->field2Value}}
                                             </td>
                                         </tr>
                                         <tr>
@@ -643,13 +656,25 @@
                                                 추가 분야
                                             </td>
                                             <td colspan="2">
-                                                -
+                                                {{$memberData->field3Value}}
                                             </td>
                                         </tr>
                                         <tr>
                                             <th class="whitespace-nowrap text-center bg-primary/10">증빙 자료</th>
                                             <td colspan="3" class="whitespace-nowrap">
-                                                증빙자료가 없습니다.
+                                                @if(count($mentoFile) > 0)
+
+                                                    @php $i=1; @endphp
+                                                    @foreach($mentoFile as $rs)
+                                                        <div><a href="javascript:download('{{$rs->mentoFileUrl}}','{{$rs->file_name}}');"><input type="hidden" name="file{{$i}}" id="file{{$i}}" value="{{$rs->mentoFileUrl}}" /><input type="hidden" name="fileName{{$i}}" id="fileName{{$i}}" value="{{$rs->file_name}}" /><label for="file{{$i}}">{{$rs->file_name}}</label></a></div>
+                                                        @php $i++; @endphp
+                                                    @endforeach
+                                                    <div class="btn-primary w-52 btn " onclick="suffix=1;downloadAll();return false" style="">증빙자료 전체 다운로드</div>
+                                                @else
+                                                    증빙자료가 없습니다.
+                                                @endif
+
+
                                                 <!--
                                                     파일이름.확장자
                                                     파일이름.확장자
@@ -669,7 +694,7 @@
                                         <tr>
                                             <th class="whitespace-nowrap text-center bg-primary/10">보유 쿠폰</th>
                                             <td colspan="3" class="whitespace-nowrap">
-                                                {{$memberData->nationality}}
+
                                             </td>
                                         </tr>
 
@@ -731,6 +756,15 @@
     </div>
 
     <script>
+        function downloadAll() {
+            var fCount = {{count($mentoFile)}};
+            for (var i = 1; i <= fCount; i++) {
+                window.open('/downloadFile?furl=' + $('input[name=file' + i + ']').val()+'&fileName='+$('input[name=fileName' + i + ']').val());
+            }
+        }
+        function download(url,name) {
+            window.open('/downloadFile?furl=' + url+'&fileName='+name);
+        }
 
         function memoList(page){
             var mem_id = $('input[name=mem_id]').val();
@@ -856,5 +890,28 @@
             memoList(1);
         });
 
+        function chPasswd(id){
+            var data = {
+                email_id:id
+            };
+
+            jQuery.ajax({
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                type:"put",
+                dataType:'json',
+                data: data,
+                url: '{{ url('/api/v1/chPasswordEmail') }}',
+                success: function searchSuccess(data) {
+                    if(data.code==0){
+                        alert(data.message);
+                    }else{
+                        alert('처리 중 오류가 발생 하였습니다. 다시 시도해주세요.');
+                    }
+                },
+                error: function (e) {
+                    alert('로딩 중 오류가 발생 하였습니다.');
+                }
+            });
+        }
     </script>
 @endsection

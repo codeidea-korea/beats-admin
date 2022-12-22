@@ -71,9 +71,9 @@ class ApiSmsController extends Controller
             $result['resultCode'] = 'FAIL';
             $result['resultMassage'] = '문자를 보낼 휴대폰 번호와 인증번호를 입력해주세요.';
         }else{
-            $message->text = "[Web발신] [BY BEATS X BEAT SOMEONE] 통합회원가입 인증번호는 ".$request['smsNumber']."입니다. 정확히 입력해주세요";
+            $message->text = "(주)비트썸원 인증번호 ".$request['smsNumber'];
             $message->to = $request['to'];
-            $message->from = "01032108045"; // $from
+            $message->from = env('SMS_FROM_NO'); // $from
             $request['subject'] = $request['subject'] ?? "";
             $request['imageId'] = $request['imageId'] ?? "";
             if ($request['subject'] != '') $message->subject = $request['subject'];

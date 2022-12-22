@@ -332,4 +332,135 @@ class ApiHomeController extends Controller
         }
     }
 
+    public function trendList()
+    {
+        try{
+            $params = $this->request->input();
+            $params['page'] = $params['page'] ?? 1;
+            $params['limit'] = $params['limit'] ?? 10;
+            //정렬 최신순 1 비트 많은 순(인기순) 2 높은 조회수 3
+            $params['sorting'] = $params['sorting'] ?? '';
+            $params['mem_id'] = $params['mem_id'] ?? 0;
+
+            $trendList = $this->apiHomeService->getTrendList($params);
+            $total = $this->apiHomeService->getTrendTotal($params);
+
+            foreach($trendList as $key => $rs){
+                $photoData = $this->apiHomeService->setProfilePhotoList($rs);
+                $trendList[$key]->photo = array(
+                    'profilePhotoListCount' => count($photoData),
+                    'profilePhotoList' => $photoData,
+                );
+            }
+
+            $returnData['code']=0;
+            $returnData['message']="complete";
+            $returnData['response']['total']=$total->cnt;
+            $returnData['response']['count']=count($trendList);
+            $returnData['response']['data']=$trendList;
+
+
+            return json_encode($returnData);
+
+        } catch(\Exception $exception){
+            throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+        }
+    }
+
+    public function getTrendView()
+    {
+        try{
+            $params = $this->request->input();
+            $params['idx'] = isset($params['idx']) ? $params['idx'] : '';
+            $params['mem_id'] = $params['mem_id'] ?? 0;
+
+
+            if($params['idx']==""){
+                $returnData['code']=-1;
+                $returnData['message']="고유번호가 누락되었습니다.";
+            }else{
+
+                $trendView = $this->apiHomeService->getTrendView($params);
+
+                if($trendView->isEmpty()){
+                    $returnData['code'] = 1;
+                    $returnData['message'] = "유효하지 않은 고유번호입니다.";
+                }else{
+
+                    $photoData = $this->apiHomeService->setProfilePhotoList($trendView[0]);
+                    $trendView[0]->photo = array(
+                        'profilePhotoListCount' => count($photoData),
+                        'profilePhotoList' => $photoData,
+                    );
+
+                    $diff = strtotime($trendView[0]->now_date) - strtotime($trendView[0]->created_at);
+
+                    $s = 60; //1분 = 60초
+                    $h = $s * 60; //1시간 = 60분
+                    $d = $h * 24; //1일 = 24시간
+                    $y = $d * 30; //1달 = 30일 기준
+                    $a = $y * 12; //1년
+
+                    if ($diff < $s) {
+                        $result = $diff . '초전';
+                    } elseif ($h > $diff && $diff >= $s) {
+                        $result = round($diff/$s) . '분전';
+                    } elseif ($d > $diff && $diff >= $h) {
+                        $result = round($diff/$h) . '시간전';
+                    } elseif ($y > $diff && $diff >= $d) {
+                        $result = round($diff/$d) . '일전';
+                    } elseif ($a > $diff && $diff >= $y) {
+                        $result = round($diff/$y) . '달전';
+                    } else {
+                        $result = round($diff/$a) . '년전';
+                    }
+
+                    $trendView[0]->created_at = $result;
+
+                    $returnData['code'] = 0;
+                    $returnData['message'] = "complete";
+                    $returnData['response'] = $trendView;
+                }
+            }
+
+
+            return json_encode($returnData);
+
+        } catch(\Exception $exception){
+            throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+        }
+    }
+
+    public function setTrendHitAdd()
+    {
+        try{
+            $params = $this->request->input();
+            //정렬 최신순 1 비트 많은 순(인기순) 2 높은 조회수 3
+            $params['idx'] = $params['idx'] ?? '';
+
+            if($params['idx'] == ''){
+                $returnData['code']=1;
+                $returnData['message']="고유번호가 누락되었습니다";
+            }else{
+                
+                $HitAdd = $this->apiHomeService->setTrendHitAdd($params);
+
+                if($HitAdd){    
+                    $returnData['code']=0;
+                    $returnData['message']="complete";
+                    $returnData['response']['data']=$HitAdd;
+                }else{
+                    $returnData['code']=2;
+                    $returnData['message']="fail";
+                    $returnData['response']['data']=$HitAdd;
+                }
+            }
+
+            return json_encode($returnData);
+
+        } catch(\Exception $exception){
+            throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+        }
+    }
+
 }

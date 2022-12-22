@@ -86,12 +86,12 @@
                                 @php $i=0; @endphp
                                 @foreach($popupList as $rs)
                                     <tr>
-                                        <td class="whitespace-nowrap text-center">{{$totalCount-($i+(($params['page']-1)*10))}}</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->type}}</td>
+                                        <td class="whitespace-nowrap text-center"><a href="/mainmanage/popup/view/{{$rs->idx}}">{{$totalCount-($i+(($params['page']-1)*10))}}</a></td>
+                                        <td class="whitespace-nowrap text-center"><a href="/mainmanage/popup/view/{{$rs->idx}}">{{$rs->type}}</a></td>
                                         <td class="whitespace-nowrap text-center"><a href="/mainmanage/popup/view/{{$rs->idx}}">{{$rs->pp_title}}</a></td>
-                                        <td class="whitespace-nowrap text-center">@if($rs->isuse === 'Y') 사용 @else 미 사용 @endif</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->created_at}}</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->name}}</td>
+                                        <td class="whitespace-nowrap text-center"><a href="/mainmanage/popup/view/{{$rs->idx}}">@if($rs->isuse === 'Y') 사용 @else 미 사용 @endif </a></td>
+                                        <td class="whitespace-nowrap text-center"><a href="/mainmanage/popup/view/{{$rs->idx}}">{{$rs->created_at}} </a></td>
+                                        <td class="whitespace-nowrap text-center"><a href="/mainmanage/popup/view/{{$rs->idx}}">{{$rs->name}} </a></td>
                                         <td class="whitespace-nowrap text-center">{{$rs->fr_show_date}} ~ {{$rs->bk_show_date}}</td>
                                     </tr>
                                     @php $i++; @endphp

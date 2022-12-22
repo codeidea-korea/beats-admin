@@ -82,12 +82,20 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th class="bg-primary/10 whitespace-nowrap w-13 text-center">검색</th>
-                                            <td class="whitespace-nowrap" colspan="3">
+                                            <th class="bg-primary/10 whitespace-nowrap w-13 text-center">닉네임/이메일ID/고유ID</th>
+                                            <td class="whitespace-nowrap">
                                                 <input id="regular-form-1" id="sWord" name="sWord" value="{{$params['sWord']}}" type="text">
                                             </td>
+                                            <th class="bg-primary/10 whitespace-nowrap w-13 text-center">휴대전화번호</th>
+                                            <td class="whitespace-nowrap">
+                                                <input id="regular-form-1" id="phone_number" name="phone_number" value="{{$params['phone_number']}}" type="text">
+                                            </td>
+                                            <th class="bg-primary/10 whitespace-nowrap w-13 text-center">이름</th>
+                                            <td class="whitespace-nowrap">
+                                                <input id="regular-form-1" id="name" name="name" value="{{$params['name']}}" type="text">
+                                            </td>
                                             <th class="bg-primary/10 whitespace-nowrap w-13 text-center">가입일</th>
-                                            <td class="whitespace-nowrap" colspan="5">
+                                            <td class="whitespace-nowrap" colspan="3">
                                                 <div class="sm:ml-auto mt-3 sm:mt-0 relative text-slate-500">
                                                     <i data-lucide="calendar" class="w-4 h-4 z-10 absolute my-auto inset-y-0 ml-3 left-0"></i>
                                                     <input type="text" class="datepicker form-control sm:w-56 box pl-10" name="searchDate" id="searchDate" value="{{$params['searchDate']}}">
@@ -96,20 +104,21 @@
 
                                         </tr>
                                     </table>
+                                    <div style="float:right;">
+                                        <button class="btn box flex items-center text-slate-600 border border-slate-400 formSearchBtn" >
+                                            검색
+                                        </button>
+                                    </div>
+                                    <div style="float:right;">
+                                        &nbsp;
+                                    </div>
+                                    <div style="float:right;">
+                                        <a href="javascript:location.href = '/member/memberList';" class="btn box flex items-center text-slate-600 border border-slate-400" > 초기화</a>
+                                    </div>
                                 </form>
-                                <div style="float:right;">
-                                    <button class="btn box flex items-center text-slate-600 border border-slate-400" onClick="javascript:location.href = '/member/memberList';">
-                                        초기화
-                                    </button>
-                                </div>
-                                <div style="float:right;">
-                                    &nbsp;
-                                </div>
-                                <div style="float:right;">
-                                    <button class="btn box flex items-center text-slate-600 border border-slate-400 formSearchBtn" >
-                                        검색
-                                    </button>
-                                </div>
+
+
+
                             </div>
                         </div>
                     </div>
@@ -127,17 +136,16 @@
                                 <tr>
                                     <th class="whitespace-nowrap text-center">No.</th>
                                     <th class="whitespace-nowrap text-center">분류</th>
-                                  <th class="whitespace-nowrap text-center">회원 구분</th>
+                                    <th class="whitespace-nowrap text-center">회원 구분</th>
                                     <th class="whitespace-nowrap text-center">가입 채널</th>
                                     <th class="whitespace-nowrap text-center">국적</th>
-
-                                    <th class="whitespace-nowrap text-center">고유 ID</th>
+                                    <th class="whitespace-nowrap text-center">Email ID</th>
+                                    <th class="whitespace-nowrap text-center">이름</th>
                                     <th class="whitespace-nowrap text-center">닉네임</th>
-                                    <th class="whitespace-nowrap text-center">제재</th>
+                                    <th class="whitespace-nowrap text-center">휴대전화번호</th>
                                     <th class="whitespace-nowrap text-center">상태</th>
+                                    <th class="whitespace-nowrap text-center">제재</th>
                                     <th class="whitespace-nowrap text-center">가입일</th>
-
-                                    <th class="whitespace-nowrap text-center">최근 접속일</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -174,7 +182,12 @@
                                         </td>
                                         <td class="whitespace-nowrap text-center">
                                             <a href="/member/memberView/{{$rs->mem_id}}">
-                                                {{$rs->mem_id}}
+                                                {{$rs->email_id}}
+                                            </a>
+                                        </td>
+                                        <td class="whitespace-nowrap text-center">
+                                            <a href="/member/memberView/{{$rs->mem_id}}">
+                                                {{$rs->name}}
                                             </a>
                                         </td>
                                         <td class="whitespace-nowrap text-center">
@@ -182,11 +195,14 @@
                                                 {{$rs->mem_nickname}}
                                             </a>
                                         </td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->mem_sanctions}}</td>
+                                        <td class="whitespace-nowrap text-center">
+                                            <a href="/member/memberView/{{$rs->mem_id}}">
+                                                {{$rs->phone_number}}
+                                            </a>
+                                        </td>
                                         <td class="whitespace-nowrap text-center">{{$rs->statusValue}}</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->mem_regdate}}</td>
-
-                                        <td class="whitespace-nowrap text-center">{{$rs->last_login_at}}</td>
+                                        <td class="whitespace-nowrap text-center">{{$rs->mem_sanctions}}</td>
+                                        <td class="whitespace-nowrap text-center">{{$rs->created_at}}</td>
                                     </tr>
                                     @php $i++; @endphp
                                 @endforeach

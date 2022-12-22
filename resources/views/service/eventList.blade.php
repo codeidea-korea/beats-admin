@@ -86,12 +86,12 @@
                                 @php $i=0; @endphp
                                 @foreach($eventData as $rs)
                                     <tr>
-                                        <td class="whitespace-nowrap text-center">{{$totalCount-($i+(($params['page']-1)*10))}}</td>
-                                        <td class="whitespace-nowrap text-center">@if($rs->gubun === 1) 진행중 @elseif($rs->gubun === 2) 종료 @else 대기중 @endif</td>
+                                        <td class="whitespace-nowrap text-center"><a href="/service/event/view/{{$rs->idx}}">{{$totalCount-($i+(($params['page']-1)*10))}}</a></td>
+                                        <td class="whitespace-nowrap text-center"><a href="/service/event/view/{{$rs->idx}}">@if($rs->gubun === 1) 진행중 @elseif($rs->gubun === 2) 종료 @else 대기중 @endif</a></td>
                                         <td class="whitespace-nowrap text-center"><a href="/service/event/view/{{$rs->idx}}">{{$rs->title}}</a></td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->fr_event_date}} ~ {{$rs->bk_event_date}}</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->name}}</td>
-                                        <td class="whitespace-nowrap text-center">@if($rs->open_status === 'Y') 노출 @else 미 노출 @endif</td>
+                                        <td class="whitespace-nowrap text-center"><a href="/service/event/view/{{$rs->idx}}">{{$rs->fr_event_date}} ~ {{$rs->bk_event_date}}</a></td>
+                                        <td class="whitespace-nowrap text-center"><a href="/service/event/view/{{$rs->idx}}">{{$rs->name}}</a></td>
+                                        <td class="whitespace-nowrap text-center"><a href="/service/event/view/{{$rs->idx}}">@if($rs->open_status === 'Y') 노출 @else 미 노출 @endif</a></td>
                                         <td class="whitespace-nowrap text-center">{{$rs->created_at}}</td>
                                     </tr>
                                     @php $i++; @endphp

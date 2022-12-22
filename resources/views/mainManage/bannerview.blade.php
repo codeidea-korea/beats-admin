@@ -130,7 +130,8 @@
                                     <tr>
                                         <td class="whitespace-nowrap text-center"><input type="checkbox" class="del_check" name="del_check" value="{{$rs->idx}}"></td>
                                         <td class="whitespace-nowrap text-center">@if($rs->contents === 'notice') 공지사항 @elseif($rs->contents === 'event') 이벤트 @else URL 등록 @endif</td>
-                                        <td class="whitespace-nowrap text-center bannerUpdate" data-idx="{{$rs->idx}}" data-contents="{{$rs->contents}}" data-contents_url="{{$rs->contents_url}}" data-br_title="{{$rs->br_title}}" data-isuse="{{$rs->isuse}}" data-banner_file="{{$rs->banner_file}}" data-banner_source="{{$rs->banner_source}}" data-tw-toggle="modal" data-tw-target="#superlarge-modal-size-update">{{$rs->br_title}}</td>
+                                        <td class="whitespace-nowrap text-center bannerUpdate" data-idx="{{$rs->idx}}" data-contents="{{$rs->contents}}" data-contents_url="{{$rs->contents_url}}" data-br_title="{{$rs->br_title}}" data-banner_text="{{$rs->banner_text}}" data-isuse="{{$rs->isuse}}" data-banner_file="{{$rs->banner_file}}" data-banner_source="{{$rs->banner_source}}"
+                                         data-banner_file_en="{{$rs->banner_file_en}}" data-banner_source_en="{{$rs->banner_source_en}}" data-banner_file_jp="{{$rs->banner_file_jp}}" data-banner_source_jp="{{$rs->banner_source_jp}}" data-banner_file_ch="{{$rs->banner_file_ch}}" data-banner_source_ch="{{$rs->banner_source_ch}}" data-tw-toggle="modal" data-tw-target="#superlarge-modal-size-update">{{$rs->br_title}}</td>
                                         <td class="whitespace-nowrap text-center">@if($rs->isuse === "Y") 사용 @else 미 사용 @endif</td>
                                         <td class="whitespace-nowrap text-center">{{$rs->created_at}}</td>
                                         <td class="whitespace-nowrap text-center">
@@ -195,6 +196,14 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">내용</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <textarea class="form-control" name="banner_text"></textarea>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">컨텐츠 구분</th>
                                 </tr>
                                 <tr>
@@ -221,6 +230,30 @@
                                 <tr>
                                     <td>
                                         <input type="file" id="banner_img" name="banner_img" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">배너 이미지(영어)</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="file" id="banner_img_en" name="banner_img_en" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">배너 이미지(일어)</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="file" id="banner_img_jp" name="banner_img_jp" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">배너 이미지(중국어)</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="file" id="banner_img_ch" name="banner_img_ch" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
                                     </td>
                                 </tr>
                                 <tr>
@@ -273,6 +306,14 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">내용</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <textarea class="form-control" name="up_banner_text"></textarea>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">컨텐츠 구분</th>
                                 </tr>
                                 <tr>
@@ -300,6 +341,33 @@
                                     <td>
                                         <input type="file" id="up_banner_img" name="up_banner_img" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
                                         <img class="up_banner_img" src="" alt="배너 이미지">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">배너 이미지(영어)</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="file" id="up_banner_img_en" name="up_banner_img_en" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
+                                        <img class="up_banner_img_en" src="" alt="배너 이미지">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">배너 이미지(일어)</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="file" id="up_banner_img_jp" name="up_banner_img_jp" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
+                                        <img class="up_banner_img_jp" src="" alt="배너 이미지">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10" rowspan="2">배너 이미지(중국어)</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="file" id="up_banner_img_ch" name="up_banner_img_ch" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
+                                        <img class="up_banner_img_ch" src="" alt="배너 이미지">
                                     </td>
                                 </tr>
                                 <tr>
@@ -433,18 +501,26 @@
         $(document).on('click','.bannerUpdate',function(){
             var idx = $(this).data('idx');
             var br_title = $(this).data('br_title');
+            var banner_text = $(this).data('banner_text');
             var contents = $(this).data('contents');
             var contents_url = $(this).data('contents_url');
             var banner_file = $(this).data('banner_file');
             var banner_source = $(this).data('banner_source');
+            var banner_source_en = $(this).data('banner_source_en');
+            var banner_source_jp = $(this).data('banner_source_jp');
+            var banner_source_ch = $(this).data('banner_source_ch');
             var isuse = $(this).data('isuse');
 
             $("input[name='up_idx']").val(idx);
             $("input[name='up_br_title']").val(br_title);
+            $("textarea[name='up_banner_text']").val(banner_text);
             $("select[name='up_contents']").val(contents);
             $("input[name='up_contents_url']").val(contents_url);
             $("select[name='up_isuse']").val(isuse);
             $('.up_banner_img').attr('src','/storage/banner/'+banner_source);
+            $('.up_banner_img_en').attr('src','/storage/banner/'+banner_source_en);
+            $('.up_banner_img_jp').attr('src','/storage/banner/'+banner_source_jp);
+            $('.up_banner_img_ch').attr('src','/storage/banner/'+banner_source_ch);
         });
 
         $(document).on('click','.bannerUpdatebtn', function(){
@@ -564,7 +640,7 @@
                             var hitem = '<tr>'
                                 +'<td class="whitespace-nowrap text-center"><input type="checkbox" class="del_check" name="del_check" value="'+item.idx+'"></td>'
                                 +'<td class="whitespace-nowrap text-center">'+item.contents+'</td>'
-                                +'<td class="whitespace-nowrap text-center bannerUpdate" data-idx="'+item.idx+'" data-contents="'+item.contents+'" data-contents_url="'+item.contents_url+'" data-br_title="'+item.br_title+'" data-isuse="'+item.isuse+'" data-banner_file="'+item.banner_file+'" data-banner_source="'+item.banner_source+'" data-tw-toggle="modal" data-tw-target="#superlarge-modal-size-update">'+item.br_title+'</td>'
+                                +'<td class="whitespace-nowrap text-center bannerUpdate" data-idx="'+item.idx+'" data-contents="'+item.contents+'" data-contents_url="'+item.contents_url+'" data-br_title="'+item.br_title+'" data-isuse="'+item.isuse+'" data-banner_file="'+item.banner_file+'" data-banner_source="'+item.banner_source+'" data-banner_file_en="'+item.banner_file_en+'" data-banner_source_en="'+item.banner_source_en+'" data-banner_file_jp="'+item.banner_file_jp+'" data-banner_source_jp="'+item.banner_source_jp+'" data-banner_file_ch="'+item.banner_file_ch+'" data-banner_source_ch="'+item.banner_source_ch+'" data-tw-toggle="modal" data-tw-target="#superlarge-modal-size-update">'+item.br_title+'</td>'
                                 +'<td class="whitespace-nowrap text-center">'+item.isuse+'</td>'
                                 +'<td class="whitespace-nowrap text-center">'+item.created_at+'</td>'
                                 +'<td class="whitespace-nowrap text-center">'

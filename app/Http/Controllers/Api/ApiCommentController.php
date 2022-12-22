@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Service\ApiCommentServiceImpl;
+use App\Service\MemberNoticeServiceImpl;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Response;
@@ -13,12 +14,14 @@ class ApiCommentController extends Controller
 {
     private $request;
     private $apiCommentService;
+    private $memberNoticeService;
 
 
     public function __construct(Request $request)
     {
         $this->request = $request;
         $this->apiCommentService = new ApiCommentServiceImpl();
+        $this->memberNoticeService = new MemberNoticeServiceImpl();
     }
 
     public function getCommentList()
@@ -261,6 +264,15 @@ class ApiCommentController extends Controller
             }else{
 
                 $resultData1 = $this->apiCommentService->commentAdd($params);
+
+                $mem_nickname = $this->memberNoticeService->getMemberNickname($params);
+
+                $sqlData['mem_id'] = $params['mem_id'];
+                $sqlData['gubun'] = '02';
+                $sqlData['message'] = $mem_nickname->mem_nickname.'님의 새로운 피드백이 등록되었습니다.';
+                $sqlData['url'] = '/mypage/music_details/'.$params['wr_idx'];
+
+                $result = $this->memberNoticeService->setMemberNotice($sqlData);
 
                 if(!empty($files)){
                     $resultData2 = $this->apiCommentService->setRecordFileUpdate($resultData1,$files);

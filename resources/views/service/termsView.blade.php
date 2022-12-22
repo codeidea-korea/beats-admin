@@ -60,7 +60,7 @@
                                     <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">내용</th>
                                     <td colspan="3" class="whitespace-nowrap">
                                         <script type="text/javascript" src="/smarteditor2-2.8.2.3/js/HuskyEZCreator.js" charset="utf-8"></script>
-                                        <textarea class="form-control" name="content" id="content"
+                                        <textarea class="form-control" name="content" id="content" style="width:95%"
                                                   rows="20" cols="10"
                                                   placeholder="내용을 입력해주세요"
                                         >{{$termsData[0]->content}}</textarea>

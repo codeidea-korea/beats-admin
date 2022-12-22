@@ -105,7 +105,13 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
                 'notice_board.mem_id',
                 'notice_board.gubun',
                 'notice_board.wr_title',
+                'notice_board.wr_title_en',
+                'notice_board.wr_title_jp',
+                'notice_board.wr_title_ch',
                 'notice_board.wr_content',
+                'notice_board.wr_content_en',
+                'notice_board.wr_content_jp',
+                'notice_board.wr_content_ch',
                 'notice_board.wr_hit',
                 'notice_board.wr_comment',
                 'notice_board.wr_bit',
@@ -129,7 +135,9 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
 
         $result = $this->statDB->table('notice_board')
             ->insertGetId([
-                'wr_title' => $params['wr_title'], 'wr_content' => $params['wr_content'], 'wr_open' => $params['wr_open'],
+                'wr_title' => $params['wr_title'], 'wr_title_en' => $params['wr_title_en'], 'wr_title_jp' => $params['wr_title_jp'],
+                'wr_title_ch' => $params['wr_title_ch'], 'wr_content' => $params['wr_content'], 'wr_content_en' => $params['wr_content_en'],
+                'wr_content_jp' => $params['wr_content_jp'], 'wr_content_ch' => $params['wr_content_ch'],'wr_open' => $params['wr_open'],
                 'gubun' => $params['gubun'], 'mem_id' => auth()->user()->idx, 'created_at' => DB::raw('now()'),
             ]);
 
@@ -142,7 +150,9 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
         $result = $this->statDB->table('notice_board')
             ->where('idx',$params['idx'])
             ->update([
-                'wr_title' => $params['wr_title'], 'wr_content' => $params['wr_content'], 'wr_open' => $params['wr_open'],
+                'wr_title' => $params['wr_title'], 'wr_title_en' => $params['wr_title_en'], 'wr_title_jp' => $params['wr_title_jp'],
+                'wr_title_ch' => $params['wr_title_ch'], 'wr_content' => $params['wr_content'], 'wr_content_en' => $params['wr_content_en'],
+                'wr_content_jp' => $params['wr_content_jp'], 'wr_content_ch' => $params['wr_content_ch'], 'wr_open' => $params['wr_open'],
                 'gubun' => $params['gubun'],'updated_at' => DB::raw('now()')
             ]);
 
@@ -243,7 +253,13 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
                 'adm_event.idx',
                 'adm_event.mem_id',
                 'adm_event.title',
+                'adm_event.title_en',
+                'adm_event.title_jp',
+                'adm_event.title_ch',
                 'adm_event.content',
+                'adm_event.content_en',
+                'adm_event.content_jp',
+                'adm_event.content_ch',
                 'adm_event.open_status',
                 'adm_event.event_file',
                 'adm_event.event_source',
@@ -281,7 +297,9 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
 
         $result = $this->statDB->table('adm_event')
             ->insertGetId([
-                'title' => $params['title'], 'content' => $params['content'], 'open_status' => $params['open_status'],
+                'title' => $params['title'], 'title_en' => $params['title_en'], 'title_jp' => $params['title_jp'],
+                'title_ch' => $params['title_ch'], 'content' => $params['content'], 'content_en' => $params['content_en'],
+                'content_jp' => $params['content_jp'], 'content_ch' => $params['content_ch'], 'open_status' => $params['open_status'],
                 'event_file' => $params['event_file'], 'event_source' => $params['event_source'], 'fr_event_date' => $params['fr_event_date'],
                 'bk_event_date' => $params['bk_event_date'],'mem_id' => auth()->user()->idx, 'created_at' => DB::raw('now()'),
             ]);
@@ -322,7 +340,9 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
         $result = $this->statDB->table('adm_event')
             ->where('idx',$params['idx'])
             ->update([
-                'title' => $params['title'], 'content' => $params['content'], 'open_status' => $params['open_status'],
+                'title' => $params['title'], 'title_en' => $params['title_en'], 'title_jp' => $params['title_jp'],
+                'title_ch' => $params['title_ch'], 'content' => $params['content'], 'content_en' => $params['content_en'],
+                'content_jp' => $params['content_jp'], 'content_ch' => $params['content_ch'], 'open_status' => $params['open_status'],
                 'event_file' => $params['event_file'], 'event_source' => $params['event_source'], 'fr_event_date' => $params['fr_event_date'],
                 'bk_event_date' => $params['bk_event_date'],'updated_at' => DB::raw('now()'),
             ]);
@@ -636,6 +656,311 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
         $result = $this->statDB->table('contract')->where('idx', $params['idx'])->delete();
 
         return $result;
+    }
+
+    public function getTrendList($params) {
+
+
+        $result = $this->statDB->table('adm_trend')
+            ->leftJoin('users', 'adm_trend.mem_id', '=', 'users.idx')
+            ->select(
+                'adm_trend.idx',
+                'adm_trend.mem_id',
+                'adm_trend.title',
+                'adm_trend.gubun',
+                'adm_trend.open_status',
+                'adm_trend.created_at',
+                DB::raw("(select count(idx) from beat_data where service_name = 'trend' and service_idx = adm_trend.idx and is_beat = 1) as wr_bit"),
+                DB::raw("(select count(idx) from comment where wr_type = 'trend' and wr_idx = adm_trend.idx and del_status='N' ) as wr_comment"),
+                'users.name',
+               // $this->statDB->raw('SUM(name) AS CNT')
+            )
+            ->when(isset($params['gubun']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('gubun',  $params['gubun']);
+                });
+            })
+            ->when(isset($params['open_status']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('open_status',  $params['open_status']);
+                });
+            })
+            ->when(isset($params['search_text']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('title', 'like', '%'.$params['search_text'].'%');
+                });
+            })
+            ->when(isset($params['fr_search_at']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->whereBetween('adm_trend.created_at',  [$params['fr_search_at'],$params['bk_search_at']]);
+                });
+            })
+            ->orderby('created_at','desc')
+            ->skip(($params['page']-1)*$params['limit'])
+            ->take($params['limit'])
+           // ->groupBy('name')
+            ->get();
+        return $result;
+
+    }
+
+    public function getTrendTotal($params) {
+
+        $result = $this->statDB->table('adm_trend')
+            ->select(DB::raw("COUNT(idx) AS cnt"))
+            ->when(isset($params['gubun']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('gubun',  $params['gubun']);
+                });
+            })
+            ->when(isset($params['open_status']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('open_status',  $params['open_status']);
+                });
+            })
+            ->when(isset($params['search_text']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('title', 'like', '%'.$params['search_text'].'%');
+                });
+            })
+            ->when(isset($params['fr_search_at']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->whereBetween('adm_trend.created_at',  [$params['fr_search_at'],$params['bk_search_at']]);
+                });
+            })
+            ->first();
+        return $result;
+
+    }
+
+    public function getTrendView($params, $bidx) {
+
+        $result = $this->statDB->table('adm_trend')
+            ->leftJoin('users', 'adm_trend.mem_id', '=', 'users.idx')
+            ->select(
+                'adm_trend.idx',
+                'adm_trend.mem_id',
+                'adm_trend.title',
+                'adm_trend.title_en',
+                'adm_trend.title_jp',
+                'adm_trend.title_ch',
+                'adm_trend.content',
+                'adm_trend.content_en',
+                'adm_trend.content_jp',
+                'adm_trend.content_ch',
+                'adm_trend.gubun',
+                'adm_trend.open_status',
+                'adm_trend.trand_file',
+                'adm_trend.trand_source',
+                'adm_trend.created_at',
+                'adm_trend.updated_at',
+                DB::raw("(select count(idx) from beat_data where service_name = 'trend' and service_idx = adm_trend.idx and is_beat = 1) as wr_bit"),
+                DB::raw("(select count(idx) from comment where wr_type = 'trend' and wr_idx = adm_trend.idx and del_status = 'N') as wr_comment"),
+                'users.name',
+               // $this->statDB->raw('SUM(name) AS CNT')
+            )
+            ->where('adm_trend.idx',$bidx)
+           // ->groupBy('name')
+           ->get();
+
+        return $result;
+
+    }
+
+    public function TrendAdd($params, $file) {
+
+        if($file != ""){
+            $cfilename = $file->getClientOriginalName();
+            $cfilesource = $file->hashName();
+            $folderName = '/trend/';
+            $file->storeAs($folderName, $file->hashName(), 'public');
+            $params['trend_file'] = $cfilename;
+            $params['trend_source'] = $cfilesource;
+        }
+
+        $result = $this->statDB->table('adm_trend')
+            ->insertGetId([
+                'title' => $params['title'], 'title_en' => $params['title_en'], 'title_jp' => $params['title_jp'],
+                'title_ch' => $params['title_ch'], 'content' => $params['content'], 'content_en' => $params['content_en'],
+                'content_jp' => $params['content_jp'], 'content_ch' => $params['content_ch'], 'open_status' => $params['open_status'],
+                'trand_file' => $params['trend_file'], 'trand_source' => $params['trend_source'], 'gubun' => $params['gubun']
+                ,'mem_id' => auth()->user()->idx, 'created_at' => DB::raw('now()'),
+            ]);
+
+        return $result;
+
+    }
+
+    public function TrendUpdate($params, $file) {
+
+        $adm_trend = DB::table('adm_trend')->where('idx', $params['idx'])->first();
+
+        if($file != ""){
+            $cfilename = $file->getClientOriginalName();
+            $cfilesource = $file->hashName();
+            $folderName = '/trend/';
+            $file->storeAs($folderName, $file->hashName(), 'public');
+            $params['trend_file'] = $cfilename;
+            $params['trend_source'] = $cfilesource;
+        }else{
+            $params['trend_file'] = $adm_trend->trand_file;
+            $params['trend_source'] = $adm_trend->trand_source;
+        }
+
+        $result = $this->statDB->table('adm_trend')
+            ->where('idx',$params['idx'])
+            ->update([
+                'title' => $params['title'], 'title_en' => $params['title_en'], 'title_jp' => $params['title_jp'],
+                'title_ch' => $params['title_ch'], 'content' => $params['content'], 'content_en' => $params['content_en'],
+                'content_jp' => $params['content_jp'], 'content_ch' => $params['content_ch'], 'open_status' => $params['open_status'],
+                'trand_file' => $params['trend_file'], 'trand_source' => $params['trend_source'], 'gubun' => $params['gubun'],
+                'updated_at' => DB::raw('now()'),
+            ]);
+
+        return $result;
+
+    }
+
+    public function TrendDelete($params) {
+
+        $result = $this->statDB->table('adm_trend')->where('idx', $params['idx'])->delete();
+
+        return $result;
+
+    }
+
+    public function getTrendBeatView($params,$idx) {
+
+        $result = $this->statDB->table('beat_data')
+            ->leftJoin('member_data','beat_data.mem_id','=','member_data.mem_id')
+            ->select(
+                'beat_data.idx',
+                'beat_data.create_date',
+                'member_data.u_id',
+                'member_data.mem_nickname',
+                'member_data.nationality',
+            )
+            ->where('beat_data.service_name','trend')
+            ->where('beat_data.service_idx', $idx)
+            ->when(isset($params['nationality']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.nationality',  $params['nationality']);
+                });
+            })
+            ->when(isset($params['search_text']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.u_id', 'like', '%'.$params['search_text'].'%')
+                    ->orwhere('member_data.mem_nickname', 'like', '%'.$params['search_text'].'%');
+                });
+            })
+            ->when(isset($params['fr_search_at']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->whereBetween('beat_data.create_date',  [$params['fr_search_at'],$params['bk_search_at']]);
+                });
+            })
+            ->orderby('beat_data.idx','desc')
+            ->skip(($params['page']-1)*$params['limit'])
+            ->take($params['limit'])
+            ->get();
+
+        return $result;
+
+    }
+
+    public function getTrendBeatTotal($params,$idx) {
+
+        $result = $this->statDB->table('beat_data')
+            ->leftJoin('member_data','beat_data.mem_id','=','member_data.mem_id')
+            ->select(DB::raw("COUNT(beat_data.idx) AS cnt"))
+            ->where('beat_data.service_name','trend')
+            ->where('beat_data.service_idx', $idx)
+            ->when(isset($params['nationality']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.nationality',  $params['nationality']);
+                });
+            })
+            ->when(isset($params['search_text']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.u_id', 'like', '%'.$params['search_text'].'%')
+                    ->orwhere('member_data.mem_nickname', 'like', '%'.$params['search_text'].'%');
+                });
+            })
+            ->when(isset($params['fr_search_at']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->whereBetween('beat_data.create_date',  [$params['fr_search_at'],$params['bk_search_at']]);
+                });
+            })
+            ->first();
+        return $result;
+
+    }
+
+    public function getTrendCommentView($params,$idx) {
+
+        $result = $this->statDB->table('comment')
+            ->leftJoin('member_data','comment.mem_id','=','member_data.mem_id')
+            ->select(
+                'comment.idx',
+                'comment.cm_open',
+                'member_data.u_id',
+                'comment.cm_content',
+                'comment.cm_main',
+                DB::raw("(select count(idx) from beat_data where service_name = 'comment' and service_idx = comment.idx and is_beat = 1) as cm_bit"),
+                'comment.created_at',
+            )
+            ->where('comment.wr_idx',$idx)
+            ->where('comment.wr_type','trend')
+            ->when(isset($params['cm_open']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('comment.cm_open',  $params['cm_open']);
+                });
+            })
+            ->when(isset($params['search_text']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.u_id', 'like', '%'.$params['search_text'].'%')
+                    ->orwhere('member_data.mem_nickname', 'like', '%'.$params['search_text'].'%');
+                });
+            })
+            ->when(isset($params['fr_search_at']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->whereBetween('comment.created_at',  [$params['fr_search_at'],$params['bk_search_at']]);
+                });
+            })
+            ->orderby('comment.idx','desc')
+            ->skip(($params['page']-1)*$params['limit'])
+            ->take($params['limit'])
+            ->get();
+
+        return $result;
+
+    }
+
+    public function getTrendCommentTotal($params,$idx) {
+
+        $result = $this->statDB->table('comment')
+        ->leftJoin('member_data','comment.mem_id','=','member_data.mem_id')
+            ->select(DB::raw("COUNT(comment.idx) AS cnt"))
+            ->where('comment.wr_idx',$idx)
+            ->where('comment.wr_type','trend')
+            ->when(isset($params['cm_open']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('comment.cm_open',  $params['cm_open']);
+                });
+            })
+            ->when(isset($params['search_text']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('member_data.u_id', 'like', '%'.$params['search_text'].'%')
+                    ->orwhere('member_data.mem_nickname', 'like', '%'.$params['search_text'].'%');
+                });
+            })
+            ->when(isset($params['fr_search_at']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->whereBetween('comment.created_at',  [$params['fr_search_at'],$params['bk_search_at']]);
+                });
+            })
+            ->first();
+        return $result;
+
     }
 
 }

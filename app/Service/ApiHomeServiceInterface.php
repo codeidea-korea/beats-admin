@@ -44,5 +44,17 @@ interface ApiHomeServiceInterface
     //약관 내용
     public function getTermsContent($params);
 
+    //트렌드 리스트
+    public function getTrendList($params);
+
+    //트렌드 상세
+    public function getTrendView($params);
+
+    //트렌드 리스트 총 수
+    public function getTrendTotal($params);
+
+    //트렌드 조회수 업
+    public function setTrendHitAdd($params);
+
 
 }

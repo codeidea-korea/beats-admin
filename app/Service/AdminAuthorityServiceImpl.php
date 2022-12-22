@@ -164,6 +164,10 @@ class AdminAuthorityServiceImpl extends DBConnection  implements AdminAuthorityS
                 'A.adminindex',
                 'C.id as cid',
                 'C.name as cname',
+                'A.profile_photo_name',
+                'A.profile_photo_hash_name',
+                'A.profile_photo_url',
+
             // $this->statDB->raw('SUM(name) AS CNT')
             )
             ->where('A.type', $params['type'])
@@ -184,6 +188,9 @@ class AdminAuthorityServiceImpl extends DBConnection  implements AdminAuthorityS
                 ,'isuse' => $params['isuse']
                 ,'email' => $params['email']
                 ,'password' => bcrypt($params['password'])
+                //,'profile_photo_name' => $params['file_name']
+                //,'profile_photo_hash_name' => $params['hash_name']
+                //,'profile_photo_url' => $params['photo_url']
                 ,'type' => 0
                 ,'created_at' => now()
                 ,'adminindex' => auth()->user()->idx
@@ -215,6 +222,11 @@ class AdminAuthorityServiceImpl extends DBConnection  implements AdminAuthorityS
                 ,'name' => $params['name']
                 ,'phoneno' => $params['phoneno']
                 ,'email' => $params['email']
+
+                ,'profile_photo_name' => $params['file_name']
+                ,'profile_photo_hash_name' => $params['hash_name']
+                ,'profile_photo_url' => $params['photo_url']
+
                 ,'updated_at' => now()
                 ,'adminindex' => auth()->user()->idx
             ]);

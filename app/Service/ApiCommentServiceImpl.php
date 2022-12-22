@@ -29,10 +29,8 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
             ->where('cm_main', 1)
             ->orderby('cm_seq','desc')
             ->when($params['wr_type']!="soundSource", function($query) use ($params){
-                return $query->where(function($query) use ($params) {
-                    $query->skip(($params['page']-1)*$params['limit']);
-                    $query->take($params['limit']);
-                });
+                $query->skip(($params['page']-1)*$params['limit']);
+                $query->take($params['limit']);
             })
             ->get();
 
@@ -89,6 +87,7 @@ class ApiCommentServiceImpl extends DBConnection  implements ApiCommentServiceIn
                 'R.hash_name as recordHashName',
                 'R.file_url as  recordFileUrl',
                 'MC.mem_nickname AS cmIdxNickname',
+                DB::raw("CONCAT('".env('AWS_CLOUD_FRONT_URL')."',member_data.profile_photo_url,member_data.profile_photo_hash_name) AS fullUrl"),
 
                 DB::raw('now() as now_date'),
             )

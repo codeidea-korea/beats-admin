@@ -108,32 +108,68 @@
                                     <th class="whitespace-nowrap text-center">회원 구분</th>
                                     <th class="whitespace-nowrap text-center">가입 채널</th>
                                     <th class="whitespace-nowrap text-center">국적</th>
-
                                     <th class="whitespace-nowrap text-center">고유 ID</th>
                                     <th class="whitespace-nowrap text-center">닉네임</th>
                                     <th class="whitespace-nowrap text-center">제재</th>
                                     <th class="whitespace-nowrap text-center">상태</th>
                                     <th class="whitespace-nowrap text-center">가입일</th>
-
-                                    <th class="whitespace-nowrap text-center">초대 회원</th>
+                                    <th class="whitespace-nowrap text-center">탈퇴일</th>
                                 </tr>
                                 </thead>
                                 <tbody>
+                                @php $i=0; @endphp
+                                @foreach($memberList as $rs)
+
                                 <tr>
-                                    <td class="whitespace-nowrap text-center"> - </td>
-                                    <td class="whitespace-nowrap text-center"> - </td>
-                                    <td class="whitespace-nowrap text-center"> - </td>
-                                    <td class="whitespace-nowrap text-center"> - </td>
-                                    <td class="whitespace-nowrap text-center"> - </td>
+                                    <td class="whitespace-nowrap text-center">
+                                        <a href="/member/memberView/{{$rs->mem_id}}">
+                                            {{$totalCount-($i+(($params['page']-1)*10))}}
+                                        </a>
+                                    </td>
+                                    <td class="whitespace-nowrap text-center">
+                                        {{$rs->delSiteValue}}
+                                    </td>
+                                    <td class="whitespace-nowrap text-center">
+                                        <a href="/member/memberView/{{$rs->mem_id}}">
+                                            {{$rs->gubunValue}}
+                                        </a>
+                                    </td>
 
-                                    <td class="whitespace-nowrap text-center"> - </td>
-                                    <td class="whitespace-nowrap text-center"> - </td>
-                                    <td class="whitespace-nowrap text-center"> - </td>
-                                    <td class="whitespace-nowrap text-center"> - </td>
-                                    <td class="whitespace-nowrap text-center"> - </td>
-
-                                    <td class="whitespace-nowrap text-center"> - </td>
+                                    <td class="whitespace-nowrap text-center">
+                                        <a href="/member/memberView/{{$rs->mem_id}}">
+                                            {{$rs->channelValue}}
+                                        </a>
+                                    </td>
+                                    <td class="whitespace-nowrap text-center">
+                                        <a href="/member/memberView/{{$rs->mem_id}}">
+                                            {{$rs->nati}}
+                                        </a>
+                                    </td>
+                                    <td class="whitespace-nowrap text-center">
+                                        <a href="/member/memberView/{{$rs->mem_id}}">
+                                            {{$rs->u_id}}
+                                        </a>
+                                    </td>
+                                    <td class="whitespace-nowrap text-center">
+                                        <a href="/member/memberView/{{$rs->mem_id}}">
+                                            {{$rs->mem_nickname}}
+                                        </a>
+                                    </td>
+                                    <td class="whitespace-nowrap text-center">
+                                        <a href="/member/memberView/{{$rs->mem_id}}">
+                                            {{$rs->mem_sanctions}}
+                                        </a>
+                                    </td>
+                                    <td class="whitespace-nowrap text-center">{{$rs->statusValue}}</td>
+                                    <td class="whitespace-nowrap text-center">
+                                        <a href="/member/memberView/{{$rs->mem_id}}">
+                                            {{$rs->created_at}}
+                                        </a>
+                                    </td>
+                                    <td class="whitespace-nowrap text-center">{{$rs->updated_at}}</td>
                                 </tr>
+                                @php $i++; @endphp
+                                @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -143,7 +179,7 @@
                 <!-- 페이징처리 시작 -->
                 <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center mt-5">
                     <nav class="w-full">
-                        {{-- @include('vendor.pagination.default') --}}
+                        @include('vendor.pagination.default')
                     </nav>
                 </div>
                 <!-- 페이징처리 종료 -->

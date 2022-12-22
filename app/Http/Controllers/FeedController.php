@@ -67,10 +67,14 @@ class FeedController extends Controller
 
         $feedData = $this->adminFeedService->getFeedView($idx);
 
-        $feedFileData = $this->adminFeedService->getFeedFile($idx);
+        $feedFileData = $this->adminFeedService->getFeedFile($idx,'content');
+
+        $feedMusicFileData = $this->adminFeedService->getFeedFile($idx,'music');
+
         return view('contents.feed.feedView',[
             'feedData' => $feedData
             ,'feedFileData' => $feedFileData
+            ,'feedMusicFileData' => $feedMusicFileData
             ,'params' => $params
         ]);
     }

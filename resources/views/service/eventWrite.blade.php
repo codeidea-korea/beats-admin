@@ -30,6 +30,30 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">제목(영어)</th>
+                                    <td colspan="3" class="whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <input name="title_en" id="regular-form-2" type="text" class="form-control" placeholder="Input text">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">제목(일어)</th>
+                                    <td colspan="3" class="whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <input name="title_jp" id="regular-form-3" type="text" class="form-control" placeholder="Input text">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">제목(중국어)</th>
+                                    <td colspan="3" class="whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <input name="title_ch" id="regular-form-4" type="text" class="form-control" placeholder="Input text">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
                                 <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">대표 이미지</th>
                                     <td>
                                         <input type="file" name="event_img" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
@@ -40,10 +64,34 @@
                                     <td colspan="3" class="whitespace-nowrap">
                                         <div class="p-5" id="classic-editor">
                                             <script type="text/javascript" src="/smarteditor2-2.8.2.3/js/HuskyEZCreator.js" charset="utf-8"></script>
-                                            <textarea class="form-control" name="content" id="content"
+                                            <textarea class="form-control" name="content" id="content" style="width:95%"
                                                       rows="20" cols="10"
                                                       placeholder="내용을 입력해주세요"
                                             ></textarea>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">내용(영어)</th>
+                                    <td colspan="3" class="whitespace-nowrap">
+                                        <div class="p-5" id="classic-editor">
+                                            <textarea class="form-control" name="content_en" id="content_en" rows="20" cols="10" style="width:95%" placeholder="내용을 입력해주세요"></textarea>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">내용(일어)</th>
+                                    <td colspan="3" class="whitespace-nowrap">
+                                        <div class="p-5" id="classic-editor">
+                                            <textarea class="form-control" name="content_jp" id="content_jp" rows="20" cols="10" style="width:95%" placeholder="내용을 입력해주세요"></textarea>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" class="bg-primary/10 whitespace-nowrap w-32 text-center">내용(중국어)</th>
+                                    <td colspan="3" class="whitespace-nowrap">
+                                        <div class="p-5" id="classic-editor">
+                                            <textarea class="form-control" name="content_ch" id="content_ch" rows="20" cols="10" style="width:95%" placeholder="내용을 입력해주세요"></textarea>
                                         </div>
                                     </td>
                                 </tr>
@@ -102,6 +150,54 @@
                 fOnAppLoad : function(){
                 },
             })
+
+            nhn.husky.EZCreator.createInIFrame({
+                oAppRef: oEditors,
+                elPlaceHolder: "content_en",
+                sSkinURI: "/smarteditor2-2.8.2.3/SmartEditor2Skin.html",
+                fCreator: "createSEditor2",
+                htParams : {
+                    bUseToolbar : true,				// 툴바 사용 여부 (true:사용/ false:사용하지 않음)
+                    bUseVerticalResizer : true,		// 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
+                    bUseModeChanger : true,			// 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
+                    fOnBeforeUnload : function(){
+                    }
+                },
+                fOnAppLoad : function(){
+                },
+            })
+
+            nhn.husky.EZCreator.createInIFrame({
+                oAppRef: oEditors,
+                elPlaceHolder: "content_jp",
+                sSkinURI: "/smarteditor2-2.8.2.3/SmartEditor2Skin.html",
+                fCreator: "createSEditor2",
+                htParams : {
+                    bUseToolbar : true,				// 툴바 사용 여부 (true:사용/ false:사용하지 않음)
+                    bUseVerticalResizer : true,		// 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
+                    bUseModeChanger : true,			// 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
+                    fOnBeforeUnload : function(){
+                    }
+                },
+                fOnAppLoad : function(){
+                },
+            })
+
+            nhn.husky.EZCreator.createInIFrame({
+                oAppRef: oEditors,
+                elPlaceHolder: "content_ch",
+                sSkinURI: "/smarteditor2-2.8.2.3/SmartEditor2Skin.html",
+                fCreator: "createSEditor2",
+                htParams : {
+                    bUseToolbar : true,				// 툴바 사용 여부 (true:사용/ false:사용하지 않음)
+                    bUseVerticalResizer : true,		// 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
+                    bUseModeChanger : true,			// 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
+                    fOnBeforeUnload : function(){
+                    }
+                },
+                fOnAppLoad : function(){
+                },
+            })
         })
 
         // 값 가져오기
@@ -133,6 +229,12 @@
                 alert("내용을 입력해주세요.");
                 return false;
             }
+
+            oEditors.getById["content_en"].exec("UPDATE_CONTENTS_FIELD", []);
+
+            oEditors.getById["content_jp"].exec("UPDATE_CONTENTS_FIELD", []);
+
+            oEditors.getById["content_ch"].exec("UPDATE_CONTENTS_FIELD", []);
 
             $('#boardWriteForm')[0].submit();
 
