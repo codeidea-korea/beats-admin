@@ -18,11 +18,23 @@
                         <div class="overflow-x-auto">
                             <table class="table table-bordered">
                                 <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10">언어 선택</th>
+                                    <td colspan="3">
+                                        <select name="lang" class="form-select w-56" aria-label=".form-select-lg">
+                                            <option @if($planData->lang == "KR") selected @endif value="KR">한국어</option>
+                                            <option @if($planData->lang == "EN") selected @endif value="EN">영어</option>
+                                            <option @if($planData->lang == "JP") selected @endif value="JP">일본어</option>
+                                            <option @if($planData->lang == "CH") selected @endif value="CH">중국어</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <th class="whitespace-nowrap text-center bg-primary/10">요금제 구분</th>
                                     <td colspan="3">
                                         <select name="gubun" class="form-select w-56" aria-label=".form-select-lg">
-                                            <option @if($planData->gubun == "0") selected @endif value="0">일반</option>
-                                            <option @if($planData->gubun == "1") selected @endif value="1">학생</option>
+                                            <option @if($planData->gubun == "0") selected @endif value="0">Free</option>
+                                            <option @if($planData->gubun == "1") selected @endif value="1">Premium</option>
+                                            <option @if($planData->gubun == "2") selected @endif value="2">학생요금</option>
                                         </select>
                                     </td>
                                 </tr>
@@ -41,8 +53,12 @@
                                 </tr>
                                 <tr>
                                     <th class="whitespace-nowrap text-center bg-primary/10">이용 요금 (월)</th>
-                                    <td colspan="3">
+                                    <td>
                                         <input name="fee" id="" type="text" class="form-control w-64 mr-2" value="{{$planData->fee}}"><span>(원)</span>
+                                    </td>
+                                    <th class="whitespace-nowrap text-center bg-primary/10">할인율</th>
+                                    <td>
+                                        <input name="sale" id="" type="text" class="form-control w-64 mr-2" value="{{$planData->sale}}"><span>(%)</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -116,9 +132,11 @@
                                                         });
                                                         formData.append( "idx", $('input[name=idx]').val());
                                                         formData.append( "gubun",$("select[name='gubun']").val());
+                                                        formData.append( "lang",$("select[name='lang']").val());
                                                         formData.append( "name", $('input[name=name]').val());
                                                         formData.append( "contents", $('input[name=contents]').val());
                                                         formData.append( "fee", $('input[name=fee]').val());
+                                                        formData.append( "sale", $('input[name=sale]').val());
                                                         formData.append( "is_yn",$("select[name='is_yn']").val());
 
                                                         jQuery.ajax({

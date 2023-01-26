@@ -270,6 +270,7 @@ class BoardController extends Controller
         $params['limit'] = $params['limit'] ?? 10;
         $params['search_gubun'] = $params['gubun'] ?? '';
         $params['search_terms_type'] = $params['terms_type'] ?? '';
+        $params['search_lang_code'] = $params['lang_code'] ?? '';
         $params['fr_search_text'] = $params['search_text'] ?? '';
         $params['apply_date'] = $params['apply_date'] ?? "2022-01-01 - ".date("Y-m-d");
 
@@ -291,6 +292,8 @@ class BoardController extends Controller
         $totalCount = $termsTotal->cnt;
         $params['totalCnt'] = $totalCount;
 
+        $lang_data = $this->adminBoardService->getLangData($params);
+
         return view('service.termsList',[
             'termsData' => $termsData
             ,'terms_type' => $terms_type
@@ -298,6 +301,7 @@ class BoardController extends Controller
             ,'params' => $params
             ,'searchData' => $params
             ,'totalCount' => $totalCount
+            ,'lang_data' =>$lang_data
         ]);
     }
 
@@ -316,6 +320,7 @@ class BoardController extends Controller
         $data = $this->adminBoardService->getMaxVersion($params2);
         $maxVersion =  $data->maxVersion;
 
+        $lang_data = $this->adminBoardService->getLangData($params);
 
 
         return view('service.termsView',[
@@ -324,6 +329,7 @@ class BoardController extends Controller
             ,'terms_type' => $terms_type
             ,'params' => $params
             ,'maxVersion' =>$maxVersion
+            ,'lang_data' =>$lang_data
         ]);
     }
 
@@ -339,9 +345,11 @@ class BoardController extends Controller
         $params = $this->request->input();
         $params['menuCode'] = "AD100500";
         $gubun = $this->adminBoardService->getGubun($params);
+        $lang_data = $this->adminBoardService->getLangData($params);
         return view('service.termsWrite',[
             'params'=> $params
             ,'gubun' => $gubun
+            ,'lang_data' =>$lang_data
         ]);
     }
 

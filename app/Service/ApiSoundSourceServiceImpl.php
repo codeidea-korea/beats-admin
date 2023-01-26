@@ -90,12 +90,64 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
             ->insertGetId([
                 'mem_id' => $sqlData['mem_id']
                 , 'file_cnt' => $sqlData['file_cnt']
-                , 'file_cnt' => $sqlData['file_cnt']
             ]);
         $sqlData['idx']=$result;
 
         return $sqlData;
     }
+
+    //음원데이터 업로드
+    public function setMusicAdd($params,$files)
+    {
+
+        $sqlData = array();
+        $sqlData['file_cnt'] = count($files);
+        $sqlData['mem_id'] = $params['mem_id'];
+
+        $folderName = '/soundSource/'.date("Y/m/d").'/';
+        if($files != "" && $files !=null){
+            $i=1;
+            $j=0;
+            foreach($files as $fa){
+
+                $sqlData['file_name'] = $fa->getClientOriginalName();
+                $sqlData['hash_name'] = $fa->hashName();
+                $sqlData['file_url'] =  $folderName;
+                $sqlData['seconds'] = $params['seconds'][$j];
+                //$fa->storeAs($folderName, $fa->hashName(), 'public');
+                $path = Storage::disk('s3')->put($folderName. $sqlData['hash_name'], file_get_contents($fa));
+                $path = Storage::disk('s3')->url($path);
+
+                $idx = $this->statDB->table('music_head')
+                ->insertGetId([
+                    'mem_id' => $sqlData['mem_id']
+                    , 'file_cnt' => $sqlData['file_cnt']
+                ]);
+
+                $this->statDB->table('music_file')
+                ->insert([
+                    'music_head_idx' => $idx
+                    , 'mem_id' => $sqlData['mem_id']
+                    , 'file_name' => $sqlData['file_name']
+                    , 'hash_name' => $sqlData['hash_name']
+                    , 'file_url' => $sqlData['file_url']
+                    , 'file_no' => $i
+                    , 'representative_music' => 'Y'
+                    , 'seconds' => $sqlData['seconds']
+                ]);
+
+                $last_file['file_name'] = $sqlData['file_name'];
+                $last_file['hash_name'] = $sqlData['hash_name'];
+                $last_file['file_url'] = $sqlData['file_url'];
+
+                $i++;
+                $j++;
+            }
+        }
+
+        return $sqlData;
+    }
+
     //음원데이터 업로드
     public function setLog($params)
     {
@@ -128,8 +180,23 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
         return $result;
     }
 
+    public function getCoComList($params){
+
+        $result = $this->statDB->table('co_composer')
+            ->select(
+                'music_head_idx'
+            )
+            ->where('co_composer_mem_id',$params['mem_id'])
+            ->get();
+        return $result;
+
+
+
+
+    }
+
     //음원 정보 리스트 (list) 페이징
-    public function setSoundSourceListPaging($params)
+    public function setSoundSourceListPaging($params,$mkList)
     {
         $_where="";
         //음원상태 및 진행율   (10단위 증가임 이에 select박스 주성 유무 문의)
@@ -201,6 +268,11 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
             $_where_temp .= " )";
             $_where .= " AND ".$_where_temp;
         }
+        if(trim($mkList)!="") {
+            $_where2 = "(H.mem_id = " . $params['mem_id'] . " OR H.idx IN (" . $mkList . "))";
+        }else{
+            $_where2 = "H.mem_id = " . $params['mem_id'];
+        }
 
         $result = $this->statDB->select(
             "
@@ -231,13 +303,14 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
                         ,H.del_status as HeadDelStatus
                         ,H.del_date as HeadDelDate
                         ,(select count(idx) from comment where wr_type = 'soundSource' and wr_idx = H.idx and del_status ='N') as wr_comment
-                        ,(select SUM(seconds)  from music_file  WHERE music_head_idx = H.idx AND VERSION =H.file_version AND del_status ='N') as totalSeconds
+                        ,(select SUM(seconds)  from music_file  WHERE music_head_idx = H.idx AND VERSION =H.file_version AND del_status ='N') as alltotalSeconds
+                        ,(select seconds from music_file WHERE music_head_idx = H.idx AND VERSION =H.file_version AND del_status ='N' and representative_music = 'Y') as totalSeconds
 
                     FROM
                     music_head H LEFT JOIN music_file F ON H.idx = F.music_head_idx
                     LEFT JOIN member_data M ON F.mem_id=M.mem_id
                     WHERE
-                    H.mem_id = ".$params['mem_id']."
+                    ".$_where2."
                     AND F.representative_music = 'Y'
                     AND F.del_status = 'N'
                     AND ((H.del_date IS  NULL AND H.del_status = 'N') OR (H.del_date > NOW() AND H.del_status = 'Y'))
@@ -421,17 +494,18 @@ class ApiSoundSourceServiceImpl extends DBConnection  implements ApiSoundSourceS
     //공동 작곡가 (data)
     public function getCommonCompositionList($params)
     {
-        $result = $this->statDB->table('music_common_composition')
+        $result = $this->statDB->table('co_composer')
+            ->leftJoin('member_data', 'member_data.mem_id', '=', 'co_composer.co_composer_mem_id')
             ->select(
-                'cc_idx',
+                'co_composer.idx as  cc_idx',
                 'mem_id as memId',
-                'cc_email as fileName',
-                'cc_nickname as nickname',
-                'cc_name as name',
-                'cc_status as status',
+                DB::raw("CONCAT('".env('AWS_CLOUD_FRONT_URL')."',member_data.profile_photo_url,member_data.profile_photo_hash_name) AS fileName"),
+                'member_data.mem_nickname as nickname',
+                'member_data.name as name',
+                'co_composer.isUse as status',
             )
-            ->where('music_head_idx',$params['music_head_idx'])
-            ->orderby('cc_idx','desc')
+            ->where('co_composer.music_head_idx',$params['music_head_idx'])
+            ->orderby('co_composer.idx','desc')
             ->get();
         return $result;
     }

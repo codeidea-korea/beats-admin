@@ -289,6 +289,7 @@ class ApiHomeController extends Controller
         try{
             $params = $this->request->input();
             $params['terms_type'] = $params['terms_type'] ?? '';
+            $params['lang_code'] = $params['langCode'] ?? 'kr';
 
             if($params['terms_type'] == ''){
                 $returnData['code']=-1;

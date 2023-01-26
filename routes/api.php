@@ -14,7 +14,9 @@ use App\Http\Controllers\Api\ApiMemberNoticeController;
 use App\Http\Controllers\Api\ApiContentController;
 use App\Http\Controllers\Api\ApiProductController;
 use App\Http\Controllers\Api\ApiCoComposerController;
-
+use App\Http\Controllers\Api\ApiPlanController;
+use App\Http\Controllers\Api\ApiSubscriptionPaymentController;
+use App\Http\Controllers\Api\ApiStudentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -49,7 +51,7 @@ Route::prefix('/v1/')->group(function () {
     // 약관 적용날짜 리스트
     Route::get('getTermsApplyData', [ApiHomeController::class, 'getTermsApplyData']);
     // 약관 내용
-    Route::get('getTermsReview', [ApiHomeController::class, 'getTermsReview']);
+    Route::get('getTermsContent', [ApiHomeController::class, 'getTermsContent']);
     // 트랜드 리스트
     Route::get('trendList', [ApiHomeController::class, 'trendList']);
     // 트랜드 상세
@@ -131,6 +133,7 @@ Route::prefix('/v1/')->group(function () {
     });
 
     Route::group(['prefix' => 'soundSource'], function() {
+        Route::post('soundFileAdd', [ApiSoundSourceController::class, 'soundFileAdd']);
         Route::post('soundFileUpdate', [ApiSoundSourceController::class, 'soundFileUpdate']);
         Route::post('soundDataUpdate', [ApiSoundSourceController::class, 'soundDataUpdate']);
         Route::get('soundSourceList', [ApiSoundSourceController::class, 'soundSourceList']);
@@ -155,8 +158,17 @@ Route::prefix('/v1/')->group(function () {
     });
 
     Route::group(['prefix' => 'coComposer'], function() {
+        //공동작곡가 초대
         Route::post('invite', [MailController::class,'coComposerInvite']);
+        //공동작곡가 재발송setCoComposer
+        Route::post('inviteRe', [MailController::class,'coComposerInviteRe']);
+        //공동작고가 초대리스트
+        Route::get('inviteList', [ApiCoComposerController::class,'getInviteList']);
+        //공동작고가 삭제
+        Route::delete('inviteDel', [ApiCoComposerController::class,'inviteDel']);
+
         Route::get('checkEmail', [ApiCoComposerController::class,'checkEmail']);
+
         Route::post('setCoComposer', [ApiCoComposerController::class,'setCoComposer']);
         //권리비율 등록
         Route::post('setCopyRight', [ApiCoComposerController::class,'setCopyRight']);
@@ -164,9 +176,23 @@ Route::prefix('/v1/')->group(function () {
         Route::get('getCoComposer', [ApiCoComposerController::class,'getCoComposer']);
         //권리비율 승인
         Route::post('copyRightOk', [ApiCoComposerController::class,'copyRightOk']);
+        //공동작곡가 해지 신청
+        Route::post('cancellation',[ApiCoComposerController::class,'cancellation']);
+
+        Route::post('cancelDecision',[ApiCoComposerController::class,'cancelDecision']);
 
     });
+    // 요금제 학생인증
+    Route::group(['prefix' => 'student'], function() {
+        //학생 인증 신청
+        Route::post('chStudent', [ApiStudentController::class,'chStudent']);
+    });
 
+    // 정기 구독
+    Route::group(['prefix' => 'subscriptionPayment'], function() {
+        //구독 등록
+        Route::get('sPayment', [ApiSubscriptionPaymentController::class,'sPayment']);
+    });
 
     Route::group(['prefix' => 'feed'], function() {
         Route::get('feedList', [ApiFeedController::class, 'getFeedList']);
@@ -206,8 +232,10 @@ Route::prefix('/v1/')->group(function () {
     {
         // 상품상세
         Route::get('productData', [ApiProductController::class, 'getProductData']);
-
     });
+
+    //요금제 리스트
+    Route::get('planList', [ApiPlanController::class, 'getPlanList']);
 
 
     Route::get('getTerms', [ApiMemberController::class, 'getTerms']);

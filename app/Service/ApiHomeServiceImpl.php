@@ -265,7 +265,9 @@ class ApiHomeServiceImpl extends DBConnection  implements ApiHomeServiceInterfac
                 DB::raw("date_format(adm_terms.apply_date, '%Y-%m-%d' ) as apply_date"),
             )
             ->where('terms_type',$params['terms_type'])
+            ->where('lang_code',$params['lang_code'])
             ->where('isuse','Y')
+            ->where('adm_terms.apply_date','<=',DB::raw('now()'))
             ->orderby('adm_terms.apply_date','desc')
             ->get();
         return $result;

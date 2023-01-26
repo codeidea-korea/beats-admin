@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\DB;
 
 interface ApiSoundSourceServiceInterface
 {
+    //음원 파일 다량 등록
+    public function setMusicAdd($params,$files);
 
     //음원파일 업로드
     public function setSoundFileUpdate($params,$files,$params2);
@@ -15,7 +17,7 @@ interface ApiSoundSourceServiceInterface
     //음원 정보 업로드 (상세정보)
     public function setSoundDataUpdate($params);
     //음원 정보 리스트 (list) 페이징
-    public function setSoundSourceListPaging($params);
+    public function setSoundSourceListPaging($params,$mkList);
 
     // 음원정보 리스트의 프로파일 이미지 및 닉네님 리스트
     public function setProfilePhotoList($params);

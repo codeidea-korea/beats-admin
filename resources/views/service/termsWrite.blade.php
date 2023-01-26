@@ -33,6 +33,16 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <th class="bg-primary/10 whitespace-nowrap w-32 text-center">언어</th>
+                                    <td class="whitespace-nowrap">
+                                        <select id="lang_code" name="lang_code" class="form-select w-60" aria-label=".form-select-lg example">
+                                            @foreach($lang_data as $rs)
+                                                <option value="{{$rs->lang_code}}">{{$rs->lang_value}}</option>
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <th class="bg-primary/10 whitespace-nowrap w-32 text-center">약관 종류</th>
                                     <td class="whitespace-nowrap">
                                         <select id="terms_type" name="terms_type" class="form-select w-60" aria-label=".form-select-lg example">

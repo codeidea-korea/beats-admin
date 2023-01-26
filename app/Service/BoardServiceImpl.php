@@ -366,6 +366,7 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
             ->leftJoin('users', 'adm_terms.mem_id', '=', 'users.idx')
             ->leftJoin('adm_code as gubun', 'adm_terms.gubun', '=', 'gubun.codename')
             ->leftJoin('adm_code as terms_type', 'adm_terms.terms_type', '=', 'terms_type.codename')
+            ->leftJoin('lang_data', 'adm_terms.lang_code', '=', 'lang_data.lang_code')
             ->select(
                 'adm_terms.idx',
                 'adm_terms.mem_id',
@@ -376,6 +377,7 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
                 'adm_terms.isuse',
                 'adm_terms.apply_date',
                 'users.name',
+                'lang_data.lang_value',
                // $this->statDB->raw('SUM(name) AS CNT')
             )
             ->when(isset($params['gubun']), function($query) use ($params){
@@ -386,6 +388,11 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
             ->when(isset($params['terms_type']), function($query) use ($params){
                 return $query->where(function($query) use ($params) {
                     $query->where('terms_type',  $params['terms_type']);
+                });
+            })
+            ->when(isset($params['lang_code']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('adm_terms.lang_code',  $params['lang_code']);
                 });
             })
             ->when(isset($params['search_text']), function($query) use ($params){
@@ -455,6 +462,11 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
                     $query->where('terms_type',  $params['terms_type']);
                 });
             })
+            ->when(isset($params['lang_code']), function($query) use ($params){
+                return $query->where(function($query) use ($params) {
+                    $query->where('lang_code',  $params['lang_code']);
+                });
+            })
             ->when(isset($params['search_text']), function($query) use ($params){
                 return $query->where(function($query) use ($params) {
                     $query->where('content', 'like', '%'.$params['search_text'].'%');
@@ -485,10 +497,26 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
                 'adm_terms.apply_date',
                 'adm_terms.created_at',
                 'adm_terms.updated_at',
+                'adm_terms.lang_code',
                 'users.name',
                 DB::raw('case WHEN adm_terms.apply_date < date_format(now(), \'%Y-%m-%d  %h:%i:%s\') THEN 0 ELSE 1 end AS crVal'),
             )
             ->where('adm_terms.idx',$tidx)
+           // ->groupBy('name')
+           ->get();
+
+        return $result;
+
+    }
+
+    public function getLangData() {
+
+        $result = $this->statDB->table('lang_data')
+            ->select(
+                'lang_data.idx',
+                'lang_data.lang_code',
+                'lang_data.lang_value',
+            )
            // ->groupBy('name')
            ->get();
 
@@ -513,7 +541,7 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
 
         $result = $this->statDB->table('adm_terms')
             ->insertGetId([
-                'gubun' => $params['gubun'], 'terms_type' => $params['terms_type'], 'content' => $params['content'],
+                'gubun' => $params['gubun'], 'terms_type' => $params['terms_type'], 'content' => $params['content'], 'lang_code' => $params['lang_code'],
                 'version' => $params['version'], 'apply_date' => $params['apply_date_time'], 'mem_id' => auth()->user()->idx, 'created_at' => DB::raw('now()'),
             ]);
 
@@ -526,7 +554,7 @@ class BoardServiceImpl extends DBConnection  implements BoardServiceInterface
         $result = $this->statDB->table('adm_terms')
             ->where('idx',$params['idx'])
             ->update([
-                'gubun' => $params['gubun'], 'terms_type' => $params['terms_type'], 'content' => $params['content'],
+                'gubun' => $params['gubun'], 'terms_type' => $params['terms_type'], 'content' => $params['content'], 'lang_code' => $params['lang_code'],
                 'version' => $params['version'], 'apply_date' => $params['apply_date_time'], 'updated_at' => DB::raw('now()')
             ]);
 

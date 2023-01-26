@@ -123,9 +123,9 @@
                                         <audio id="player" controls  src="{{url(env('AWS_CLOUD_FRONT_URL').$rs->file_url.$rs->hash_name)}}">
                                         </audio>
                                     </div>
-                                    <div class="grow px-5">
-                                        <div class="font-medium text-lg">{{$rs->music_title}}</div>
-                                        <div class="text-slate-400 mt-1"> <span class="font-bold"><a href="javascript:test123();">최근 수정일</a> :</span>{{$rs->moddate}}</div>
+                                    <div class="grow px-5" style="min-width:200px;width:480px;">
+                                        <div class="font-medium text-lg " style="overflow-wrap: break-word;">{{$rs->music_title}}</div>
+                                        <div class="text-slate-400 mt-1"> <span class="font-bold"><a href="#">최근 수정일</a> :</span>{{$rs->moddate}}</div>
                                         <div class="text-slate-400 flex items-center mt-1">
                                             <i data-lucide="circle" class="w-4 h-4 mr-1"></i>
                                             47

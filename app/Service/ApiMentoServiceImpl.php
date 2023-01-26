@@ -2,8 +2,6 @@
 
 namespace App\Service;
 
-namespace App\Service;
-
 use Agent;
 use Session;
 use Illuminate\Support\Facades\DB;

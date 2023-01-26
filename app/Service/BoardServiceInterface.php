@@ -74,4 +74,6 @@ interface BoardServiceInterface
     public function getTrendCommentView($params,$idx);
 
     public function getTrendCommentTotal($params,$idx);
+
+    public function getLangData();
 }

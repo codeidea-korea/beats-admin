@@ -18,11 +18,23 @@
                         <div class="overflow-x-auto">
                             <table class="table table-bordered">
                                 <tr>
+                                    <th class="whitespace-nowrap text-center bg-primary/10">언어 선택</th>
+                                    <td colspan="3">
+                                        <select name="lang" class="form-select w-56" aria-label=".form-select-lg">
+                                            <option selected value="KR">한국어</option>
+                                            <option value="EN">영어</option>
+                                            <option value="JP">일본어</option>
+                                            <option value="CH">중국어</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <th class="whitespace-nowrap text-center bg-primary/10">요금제 구분</th>
                                     <td colspan="3">
                                         <select name="gubun" class="form-select w-56" aria-label=".form-select-lg">
-                                            <option value="0">일반</option>
-                                            <option value="1">학생</option>
+                                            <option selected value="0">Free</option>
+                                            <option  value="1">Premium</option>
+                                            <option  value="2">학생요금</option>
                                         </select>
                                     </td>
                                 </tr>
@@ -41,8 +53,12 @@
                                 </tr>
                                 <tr>
                                     <th class="whitespace-nowrap text-center bg-primary/10">이용 요금 (월)</th>
-                                    <td colspan="3">
+                                    <td>
                                         <input name="fee" id="" type="text" class="form-control w-64 mr-2" value="0"><span>(원)</span>
+                                    </td>
+                                    <th class="whitespace-nowrap text-center bg-primary/10">할인율</th>
+                                    <td>
+                                        <input name="sale" id="" type="text" class="form-control w-64 mr-2" value="0"><span>(%)</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -108,10 +124,12 @@
                                                         $("input[name='benefits[]']").each(function(i) {
                                                             formData.append('benefits[]',$(this).val());
                                                         });
+                                                        formData.append( "lang",$("select[name='lang']").val());
                                                         formData.append( "gubun",$("select[name='gubun']").val());
                                                         formData.append( "name", $('input[name=name]').val());
                                                         formData.append( "contents", $('input[name=contents]').val());
                                                         formData.append( "fee", $('input[name=fee]').val());
+                                                        formData.append( "sale", $('input[name=sale]').val());
                                                         formData.append( "is_yn",$("select[name='is_yn']").val());
 
                                                         jQuery.ajax({

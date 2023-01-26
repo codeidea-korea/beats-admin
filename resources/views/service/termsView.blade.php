@@ -38,6 +38,16 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <th class="bg-primary/10 whitespace-nowrap w-32 text-center">언어</th>
+                                    <td class="whitespace-nowrap">
+                                        <select id="lang_code" name="lang_code" class="form-select w-60" aria-label=".form-select-lg example">
+                                            @foreach($lang_data as $rs)
+                                                <option value="{{$rs->lang_code}}" @if($termsData[0]->lang_code == $rs->lang_code) selected @endif>{{$rs->lang_value}}</option>
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <th class="bg-primary/10 whitespace-nowrap w-32 text-center">약관 종류</th>
                                     <td class="whitespace-nowrap">
                                         <select id="terms_type" name="terms_type" class="form-select w-60" aria-label=".form-select-lg example">
@@ -208,10 +218,10 @@
                 return false;
             }
 
-            if(editor.getData() == ""){
-                alert("내용을 입력해주세요.");
-                return false;
-            }
+            // if(editor.getData() == ""){
+            //     alert("내용을 입력해주세요.");
+            //     return false;
+            // }
 
             if($("#apply_date").val() == ""){
                 alert("적용 날짜를 선택해주세요.");

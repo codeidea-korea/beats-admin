@@ -26,13 +26,13 @@
                     비밀번호 재설정
                 </th>
                 <th align="center" style="width: 20%; text-align: right; font-weight: 500; font-size: 24px;">
-                    <img src="https://d7x2ggm74g7nd.cloudfront.net/imgData/logo_222.642ce4a6.svg" alt="비트썸원 로고" style="width: 100px; height: 30px; font-weight: 500; font-size: 24px;">
+                    <img src="https://d7x2ggm74g7nd.cloudfront.net/imgData/logo_beatsomeone.png" alt="비트썸원 로고" style="width: 100px; height: 30px; font-weight: 500; font-size: 24px;">
                 </th>
                 <th>
                     <span>×</span>
                 </th>
                 <th align="center" style="width: 20%; font-weight: 500; font-size: 24px;">
-                    <img src="https://d7x2ggm74g7nd.cloudfront.net/imgData/logo.svg" alt="바이비츠 로고" style="width: 100px; height: 30px; font-weight: 500; font-size: 24px;">
+                    <img src="https://d7x2ggm74g7nd.cloudfront.net/imgData/logo_bybeats.png" alt="바이비츠 로고" style="width: 100px; height: 30px; font-weight: 500; font-size: 24px;">
                 </th>
             </tr>
             <tr>

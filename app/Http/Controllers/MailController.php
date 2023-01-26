@@ -128,7 +128,8 @@ class MailController extends Controller
 
         $params = $this->request->input();
         $params['music_head_idx'] = $params['music_head_idx'] ?? 0;
-        $params['send_emails'] = $params['send_emails'] ?? array();
+        $params['send_emails'] = $params['send_emails'] ?? '';
+        $params['site_code'] = $params['site_code'] ?? 'APP_URL2';
 
 
 
@@ -137,22 +138,35 @@ class MailController extends Controller
             $returnData['message'] = "잘못된 정보 입니다.";
         }else{
 
+            $rData = $this->apiCocomposerService->getCheckEmailSetData($params);
+
+            if($rData->title == null){
+                $title = "정해지지 않았음";
+            }else{
+                $title = $rData->title;
+            }
             $result = $this->apiCocomposerService->setCoComposerInvite($params);
 
+
             if($result){
-                foreach($params['send_emails'] as $rs){
-                    $user = array(
-                        'email' => $rs
-                    );
-                    $data = array(
-                        'music_head_idx'  => $user['music_head_idx']
-                    );
-                    Mail::send('emails.coComposerEmail', $data, function($message) use ($user)
-                    {
-                        $message->from('beatsomeone@gmail.com', 'Betanews Master');
-                        $message->to($user['email'])->subject('ByBeat 공동작곡가 초대');
-                    });
-                }
+
+                $user = array(
+                    'email' => $params['send_emails']
+                );
+                $data = array(
+                    'music_head_idx'  => $params['music_head_idx']
+                    ,'title'  => $title
+                    ,'nickname'  =>  $rData->nickname
+                    ,'send_emails'  =>  $params['send_emails']
+                    ,'site_code'  => $params['site_code']
+                );
+
+                Mail::send('emails.coComposerEmail', $data, function($message) use ($user)
+                {
+                    $message->from('beatsomeone@gmail.com', 'beatsomeone');
+                    $message->to($user['email'])->subject('ByBeat 공동작곡가 초대');
+                });
+
                 $returnData['code']=0;
                 $returnData['message']="이메일전송 완료";
             }else{
@@ -160,8 +174,54 @@ class MailController extends Controller
                 $returnData['message'] = "시스템 장애";
             }
 
+        }
+
+        return $returnData;
+    }
+
+    //공동작곡가 초대메일 재발송
+    public function coComposerInviteRe(){
+        $returnData['code'] = -1;
+        $returnData['message'] = "시스템 장애";
+        define('SECRET', now());
+
+        $params = $this->request->input();
+        $params['music_head_idx'] = $params['music_head_idx'] ?? 0;
+        $params['send_emails'] = $params['send_emails'] ?? '';
+        $params['site_code'] = $params['site_code'] ?? 'APP_URL2';
+
+        if($params['send_emails']==null||$params['music_head_idx']==0){
+            $returnData['code'] = -1;
+            $returnData['message'] = "잘못된 정보 입니다.";
+        }else{
+
+            $rData = $this->apiCocomposerService->getCheckEmailSetData($params);
+
+            if($rData->title == null){
+                $title = "정해지지 않았음";
+            }else{
+                $title = $rData->title;
+            }
+
+            $user = array(
+                'email' => $params['send_emails']
+            );
+            $data = array(
+                'music_head_idx'  => $params['music_head_idx']
+            ,'title'  => $title
+            ,'nickname'  =>  $rData->nickname
+            ,'send_emails'  =>  $params['send_emails']
+            ,'site_code'  => $params['site_code']
+            );
+
+            Mail::send('emails.coComposerEmail', $data, function($message) use ($user)
+            {
+                $message->from('beatsomeone@gmail.com', 'beatsomeone');
+                $message->to($user['email'])->subject('ByBeat 공동작곡가 초대');
+            });
+
             $returnData['code']=0;
-            $returnData['message']="테스트 완료";
+            $returnData['message']="이메일전송 완료";
 
         }
 

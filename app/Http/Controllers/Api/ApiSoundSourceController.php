@@ -25,6 +25,31 @@ class ApiSoundSourceController extends Controller
         $this->memberNoticeService = new MemberNoticeServiceImpl();
     }
 
+    public function soundFileAdd()
+    {
+        $returnData['code'] = -1;
+        $returnData['message'] = "시스템 장애";
+        try{
+            $params = $this->request->input();
+            $params['mem_id'] = $params['mem_id'] ?? 0;
+
+            $files = $this->request->file('music_file');
+            $params['seconds'] = $params['seconds'] ?? array();
+
+            // 음원파일 헤드 등록
+            // 첨부파일 db 등록 및 서버 저장
+            $resultData2 = $this->apiSoundSorceService->setMusicAdd($params,$files);
+
+            $returnData['code']=0;
+            $returnData['message']="음원파일 등록 완료";
+            $returnData['response']['last_file']=$resultData2;
+
+        } catch(\Exception $exception){
+            throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+        }
+        return json_encode($returnData);
+    }
+
     public function soundFileUpdate()
     {
         $returnData['code'] = -1;
@@ -172,7 +197,15 @@ class ApiSoundSourceController extends Controller
         }else{
             try{
 
-                $resultData = $this->apiSoundSorceService->setSoundSourceListPaging($params);
+                //공동작곡가 음원 list
+                $mhlist = '';
+                $getCoComList = $this->apiSoundSorceService->getCoComList($params);
+
+                foreach($getCoComList as $ms){
+                    $mhlist=$mhlist.",'".$ms->music_head_idx."'";
+                }
+                $mhlist = substr($mhlist,1);
+                $resultData = $this->apiSoundSorceService->setSoundSourceListPaging($params,$mhlist);
                 $dataList=array();
                 $i=0;
                 foreach($resultData as $rs){

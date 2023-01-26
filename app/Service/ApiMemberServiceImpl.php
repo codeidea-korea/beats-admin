@@ -501,6 +501,7 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
                 'adm_code.codename',
             )
             ->where('adm_code.depth',3)
+            ->where('lang_code',$params['lang_code'])
             ->get();
 
         $result = array_map(function ($value) {
@@ -517,6 +518,7 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
                 DB::raw('MAX(adm_terms.version) as version'),
             )
             ->where('apply_date', '<=', DB::raw("(DATE_FORMAT(NOW(), '%Y-%m-%d %h:%i:%s'))"))
+            ->where('lang_code',$params['lang_code'])
             ->when(isset($params['termsType']), function($query) use ($params){
                 return $query->where(function($query) use ($params) {
                     $query->whereIn('adm_terms.terms_type',  $params['termsType']);
@@ -536,6 +538,7 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
                 'terms_type.codevalue as termsType',
                 'adm_terms.content',
             )
+            ->where('lang_code',$params['lang_code'])
             ->get();
 
         return $result;
@@ -699,7 +702,7 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
     {
         $result = $this->statDB->table('members')
             ->where('idx',$params['mem_id'])
-            ->where('login_token',$params['_token'])
+            ->where('findpw_token',$params['_token'])
             ->update(
                 [
                     'password' => Hash::make($params['password']),
@@ -714,7 +717,7 @@ class ApiMemberServiceImpl extends DBConnection  implements ApiMemberServiceInte
     {
         $result = $this->statDB->table('members')
             ->where('idx',$params['mem_id'])
-            ->where('login_token',$params['_token'])
+            ->where('findpw_token',$params['_token'])
             ->update(
                 [
                     'password' => Hash::make($params['chPassword']),

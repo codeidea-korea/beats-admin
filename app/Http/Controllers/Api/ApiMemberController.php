@@ -562,6 +562,7 @@ class ApiMemberController extends Controller
     {
         $params = $this->request->input();
         $params['termsType'] = $params['termsType'] ?? 'all';
+        $params['lang_code'] = $params['langCode'] ?? 'kr';
 
         if($params['termsType'] == 'all'){
             $params['termsType'] = $this->apiMemberService->getTermsCode($params);

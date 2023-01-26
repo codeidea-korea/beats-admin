@@ -60,9 +60,11 @@ class PlanController extends Controller
         try{
             $params = $this->request->input();
             $params['gubun']       = $params['gubun'] ?? '0';
+            $params['lang']        = $params['lang'] ?? 'KR';
             $params['name']        = $params['name'] ?? '';
             $params['contents']    = $params['contents'] ?? '';
             $params['fee']         = $params['fee'] ?? 0;
+            $params['sale']         = $params['sale'] ?? 0;
             $params['is_yn']       = $params['is_yn'] ?? 'N';
             $params['admin_idx']   = auth()->user()->idx;
             $params['admin_name']  = auth()->user()->name;
@@ -117,10 +119,12 @@ class PlanController extends Controller
             $params = $this->request->input();
 
             $params['idx']         = $params['idx'] ?? '';
+            $params['lang']       = $params['lang'] ?? 'KR';
             $params['gubun']       = $params['gubun'] ?? '0';
             $params['name']        = $params['name'] ?? '';
             $params['contents']    = $params['contents'] ?? '';
             $params['fee']         = $params['fee'] ?? 0;
+            $params['sale']         = $params['sale'] ?? 0;
             $params['is_yn']       = $params['is_yn'] ?? 'N';
             $params['admin_idx']   = auth()->user()->idx;
             $params['admin_name']  = auth()->user()->name;
@@ -155,6 +159,64 @@ class PlanController extends Controller
         return $returnData;
     }
 
+    public function getStudentList()
+    {
+        $params = $this->request->input();
+        $params['menuCode'] = "AD050000";
+
+        $params['type'] = $params['type'] ?? 0;
+        $params['page'] = $params['page'] ?? 1;
+        $params['limit'] = $params['limit'] ?? 10;
+
+        $studentList = $this->planService->getStudentList($params);
+        $studentTotal = $this->planService->getStudentTotal($params);
+        $totalCount = $studentTotal->cnt;
+        $params['totalCnt'] = $totalCount;
+
+        return view('plan.studentList',[
+            'studentList' => $studentList
+            ,'params' => $params
+            ,'searchData' => $params
+            ,'totalCount' => $totalCount
+        ]);
+    }
+
+    public function studentStatusUp(){
+        $returnData['code'] = -1;
+        $returnData['message'] = "시스템 장애";
+
+        try{
+            $params = $this->request->input();
+
+            $params['idx_arr'] = $params['idx_arr'] ?? array();
+            $params['status'] = $params['status'] ?? '';
+            $params['student_reject'] = $params['student_reject'] ?? '';
+
+
+            if($params['idx_arr']!=null && count($params['idx_arr'])!=0){
+                if($params['status']=="Y"){
+
+                    $result = $this->planService->setStudentStatusUp($params);
+                    var_dump($result);exit();
+                    $returnData['code']=0;
+                    $returnData['message']="학생인증 승인 완료";
+                    //이메일 발송
+                }else if($params['status']=="N"){
+                    $result = $this->planService->setStudentStatusUp2($params);
+                    $returnData['code']=0;
+                    $returnData['message']="학생인증 반려 완료";
+                    //이메일 발송
+                }else{
+                    $returnData['code']=306;
+                    $returnData['message']="status 값이 잘봇되었습니다.";
+                }
+            }
+
+        } catch(\Exception $exception){
+            throw new HttpException(400,"Invalid data -{$exception->getMessage()}");
+        }
+        return $returnData;
+    }
 
 
 }

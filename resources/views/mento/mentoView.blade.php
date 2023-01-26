@@ -112,6 +112,7 @@
                                     <th class="whitespace-nowrap text-center bg-primary/10" >반려사유</th>
                                     <td colspan="3">
                                         <input type="text" class="form-control" style="width:600px;" id="reject" name="reject" value="{{$memberData->mento_reject}}">
+                                        <div style="margin:10px 0 0 0;">※ 작성한 반려사유는 반려사유 안내 메일에 기재되어 신청회원에게 발송됩니다.</div>
                                     </td>
                                 </tr>
                             </table>

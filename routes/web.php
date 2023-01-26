@@ -264,6 +264,11 @@ Route::middleware(['auth'])->group(function () {
         // 요금제 수정
         Route::post('planUpdate', [PlanController::class, 'putPlanUpdate']);
 
+        // 학생 요금제 승인 신청내역 리스트
+        Route::get('studentList', [PlanController::class, 'getStudentList']);
+        // 학생 요금제 승인 및 반려
+        Route::post('studentStatusUp', [PlanController::class, 'studentStatusUp']);
+
     });
 
 });

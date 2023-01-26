@@ -91,19 +91,19 @@
                         <div class="p-2 bg-slate-200 flex flex-wrap gap-3">
                             @php $i=0; @endphp
                             @foreach($musicList as $rs)
-                                <div class="intro-x box p-5 w-full">
+                                <div class="intro-x box p-3 w-full overflow-hidden">
                                     <div class="w-full items-center flex gap-5">
-                                        <div class="border-l flex gap-3 px-5 ml-auto">
+                                        <div class="border-l flex gap-3 ml-auto">
                                             {{$totalCount-($i+(($params['page']-1)*10))}}
                                         </div>
                                         <script src="https://unpkg.com/wavesurfer.js"></script>
-                                        <div class="border-l flex gap-3 px-5 ml-auto">
+                                        <div class="border-l flex gap-3 pl-5 ml-auto">
                                             <audio id="player" controls  src="{{env('AWS_CLOUD_FRONT_URL')}}{{$rs->file_url}}{{$rs->hash_name}}">
                                             </audio>
                                         </div>
-                                        <div class="grow px-5">
-                                            <div class="font-medium text-lg">{{$rs->music_title}}</div>
-                                            <div class="text-slate-400 mt-1"> <span class="font-bold"><a href="javascript:test123();">최근 수정일</a> :</span>{{$rs->moddate}}</div>
+                                        <div class="grow" style="min-width:200px;width:480px;">
+                                            <div class="font-medium text-md" style="overflow-wrap: break-word;">{{$rs->music_title}}</div>
+                                            <div class="text-slate-400 mt-1 text-xs"> <span class="font-bold"><a href="#" class="text-xs">최근 수정일</a> :</span>{{$rs->moddate}}</div>
                                             <div class="text-slate-400 flex items-center mt-1">
                                                 <i data-lucide="circle" class="w-4 h-4 mr-1"></i>
                                                 47
@@ -112,26 +112,36 @@
                                         </div>
 
 
-                                        <div class="border-l flex gap-3 px-5 ml-auto">
-                                            <div class="border border-slate-300 rounded-md border-dashed p-3 text-center">
-                                                <div class="font-bold">작업 방식</div>
-                                                <div class="btn-warning p-1 rounded-md">@if($rs->common_composition=="Y") 공동작업 @else 개인작업 @endif</div>
+                                        <div class="border-l flex gap-3 pl-3 ml-auto" style="width:436px;flex-shrink: 0;">
+                                            <div class="border border-slate-300 rounded-md border-dashed p-2 text-center flex items-center">
+                                                <div>
+                                                    <div class="font-bold text-xs">작업 방식</div>
+                                                    <div class="btn-warning p-1 rounded-md text-xs">@if($rs->common_composition=="Y") 공동작업 @else 개인작업 @endif</div>
+                                                </div>
                                             </div>
-                                            <div class="border border-slate-300 rounded-md border-dashed p-3 text-center">
-                                                <div class="font-bold">작업 진행률</div>
-                                                <div class="btn-warning p-1 rounded-md">{{$rs->progress_rate}}%</div>
+                                            <div class="border border-slate-300 rounded-md border-dashed p-2 text-center flex items-center">
+                                                <div>
+                                                    <div class="font-bold text-xs">작업 진행률</div>
+                                                    <div class="btn-warning p-1 rounded-md font-xs">{{$rs->progress_rate}}%</div>
+                                                </div>
                                             </div>
-                                            <div class="border border-slate-300 rounded-md border-dashed p-3 text-center">
-                                                <div class="font-bold">재생 시간</div>
-                                                <div class="btn-warning p-1 rounded-md">{{$rs->play_time}}</div>
+                                            <div class="border border-slate-300 rounded-md border-dashed p-2 text-center flex items-center">
+                                                <div>
+                                                    <div class="font-bold text-xs">재생 시간</div>
+                                                    <div class="btn-warning p-1 rounded-md text-xs">{{$rs->play_time}}</div>
+                                                </div>
                                             </div>
-                                            <div class="border border-slate-300 rounded-md border-dashed p-3 text-center" style="width:90px;">
-                                                <div class="font-bold">판매 상태</div>
-                                                <div class="btn-secondary p-1 rounded-md" style>@if($rs->sales_status=="Y") 판매중 @else 미판매중 @endif</div>
+                                            <div class="border border-slate-300 rounded-md border-dashed p-2 text-center flex items-center">
+                                                <div>
+                                                    <div class="font-bold text-xs">판매 상태</div>
+                                                    <div class="btn-secondary p-1 rounded-md text-xs" style>@if($rs->sales_status=="Y") 판매중 @else 미판매중 @endif</div>
+                                                </div>
                                             </div>
-                                            <div class="border border-slate-300 rounded-md border-dashed p-3 text-center">
-                                                <div class="font-bold">공개 상태</div>
-                                                <div class="btn-secondary p-1 rounded-md" >@if($rs->open_status=="Y") 공개 @else 비공개 @endif</div>
+                                            <div class="border border-slate-300 rounded-md border-dashed p-2 text-center flex items-center">
+                                                <div>
+                                                    <div class="font-bold text-xs">공개 상태</div>
+                                                    <div class="btn-secondary p-1 rounded-md text-xs" >@if($rs->open_status=="Y") 공개 @else 비공개 @endif</div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

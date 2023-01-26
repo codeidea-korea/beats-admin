@@ -54,9 +54,11 @@
                                         </div>
                                     </td>
                                     <td class="md:w-60 w-60">
-                                        <button class="btn btn-primary w-24 up_{{$rs->idx}}" style="display:none;" onClick="updateField({{$rs->idx}});">완료</button>
-                                        <button class='btn btn-outline-pending w-24 inline-block cl_{{$rs->idx}}' style="display:none;" onClick="changeCd({{$rs->idx}});">취소</button>
-                                            <button class="btn btn-outline-dark w-24 inline-block ch_{{$rs->idx}}" onClick="changeAd({{$rs->idx}});">수정</button>
+                                        <div class="flex items-center gap-2">
+                                            <button class="btn btn-primary w-w-1/2 up_{{$rs->idx}}" style="display:none;" onClick="updateField({{$rs->idx}});">완료</button>
+                                            <button class='btn btn-outline-pending w-1/2 inline-block cl_{{$rs->idx}}' style="display:none;" onClick="changeCd({{$rs->idx}});">취소</button>
+                                            <button class="btn btn-outline-dark w-1/2 inline-block ch_{{$rs->idx}}" onClick="changeAd({{$rs->idx}});">수정</button>
+                                        </div>
                                     </td>
                                     <td class="md:w-60 w-60">
                                         <div class="form-check form-switch">

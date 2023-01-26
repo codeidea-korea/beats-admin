@@ -29,4 +29,16 @@ interface PlanServiceInterface
     //혜택 삭제
     public function delBenefits($params);
 
+    //학생 승인 신청 리스트 (list)
+    public function getStudentList($params);
+
+    //학생 승인 신청 total (total)
+    public function getStudentTotal($params);
+
+    //학생 승인여부 승인 처리
+    public function setStudentStatusUp($params);
+
+    //학생 승인여부 반려 처리
+    public function setStudentStatusUp2($params);
+
 }

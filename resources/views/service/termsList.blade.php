@@ -45,14 +45,24 @@
                                                 <input type="text" name="search_text" class="form-control" data-single-mode="true" value="{{$params['fr_search_text']}}">
                                             </div>
                                         </td>
-                                        <th class="bg-primary/10 whitespace-nowrap w-25 text-center">적용일자</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-primary/10 whitespace-nowrap w-25 text-center">언어</th>
                                         <td class="">
+                                            <select id="lang_code" name="lang_code" class="form-select w-25" aria-label=".form-select-lg example">
+                                                <option value=''>전체</option>
+                                                @foreach($lang_data as $rs)
+                                                    <option value="{{$rs->lang_code}}" @if($params['search_lang_code'] == $rs->lang_code) selected @endif>{{$rs->lang_value}}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        <th class="bg-primary/10 whitespace-nowrap w-25 text-center">적용일자</th>
+                                        <td class="" colspan='4'>
                                             <div class="sm:ml-auto mt-3 sm:mt-0 relative text-slate-500">
                                                 <i data-lucide="calendar" class="w-4 h-4 z-10 absolute my-auto inset-y-0 ml-3 left-0"></i>
                                                 <input name="apply_date" type="text" class="datepicker form-control sm:w-56 box pl-10" value="{{$params['apply_date']}}">
                                             </div>
                                         </td>
-                                    </tr>
                                 </table>
                             </div>
                             <div class="intro-y col-span-12 flex items-center justify-center sm:justify-end mt-5">
@@ -78,6 +88,7 @@
                                     <th class="whitespace-nowrap text-center">No.</th>
                                     <th class="whitespace-nowrap text-center">구분</th>
                                     <th class="whitespace-nowrap text-center">약관 종류</th>
+                                    <th class="whitespace-nowrap text-center">언어</th>
                                     <th class="whitespace-nowrap text-center">버전</th>
                                     <th class="whitespace-nowrap text-center">관리자</th>
                                     <th class="whitespace-nowrap text-center">적용날짜</th>
@@ -90,6 +101,7 @@
                                         <td class="whitespace-nowrap text-center"><a href="/service/terms/view/{{$rs->idx}}">{{$totalCount-($i+(($params['page']-1)*10))}}</a></td>
                                         <td class="whitespace-nowrap text-center"><a href="/service/terms/view/{{$rs->idx}}">{{$rs->gubun}}</a></td>
                                         <td class="whitespace-nowrap text-center"><a href="/service/terms/view/{{$rs->idx}}">{{$rs->terms_type}}</a></td>
+                                        <td class="whitespace-nowrap text-center"><a href="/service/terms/view/{{$rs->idx}}">{{$rs->lang_value}}</a></td>
                                         <td class="whitespace-nowrap text-center"><a href="/service/terms/view/{{$rs->idx}}">{{$rs->version}}</a></td>
                                         <td class="whitespace-nowrap text-center"><a href="/service/terms/view/{{$rs->idx}}">{{$rs->name}}</a></td>
                                         <td class="whitespace-nowrap text-center">{{$rs->apply_date}}</td>
