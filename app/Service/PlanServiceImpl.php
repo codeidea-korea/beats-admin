@@ -197,6 +197,21 @@ class PlanServiceImpl extends DBConnection implements PlanServiceInterface
         return $result;
     }
 
+    //학생 승인 신청 첨부파일
+    public function getStudentFiles($params)
+    {
+        $result = $this->statDB->table('student_file')
+            ->select(
+                'file_url',
+                'file_name',
+                DB::raw("CONCAT(file_url,hash_name) AS FileUrl"),
+            )
+            ->where('sa_idx',$params['sa_idx'])
+            ->orderby('idx','desc')
+            ->get();
+        return $result;
+    }
+
     //학생 승인여부 승인 처리
     public function setStudentStatusUp($params)
     {
@@ -242,6 +257,38 @@ class PlanServiceImpl extends DBConnection implements PlanServiceInterface
                 ,'mode_date' => DB::raw("now()")
             ]);
 
+        return $result;
+    }
+
+    //학생 승인 신청 리스트 엑셀 다운로드
+    public function getStudentListExcel($params)
+    {
+        $result = $this->statDB->table('student_authentication')
+            ->leftJoin('member_data', 'student_authentication.mem_id', '=', 'member_data.mem_id')
+            ->leftJoin('members', 'members.idx', '=', 'member_data.mem_id')
+            ->select(
+
+                DB::raw("CASE
+                    WHEN student_authentication.status = 'H' THEN '대기'
+                    WHEN student_authentication.status = 'Y' THEN '승인완료'
+                    WHEN student_authentication.status = 'N' THEN '반려'
+                    END AS statusValue"),
+                DB::raw("CASE
+                    WHEN member_data.gubun = '1' THEN '일반'
+                    WHEN member_data.gubun = '2' THEN '작곡가'
+                    WHEN member_data.gubun = '3' THEN '음원구매자'
+                    WHEN member_data.gubun = '4' THEN '멘토뮤지션'
+                    ELSE '미지정' END AS gubunValue"),
+                'member_data.channel',
+                'member_data.nationality',
+                'members.email_id as emailId',
+                'member_data.mem_nickname as nickName',
+                DB::raw("CONCAT('student_authentication.last_name','student_authentication.first_name')"),
+
+            )
+            ->where('student_authentication.status','!=','Y')
+            ->orderby('student_authentication.idx','desc')
+            ->get();
         return $result;
     }
 

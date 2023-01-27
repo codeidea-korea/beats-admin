@@ -8,6 +8,11 @@ use Response;
 use Illuminate\Http\Request;
 use Session;
 use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpSpreadsheet;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\IWriter;
+
 
 class PlanController extends Controller
 {
@@ -26,6 +31,68 @@ class PlanController extends Controller
 
         $this->middleware('auth');
     }
+    public function studentExcelDownLoad(){
+
+
+
+        $params = $this->request->input();
+        $datas = array(
+            array(
+                'A1' => '김정호'
+            , 'B1' => '010-1234-1234'
+            , 'C1' => '국민은행'),
+            array('A1' => '홍길동', 'B1' => '010-5678-5678', 'C1' => '한국은행')
+        );
+
+        $cells = array(
+            'A' => array(15, 'statusValue', '상태'),
+            'B' => array(20, 'gubunValue',  '회원 구분'),
+            'C' => array(20, 'channel', '가입 채널'),
+            'D' => array(20, 'nationality', '국적'),
+            'E' => array(20, 'emailId', '이메일 ID'),
+            'F' => array(20, 'nickName', '닉네임'),
+            'G' => array(20, 'G1', '연락처'),
+            'H' => array(20, 'H1', '성+이름'),
+            'I' => array(20, 'I1', '생년월일'),
+            'J' => array(20, 'J1', '학교명'),
+            'K' => array(20, 'K1', '학번'),
+            'L' => array(20, 'L1', '작성한 이메일'),
+            'M' => array(20, 'M1', '신청일')
+        );
+
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('tab1');
+
+        foreach ($cells as $key => $val) {
+            $cellName = $key.'1';
+
+            $sheet->getColumnDimension($key)->setWidth($val[0]);
+            $sheet->getRowDimension('1')->setRowHeight(25);
+            $sheet->setCellValue($cellName, $val[2]);
+            $sheet->getStyle($cellName)->getFont()->setBold(true);
+            $sheet->getStyle($cellName)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle($cellName)->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+        }
+        for ($i = 2; $row = array_shift($datas); $i++) {
+            foreach ($cells as $key => $val) {
+                $sheet->setCellValue($key.$i, $row[$val[1]]);
+            }
+        }
+        $spreadsheet->createSheet();
+        $spreadsheet->setActiveSheetIndex(1) ->setCellValue('A1', 'Hello world!');
+        $spreadsheet->getActiveSheet()->setTitle('tab2');
+
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, "Xlsx");
+        //$writer->save('test'.date("YmdHis").'.xlsx');
+        $writer->save('test.xlsx');
+
+
+        $spreadsheet->disconnectWorksheets();
+        unset($spreadsheet);
+
+    }
     public function getPlanList()
     {
         $params = $this->request->input();
@@ -43,6 +110,7 @@ class PlanController extends Controller
             ,'totalCount' => $totalCount
         ]);
     }
+
     public function getPlanWrite(){
         $params = $this->request->input();
         $params['menuCode'] = "AD050000";
@@ -168,13 +236,23 @@ class PlanController extends Controller
         $params['page'] = $params['page'] ?? 1;
         $params['limit'] = $params['limit'] ?? 10;
 
+        $temp_data = array();
+
         $studentList = $this->planService->getStudentList($params);
+        $i=0;
+        foreach($studentList as $rs){
+            $temp_data[$i]['data'] = $rs;
+            $sqlParam['sa_idx'] =$rs->sa_idx;
+            $temp_data[$i]['files'] = $this->planService->getStudentFiles($sqlParam);
+            $i++;
+        }
         $studentTotal = $this->planService->getStudentTotal($params);
         $totalCount = $studentTotal->cnt;
         $params['totalCnt'] = $totalCount;
 
         return view('plan.studentList',[
             'studentList' => $studentList
+            ,'temp_data' => $temp_data
             ,'params' => $params
             ,'searchData' => $params
             ,'totalCount' => $totalCount
@@ -197,7 +275,6 @@ class PlanController extends Controller
                 if($params['status']=="Y"){
 
                     $result = $this->planService->setStudentStatusUp($params);
-                    var_dump($result);exit();
                     $returnData['code']=0;
                     $returnData['message']="학생인증 승인 완료";
                     //이메일 발송

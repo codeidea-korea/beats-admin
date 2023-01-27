@@ -269,6 +269,9 @@ Route::middleware(['auth'])->group(function () {
         // 학생 요금제 승인 및 반려
         Route::post('studentStatusUp', [PlanController::class, 'studentStatusUp']);
 
+        // 학생 요금제 승인 및 반려
+        Route::get('studentExcelDownLoad', [PlanController::class, 'studentExcelDownLoad']);
+
     });
 
 });
