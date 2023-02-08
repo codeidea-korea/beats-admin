@@ -207,6 +207,7 @@ class ApiCoComposerServiceImpl extends DBConnection  implements ApiCoComposerSer
                 WHEN isCopyRight = 'N' THEN '권한해지'
                 ELSE '' END AS isCopyRightValue"),
             )
+            ->where('isUse','!=','N')
             ->where('music_head_idx',$params['music_head_idx'] )
             ->get();
         return $result;
