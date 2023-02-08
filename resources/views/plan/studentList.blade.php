@@ -82,7 +82,7 @@
 
                         <a href="javascript:;" class="btn btn-primary mr-1 mb-2" id="excelDownload" onClick="stStatusY();">학생인증승인</a>
                         <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#superlarge-modal-size-preview" class="btn btn-primary mr-1 mb-2">학생인증반려</a>
-                        <a href="javascript:;" class="btn btn-primary mr-1 mb-2" id="excelDownload">Excel Download</a>
+                        <a href="javascript:;" class="btn btn-primary mr-1 mb-2" id="excelDownload" onClick="excelDonload();">Excel Download</a>
                     </div>
                     <div class="p-5">
                         <div class="overflow-x-auto">
@@ -109,28 +109,34 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($studentList as $rs)
+                                @foreach($temp_data as $rs)
                                     <tr>
                                         <td class="whitespace-nowrap text-center">
                                             <div class="form-check">
-                                                <input id="checkbox-switch-1" class="form-check-input all_check" type="checkbox" name="chkUser" value="{{$rs->sa_idx}}" onClick="checkCountVal()">
+                                                <input id="checkbox-switch-1" class="form-check-input all_check" type="checkbox" name="chkUser" value="{{$rs['data']->sa_idx}}" onClick="checkCountVal()">
                                             </div>
                                         </td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->statusValue}}</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->gubunValue}}</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->nationality}}</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->email_id}}</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->mem_nickname}}</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->last_name}} {{$rs->first_name}}</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->year}}-{{$rs->month}}-{{$rs->day}}</td>
+                                        <td class="whitespace-nowrap text-center">{{$rs['data']->statusValue}}</td>
+                                        <td class="whitespace-nowrap text-center">{{$rs['data']->gubunValue}}</td>
+                                        <td class="whitespace-nowrap text-center">{{$rs['data']->nationality}}</td>
+                                        <td class="whitespace-nowrap text-center">{{$rs['data']->email_id}}</td>
+                                        <td class="whitespace-nowrap text-center">{{$rs['data']->mem_nickname}}</td>
+                                        <td class="whitespace-nowrap text-center">{{$rs['data']->last_name}} {{$rs['data']->first_name}}</td>
+                                        <td class="whitespace-nowrap text-center">{{$rs['data']->year}}-{{$rs['data']->month}}-{{$rs['data']->day}}</td>
                                         <td class="whitespace-nowrap text-center"> - </td>
                                         <td class="whitespace-nowrap text-center"> - </td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->send_email}}</td>
-                                        <td class="whitespace-nowrap text-center">{{$rs->credate}}</td>
+                                        <td class="whitespace-nowrap text-center">{{$rs['data']->send_email}}</td>
+                                        <td class="whitespace-nowrap text-center">{{$rs['data']->credate}}</td>
                                         <td class="whitespace-nowrap text-center">
-                                            <button class="btn box flex items-center text-slate-600 border border-slate-400" onClick="alert()">
+                                            <button class="btn box flex items-center text-slate-600 border border-slate-400" onClick="downloadAll({{$rs['data']->sa_idx}},{{count($rs['files'])}})">
                                                 파일
                                             </button>
+                                            @php $k=1; @endphp
+                                            @foreach($rs['files'] as $rs2)
+                                                <input type="hidden" name="furl{{$rs['data']->sa_idx.'_'.$k}}"  value="{{$rs2->FileUrl}}" />
+                                                <input type="hidden" name="fileName{{$rs['data']->sa_idx.'_'.$k}}"  value="{{$rs2->file_name}}" />
+                                                @php $k++; @endphp
+                                            @endforeach
                                         </td>
                                     </tr>
                                 @endforeach
@@ -186,6 +192,17 @@
     <!-- 비밀번호 변경 modal 끝 -->
 
     <script>
+        function excelDonload(){
+            window.open('/plan/studentExcelDownLoad');
+
+        }
+        function downloadAll(idx,cnt) {
+            var fCount = cnt;
+            for (var i = 1; i <= fCount; i++) {
+                window.open('/downloadFile?furl=' + $('input[name=furl'+idx+'_' + i + ']').val()+'&fileName='+$('input[name=fileName'+idx+'_' + i + ']').val());
+            }
+        }
+
         function change(page) {
             $("input[name=page]").val(page);
             document.forms["searchData"].submit();
@@ -233,7 +250,7 @@
                     data: data,
                     url: "{{ url('/plan/studentStatusUp') }}",
                     success: function searchSuccess(data) {
-                        if(data.result=="SUCCESS"){
+                        if(data.code==0){
                             alert('총 '+chk_arr.length+'명의 학생인증승인이 완료되었습니다.');
                             location.reload();
                         }else{
@@ -276,7 +293,7 @@
                     data: data,
                     url: "{{ url('/plan/studentStatusUp') }}",
                     success: function searchSuccess(data) {
-                        if(data.result=="SUCCESS"){
+                        if(data.code==0){
                             alert('총 '+chk_arr.length+'명의 학생인증승인이 반려되었습니다.');
                             location.reload();
                         }else{

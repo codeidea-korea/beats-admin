@@ -207,6 +207,7 @@ class ApiCoComposerServiceImpl extends DBConnection  implements ApiCoComposerSer
                 WHEN isCopyRight = 'N' THEN '권한해지'
                 ELSE '' END AS isCopyRightValue"),
             )
+            ->where('isUse','!=','N')
             ->where('music_head_idx',$params['music_head_idx'] )
             ->get();
         return $result;
@@ -262,10 +263,11 @@ class ApiCoComposerServiceImpl extends DBConnection  implements ApiCoComposerSer
 
 
     public function coComposerDel($params){
+
         $result = $this->statDB->table('authority_cancellation')
             ->select(
                 DB::raw("COUNT(idx) AS T1")
-                ,DB::raw(",SUM(CASE WHEN isYN='Y' THEN 1 ELSE 0 END) AS T2")
+                ,DB::raw("SUM(CASE WHEN isYN='Y' THEN 1 ELSE 0 END) AS T2")
             )
             ->where('music_head_idx', $params['music_head_idx'])
             ->where('target_mem_id', $params['target_mem_id'])

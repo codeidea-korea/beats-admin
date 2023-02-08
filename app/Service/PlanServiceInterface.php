@@ -35,10 +35,16 @@ interface PlanServiceInterface
     //학생 승인 신청 total (total)
     public function getStudentTotal($params);
 
+    //학생 승인 신청 첨부파일
+    public function getStudentFiles($params);
+
     //학생 승인여부 승인 처리
     public function setStudentStatusUp($params);
 
     //학생 승인여부 반려 처리
     public function setStudentStatusUp2($params);
+
+    //학생 승인 신청 리스트 엑셀 다운로드
+    public function getStudentListExcel($params);
 
 }
